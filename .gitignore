@@ -1,6 +1,9 @@
 # Dependências
 node_modules/
 
+# Read Me
+readme
+
 # Build
 dist/
 
@@ -22,3 +25,18 @@ dist/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# ── TON Node / Tunnel — NUNCA commitar ──────────────────────
+config.json
+config.*.json
+payments-db/
+*.pem
+*.key
+
+# ── Cloudflare Tunnel ────────────────────────────────────────
+.dev.vars
+wrangler.toml
+
+# ── Logs ────────────────────────────────────────────────────
+*.log
+npm-debug.log*

@@ -1,5 +1,5 @@
 {
-  "name": "ton-mesh-3d",
+  "name": "blog-updance",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=cipher-academy",
-    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=cipher-academy --branch=preview",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=blog-updance",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=blog-updance --branch=preview",
+    "post:new": "node scripts/new-post.js",
     "contracts:test": "cd contracts && npx blueprint test",
     "contracts:testnet": "cd contracts && npx blueprint run --testnet",
     "contracts:mainnet": "cd contracts && npx blueprint run --mainnet"

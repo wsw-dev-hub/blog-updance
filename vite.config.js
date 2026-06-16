@@ -4,7 +4,10 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import mkcert from 'vite-plugin-mkcert'
 import { Buffer } from 'buffer'
+import { fileURLToPath } from 'url'
+
 globalThis.Buffer = Buffer
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 // Plugin: serve o manifest com campo "url" dinâmico baseado no Host da requisição
 // Resolve o anti-phishing do Tonkeeper em qualquer ambiente (local, tunnel, prod)
@@ -43,14 +46,17 @@ const _tonManifestPlugin = {
 
 //export default defineConfig({
 export default defineConfig(({ command }) => ({
-  //base: './',
+  base: '/',
   //root: '.',
   // Dev usa '/' para servir arquivos estáticos corretamente
   // Build usa './' para compatibilidade com Cloudflare Pages
-  base: command === 'build' ? './' : '/',
+  //base: command === 'build' ? './' : '/',
   publicDir: 'public',
-  plugins: [mkcert(), _tonManifestPlugin],
-
+  //plugins: [mkcert(), _tonManifestPlugin],
+  plugins: [
+    command === 'serve' && mkcert(),   // apenas no dev server
+    command === 'serve' && _tonManifestPlugin, // manifest dinâmico só em dev
+  ].filter(Boolean),
 
   server: {
     port: 3000,
