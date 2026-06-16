@@ -1,0 +1,454 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testes [ Perfil ] | UDX</title>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap/cdn-jsdelivr-net-npm-bootstrap-5-1-3-dist-css-bootstrap.min.css">-->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="css/modal-styles.css">
+<link rel="stylesheet" type="text/css" href="css/mediaQuery.css">
+<link rel="stylesheet" type="text/css" href="css/navigation.css">
+<link rel="stylesheet" type="text/css" href="css/preloader.css">
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="js/carroussel/udx-carrossel-desq.js"></script>
+
+<script src="js/motionScript.js"></script>
+<script src="js/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"/></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+<style>
+body{
+ background-color:#fff
+}
+
+@media 
+
+</style>
+
+<script type="text/javascript">
+	function time()	{
+	
+	var intervalo = 6000;
+	var expiracaoMinutos = 4;
+	var avisoMinutos = 2;
+	var intervaloID;
+	var ultimaAtividade;
+	
+	
+	function iniciarSessao() {
+		ultimaAtividade = new Date();
+		SetIntervalo();
+
+		$(document).bind('keypress.session', function (ed, e) {
+			verificaTeclaPressionada(ed, e);
+		});
+	}
+	
+	function sessao_SetIntervalo() {
+            intervaloID = setInterval('sessaoIntervalo()', sessao_Intervalo);
+            
+	}
+	
+	function verificaTeclaPressionada(ed, e) {
+            ultimaAtividade = new Date();
+        }
+	
+	function limparIntervalo(){
+		clearInterval(intervaloID);
+	}
+	
+	function sessaoIntervalo() {
+		var now = new Date();
+		//obtem a diferença de tempo em milisegundos
+		var diferencaMilisegundos = now - ultimaAtividade;
+		//obtem o tempo em minutos
+		var diferencaMinutos = (diferencaMilisegundos / 1000 / 60);
+		console.log(diferencaMinutos);
+
+		if (diferencaMinutos >= sessao_avisoMinutos) 
+		{
+			//emite o aviso de expiração
+			//para o timer
+			sessao_LimpaIntervalo();
+			//mensagem de alerta
+			var ativar = confirm('A sua sessão irá experir em ' + (sessao_expiracaoMinutos - sessao_avisoMinutos) +
+			' minutos (de ' + now.toTimeString() + '), pressione OK para permanecer logado ' +
+			'ou pressione Cancel para fazer o log off. \nAo se desconetar seus dados da sessão serão perdidos.');
+			
+			if (ativar == true) {
+				now = new Date();
+				diferencaMilisegundos = now - sessao_ultimaAtividade;
+				diferencaMinutos = (diferencaMilisegundos / 1000 / 60);
+
+				if (diferencaMinutos > sessao_expiracaoMinutos) {
+					sessao_LogOut();
+				}
+				else {
+					inciciarSessao();
+					SetIntervalo();
+					ultimaAtividade = new Date();
+				}
+			}
+			else {
+				sessao_LogOut();
+			}
+		}
+	}
+	
+	function sessao_LogOut() {
+		//window.location.href = 'Logout.aspx';
+		window.location.href = 'index.aspx';
+	}
+	
+	today = new Date();
+	h = today.getHours();
+	m = today.getMinutes();
+	s = today.getSeconds();
+	
+	/*if(h < 10){
+		h = "0"+ h;
+	}
+	
+	if(m < 10){
+		m = "0"+ m;
+	}
+	
+	if(s < 10){
+		s = "0"+ s;
+	}*/
+	
+	document.getElementById('txt').innerHTML = "HORÁRIO ATUAL: "+h+":"+m+":"+s;
+	document.getElementById('data-hoje').innerHTML = "DADOS DE HOJE: " + today;
+	
+	setTimeout('time()',500);
+}
+
+</script>
+
+<script type="text/javascript">
+        var sessao_Intervalo = 1000;
+        var sessao_expiracaoMinutos = 4;
+        var sessao_avisoMinutos = 2;
+        var sessao_intervaloID;
+        var sessao_ultimaAtividade;
+
+        function initSession() {
+            sessao_ultimaAtividade = new Date();
+            sessao_SetIntervalo();
+
+            $(document).bind('keypress.session', function (ed, e) {
+                sessao_TeclaPressionada(ed, e);
+            });
+        }
+
+        function sessao_SetIntervalo() {
+            sessao_intervaloID = setInterval('sessaoIntervalo()', sessao_Intervalo);
+        }
+
+        function sessao_LimpaIntervalo() {
+            clearInterval(sessao_intervaloID);
+        }
+
+        function sessao_TeclaPressionada(ed, e) {
+            sessao_ultimaAtividade = new Date();
+        }
+
+        function sessao_LogOut() {
+            //window.location.href = 'Logout.aspx';
+            window.location.href = 'login.html';
+        }
+
+        function sessaoIntervalo() {
+			const viewportWidth = window.innerWidth;
+			const viewportHeight = window.innerHeight;
+			
+						
+            var now = new Date();
+            //obtem a diferença de tempo em milisegundos
+            var diferencaMilisegundos = now - sessao_ultimaAtividade;
+            //obtem o tempo em minutos
+            var diferencaMinutos = (diferencaMilisegundos / 1000 / 60);
+            //console.log(now);
+			result = sessao_expiracaoMinutos - sessao_avisoMinutos;
+			
+			tempo = Math.round((result - diferencaMinutos) * 60);
+			minutos = Math.round(diferencaMinutos * 60);
+			
+			tempo = formatarCronometro(tempo);
+			minutos = formatarCronometro(minutos);
+			
+			document.getElementById('data-hoje').innerHTML = "Sua Sessão irá Expeirar em: " + tempo;
+			
+			//console.log(diferencaMinutos * 60);
+			document.getElementById('txt').innerHTML = "VALOR EM SEGUNDOS: " + minutos;
+			
+			document.querySelector('#screen').innerHTML = 'Total width / height: ' +viewportWidth + ' x ' + viewportHeight;
+			
+			verificarTela(viewportWidth);
+			
+            if (diferencaMinutos >= sessao_avisoMinutos) 
+            {
+                //emite o aviso de expiração
+                //para o timer
+                sessao_LimpaIntervalo();
+                //mensagem de alerta
+				var ativar = "";
+                /*var ativar = confirm('A sua sessão irá experir em ' + (sessao_expiracaoMinutos - sessao_avisoMinutos) +
+                ' minutos (de ' + now.toTimeString() + '), pressione OK para permanecer logado ' +
+                'ou pressione Cancel para fazer o log off. \nAo se desconetar seus dados da sessão serão perdidos.');*/
+                
+				abreModal();
+				
+				//if (ativar == "") {
+				if (ativar == "") {
+                    now = new Date();
+                    diferencaMilisegundos = now - sessao_ultimaAtividade;
+                    diferencaMinutos = (diferencaMilisegundos / 1000 / 60);
+					
+					console.log(diferencaMinutos);
+
+                    if (diferencaMinutos > sessao_expiracaoMinutos) {
+						console.log(diferencaMinutos);
+                        sessao_LogOut();
+                    }
+                    else {
+                        initSession();
+                        sessao_SetIntervalo();
+                        sessao_ultimaAtividade = new Date();
+						
+						console.log(diferencaMinutos);
+                    }
+                }
+                else {
+                    sessao_LogOut();
+                }
+            }
+        }
+		
+	function formatarCronometro(s){
+		function duas_casas(numero){
+			if(numero <= 9){
+				numero = "0"+numero;
+			}
+			return numero;
+		}
+		hora = duas_casas(parseInt(s/3600));
+		minuto = duas_casas(parseInt((s%3600)/60));
+		segundo = duas_casas((s%3600)%60);
+		
+		hora = hora % 60;
+		minuto = minuto % 60;
+		segundo = segundo % 60;
+		
+		if( hora <= 9){ hora = "0" + hora; }
+		if( minuto <= 9){ minuto = "0" + minuto; }
+		if( segundo <= 9 ){ segundo = "0" + segundo; }
+		
+		if((hora == 00) || (hora == null) ||(hora == undefined)){
+			formatado = " "+minuto+":"+segundo+" ";
+		}else{
+			formatado = " "+hora+":"+minuto+":"+segundo+" ";
+		}
+		return formatado;
+	}
+	
+	/*function abreModal() {
+	 $("#modal-alert").modal({
+		  show: true
+		});
+	 }
+	setTimeout(abreModal, 5000);*/	
+	//sessao_SetIntervalo();
+		
+		
+	document.onclick = function(event){
+		//Compensate for IE<9's non-standard event model
+		//
+		if(event===undefined) event=window.event;
+		var target= 'target' in event? event.target : event.srcElement;
+		alert('clicked on :'+target.tagName);
+	};	
+		
+</script>
+
+<script type="text/javascript">
+	function verificarTela(screen, window){
+		var tela = screen;
+		
+		if((screen >= 480) && (screen <= 577)){
+		if(!$("#screen").hasClass("black")){
+				$("#screen").removeClass()
+				$("#screen").addClass("black")
+				
+			}
+		if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		
+		if((screen >= 576) && (screen <= 768)){
+			if(!$("#screen").hasClass("gray")){
+				$("#screen").removeClass()
+				$("#screen").addClass("gray")
+			}
+			if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		
+		if((screen >= 769) && (screen <= 841)){
+			if(!$("#screen").hasClass("red")){
+				$("#screen").removeClass()
+				$("#screen").addClass("red")
+			}
+			if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		
+		if((screen == 842) && (screen == 991)){
+			if(!$("#screen").hasClass("green")){
+				$("#screen").removeClass()
+				$("#screen").addClass("green")
+			}
+			if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		
+		if((screen >= 992) && (screen <= 1023)){
+			if(!$("#screen").hasClass("yellow")){
+				$("#screen").removeClass()
+				$("#screen").addClass("yellow")
+			}
+			if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		
+		if((screen >= 1024) && (screen <= 1199)){
+			if(!$("#screen").hasClass("blue")){
+				$("#screen").removeClass()
+				$("#screen").addClass("blue")
+			}
+			if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		if((screen >= 1200)) {
+			if(!$("#screen").hasClass("brown")){
+				$("#screen").removeClass()
+				$("#screen").addClass(".brown")
+			}
+			if(!$("#window").hasClass("black")){
+			$("#window").removeClass()
+			$("#window").addClass("black")
+			}
+		}
+		return tela;
+	}
+
+</script>
+<script>
+function sizeOfThings(){
+  var windowWidth = window.innerWidth;
+  var windowHeight = window.innerHeight;
+  
+  var screenWidth = screen.width;
+  var screenHeight = screen.height;
+  
+  document.querySelector('.window-size').innerHTML = windowWidth + 'x' + windowHeight;
+  document.querySelector('.screen-size').innerHTML = screenWidth + 'x' + screenHeight;
+
+};
+sizeOfThings();
+
+window.addEventListener('resize', function(){
+	sizeOfThings();
+});
+</script>
+<style>
+    .black {
+		color: white;
+        background-color: black;
+    }
+	.gray {
+		color: black;
+        background-color: gray;
+    }
+	.red {
+		color: white;
+        background-color: red;
+    }
+	.green {
+		color: white;
+        background-color: green;
+    }
+	.yellow {
+		color: black;
+        background-color: yellow;
+    }
+	.brown {
+		color: black;
+        background-color: brown;
+    }
+	.blue {
+		color: white;
+        background-color: blue;
+    }
+</style>
+</head>
+<body onload="initSession()">
+	<div class="modal fade" tabindex="10" role="dialog" id="modal-alert" >
+    	<div class="modal-dialog" >
+        	<div class="modal-content">
+				<!--<div class="fechar" data-dismiss="modal">X</div>-->
+
+				<div class="modal-alert">
+					<img src="images/logo-alpha.png" style="width:45%"><br/><br/>
+					
+					<h5><div class="text-white" id="data-hoje" style="float:right"></div></h5><br/>
+					<div style="float:right; padding-right:10px">
+						
+						<a href="" class="btn-desq" data-dismiss="modal">
+							<button class="btn btn-lg btn-custon-white">
+								<span class="mdi mdi-run"></span> Continue
+							</button>
+						</a>
+						<a href="" class="btn-desq">
+							<button class="btn btn-lg btn-custon-transluced">	
+								<span class="mdi mdi-logout"></span> Sair
+							</button>
+						</a>
+					</div>
+				</div>
+				<br/>
+			</div>
+		</div>		
+	</div>
+
+	<div id="txt"></div><br/></div>
+	
+	<div id="window"></div>
+		<h3>Window size is <span class="window-size"></span></h3>
+		<p>Knowing this number you can make decisions based in breakpoints of window.</p>
+		<hr>
+	<div id="screen"></div>
+		<h3>Screen size is <span class="screen-size"></span></h3>
+		<p>Here you have an idea of device screen size. </p>
+</body>
+</html>

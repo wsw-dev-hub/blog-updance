@@ -1,0 +1,161 @@
+/*@charset "utf-8"
+/* CSS Document */
+
+/*PALETA DE CORES*/
+/*
+LARANJA:      #F27405
+VERMELHO:     #F20505
+ROXO/MARROM:  #40010D
+ROXO/AZUL:    #400124
+ROXO/ESCURO:  #270140
+ROSA/CHOQUE:  #D9043D
+ROSA/OPACO:   #BF0449
+ROXO:         #8C0783
+ROXO/MEIO:    #5708A6
+AZUL/MÉDIO:   #430ABF
+AZUL MARINHO: #110273
+AZUL:         #030BA6
+AZUL/GELO:    #DFE0F2
+*/
+
+/* Telefones em paisagem e abaixo */
+ /* @media (max-width: 480px) */
+
+/* Telefones em paisagem a tablet em retrato */
+  /*@media (max-width: 767px)*/
+
+/* Tablet em retrato a paisagem e desktop */
+  /*@media (min-width: 768px) and (max-width: 992px)*/
+
+/* Desktop grande */
+  /*@media (min-width: 1200px)*/
+ 
+/* Monitor widescreen */ 
+  /*@media (max-width: 1200px)*/
+  
+body{
+ background-color:#fff;
+}
+
+body { padding: 15px; background:#eee; font-family: Arial,
+Helvetica, sans-serif; }
+
+.caixa {
+	border: solid 1px #666;
+	padding: 5px 10px;
+	margin: 40px;
+}
+
+.area-visivel span {
+	color: #666;
+	display: none;
+}
+
+/* max-width  */
+@media screen and (max-width: 480px) {
+	.zero {
+		background: yellow;
+	}
+	span.lt480 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 481px) and (max-width: 575px) {
+	.um {
+		background: #F9C;
+	}
+	span.bt841-575 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+	.dois {
+		background: blue;
+	}
+	span.bt576-768 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 769px) and (max-width: 842px) {
+	.tres {
+		background: purple;
+	}
+	span.bt769-842 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 843px) and (max-width: 992px) {
+	.quatro {
+		background: green;
+	}
+	span.bt843-992 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 993px) and (max-width: 1024px) {
+	.cinco {
+		background: red;
+	}
+	span.gt993-1024 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1199px) {
+	.seis {
+		background: gray;
+	}
+	span.gt1025-1200 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width:1200px){
+	.sete {
+		background: orange;
+	}
+	span.gt1200 {
+		display: inline-block;
+	}
+}
+/* min-width 
+@media screen and (min-width: 900px) {
+	.dois {
+		background: #F90;
+	}
+	span.gt900 {
+		display: inline-block;
+	}
+}*/
+
+/* min-width & max-width 
+@media screen and (min-width: 600px) and (max-width: 900px) {
+	.tres {
+		background: #9CF;
+	}
+	span.bt600-900 {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+	.quatro {
+		background: green;
+	}
+	span.bt900-1200 {
+		display: inline-block;
+	}
+}*/
+
+
+/* max device width */
+@media screen and (max-device-width: 480px) {
+	.iphone {
+		background: #ccc;
+	}
+}

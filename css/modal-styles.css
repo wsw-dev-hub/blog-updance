@@ -1,0 +1,121 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+
+/*MODAL*/
+.modal-dialog, .modal-content{background:#020118; z-index:99999!important;}
+.modal-dialog{ width:600px;}
+.modal-content .fechar{ position:absolute; margin:0; padding:15px; color: #F434A1; right:15px; cursor:pointer; font-style:bold; transition:0.5s;}
+.modal-content .fechar:hover{ color: #DFE0F2; transition:0.5s; } 
+
+
+/*.modal-hero{
+	top:0;
+	height:300px;
+	background-image: url(./images/capa-segredos.png);
+	position:center;
+	background-size:cover;
+	background-repeat:no-repeat;
+	padding:40px;
+	margin-bottom:30px;}*/
+	
+.modal-hero::after{
+	content:'';
+	width:100%;
+	height:200px;
+	display:block;
+	background:linear-gradient(180deg, rgba(0,0,0,0)0%, #020118 100%);
+	position:absolute;
+	left:0;
+	margin-top:-170px;
+	z-index:1;}	
+	
+.modal-hero img{
+	width:210px;
+	z-index:2;
+	margin-bottom:40px;
+	margin-top:40px;
+	position:relative;}
+
+.modal-hero-infos{position:relative; z-index:2;}
+	
+.modal-hero-infos button:first-child{margin-right:20px;}
+
+.news-descricao, .medida-descricao, .estrelas-descricao, .modal-descricao{font-size:15px;color:#fff;}
+	
+.news-elenco, .medida-elenco, .modal-elenco{font-size:13px; color:rgba(255,255,255,0.55);}
+.news-elenco text, .medida-elenco, .estrelas-elenco, .modal-elenco{color:#fff;}
+
+/*.desc{
+	height:420px;
+	overflow-y:scroll;
+	list-style:none;
+	padding:20px 0;
+	padding:0;
+	display:block;
+	border:1px solid transparent;
+	position:relative;
+	transition:0.5s;
+	z-index:3;
+}*/
+
+.modal-infos p{color:#7e7b7b; font-size:12px;padding-top:16px;}
+.modal-infos p text{color:#fff;}
+
+#lista-episodeos{ list-style:none; padding:0; color:white;}
+/*#lista-episodeos li{
+	padding:20px;}
+	
+.desc::-webkit-scrollbar{display:none}	*/
+
+#lista-episodeos li{
+	padding:20px; 
+	overflow:hidden;
+	overflow:auto;
+	transition:0.5s;
+	overflow:auto;
+	border:1px solid transparent;
+	overflow-y: hidden;}
+
+#lista-episodeos li:hover{cursor:pointer; background-color:rgba(255,255,255,0.05);}
+#lista-episodeos li.select{cursor:pointer; padding-top:10px; background-color:rgba(255,255,255,0.05);}
+#lista-episodeos li p{font-size:13px;color:#CCC!important;}
+
+
+
+/*AJUSTES DA ÁREA DE DESCRIÇÃO*/
+.desc{}
+
+.descricao-lista{ 
+	height:420px;
+	/*overflow-y:scroll;*/
+	overflow:hidden;
+	list-style:none;
+	padding:20px 0;
+	padding:0;
+	display:block;
+	border:1px solid transparent;
+	position:relative;
+	transition:0.5s;
+	z-index:3;
+	list-style:none; 
+	padding:0; 
+	color:white;
+	}
+
+.descricao-lista li{
+	padding:20px; 
+	overflow:hidden;
+	overflow:auto;
+	transition:0.5s;
+	overflow:auto;
+	border:1px solid transparent;
+	overflow-y: hidden;}
+
+.descricao-lista li:hover{cursor:pointer; background-color:rgba(255,255,255,0.05);}
+.descricao-lista li.select{cursor:pointer; padding-top:10px; background-color:rgba(255,255,255,0.05);}
+.descricao-lista li p{font-size:13px;color:#CCC!important;}
+
+
+.lista-selecao{padding:10px; list-style:none; }
+/* FIM MODAL */

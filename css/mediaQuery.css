@@ -1,0 +1,641 @@
+/*@charset "utf-8"*/
+/* ================================================================
+   MEDIA QUERIES — Up Dance Experience
+   Paleta de cores oficial:
+   #F27405  Laranja         #F20505  Vermelho
+   #BF0449  Rosa/Opaco      #FA33A1  Rosa/Choque
+   #8C0783  Roxo            #5708A6  Roxo/Médio
+   #430ABF  Azul/Médio      #110273  Azul Marinho
+   #030BA6  Azul            #DFE0F2  Azul/Gelo
+================================================================ */
+
+/* ================================================================
+   MOBILE PEQUENO — até 360px
+================================================================ */
+@media screen and (max-width: 360px) {
+    .page-title .content h1 { font-size: 1.15rem; }
+    .news-block-two .inner-box .upper-content h4 { font-size: 0.95rem; }
+}
+
+
+/* ================================================================
+   MOBILE — até 480px
+================================================================ */
+@media screen and (max-width: 480px) {
+
+    /* HEADER — oculta header de outras páginas, preserva blog-header */
+    header.row:not(.blog-header) { visibility: hidden; }
+    header.main-header,
+    header.main-watch            { visibility: visible; }
+    .nav-outer                   { float: right; padding-right: 4%; }
+    .outer-box                   { margin-top: 0 !important; }
+
+    /* PLAYLIST / HERO (outras páginas) */
+    #hero               { height: 768px; top: -160px; background-position: left; background-size: contain; }
+    #hero::after        { top: calc(690px - 375px); }
+    #hero-descricao     { height: 690px; top: -100px; }
+    #hero-descricao::after { top: calc(600px - 325px); }
+    #hero-watch         { height: 576px; }
+    #hero-watch::after,
+    #hero-perfil::after { top: calc(576px - 275px); }
+
+    #desc-infos img.logo,
+    #hero-infos img.logo { width: 230px; margin-bottom: 20px; }
+    #desc-infos,
+    #hero-infos          { top: 80px; }
+
+    .modal-dialog { width: 100%; }
+    .modal        { height: 95%; }
+    iframe        { width: 100%; height: 576px; top: -30px; }
+    .page         { margin-top: 640px !important; left: 4px; width: calc(100% - 10px); }
+
+    .controles             { margin-top: 455px; }
+    .controles .channels   { margin-top: 0; height: 50px; position: absolute; }
+    .btn-custon-right      { left: 1%; margin-top: 110px; }
+
+    .content-left { width: 100%; height: 370px; margin: 0 auto; text-align: center; }
+    .content-left h6 { padding: 12px; }
+    .content-right { width: 100%; padding-left: 0; padding-right: 0; padding-bottom: 150px; }
+    .modal-infos p { color: #7e7b7b; font-size: 12px; padding-top: 7px; }
+    .desc-nav      { width: 90%; }
+
+    /* Botões / lista */
+    .lista-selecao,
+    #desc-infos .destaq span { visibility: hidden; }
+    .descricao-lista li       { height: 160px; }
+    .playlist { width: 100%; position: relative; margin: 0 auto; margin-top: 56px; padding: 0; }
+    .play     { width: calc(100% - 20px); margin: 10px; margin-top: 25px; margin-bottom: 35px; }
+
+    /* FOOTER */
+    .floor          { margin-top: -960px !important; z-index: 3; }
+    .main-floor     { margin-top: 90px !important; }
+    .footer         { padding-top: 1120px; }
+    .footer,
+    .sing-footer    { left: 10px !important; width: calc(100% - 20px) !important; }
+
+    #hero-blog .floor           { margin-top: 30px !important; }
+    #hero-blog .container.footer { padding-top: 20px !important; }
+    #hero-blog .container.footer,
+    #hero-blog .container.sing-footer { left: 0 !important; width: 100% !important; padding-left: 15px; padding-right: 15px; }
+
+    .on-footer {
+        flex: 0 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 7px 0;
+        display: block !important;
+        min-height: 180px;
+    }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    .gallery      { width: 100%; }
+    .lista-galeria { width: 100%; padding-top: 20px; margin: 0 auto; }
+    .lista-galeria li {
+        width: 98px; height: 98px; margin: 6px;
+        background-color: #666; display: inline-block;
+        float: left; list-style: none;
+    }
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+
+    /* ── BLOG (mobile pequeno) ─────────────────────────────── */
+    .main-blog-content      { padding: 80px 10px 0 !important; }
+    .page-title             { padding: 60px 0 40px; }
+    .page-title .content h1 { font-size: 1.25rem; }
+    #blog-list-infos .content-side,
+    #blog-list-infos .sidebar-side { padding-left: 6px !important; padding-right: 6px !important; }
+    .sidebar_cleanner       { height: 0 !important; }
+    .blog-club-content      { height: auto; min-height: 360px; }
+    .blog-club-footer       { padding: 8% 18%; }
+    .news-block-two .inner-box { padding: 16px 14px 14px; }
+    .news-block-two .inner-box .upper-content { padding: 0 0 10px; }
+    .news-block-two .inner-box .upper-content h4 { font-size: 1rem; }
+    .news-block-two .inner-box .upper-content .text { font-size: 13px; }
+    .news-block-two .inner-box .lower-content { padding-top: 14px; }
+
+    /* Logo mobile */
+    .blog-logo-img { height: 36px; }
+
+    /* ── Rodapé blog (≤ 480px) */
+    .blog-footer              { padding: 36px 0 0; margin-top: 40px; }
+    .blog-footer__col         { padding-left: 12px; padding-right: 12px; }
+    .blog-footer__cols        { row-gap: 28px; padding-bottom: 32px; }
+    .blog-footer__gallery     { max-width: 200px; }
+
+}
+
+
+/* ================================================================
+   PHABLET — 481px a 575px
+================================================================ */
+@media (min-width: 481px) and (max-width: 575px) {
+
+    header.row:not(.blog-header) { visibility: hidden; }
+    header.main-header,
+    header.main-watch            { visibility: visible; }
+
+    /* FOOTER */
+    .on-footer {
+        flex: 0 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 7px 0 !important;
+        display: block !important;
+        min-height: 180px;
+    }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    /* ── BLOG ──────────────────────────────────────────────── */
+    .main-blog-content      { padding: 90px 12px 0 !important; }
+    .page-title             { padding: 68px 0 44px; }
+    .page-title .content h1 { font-size: 1.35rem; }
+    #blog-list-infos .content-side,
+    #blog-list-infos .sidebar-side { padding-left: 8px !important; padding-right: 8px !important; }
+    .news-block-two .inner-box .upper-content .text { font-size: 13px; }
+    .blog-club-content  { height: auto; min-height: 360px; }
+    .blog-club-footer   { padding: 8% 20%; }
+    .blog-logo-img      { height: 38px; }
+
+    /* ── Rodapé blog (481–575px) */
+    .blog-footer          { padding: 36px 0 0; margin-top: 40px; }
+    .blog-footer__col     { padding-left: 12px; padding-right: 12px; }
+    .blog-footer__cols    { row-gap: 28px; padding-bottom: 32px; }
+    .blog-footer__gallery { max-width: 200px; }
+
+}
+
+
+/* ================================================================
+   SMALL (Bootstrap sm) — 576px a 767px
+================================================================ */
+@media screen and (min-width: 576px) {
+
+    /* HEADER — outras páginas */
+    header.row:not(.blog-header) { visibility: hidden; }
+    header.main-header,
+    header.main-watch            { visibility: visible; padding: 40px; }
+    .nav-outer  { float: right; padding-right: 0; }
+    .outer-box  { margin-top: 0; }
+    .menu-list  { visibility: hidden; }
+
+    /* HERO / PLAYLIST */
+    #hero-descricao     { height: 768px; top: -160px; }
+    #hero, #hero-watch  { height: 650px; }
+    #hero::after,
+    #hero-watch::after  { height: 275px; top: calc(660px - 275px); }
+    #hero-infos,
+    #perfil-infos       { margin-top: 90px; }
+    #desc-infos         { margin: 0 auto; top: 190px; }
+    #desc-infos img.logo { width: 300px; padding-bottom: 10px; }
+
+    iframe  { width: 100%; height: 676px; top: -30px; }
+    .page   { margin-top: 580px !important; left: 4px; width: calc(100% - 10px); }
+    .controles          { margin-top: 495px; }
+    .controles .channels { margin-top: 0; height: 50px; position: absolute; }
+    .btn-custon-right   { left: 1%; margin-top: 110px; }
+
+    .content-left  { width: 90% !important; height: 370px; margin: 0 auto; padding-left: 10%; text-align: justify; }
+    .lista-selecao,
+    #desc-infos .destaq span { visibility: hidden !important; }
+    .descricao-lista li { height: 160px; }
+    .content-right { width: 100%; padding-bottom: 150px; }
+    .desc-nav      { width: 70%; }
+    .play { left: 2.5px; width: calc(95% - 0px); margin: 10px; margin-top: 25px; margin-bottom: 50px; }
+
+    /* FOOTER */
+    .floor      { margin-top: 110px !important; z-index: 3; }
+    .main-floor { margin-top: 2350px !important; }
+    .footer, .sing-footer { left: 90px; width: calc(100% - 190px); }
+    .footer     { padding-top: 325px; }
+    #hero-blog .floor            { margin-top: 30px !important; }
+    #hero-blog .container.footer { padding-top: 20px !important; }
+
+    .on-footer {
+        margin: 7px !important;
+        display: inline-table !important;
+        width: 90% !important;
+        height: 200px !important;
+    }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    .gallery       { width: 100% !important; margin: 0 auto !important; }
+    .lista-galeria { padding-left: 21%; }
+    .lista-galeria li {
+        width: 90px; height: 90px; margin: 6px;
+        background-color: #666; display: inline-block;
+        float: left; list-style: none;
+    }
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+
+    /* ── BLOG (sm) ─────────────────────────────────────────── */
+    .main-blog-content      { padding: 100px 14px 0 !important; }
+    .page-title             { padding: 74px 0 50px; }
+    .page-title .content h1 { font-size: 1.45rem; }
+    .news-block-two .inner-box .upper-content .text { font-size: 13px; }
+    .blog-club-content  { height: auto; min-height: 370px; }
+    .blog-club-footer   { padding: 8% 22%; }
+    .blog-logo-img      { height: 40px; }
+
+    /* ── Rodapé blog (576–767px): limita galeria em tela estreita */
+    .blog-footer__gallery { max-width: 180px; }
+
+    /* Desfaz visibility:hidden do .menu-list acima para blog-header.
+       display NÃO é forçado aqui — Bootstrap d-none/d-lg-inline-flex controla */
+    header.blog-header .menu-list {
+        visibility: visible !important;
+    }
+
+}
+
+
+/* ================================================================
+   TABLET PORTRAIT — 768px a 841px
+================================================================ */
+@media screen and (min-width: 768px) {
+
+    /* HEADER */
+    header.row:not(.blog-header) { visibility: hidden; }
+    header.main-header,
+    header.main-watch            { visibility: visible; padding: 40px; }
+    .outer-box  { margin-top: 0; }
+    .nav-outer  { float: right; padding-right: 1%; }
+    .menu-list  { visibility: hidden; }
+
+    /* DESTAQUES */
+    #hero-infos img.logo       { width: 280px; padding-bottom: 0; }
+    #hero, #hero-watch         { height: 650px; }
+    #hero::after,
+    #hero-perfil::after        { top: calc(660px - 275px); }
+    #hero-watch::after         { top: calc(650px - 235px); }
+    #hero-descricao            { height: 600px; top: -30px; }
+    #hero-descricao::after     { top: calc(600px - 325px); }
+    #desc-infos                { top: 0; }
+
+    #hero-infos, #desc-infos, #perfil-infos { padding: 0; margin-top: 70px; z-index: 3; position: relative; }
+    #desc-infos                { top: 120px; }
+
+    iframe  { width: 100%; height: 676px; top: -20px; }
+    .page   { margin-top: 580px !important; left: 4px; width: calc(100% - 10px); }
+    .controles          { margin-top: 495px; }
+    .controles .channels { margin-top: 0; height: 50px; position: absolute; }
+    .btn-custon-right   { left: 0; margin-top: 150px; }
+
+    .content-left  { width: 80% !important; height: 370px; margin: 0 auto !important; padding-left: 1.5%; }
+    .content-right { width: 80%; margin-left: 70px; padding-bottom: 150px; }
+    .desc-nav      { width: 70%; }
+    .lista-selecao,
+    #desc-infos .destaq span { visibility: hidden; }
+    .descricao-lista li { height: 160px; }
+    .play { left: 2.5px; width: calc(47% - 5px); margin: 10px; margin-top: 25px; margin-bottom: 50px; }
+
+    /* FOOTER */
+    .floor      { margin-top: 110px !important; z-index: 3; }
+    .main-floor { margin-top: 1100px !important; }
+    .footer, .sing-footer { padding-left: 30px; left: 110px; width: calc(100% - 220px); }
+    .footer     { padding-top: 325px; }
+    #hero-blog .floor            { margin-top: 40px !important; }
+    #hero-blog .container.footer { padding-top: 20px !important; }
+
+    .on-footer {
+        margin: 7px !important;
+        display: inline-table !important;
+        width: 100% !important;
+        height: 200px !important;
+    }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    .gallery        { width: 100% !important; }
+    .lista-galeria  { width: 70%; padding-left: 11%; margin: 0 auto !important; }
+    .lista-galeria li {
+        width: 100px; height: 100px; margin: 6px;
+        background-color: #666; display: inline-block;
+        float: left; list-style: none;
+    }
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+
+    /* ── BLOG (tablet portrait) ─────────────────────────────── */
+    .main-blog-content      { padding: 110px 18px 0 !important; }
+    .page-title             { padding: 85px 0 60px; }
+    .page-title .content h1 { font-size: 1.6rem; }
+    .blog-club-content      { height: auto; min-height: 400px; }
+    .blog-club-footer       { padding: 9% 25%; }
+    .blog-logo-img          { height: 42px; }
+
+    header.blog-header .menu-list {
+        visibility: visible !important;
+    }
+}
+
+
+/* ================================================================
+   TABLET LANDSCAPE — 842px a 991px
+================================================================ */
+@media screen and (min-width: 842px) {
+
+    header.row:not(.blog-header) { visibility: hidden; }
+    header.main-header,
+    header.main-watch            { visibility: visible; padding: 40px; }
+    .outer-box  { margin-top: 0; }
+    .nav-outer  { float: right; padding-right: 1%; }
+    .menu-list  { visibility: hidden; }
+
+    #hero-infos img.logo { width: 280px; }
+    #hero-infos, #desc-infos, #perfil-infos { padding: 0; margin-top: 70px; z-index: 3; position: relative; }
+    #hero, #hero-watch   { height: 650px; }
+    #hero-watch::after   { top: calc(650px - 275px); }
+    #hero::after,
+    #hero-perfil::after  { top: calc(700px - 325px); }
+    #hero-descricao      { height: 650px; top: -100px; }
+    #desc-infos          { top: 120px; }
+    #desc-play, #desc-infos { width: 100%; }
+
+    iframe { width: 100%; height: 676px; top: -20px; }
+    .page  { margin-top: 550px !important; left: 4px; width: calc(100% - 10px); }
+
+    .content-left  { width: 75%; height: 370px; margin: 0 auto; padding-left: 12px; padding-top: 40px; }
+    .content-right { width: 80%; margin-left: 70px; padding-bottom: 150px; }
+    .desc-nav      { width: 70%; }
+
+    .floor      { margin-top: 110px !important; z-index: 3; }
+    .main-floor { margin-top: 1080px !important; }
+    .footer, .sing-footer { padding-left: 10px; left: 110px; width: calc(100% - 220px); }
+    .footer     { padding-top: 325px; }
+    #hero-blog .floor            { margin-top: 40px !important; }
+    #hero-blog .container.footer { padding-top: 20px !important; }
+
+    .on-footer {
+        flex: 0 0 auto !important;
+        max-width: 46% !important;
+        width: 46% !important;
+        margin: 7px 4px !important;
+        display: block !important;
+        min-height: 200px;
+    }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    .gallery       { width: 100% !important; margin: 0 auto !important; }
+    .lista-galeria { width: 70%; margin: 0 auto; margin-left: 13% !important; }
+    .lista-galeria li {
+        width: 100px; height: 100px; margin: 6px;
+        background-color: #666; display: inline-block;
+        float: left; list-style: none;
+    }
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+
+    /* ── BLOG (tablet landscape) ────────────────────────────── */
+    .main-blog-content { padding: 120px 20px 0 !important; }
+    .blog-logo-img     { height: 44px; }
+
+    header.blog-header .menu-list {
+        visibility: visible !important;
+    }
+}
+
+
+/* ================================================================
+   SIDEBAR — oculta coluna lateral abaixo de lg
+   (widgets são injetados inline pelo scroll infinito)
+================================================================ */
+@media (max-width: 991.98px) {
+    .sidebar-side { display: none !important; }
+}
+
+
+/* ================================================================
+   DESKTOP PEQUENO — 992px a 1023px
+================================================================ */
+@media screen and (min-width: 992px) {
+    .cleanner { margin-top: 0; }
+
+    /* HEADER */
+    header.row:not(.blog-header) { visibility: hidden; }
+    header.main-header           { visibility: visible; padding: 40px; }
+    header.main-watch            { visibility: visible; padding: 40px; }
+    .outer-box  { margin-top: 0; }
+    .nav-outer  { float: right; padding-right: 7%; }
+    .menu-list  { visibility: hidden; }
+
+    /* DESTAQUES */
+    #hero-infos img.logo { width: 280px; }
+    #hero, #hero-watch   { height: 650px; }
+    #hero-watch::after   { top: calc(650px - 275px); }
+    #hero::after,
+    #hero-perfil::after  { top: calc(700px - 325px); }
+    #hero-descricao      { height: 540px; top: 3px; }
+    #desc-infos          { top: 0; }
+
+    #desc-play.container { width: 940px; }
+    #playlist-content    { width: 100%; }
+
+    iframe   { width: 100%; height: 700px; }
+    .controles { margin-top: 500px; }
+    .video-bar-range    { width: 100% !important; }
+    .controles .channels { margin-top: 0; height: 50px; position: absolute; width: 100%; }
+    .btn-custon-right   { left: 0; margin-top: 150px; }
+
+    #desc-play.container { width: 940px; }
+    #playlist-content h5 { font-size: 1.15rem; }
+    #desc-infos .text-white h6 { width: 380px; padding-left: 20px; font-size: 0.86rem; margin-bottom: 25px; }
+    #desc-infos .titulos h5    { font-size: 1.15rem !important; }
+
+    .content-left  { width: 45% !important; margin-left: 10px; height: 370px; }
+    .content-right { width: 50%; margin-left: 0; padding-bottom: 120px; }
+    .content-left.dsq  { width: 100% !important; padding-top: 20px; padding-left: 3%; }
+    .content-left.dsq h6 { width: 56%; }
+    .desc-nav { width: 40%; }
+    .lista-selecao,
+    #desc-infos .destaq span { visibility: visible !important; }
+
+    .gallery  { width: 100% !important; margin: 0 auto !important; }
+    .playlist { width: 100%; margin: 0 auto; position: relative; }
+    .play     { left: 2.6px; width: calc(31% - 5px); margin: 10px; margin-top: 25px; margin-bottom: 50px; }
+
+    /* FOOTER */
+    .floor      { margin-top: 480px !important; z-index: 3; }
+    .main-floor { margin-top: 0 !important; }
+    .footer     { padding-top: 0; }
+    .footer, .sing-footer { left: 25px; width: calc(100% - 50px); }
+    #hero-blog .floor { margin-top: 40px !important; }
+
+    .col-3 { flex: 0 0 auto !important; width: 25% !important; }
+    .col-4 { flex: 0 0 auto !important; width: 33.3333% !important; }
+    .on-footer { margin: 12px; display: block; height: 250px; }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+    .lista-galeria { width: 100%; margin-left: 0 !important; }
+    .lista-galeria li {
+        width: 78px !important; height: 78px !important; margin: 3px;
+        background-color: #666; display: inline-block;
+        float: right; list-style: none;
+    }
+
+    /* ── BLOG (desktop pequeno) ─────────────────────────────── */
+    .column-blog {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    .main-blog-content     { padding-left: 22px !important; padding-top: 0; }
+    .content-side.col-lg-8 { padding-right: 20px; }
+    .sidebar-side.col-lg-4 { padding-left: 10px; }
+    .blog-club-content     { height: 450px; }
+    .blog-logo-img         { height: 44px; }
+
+    /* Menu do blog visível no desktop */
+    header.blog-header .menu-list {
+        visibility: visible !important;
+        display: inline-flex !important;
+    }
+}
+
+
+/* ================================================================
+   DESKTOP — 1024px a 1199px
+================================================================ */
+@media screen and (min-width: 1024px) {
+
+    header.row:not(.blog-header) { visibility: visible; font-size: 0.9rem; }
+    header.main-header           { visibility: hidden; }
+    header.main-watch            { visibility: visible; }
+    .nav-outer  { visibility: hidden; }
+    .menu-list  { font-size: 1rem; visibility: visible; }
+
+    /* DESTAQUES */
+    #hero                { top: -70px; }
+    #hero, #hero-watch   { height: 650px; }
+    #hero::after,
+    #hero-watch::after,
+    #hero-perfil::after  { top: calc(700px - 275px); }
+    #hero-descricao::after { top: calc(600px - 225px); }
+    #hero-infos, #desc-infos, #perfil-infos {
+        padding: 0; margin-top: 170px;
+        z-index: 3; position: relative; padding-left: 3%;
+    }
+    #hero-infos img.logo { width: 320px; padding-bottom: 0; }
+    #hero-descricao      { height: 640px; top: 2px; }
+
+    .content-left    { width: 46% !important; padding-top: 0; padding-left: 3%; }
+    .content-left h6 { width: 56%; }
+    .page            { margin-top: 550px !important; }
+
+    #playlist-content { width: 100%; }
+    #desc-play.container { width: 990px; }
+    .playlist { width: 100%; }
+    .play     { left: 2.6px; width: calc(30.3% - 0px); margin: 10px; margin-top: 25px; margin-bottom: 50px; }
+    iframe    { width: 100%; height: 700px; }
+    .controles        { margin-top: 500px; }
+    .video-bar-range  { width: 100% !important; }
+    .controles .channels { margin-top: 0; height: 50px; position: absolute; width: 100%; }
+    .btn-custon-right { left: 0; margin-top: 150px; }
+
+    #desc-perfil.container { width: 100% !important; margin: 0; }
+
+    /* FOOTER */
+    .footer     { padding-top: 0; }
+    .main-floor { margin-top: 0; }
+    .footer, .sing-footer { left: 50px; width: calc(100% - 100px); }
+    #hero-blog .floor { margin-top: 40px !important; }
+
+    .col-3 { flex: 0 0 auto !important; width: 25% !important; }
+    .col-4 { flex: 0 0 auto !important; width: 33.3333% !important; }
+    .on-footer { margin: 12px; display: block; height: 250px; }
+    .on-footer h5.text-white { color: #D9043D !important; }
+
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+    .lista-galeria { width: 100%; margin-left: 10px; padding-left: 0; }
+    .lista-galeria li {
+        width: 78px !important; height: 78px !important; margin: 3px;
+        background-color: #666; display: inline-block;
+        float: right; list-style: none;
+    }
+
+    /* ── BLOG (desktop) ─────────────────────────────────────── */
+    .main-blog-content { padding-left: 30px !important; }
+    header.blog-header .menu-list {
+        display: inline-flex !important;
+        visibility: visible !important;
+    }
+    .blog-logo-img { height: 46px; }
+}
+
+
+/* ================================================================
+   WIDE DESKTOP — 1200px+
+================================================================ */
+@media screen and (min-width: 1200px) {
+
+    header.row:not(.blog-header) { visibility: visible; font-size: 1.1rem; top: -10px; }
+    header.main-header           { visibility: hidden; }
+    header.main-watch            { visibility: visible; }
+    .nav-outer  { visibility: hidden; }
+    .menu-list  { font-size: 1.1rem; visibility: visible; }
+
+    /* DESTAQUES */
+    #hero                { top: -120px; height: 760px; }
+    #hero-watch          { height: 650px; }
+    #hero::after,
+    #hero-watch::after   { height: 275px; top: calc(700px - 275px); }
+    #main-content        { margin-top: 790px; }
+    #hero-infos          { top: 50px; }
+    #hero-infos, #desc-infos, #perfil-infos {
+        padding: 0; margin-top: 150px;
+        z-index: 3; position: relative; padding-left: 2%;
+    }
+    #hero-infos img.logo { width: 360px; padding-bottom: 20px; }
+    #hero::after         { top: calc(790px - 275px); }
+    #hero-descricao      { height: 580px; top: -10px; }
+
+    .content-left    { padding-left: 1%; }
+    .content-left h6 { width: 56%; }
+    .page            { margin-top: 600px !important; left: 4px; width: calc(100% - 10px); }
+
+    iframe    { width: 100%; height: 675px; top: 0; }
+    .controles        { margin-top: 510px; left: 0; }
+    .video-bar-range  { width: 100% !important; }
+    .controles .channels { margin-top: 0; height: 50px; position: absolute; width: 100%; }
+    .btn-custon-right { left: 0; margin-top: 150px; }
+
+    .content-left  { width: 46%; height: 370px; }
+    .content-right { width: 50%; height: 370px; margin-bottom: 140px; }
+    #desc-play.container { width: 100%; }
+    #playlist-content { width: 100%; margin-top: 140px !important; }
+    #playlist-content h5 { font-size: 1.25rem; }
+    .playlist { width: 100%; }
+    .play     { width: calc(30.9% - 0px); margin: 10px; margin-top: 25px; margin-bottom: 50px; }
+
+    /* FOOTER */
+    #main-content.floor  { margin-top: 30px; }
+    .footer, .sing-footer { left: 100px; width: calc(100% - 200px); }
+    .col-3 { flex: 0 0 auto !important; width: 25% !important; }
+    .col-4 { flex: 0 0 auto !important; width: 33.3333% !important; display: contents; }
+
+    .on-footer { margin: 12px; display: block; height: 250px; }
+    .on-footer h5.text-white { color: #D9043D !important; }
+    .lista-contatos, .lista-mapa { font-size: 0.86rem; color: #DFE0F2; padding-left: 6px; }
+    .lista-galeria { width: 90%; margin-left: 10px; padding-left: 0; }
+    .lista-galeria li {
+        width: 90px; height: 90px; margin: 3px;
+        background-color: #666; display: inline-block;
+        float: right; list-style: none;
+    }
+
+    /* ── BLOG (wide desktop) ────────────────────────────────── */
+    .main-blog-content { padding-left: 30px !important; }
+    .page-title        { padding: 115px 0 80px; }
+    .auto-container    { max-width: 1200px; }
+
+    .news-block-two .inner-box .upper-content h4 { font-size: 1.15rem; }
+    .news-block-two .inner-box .upper-content .text { font-size: 15px; }
+
+    .blog-logo-img { height: 48px; }
+}
+
+
+/* ================================================================
+   ULTRA WIDE — 1440px+
+================================================================ */
+@media screen and (min-width: 1440px) {
+    .auto-container       { max-width: 1360px; }
+    .page-title .content h1 { font-size: 2.4rem; }
+    .news-block-two .inner-box { padding: 28px 26px 24px; }
+    .blog-logo-img        { height: 52px; }
+}

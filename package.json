@@ -1,0 +1,35 @@
+{
+  "name": "ton-mesh-3d",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=cipher-academy",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=cipher-academy --branch=preview",
+    "contracts:test": "cd contracts && npx blueprint test",
+    "contracts:testnet": "cd contracts && npx blueprint run --testnet",
+    "contracts:mainnet": "cd contracts && npx blueprint run --mainnet"
+  },
+  "devDependencies": {
+    "vite": "^7.1.12",
+    "vite-plugin-mkcert": "^2.1.0",
+    "vite-plugin-node-polyfills": "^0.2.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mediapipe/holistic": "^0.5.1675471629",
+    "@mediapipe/tasks-vision": "^0.10.15",
+    "@ton/crypto": "^3.3.0",
+    "@ton/ton": "^16.0.0",
+    "@tonconnect/sdk": "^3.3.1",
+    "@tonconnect/ui": "^2.3.1",
+    "buffer": "^6.0.3",
+    "ton-core": "^0.53.0",
+    "tonweb": "^0.0.66"
+  }
+}

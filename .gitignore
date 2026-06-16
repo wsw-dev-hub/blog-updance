@@ -1,0 +1,24 @@
+# Dependências
+node_modules/
+
+# Build
+dist/
+
+# Ambiente
+.env
+.env.local
+.env.production
+
+# Certificados mkcert
+*.pem
+*.key
+
+# Cloudflare
+.wrangler/
+
+# VS Code
+.vscode/launch.json
+
+# Sistema
+.DS_Store
+Thumbs.db

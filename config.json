@@ -1,0 +1,71 @@
+{
+	"proxy_pass": "http://127.0.0.1:80/",
+	"private_key": "gXCu8H45Pyqg+Qs8HEs5M9KuljMqtTGl1axVqKE9epU=",
+	"external_ip": "186.203.133.173",
+	"listen_ip": "0.0.0.0",
+	"network_config_url": "https://ton.org/global.config.json",
+	"custom_tunnel_network_config_url": "",
+	"port": 3333,
+	"tunnel_config": {
+		"TunnelServerKey": "BtOxQAa+DI56/aYHhxF4gWGqQvErwOmfsEv6ezqLZpo=",
+		"TunnelThreads": 12,
+		"TunnelSectionsNum": 1,
+		"NodesPoolConfigPath": "",
+		"PaymentsEnabled": false,
+		"Payments": {
+			"ADNLServerKey": "DWe4qXDcF8QSTCebu3Cr/oaakwiwFiPzYIwQpPg1Guk=",
+			"PaymentsNodeKey": "5mRX/nuz5CM1PefI7totjPg+V8vax/e36K1gHAv7Df8=",
+			"WalletPrivateKey": "CVtjKnOVAySa0G976ivPzptKwxA71zukfY6fI60G2hg=",
+			"DBPath": "./payments-db/",
+			"SecureProofPolicy": false,
+			"ChannelsConfig": {
+				"SupportedCoins": {
+					"Ton": {
+						"Enabled": true,
+						"VirtualTunnelConfig": {
+							"ProxyMaxCapacity": "",
+							"ProxyMinFee": "0",
+							"ProxyFeePercent": 0,
+							"AllowTunneling": false
+						},
+						"MisbehaviorFine": "3",
+						"ExcessFeeTon": "0.25",
+						"Symbol": "TON",
+						"Decimals": 9,
+						"BalanceControl": {
+							"DepositWhenAmountLessThan": "1",
+							"DepositUpToAmount": "3",
+							"WithdrawWhenAmountReached": "0"
+						}
+					},
+					"Jettons": {
+						"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs": {
+							"Enabled": false,
+							"VirtualTunnelConfig": {
+								"ProxyMaxCapacity": "0",
+								"ProxyMinFee": "0",
+								"ProxyFeePercent": 0,
+								"AllowTunneling": false
+							},
+							"MisbehaviorFine": "12",
+							"ExcessFeeTon": "0.35",
+							"Symbol": "USDT",
+							"Decimals": 6,
+							"BalanceControl": {
+								"DepositWhenAmountLessThan": "5",
+								"DepositUpToAmount": "10",
+								"WithdrawWhenAmountReached": "0"
+							}
+						}
+					},
+					"ExtraCurrencies": {}
+				},
+				"BufferTimeToCommit": 10800,
+				"QuarantineDurationSec": 21600,
+				"ConditionalCloseDurationSec": 10800,
+				"MinSafeVirtualChannelTimeoutSec": 300
+			}
+		}
+	},
+	"version": 1
+}

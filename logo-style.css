@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	background-color:#020118;
+}
+
+.animate-svg{
+	width:200px;
+	margin:200px auto;
+	
+}
+
+.animate-svg svg{
+	stroke-width:3px;
+	stroke: #66FFFF;
+	width:100%;
+	height:100%;
+	stroke-dashoffset:2600;
+	stroke-dasharray:2600;
+	animation: svganimation 3s ease-in-out forwards infinite;
+}
+
+@keyframes svganimation{
+	
+	0%{ stroke-dashoffset:2600; }
+	
+	70%{ stroke-dashoffset:5; }
+	
+	100%{ stroke-dashoffset:0; }
+	
+}
