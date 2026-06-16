@@ -1043,7 +1043,7 @@ textarea { overflow: hidden; }
     font-size: 12px;
     line-height: 1.5;
     padding-left: 60px;
-	width:
+	/*width:*/
 }
 .sidebar .lista-posts .post .text a {
     color: var(--udx-text);

@@ -11,6 +11,10 @@ dist/
 .env
 .env.local
 .env.production
+config.
+config.json
+config.*.json
+payments-db/
 
 # Certificados mkcert
 *.pem
