@@ -1,12 +1,6 @@
 # Dependências
 node_modules/
 
-# ReadMe
-readme
-readme.md
-readme.txt
-
-
 # Build
 dist/
 
@@ -14,6 +8,9 @@ dist/
 .env
 .env.local
 .env.production
+readme
+readme.md
+readme.txt
 
 # Certificados mkcert
 *.pem
