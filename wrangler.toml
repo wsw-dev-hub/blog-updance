@@ -1,0 +1,8 @@
+name                = "blog-updance"
+compatibility_date  = "2026-06-17"
+
+[assets]
+directory = "dist"
+
+[env.staging]
+name = "blog-updance-staging"

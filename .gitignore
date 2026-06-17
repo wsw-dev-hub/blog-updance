@@ -35,7 +35,6 @@ payments-db/
 
 # ── Cloudflare Tunnel ────────────────────────────────────────
 .dev.vars
-wrangler.toml
 
 # ── Logs ────────────────────────────────────────────────────
 *.log
