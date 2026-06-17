@@ -2,7 +2,10 @@
 node_modules/
 
 # ReadMe
+readme
 readme.md
+readme.txt
+
 
 # Build
 dist/
