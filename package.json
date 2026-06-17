@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy  pages dist --project-name=blog-updance",
-    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name=blog-updance --branch=preview",
+    "deploy": "npm run build && wrangler deploy",
+    "deploy:preview": "npm run build && wrangler deploy dist",
     "deploy:staging": "npm run build && wrangler deploy --env staging",
     "post:new": "node scripts/new-post.js"
   },
