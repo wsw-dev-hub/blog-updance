@@ -7,12 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && pages deploy dist",
+    "deploy": "npm run build && workers deploy dist",
     "deploy:staging": "npm run build && wrangler deploy --env staging",
-    "post:new": "node scripts/new-post.js",
-    "contracts:test": "cd contracts && npx blueprint test",
-    "contracts:testnet": "cd contracts && npx blueprint run --testnet",
-    "contracts:mainnet": "cd contracts && npx blueprint run --mainnet"
+    "post:new": "node scripts/new-post.js"
   },
   "devDependencies": {
     "vite": "^7.1.12",
