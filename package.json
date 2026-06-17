@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy dist",
+    "deploy": "npm run build && pages deploy dist",
     "deploy:staging": "npm run build && wrangler deploy --env staging",
     "post:new": "node scripts/new-post.js",
     "contracts:test": "cd contracts && npx blueprint test",
@@ -18,7 +18,7 @@
     "vite": "^7.1.12",
     "vite-plugin-mkcert": "^2.1.0",
     "vite-plugin-node-polyfills": "^0.2.0",
-    "wrangler": "^4.63.0"
+    "wrangler": "^4.101.0"
   },
   "keywords": [],
   "author": "",
