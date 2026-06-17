@@ -1,8 +1,8 @@
 # Dependências
 node_modules/
 
-# Read Me
-readme
+# ReadMe
+readme.md
 
 # Build
 dist/
