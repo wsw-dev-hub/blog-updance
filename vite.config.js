@@ -61,7 +61,8 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 3000,
     open: true,
-    host: true,       // ← permite acessar de outros dispositivos na rede
+    host: !!process.env.EXPOSE_HOST,  // só expõe se a variável existir
+    //host: true,       // ← permite acessar de outros dispositivos na rede
     https: true
     /*https: {
       cert: fs.readFileSync(path.resolve(__dirname, 'localhost-cert.pem')),
@@ -97,9 +98,12 @@ export default defineConfig(({ command }) => ({
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
       },
       output: {
-        manualChunks: {
+        /*manualChunks: {
           'ton-connect': ['@tonconnect/ui', '@tonconnect/sdk'],
           'ton-core': ['@ton/ton', '@ton/core', '@ton/crypto'],
+        },*/
+        rollupOptions: {
+          external: ['ton-connect', 'ton-core']
         }
       }
     }
