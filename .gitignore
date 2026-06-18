@@ -1,6 +1,5 @@
 # Dependências
 node_modules/
-dist/
 
 # ReadMe
 readme
@@ -8,7 +7,6 @@ readme.md
 readme.txt
 
 # Build
-dist
 dist/
 
 # Ambiente
