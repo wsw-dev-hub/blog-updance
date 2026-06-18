@@ -98,13 +98,11 @@ export default defineConfig(({ command }) => ({
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
       },
       output: {
+        external: ['ton-connect', 'ton-core'],
         /*manualChunks: {
           'ton-connect': ['@tonconnect/ui', '@tonconnect/sdk'],
           'ton-core': ['@ton/ton', '@ton/core', '@ton/crypto'],
         },*/
-        rollupOptions: {
-          external: ['ton-connect', 'ton-core']
-        }
       }
     }
   },
