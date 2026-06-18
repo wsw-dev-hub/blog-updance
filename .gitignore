@@ -6,9 +6,6 @@ readme
 readme.md
 readme.txt
 
-# Build
-dist/
-
 # Ambiente
 .env
 .env.local
