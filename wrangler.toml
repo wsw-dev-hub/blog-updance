@@ -1,0 +1,22 @@
+name                = "blog"
+compatibility_date  = "2026-06-17"
+main                = "./worker/index.js"
+
+[assets]
+directory          = "dist"
+binding            = "ASSETS"
+html_handling      = "auto-trailing-slash"
+not_found_handling = "404-page"
+
+# o Worker roda ANTES dos assets só nestas rotas (resto continua estático e rápido)
+
+run_worker_first   = ["/api/*", "/membros/*"]
+
+# Namespace KV — guarda sessões, allowlist e inscritos da newsletter.
+# Crie com:  npx wrangler kv namespace create KV
+# e cole o id retornado abaixo.
+
+[[kv_namespaces]]
+binding = "KV"
+id      = "10d76ce53a5049fbab9cab01b68936e2"
+
