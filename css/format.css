@@ -617,7 +617,7 @@ span.destaque{
     position: relative;
     display: inline-block;
     line-height: 20px;
-    padding: 12px 18px 7px;
+    padding: 12px 18px 12px;
     margin: 0px 4px 8px 0px;
     color: #222222;
     text-align: center;
