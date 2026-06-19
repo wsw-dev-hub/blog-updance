@@ -1,0 +1,2009 @@
+@charset "utf-8";
+
+/* ================================================================
+   TOKENS DE DESIGN — Up Dance Experience
+   Centralize aqui. Reutilize em todas as páginas do projeto
+   importando este arquivo ou copiando este bloco para variables.css
+================================================================ */
+:root {
+  /* Paleta (baseada no guia de cores oficial do projeto) */
+  --udx-bg:            #02021a;          /* fundo base */
+  --udx-bg-mid:        #110273;          /* azul marinho */
+  --udx-primary:       #BF0449;          /* rosa/opaco — CTA principal */
+  --udx-primary-hot:   #FA33A1;          /* rosa/choque — hover, destaques */
+  --udx-accent:        #5708A6;          /* roxo médio */
+  --udx-accent-blue:   #430ABF;          /* azul médio — meta pills */
+  --udx-text:          #DFE0F2;          /* azul/gelo — texto principal */
+  --udx-text-muted:    #b0b3cc;          /* texto secundário */
+  --udx-border:        rgba(223, 224, 242, 0.12); /* borda sutil */
+  --udx-border-hover:  rgba(191, 4, 73, 0.32);    /* borda hover nos cards */
+
+  /* Tipografia */
+  --udx-font:          'Poppins', sans-serif;
+
+  /* Sombras */
+  --udx-shadow-card:   0 4px 28px rgba(0, 0, 0, 0.42);
+  --udx-shadow-hover:  0 8px 36px rgba(191, 4, 73, 0.18);
+  --udx-shadow-btn:    0 4px 16px rgba(191, 4, 73, 0.38);
+
+  /* Bordas arredondadas */
+  --udx-radius-xs:     4px;
+  --udx-radius-sm:     6px;
+  --udx-radius-md:     10px;
+  --udx-radius-lg:     16px;
+}
+
+
+/* ================================================================
+   LOGO DO HEADER
+================================================================ */
+.blog-logo-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.blog-logo-img {
+    height: 44px;
+    width: auto;
+    display: block;
+    transition: opacity 250ms ease, transform 250ms ease;
+}
+.blog-logo-img:hover {
+    opacity: 0.85;
+    transform: scale(1.04);
+}
+
+
+/* ================================================================
+   HEADER
+================================================================ */
+header.blog-header {
+    visibility: visible !important;
+    padding: 10px 20px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 300;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+}
+
+header.blog-header .menu-list {
+    padding-top: 0;
+    margin: 0;
+    /* display NÃO definido aqui — Bootstrap d-none/d-lg-inline-flex controla */
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+}
+
+.blog-menu-icon {
+    font-size: 18px !important;
+    line-height: 1 !important;
+    vertical-align: middle;
+    margin-right: 5px;
+    padding-top: 0;
+}
+
+/* Botão: Acessar (outline) */
+#btnAcessar {
+    /*display: inline-flex; */
+    align-items: center;
+    background: transparent;
+    padding: 8px 16px 8px 16px;
+    margin-left: 0;
+    line-height: 1.5em;
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    border-radius: var(--udx-radius-sm);
+    color: var(--udx-text);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 280ms ease, border-color 280ms ease;
+}
+#btnAcessar:hover {
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-text);
+    color: #ffffff;
+}
+
+/* Botão: Cadastrar (CTA preenchido) */
+#btnCadastrar {
+    display: inline-flex;
+    align-items: center;
+    background: var(--udx-primary);
+    padding: 9px 18px;
+    margin-left: 0;
+    line-height: 1.3em;
+    border: none;
+    border-radius: var(--udx-radius-sm);
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: var(--udx-shadow-btn);
+    transition: background-color 280ms ease, box-shadow 280ms ease;
+}
+#btnCadastrar:hover {
+    background-color: var(--udx-primary-hot);
+    box-shadow: 0 6px 20px rgba(250, 51, 161, 0.42);
+    color: #ffffff;
+}
+
+/* Botão hambúrguer mobile */
+.btn-mobile-menu {
+    background: transparent;
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    border-radius: var(--udx-radius-sm);
+    color: var(--udx-text);
+    font-size: 24px;
+    padding: 4px 10px;
+    line-height: 1;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 280ms ease, border-color 280ms ease;
+}
+.btn-mobile-menu:hover,
+.btn-mobile-menu:focus-visible {
+    background-color: var(--udx-primary);
+    border-color: var(--udx-primary);
+    outline: none;
+}
+
+/* Nav dropdown mobile */
+.mobile-nav {
+    background: linear-gradient(180deg, #02021a 0%, #110273 100%);
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 15px;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.mobile-nav.open {
+    max-height: 240px;
+    padding: 10px 15px 14px;
+}
+.mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.mobile-nav ul li {
+    border-bottom: 1px solid rgba(223, 224, 242, 0.10);
+}
+.mobile-nav ul li a {
+    display: block;
+    padding: 12px 6px;
+    color: var(--udx-text);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 280ms ease, padding-left 280ms ease;
+}
+.mobile-nav ul li a:hover {
+    color: var(--udx-primary-hot);
+    padding-left: 12px;
+}
+
+
+/* ================================================================
+   HERO / PAGE TITLE
+================================================================ */
+.page-title {
+    position: relative;
+    padding: 80px 0 60px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.page-title .content {
+    position: relative;
+    padding-left: 18px;
+    border-left: 3px solid transparent;
+}
+
+/* Linha lateral com gradiente (marca da página) */
+.page-title .content::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--udx-primary), var(--udx-primary-hot));
+    border-radius: 2px;
+}
+
+.page-title .content h1 {
+    color: var(--udx-text);
+    font-family: var(--udx-font);
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.page-title .content .destaque {
+    color: var(--udx-primary-hot);
+}
+
+/* Breadcrumb */
+.page-perfil-scrum {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.page-perfil-scrum li {
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--udx-font);
+}
+.page-perfil-scrum li::after {
+    content: '›';
+    margin-left: 8px;
+    color: rgba(223, 224, 242, 0.40);
+}
+.page-perfil-scrum li:last-child::after {
+    content: '';
+}
+.page-perfil-scrum li a {
+    color: var(--udx-text);
+    text-decoration: none;
+    transition: color 250ms ease;
+}
+.page-perfil-scrum li a:hover {
+    color: var(--udx-primary-hot);
+}
+.breadcrumb-current {
+    color: var(--udx-primary-hot);
+}
+
+
+/* ================================================================
+   BLOG LIST / SINGLE — estrutura base
+================================================================ */
+.blog-single,
+.blog-list {
+    position: relative;
+}
+
+.blog-single .inner-box,
+.blog-list .inner-box {
+    position: relative;
+}
+
+.clearfix::after {
+    display: block;
+    clear: both;
+    content: "";
+}
+
+/* Imagens */
+img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+    border-style: none;
+}
+
+.blog-list .inner-box img { width: 100%; }
+
+/* ── Reset de <figure> ─────────────────────────────────────────
+   Navegadores aplicam margin: 1em 40px a <figure> por padrão.
+   Isso desloca as thumbnails circulares dentro do container flex.
+──────────────────────────────────────────────────────────────── */
+figure {
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.blog-single .inner-box .image,
+.blog-list .inner-box .image {
+    position: relative;
+    margin-top: 22px;
+}
+
+.blog-single .inner-box .lower-content .text .news-gallery .image img,
+.blog-list .inner-box .lower-content .text .news-gallery .image img {
+    width: 100%;
+    display: block;
+}
+
+.blog-single .inner-box .lower-content .text .news-gallery .image,
+.blog-list .inner-box .lower-content .text .news-gallery .image {
+    position: relative;
+    margin-top: 0;
+}
+
+
+/* ================================================================
+   NEWS BLOCK TWO — CARD DE ARTIGO
+================================================================ */
+.news-block-two {
+    position: relative;
+    margin-bottom: 40px;
+    padding-bottom: 0;
+}
+
+/* Glass card */
+.news-block-two .inner-box {
+    background: rgba(17, 2, 115, 0.18);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-md);
+    padding: 24px 22px 20px;
+    box-shadow: var(--udx-shadow-card);
+    transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+.news-block-two:hover .inner-box {
+    border-color: var(--udx-border-hover);
+    box-shadow: var(--udx-shadow-hover);
+}
+
+/* Badge de categoria */
+.card-category {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(191, 4, 73, 0.14);
+    color: var(--udx-primary-hot);
+    border: 1px solid rgba(250, 51, 161, 0.24);
+    border-radius: var(--udx-radius-xs);
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+    font-family: var(--udx-font);
+}
+
+/* Bloco de texto superior */
+.news-block-two .inner-box .upper-content {
+    position: relative;
+    padding: 0 0 16px 0;
+}
+
+.news-block-two .inner-box .upper-content h4 {
+    margin: 0 0 10px;
+    line-height: 1.4;
+    font-family: var(--udx-font);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--udx-text);
+}
+
+.news-block-two .inner-box .upper-content .text {
+    position: relative;
+    color: var(--udx-text-muted);
+    font-size: 14px;
+    line-height: 1.8em;
+    margin: 0 0 14px;
+}
+
+/* Meta pills */
+.blog-single .inner-box .post-meta,
+.blog-list .inner-box .post-meta,
+.news-block-two .inner-box .upper-content .post-meta {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ícones MDI dentro das meta-pills: alinhamento vertical preciso */
+.post-meta li.style-two .mdi {
+    font-size: 12px;
+    line-height: 1;
+    vertical-align: middle;
+    flex-shrink: 0;
+    margin-right: 2px;
+}
+
+.blog-single .inner-box .post-meta li,
+.blog-list .inner-box .post-meta li {
+    position: relative;
+    color: #555555;
+    font-size: 12px;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.blog-single .inner-box .post-meta li.style-two,
+.blog-list .inner-box .post-meta li.style-two {
+    background-color: rgba(67, 10, 191, 0.28);
+    color: rgba(223, 224, 242, 0.80);
+    padding: 4px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: var(--udx-radius-sm);
+    font-size: 11px;
+    margin-right: 6px;
+}
+
+.news-block-two .inner-box .upper-content .post-meta li {
+    position: relative;
+    font-size: 11px;
+    padding: 4px 10px;
+    margin-right: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 250ms ease;
+}
+
+/* Imagem de destaque no card */
+.news-block-two .inner-box .images {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--udx-radius-sm);
+    line-height: 0;
+    aspect-ratio: 16 / 9; /* altura uniforme em todos os cards */
+}
+.news-block-two .inner-box .images img {
+    width: 100%;
+    height: 100%;          /* preenche o container 16:9 */
+    display: block;
+    object-fit: cover;     /* recorta sem distorcer independente da proporção da foto */
+    object-position: center top; /* prioriza a parte superior (rostos, títulos) */
+    border-radius: var(--udx-radius-sm);
+    transition: transform 400ms ease;
+}
+.news-block-two:hover .inner-box .images img {
+    transform: scale(1.04);
+}
+
+/* Botão "Saiba mais" */
+.news-block-two .inner-box .lower-content {
+    position: relative;
+    padding-top: 20px;
+}
+
+.news-block-two .inner-box .lower-content .theme-btn,
+.news-block-two .inner-box .lower-content input.theme-btn {
+    background: var(--udx-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--udx-radius-sm);
+    padding: 10px 26px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--udx-font);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    box-shadow: var(--udx-shadow-btn);
+    transition: background-color 280ms ease, box-shadow 280ms ease, transform 150ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.news-block-two .inner-box .lower-content .theme-btn:hover,
+.news-block-two .inner-box .lower-content input.theme-btn:hover {
+    background-color: var(--udx-primary-hot);
+    box-shadow: 0 6px 20px rgba(250, 51, 161, 0.42);
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+.news-block-two .inner-box .lower-content .theme-btn:focus-visible,
+.news-block-two .inner-box .lower-content input.theme-btn:focus-visible {
+    outline: 2px solid var(--udx-primary-hot);
+    outline-offset: 3px;
+}
+
+.blog-single .inner-box .lower-content,
+.blog-list .inner-box .lower-content {
+    position: relative;
+    padding-top: 30px;
+}
+.blog-single .inner-box .lower-content .text,
+.blog-list .inner-box .lower-content .text {
+    position: relative;
+}
+.blog-single .inner-box .lower-content .text .news-gallery,
+.blog-list .inner-box .lower-content .text .news-gallery {
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    padding: 0;
+}
+
+
+/* ================================================================
+   BLOG SINGLE — blockquote, comentários
+================================================================ */
+.blog-single .inner-box .lower-content blockquote {
+    position: relative;
+    border: none;
+    padding: 45px 30px 45px 110px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    background-color: #f4f4f4;
+}
+blockquote { margin: 0 0 1rem; }
+
+.blog-single .inner-box .lower-content blockquote .quote-icon {
+    position: absolute;
+    left: -20px;
+    top: -20px;
+    width: 113px;
+    height: 113px;
+    color: #4835ce;
+    font-size: 40px;
+    line-height: 113px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+.blog-single .inner-box .lower-content blockquote .quote-text {
+    position: relative;
+    color: #222222;
+    font-weight: 400;
+    line-height: 1.7em;
+}
+
+.blog-single .post-share-options,
+.blog-list .post-share-options {
+    position: relative;
+    margin-bottom: 32px;
+}
+.blog-single .post-share-options .post-share-inner,
+.blog-list .post-share-options .post-share-inner { position: relative; }
+
+.blog-single .post-share-options .post-tags,
+.blog-list .post-share-options .post-tags { position: relative; }
+
+.pull-left  { float: left; }
+.pull-right { float: right; }
+
+.blog-single .post-share-options .post-tags span,
+.blog-list .post-share-options .post-tags span {
+    position: relative;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222222;
+    margin-right: 12px;
+    font-family: var(--udx-font);
+}
+
+.blog-single .post-share-options .post-tags a,
+.blog-single .post-share-options .post-tags a {
+    position: relative;
+    padding: 8px 24px;
+    color: #555555;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    border-radius: 50px;
+    display: inline-block;
+    background-color: #f4f4f4;
+    transition: all 300ms ease;
+}
+
+.blog-single .post-share-options .social-links li {
+    position: relative;
+    margin-left: 2px;
+    display: inline-block;
+}
+.blog-single .post-share-options .social-links li a,
+.blog-list .post-share-options .social-links li a {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    color: #ffffff;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50px;
+    display: inline-block;
+    background-color: #3b5998;
+}
+.blog-single .post-share-options .social-links li.twitter a    { background-color: #55acee; }
+.blog-single .post-share-options .social-links li.google-plus a { background-color: #dd4b39; }
+.blog-single .post-share-options .social-links li.dribble a    { background-color: #cd339a; }
+
+
+/* ================================================================
+   COMMENTS
+================================================================ */
+.new-posts {
+    position: relative;
+    padding: 22px 0;
+    border-top: 1px solid #ececf0;
+    border-bottom: 1px solid #ececf0;
+}
+.new-posts .prev-post,
+.new-posts .next-post {
+    position: relative;
+    color: #888888;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 300ms ease;
+    font-family: var(--udx-font);
+}
+
+.sidebar-page-container {
+    position: relative;
+    padding: 110px 0 200px;
+}
+.sidebar-page-container .content-side,
+.sidebar-page-container .sidebar-side {
+    margin-bottom: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.sidebar-page-container .comments-area {
+    position: relative;
+    margin-top: 45px;
+    margin-bottom: 60px;
+}
+.sidebar-page-container .group-title {
+    position: relative;
+    margin-bottom: 35px;
+}
+.sidebar-page-container .group-title .group-text {
+    position: relative;
+    font-size: 14px;
+    color: #555555;
+    margin-top: 25px;
+}
+.sidebar-page-container .comments-area .comment-box {
+    position: relative;
+    padding: 0;
+    margin-bottom: 40px;
+    transition: all 300ms ease;
+}
+.sidebar-page-container .comments-area .comment {
+    position: relative;
+    font-size: 14px;
+    padding: 0 0 0 125px;
+}
+.sidebar-page-container .comments-area .comment-box .author-thumb {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.sidebar-page-container .comments-area .comment .comment-inner {
+    position: relative;
+    padding: 22px 25px 30px;
+    background-color: #f4f4f4;
+}
+.sidebar-page-container .comments-area .comment-info {
+    color: #3e5773;
+    line-height: 24px;
+    font-size: 13px;
+}
+.sidebar-page-container .comments-area .comment-info .comment-time {
+    position: relative;
+    font-size: 14px;
+    color: #888888;
+    font-weight: 400;
+    margin-top: 3px;
+}
+.sidebar-page-container .comments-area .comment-box .text {
+    color: #555555;
+    font-size: 15px;
+    margin-top: 16px;
+    line-height: 1.8em;
+    margin-bottom: 0;
+}
+.sidebar-page-container .comments-area .comment .comment-reply {
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 50px;
+    background-color: #191919;
+    font-family: var(--udx-font);
+}
+.comment-form {
+    position: relative;
+    margin-top: 0;
+    z-index: 1;
+}
+.comment-form .row { margin: 0 -7px; }
+
+textarea { overflow: hidden; }
+.comment-form .form-group-blog textarea {
+    position: relative;
+    display: block;
+    width: 100%;
+    line-height: 26px;
+    padding: 10px 20px;
+    color: #a5a5a5;
+    height: 150px;
+    font-size: 14px;
+    resize: none;
+    border-radius: 3px;
+    border: 1px solid #ececec;
+    transition: all 300ms ease;
+}
+.comment-form .form-group-blog-mini input[type="text"],
+.comment-form .form-group-blog-mini input[type="password"],
+.comment-form .form-group-blog-mini input[type="tel"],
+.comment-form .form-group-blog-mini input[type="email"],
+.comment-form .form-group-blog-mini select,
+.comment-form .form-group-blog input[type="text"],
+.comment-form .form-group-blog input[type="password"],
+.comment-form .form-group-blog input[type="tel"],
+.comment-form .form-group-blog input[type="email"],
+.comment-form .form-group-blog select {
+    position: relative;
+    display: block;
+    width: 100%;
+    line-height: 26px;
+    padding: 10px 20px;
+    height: 46px;
+    font-size: 14px;
+    border-radius: 3px;
+    border: 1px solid #ececec;
+    transition: all 300ms ease;
+}
+
+.fa {
+    display: inline-block;
+    font-family: 'FontAwesome';
+    font-weight: normal;
+    font-style: normal;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+
+.form-group-blog,
+.form-group-blog-mini {
+    position: relative;
+    padding: 0 7px;
+    margin-bottom: 1rem;
+}
+
+
+/* ================================================================
+   SIDEBAR — WIDGETS (padrão unificado)
+================================================================ */
+.sidebar {
+    position: relative;
+}
+
+/* Todos os widgets recebem o mesmo container visual */
+.sidebar .widget-box,
+.sidebar [id^="widget-"] {
+    background: rgba(4, 1, 30, 0.55);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-md);
+    padding: 18px 18px 20px;
+    margin-bottom: 22px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Cabeçalho de widget: ícone + título */
+.widget-header,
+.sidebar .row.title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    margin-left: 0;
+    border-bottom: 1px solid var(--udx-border);
+    flex-wrap: wrap;
+}
+.widget-header .icon,
+.sidebar .row.title .icon {
+    color: var(--udx-primary-hot);
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.widget-header h5,
+.sidebar .row.title h5 {
+    font-size: 0.83rem;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex: 1;
+    padding-top: 0;
+    color: var(--udx-text);
+    font-family: var(--udx-font);
+}
+/* Parágrafo extra (ex: "ver todos") */
+.widget-header p,
+.sidebar .row.title p {
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+}
+.widget-header p a,
+.sidebar .row.title p a {
+    color: rgba(223, 224, 242, 0.55);
+    font-size: 11px;
+    text-decoration: none;
+    transition: color 250ms ease;
+}
+.widget-header p a:hover,
+.sidebar .row.title p a:hover {
+    color: var(--udx-primary-hot);
+}
+/* Remove a .barra visualmente redundante */
+.sidebar .row.title .barra,
+.widget-header .barra {
+    display: none;
+}
+
+/* Sidebar widget padrão Bootstrap */
+.sidebar-widget {
+    position: relative;
+    margin-bottom: 0;
+}
+
+/* Limpadores de seção */
+.sidebar_cleanner { height: 0; }
+
+
+/* ================================================================
+   SIDEBAR — BUSCA
+================================================================ */
+.sidebar .search-box .form-group-blog {
+    position: relative;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sidebar .search-box .form-group-blog .search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    color: rgba(223, 224, 242, 0.40);
+    z-index: 2;
+}
+
+.sidebar .search-box .form-group-blog input[type="text"],
+.sidebar .search-box .form-group-blog input[type="search"] {
+    position: relative;
+    line-height: 1.6em;
+    padding: 10px 48px 10px 42px;
+    border: 1px solid rgba(223, 224, 242, 0.18);
+    border-radius: var(--udx-radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    display: block;
+    width: 100%;
+    height: 48px;
+    color: var(--udx-text);
+    font-weight: 500;
+    font-family: var(--udx-font);
+    transition: border-color 280ms ease, background-color 280ms ease;
+}
+.sidebar .search-box .form-group-blog input[type="text"]::placeholder,
+.sidebar .search-box .form-group-blog input[type="search"]::placeholder {
+    color: rgba(223, 224, 242, 0.35);
+}
+.sidebar .search-box .form-group-blog input[type="text"]:focus,
+.sidebar .search-box .form-group-blog input[type="search"]:focus {
+    border-color: rgba(223, 224, 242, 0.40);
+    background: rgba(255, 255, 255, 0.09);
+    outline: none;
+}
+
+.sidebar .search-box .form-group-blog .fa-scr {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background-size: 75%;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+[type=search] {
+    outline-offset: -2px;
+    -webkit-appearance: none;
+}
+
+
+/* ================================================================
+   SIDEBAR — LISTA DE TÍTULOS (Comece Por Aqui)
+================================================================ */
+.lista-titulos {
+    height: auto;
+    overflow: visible;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+.lista-titulos .desc {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(223, 224, 242, 0.08);
+}
+.lista-titulos .desc:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.lista-titulos span.temas a {
+    color: var(--udx-primary-hot);
+    padding: 0;
+    font-size: 10px;
+    padding-bottom: 0;
+    font-style: normal;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition: opacity 250ms ease;
+}
+.lista-titulos span.temas a:hover { opacity: 0.75; }
+
+.lista-titulos a h6 {
+    color: var(--udx-text);
+    font-size: 0.83rem;
+    font-weight: 500;
+    margin: 3px 0 0;
+    line-height: 1.45;
+    transition: color 250ms ease;
+}
+.lista-titulos a:hover h6 { color: var(--udx-primary-hot); }
+
+
+/* ================================================================
+   SIDEBAR — NOVAS PUBLICAÇÕES
+================================================================ */
+.lista-posts {
+    height: auto;
+    overflow: visible;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.lista-posts .desc {
+    border-bottom: 1px solid rgba(223, 224, 242, 0.08);
+}
+.lista-posts .desc:last-child { border-bottom: none; }
+
+/* Post com flexbox: thumb fixo à esquerda, conteúdo à direita */
+.sidebar .lista-posts .post {
+    /*display: flex;*/
+	display: block;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    position: static; /* não mais position:relative com filho absolute */
+}
+
+/* Thumbnail como item flex, sem position:absolute */
+.sidebar .lista-posts .post-thumb {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    margin: 0;
+    aspect-ratio: 1 / 1;
+}
+.sidebar .lista-posts .post-thumb img {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    display: block;
+}
+/* Overlay de link sobre o thumb */
+.sidebar .lista-posts .post-thumb .overlay-box {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(191, 4, 73, 0.70);
+    opacity: 0;
+    transition: opacity 250ms ease;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+}
+.sidebar .lista-posts .post-thumb:hover .overlay-box { opacity: 1; }
+
+/* Área de texto ao lado do thumb */
+.sidebar .lista-posts .post-content {
+    flex: 1;
+    min-width: 0;
+}
+.sidebar .lista-posts .post .text {
+    font-size: 12px;
+    line-height: 1.5;
+    padding-left: 60px;
+	/*width:*/
+}
+.sidebar .lista-posts .post .text a {
+    color: var(--udx-text);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 250ms ease;
+}
+.sidebar .lista-posts .post .text a:hover { color: var(--udx-primary-hot); }
+.sidebar .lista-posts .post-info {
+    font-size: 11px;
+    color: rgba(223, 224, 242, 0.50);
+    margin-top: 4px;
+    padding-left: 60px;
+}
+
+.popular-posts .post {
+    position: relative;
+    font-size: 16px;
+    color: #222222;
+    min-height: 100px;
+    padding-left: 90px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e7e7eb;
+}
+.popular-posts .post .post-thumb {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 65px;
+    height: 65px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.popular-posts .post .post-thumb img {
+    display: block;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+.popular-posts .post .text {
+    position: relative;
+    top: 0;
+    font-size: 16px;
+    margin: 0 0 3px;
+    font-weight: 600;
+    color: #222222;
+    line-height: 1.6em;
+    text-transform: capitalize;
+    font-family: var(--udx-font);
+}
+.popular-posts .post .text a {
+    color: #222222;
+    transition: all 0.3s ease;
+}
+.popular-posts .post-info {
+    position: relative;
+    font-size: 13px;
+    color: #555555;
+    font-weight: 400;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+.popular-posts .post-info::before {
+    position: absolute;
+    content: "\f073";
+    left: 0;
+    top: 4px;
+    color: #4835ce;
+    font-size: 14px;
+    line-height: 1em;
+    font-family: 'FontAwesome';
+}
+
+
+/* ================================================================
+   SIDEBAR — WIDGET NEWSLETTER
+================================================================ */
+.newsletter-cta {
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: var(--udx-text);
+    margin-bottom: 14px;
+}
+.newsletter-cta .destaque {
+    color: var(--udx-primary-hot);
+    font-weight: 700;
+}
+
+/* Container do formulário: coluna simples, sem flex-wrap */
+#widget-email .form-group-blog {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+/* Wrapper isola o ícone + input para position:absolute funcionar corretamente */
+.email-input-wrap {
+    position: relative;
+    width: 100%;
+}
+.email-input-wrap .icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: rgba(223, 224, 242, 0.45);
+    z-index: 2;
+    pointer-events: none;
+    line-height: 1;
+}
+.email-input-wrap input[type="email"],
+.email-input-wrap input[type="text"] {
+    width: 100%;
+    height: 46px;
+    padding: 10px 16px 10px 42px;
+    border: 1px solid rgba(223, 224, 242, 0.18);
+    border-radius: var(--udx-radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--udx-text);
+    font-size: 14px;
+    font-family: var(--udx-font);
+    box-sizing: border-box;
+    transition: border-color 280ms ease, background-color 280ms ease;
+}
+.email-input-wrap input[type="email"]::placeholder,
+.email-input-wrap input[type="text"]::placeholder {
+    color: rgba(223, 224, 242, 0.35);
+}
+.email-input-wrap input[type="email"]:focus,
+.email-input-wrap input[type="text"]:focus {
+    border-color: rgba(223, 224, 242, 0.40);
+    background: rgba(255, 255, 255, 0.09);
+    outline: none;
+}
+
+/* Botão Cadastrar: largura total abaixo do campo */
+#widget-email .form-group-blog .fa-submit {
+    width: 100%;
+    height: 44px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--udx-font);
+    text-align: center;
+    border-radius: var(--udx-radius-sm);
+    cursor: pointer;
+    background-color: var(--udx-primary);
+    color: #ffffff;
+    border: none;
+    letter-spacing: 0.03em;
+    box-shadow: var(--udx-shadow-btn);
+    transition: background-color 280ms ease, box-shadow 280ms ease;
+    box-sizing: border-box;
+}
+#widget-email .form-group-blog .fa-submit:hover {
+    background-color: var(--udx-primary-hot);
+    box-shadow: 0 6px 20px rgba(250, 51, 161, 0.42);
+}
+
+
+/* ================================================================
+   SIDEBAR — CLUBE DO GROOVE (slider)
+================================================================ */
+.blog-club-content {
+    height: 450px;
+    padding: 18px;
+    border: 1px solid var(--udx-border) !important;
+    border-radius: var(--udx-radius-md) !important;
+    margin-bottom: 22px;
+    background: rgba(4, 1, 30, 0.55) !important;
+    transition: all 500ms ease;
+}
+
+.blog-club-content .widget-header p a,
+.blog-club-content .row.title p a {
+    padding-left: 0;
+    padding-right: 0;
+    float: right;
+}
+
+.blog-club-mask {
+    position: relative;
+    padding: 0;
+}
+.blog-club-mask .play-circle {
+    background-color: var(--udx-primary);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    cursor: pointer;
+    transition: background-color 280ms ease, transform 280ms ease;
+}
+.blog-club-mask .play-circle:hover {
+    background-color: var(--udx-primary-hot);
+    transform: translate(-50%, -50%) scale(1.08);
+}
+.play-circle .icon {
+    font-size: 70px;
+    line-height: 0.95;
+    color: #DFE0F2;
+}
+.blog-club-content ul,
+.blog-club-content .slider {
+    height: 230px;
+    padding: 0;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+}
+.blog-club-content ul li {
+    border: none;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+}
+.blog-club-footer {
+    width: 100%;
+    padding: 8% 30%;
+    border-top: 1px solid var(--udx-border);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.blog-club-footer .go,
+.blog-club-footer .prev {
+    border: 1px solid rgba(223, 224, 242, 0.30);
+    text-align: center;
+    line-height: 1.3;
+    padding: 6px 14px;
+    border-radius: var(--udx-radius-xs);
+    color: var(--udx-text);
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 250ms ease, border-color 250ms ease;
+}
+.blog-club-footer .go:hover,
+.blog-club-footer .prev:hover {
+    background-color: var(--udx-primary);
+    border-color: var(--udx-primary);
+}
+
+
+/* ================================================================
+   SIDEBAR — NAVEGUE POR ASSUNTOS (Tags)
+================================================================ */
+.lista-tags {
+    height: auto;
+    overflow: visible;
+    padding: 4px 0;
+    list-style: none;
+    margin: 0;
+}
+.lista-tags li {
+    border-bottom: none;
+    padding-left: 0;
+    margin-top: 0;
+}
+.lista-tags li .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+.lista-tags li .row [class*="col-"] {
+    flex: unset;
+    max-width: unset;
+    width: auto;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.lista-tags a {
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+    line-height: 1.2;
+    padding: 8px 14px;
+    margin: 0;
+    border-radius: var(--udx-radius-sm);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(223, 224, 242, 0.80);
+    border: 1px solid var(--udx-border);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 280ms ease;
+}
+.lista-tags a h6 {
+    font-size: 12px;
+    color: inherit;
+    margin: 0;
+    font-weight: 500;
+    display: inline;
+    white-space: nowrap;
+}
+.lista-tags a:hover {
+    background-color: var(--udx-primary);
+    border-color: var(--udx-primary);
+    color: #fff;
+}
+
+.sidebar .popular-tags a {
+    z-index: 1;
+    position: relative;
+    display: inline-block;
+    line-height: 24px;
+    padding: 7px 18px;
+    margin: 0 4px 8px 0;
+    color: #222222;
+    text-align: center;
+    font-size: 15px;
+    background-color: #f4f7fc;
+    transition: all 300ms ease;
+}
+
+
+/* ================================================================
+   SIDEBAR — GALERIA (Instagram widget)
+================================================================ */
+.sidebar .instagram-widget .images-outer {
+    position: relative;
+    margin: 0 -4px;
+}
+.sidebar .instagram-widget .image-box {
+    position: relative;
+    float: left;
+    width: 33.3333%;
+    padding: 0 6px;
+    margin-bottom: 12px;
+}
+.sidebar .instagram-widget .image-box .overlay-box {
+    position: absolute;
+    content: '';
+    left: 12px;
+    top: 8px;
+    bottom: 8px;
+    right: 12px;
+    display: block;
+    z-index: 1;
+    opacity: 0;
+    text-align: center;
+    padding: 8px;
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 44px;
+    transition: all 300ms ease;
+    background-color: rgba(248, 56, 145, 0.80);
+}
+.sidebar .instagram-widget .image-box img {
+    position: relative;
+    display: block;
+    width: 100%;
+    transition: all 300ms ease;
+}
+
+.images-outer .inner-container {
+    position: relative;
+    padding: 90px;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.70);
+    background-image: linear-gradient(to right, #FA33A1 0%, #553add 100%);
+}
+
+
+/* ================================================================
+   CATEGORIAS
+================================================================ */
+.sidebar-title {
+    position: relative;
+    margin-bottom: 22px;
+}
+.blog-cat {
+    position: relative;
+    margin-bottom: 0;
+}
+.blog-cat li {
+    position: relative;
+    border-bottom: 1px solid #d7d7d7;
+}
+.blog-cat li a {
+    position: relative;
+    color: #1a1e66;
+    font-size: 15px;
+    font-weight: 400;
+    display: block;
+    padding: 15px 15px 12px 0;
+    transition: all 500ms ease;
+    font-family: var(--udx-font);
+}
+.blog-cat li a::before {
+    position: absolute;
+    content: '';
+    left: 10px;
+    top: 25px;
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+    transition: all 500ms ease;
+    border-radius: 50px;
+    display: inline-block;
+    background-color: #4835ce;
+}
+.blog-cat li a span {
+    position: absolute;
+    right: 0;
+    top: 15px;
+    font-size: 15px;
+}
+
+
+/* ================================================================
+   PAGINAÇÃO
+================================================================ */
+.blog-list { display: block; }
+
+.blog-list .styled-pagination { margin-top: 30px; }
+.styled-pagination {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 100%;
+}
+.styled-pagination li {
+    position: relative;
+    display: inline-block;
+    margin: 0 16px 16px 0;
+}
+.styled-pagination li a:hover,
+.styled-pagination li a.active,
+.styled-pagination .numeric:hover,
+.styled-pagination .numeric.active {
+    color: #ffffff;
+    border-color: var(--udx-primary-hot);
+    background-color: var(--udx-primary-hot);
+    cursor: pointer;
+}
+.styled-pagination li a,
+.styled-pagination .numeric {
+    position: relative;
+    display: inline-block;
+    line-height: 56px;
+    height: 60px;
+    font-size: 20px;
+    min-width: 60px;
+    color: #555555;
+    font-weight: 400;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 4px;
+    border: 2px solid #eaeaea;
+    text-transform: capitalize;
+    transition: all 400ms ease;
+}
+.styled-pagination .numeric { margin: 0 16px 16px 0; }
+
+
+/* ================================================================
+   SCROLL INFINITO
+================================================================ */
+#scroll-sentinel {
+    height: 1px;
+    margin: 0;
+    visibility: hidden;
+}
+
+.loading-indicator {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 0 44px;
+    color: var(--udx-text);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--udx-font);
+    width: 100%;
+    letter-spacing: 0.3px;
+}
+.loading-indicator .mdi-loading {
+    font-size: 26px;
+    color: var(--udx-primary);
+}
+.scroll-end-msg {
+    color: rgba(223, 224, 242, 0.55);
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+
+/* ================================================================
+   WIDGETS INLINE (injetados no mobile pelo scroll infinito)
+================================================================ */
+.mobile-widget-inline {
+    width: 100%;
+    margin: 28px 0 80px;
+    padding: 18px 16px 22px;
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-md);
+    background: rgba(4, 1, 30, 0.55);
+    box-sizing: border-box;
+}
+
+/* Cancela display:flex e margens negativas do Bootstrap .row */
+.mobile-widget-inline.row {
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Clube do Groove inline */
+.mobile-widget-inline.blog-club-content {
+    height: auto;
+    min-height: 370px;
+    padding: 15px;
+    margin-bottom: 80px;
+}
+
+/* Separador visual entre widget e próximos posts */
+.mobile-widget-inline + .news-block-two { margin-top: 10px; }
+
+/* ── 1. CABEÇALHO DOS WIDGETS INLINE ──────────────────────── */
+.mobile-widget-inline .widget-header,
+.mobile-widget-inline .title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--udx-border);
+    margin-bottom: 14px;
+    margin-left: 0;
+}
+.mobile-widget-inline .widget-header .icon,
+.mobile-widget-inline .title .icon {
+    font-size: 20px;
+    width: 26px;
+    height: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+    color: var(--udx-primary-hot);
+}
+.mobile-widget-inline .widget-header h5,
+.mobile-widget-inline .title h5 {
+    font-size: 0.82rem;
+    padding-left: 9px;
+    padding-top: 0;
+    flex: 1;
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+.mobile-widget-inline .title .barra { display: none; }
+.mobile-widget-inline .title p     { display: none; }
+
+/* ── 2. WIDGET BUSCA INLINE ───────────────────────────────── */
+.mobile-widget-inline .sidebar-widget.search-box .form-group-blog {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.mobile-widget-inline .sidebar-widget.search-box .form-group-blog input[type="text"],
+.mobile-widget-inline .sidebar-widget.search-box .form-group-blog input[type="search"] {
+    width: 100%;
+    height: 44px;
+    padding: 10px 48px 10px 16px;
+    border: 1px solid rgba(223, 224, 242, 0.22);
+    border-radius: var(--udx-radius-sm);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--udx-text);
+    font-size: 14px;
+    font-family: var(--udx-font);
+}
+.mobile-widget-inline .sidebar-widget.search-box .form-group-blog input::placeholder {
+    color: rgba(223, 224, 242, 0.35);
+}
+.mobile-widget-inline .sidebar-widget.search-box .fa-scr {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0;
+    float: none;
+    width: 32px;
+    height: 32px;
+    background-size: 78%;
+    border: none;
+    background-color: transparent;
+}
+
+/* ── 3. WIDGET COMECE POR AQUI INLINE ────────────────────── */
+.mobile-widget-inline .lista-titulos {
+    display: block;
+    height: auto;
+    overflow: visible;
+    padding: 0;
+    width: 100%;
+}
+.mobile-widget-inline .lista-titulos li {
+    margin-right: 0;
+    padding-left: 0;
+    margin-top: 6px;
+}
+.mobile-widget-inline .lista-titulos .temas a { font-size: 9px; }
+.mobile-widget-inline .lista-titulos a h6 {
+    font-size: 0.80rem;
+    line-height: 1.4;
+}
+
+/* ── 4. WIDGET NOVAS PUBLICAÇÕES INLINE ──────────────────── */
+.mobile-widget-inline .lista-posts {
+    height: auto;
+    overflow: visible;
+    margin-top: 0;
+}
+/* Flexbox: thumb à esquerda, texto à direita — sem position:absolute */
+.mobile-widget-inline .lista-posts .post {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    position: static;
+    min-height: unset;
+    margin-bottom: 0;
+}
+.mobile-widget-inline .lista-posts .post-thumb {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    margin: 0;            /* cancela margin padrão do <figure>: 1em 40px */
+    aspect-ratio: 1 / 1;
+}
+.mobile-widget-inline .lista-posts .post-thumb img {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    display: block;
+}
+.mobile-widget-inline .lista-posts .post-content {
+    flex: 1;
+    min-width: 0;
+}
+.mobile-widget-inline .lista-posts .post .text {
+    font-size: 12px;
+    line-height: 1.45;
+    padding-left: 60px;
+}
+.mobile-widget-inline .lista-posts .post .text a {
+    font-size: 12px;
+    color: var(--udx-text);
+    text-decoration: none;
+}
+.mobile-widget-inline .lista-posts .post-info {
+    font-size: 11px;
+    padding-left: 0;
+    margin-top: 3px;
+    color: rgba(223, 224, 242, 0.50);
+}
+
+/* ── 5. WIDGET NEWSLETTER INLINE ─────────────────────────── */
+.mobile-widget-inline .sidebar-widget h6.text-white {
+    font-size: 0.80rem;
+    line-height: 1.55;
+    margin-bottom: 12px;
+}
+/* Coluna simples — sem flex-wrap problemático */
+.mobile-widget-inline .form-group-blog {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    position: static;
+}
+/* Wrapper garante que o ícone se ancora à altura do input */
+.mobile-widget-inline .email-input-wrap {
+    position: relative;
+    width: 100%;
+}
+.mobile-widget-inline .email-input-wrap .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 17px;
+    line-height: 1;
+    z-index: 2;
+    color: rgba(223, 224, 242, 0.40);
+    pointer-events: none;
+    height: auto;
+    width: auto;
+}
+.mobile-widget-inline .email-input-wrap input[type="text"],
+.mobile-widget-inline .email-input-wrap input[type="email"] {
+    width: 100%;
+    height: 44px;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid rgba(223, 224, 242, 0.20);
+    border-radius: var(--udx-radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--udx-text);
+    font-size: 14px;
+    font-family: var(--udx-font);
+    box-sizing: border-box;
+}
+.mobile-widget-inline .email-input-wrap input::placeholder {
+    color: rgba(223, 224, 242, 0.35);
+}
+/* Para retrocompatibilidade: ícone solto (sem wrapper) no clone mobile */
+.mobile-widget-inline .form-group-blog > .icon {
+    display: none; /* esconde ícone solto — o wrapper .email-input-wrap já o mostra */
+}
+.mobile-widget-inline .form-group-blog input[type="text"],
+.mobile-widget-inline .form-group-blog input[type="email"] {
+    width: 100%;
+    height: 44px;
+    padding: 10px 16px 10px 40px;
+    border: 1px solid rgba(223, 224, 242, 0.20);
+    border-radius: var(--udx-radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--udx-text);
+    font-size: 14px;
+    font-family: var(--udx-font);
+    box-sizing: border-box;
+}
+.mobile-widget-inline .form-group-blog input[type="text"]::placeholder,
+.mobile-widget-inline .form-group-blog input[type="email"]::placeholder {
+    color: rgba(223, 224, 242, 0.35);
+}
+.mobile-widget-inline .form-group-blog .fa-submit {
+    flex: 0 0 100%;
+    margin-left: 0;
+    padding: 11px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: var(--udx-radius-sm);
+    cursor: pointer;
+    width: 100%;
+    background-color: var(--udx-primary);
+    color: #ffffff;
+    border: none;
+    letter-spacing: 0.03em;
+    box-shadow: var(--udx-shadow-btn);
+    transition: background-color 280ms ease;
+}
+.mobile-widget-inline .form-group-blog .fa-submit:hover {
+    background-color: var(--udx-primary-hot);
+}
+
+/* ── 6. WIDGET CLUBE DO GROOVE INLINE ────────────────────── */
+.mobile-widget-inline.blog-club-content .blog-club-footer {
+    padding: 8% 22%;
+}
+.mobile-widget-inline .blog-club-content .widget-header p a,
+.mobile-widget-inline.blog-club-content .widget-header p a,
+.mobile-widget-inline.blog-club-content .title p a {
+    padding-left: 0;
+    font-size: 11px;
+}
+
+/* ── 7. WIDGET ASSUNTOS INLINE ───────────────────────────── */
+.mobile-widget-inline .lista-tags {
+    height: auto;
+    overflow: visible;
+    padding: 6px 0 2px;
+}
+.mobile-widget-inline .lista-tags li {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.mobile-widget-inline .lista-tags li .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+}
+.mobile-widget-inline .lista-tags li .row [class*="col-"] {
+    flex: unset;
+    max-width: unset;
+    width: auto;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+.mobile-widget-inline .lista-tags a {
+    padding: 7px 12px;
+    font-size: 11px;
+    margin: 0;
+}
+.mobile-widget-inline .lista-tags a h6 {
+    font-size: 11px;
+    font-weight: 500;
+    display: inline;
+    white-space: nowrap;
+}
+.mobile-widget-inline .lista-tags a:hover {
+    background-color: var(--udx-primary);
+    border-color: var(--udx-primary);
+    color: #fff;
+}
+
+/* Override: sidebar desktop — lista-titulos sempre visível */
+.sidebar .lista-titulos {
+    height: auto;
+    overflow: visible;
+    padding: 6px 0;
+}
+
+
+/* ================================================================
+   ACESSIBILIDADE — foco visível e reduced-motion
+================================================================ */
+:focus-visible {
+    outline: 2px solid var(--udx-primary-hot);
+    outline-offset: 3px;
+}
+
+/* ================================================================
+   FOOTER — .blog-footer
+   Usa classes próprias para não herdar o position:absolute/left/
+   margin-top negativos das classes .floor/.footer/.on-footer
+   definidas em mediaQuery.css para as outras páginas do projeto.
+================================================================ */
+.blog-footer {
+    position: relative;          /* cria contexto de empilhamento próprio */
+    z-index: 10;                 /* acima do #hero-blog::before (z-index: 9) */
+    background: linear-gradient(180deg, rgba(4, 1, 30, 0.96) 0%, #02021a 100%);
+    border-top: 1px solid var(--udx-border);
+    padding: 52px 0 0;
+    margin-top: 64px;
+    width: 100%;
+}
+
+/* Grade das colunas */
+.blog-footer__cols {
+    row-gap: 36px;
+    padding-bottom: 48px;
+}
+
+/* Coluna individual */
+.blog-footer__col {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Título de cada coluna */
+.blog-footer__title {
+    color: var(--udx-text);
+    font-family: var(--udx-font);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--udx-primary);
+    display: inline-block;
+}
+
+/* Listas de itens (contato e links) */
+.blog-footer__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.blog-footer__list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--udx-text-muted);
+    line-height: 1.5;
+}
+.blog-footer__list li .mdi {
+    font-size: 15px;
+    color: var(--udx-primary-hot);
+    flex-shrink: 0;
+}
+.blog-footer__list li a {
+    color: var(--udx-text-muted);
+    text-decoration: none;
+    transition: color 250ms ease;
+}
+.blog-footer__list li a:hover {
+    color: var(--udx-primary-hot);
+}
+
+/* Galeria: grade de quadrados placeholder */
+.blog-footer__gallery {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+.blog-footer__gallery li span {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-sm);
+    transition: background-color 250ms ease, border-color 250ms ease;
+}
+.blog-footer__gallery li span:hover {
+    background: rgba(191, 4, 73, 0.18);
+    border-color: var(--udx-border-hover);
+}
+
+/* Barra de copyright */
+.blog-footer__bar {
+    border-top: 1px solid var(--udx-border);
+    padding: 14px 0;
+    text-align: center;
+}
+.blog-footer__bar small {
+    font-size: 11px;
+    color: rgba(223, 224, 242, 0.40);
+    letter-spacing: 0.04em;
+    font-family: var(--udx-font);
+}
+.blog-footer__bar b,
+.blog-footer__bar i {
+    color: rgba(223, 224, 242, 0.65);
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration:  0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
