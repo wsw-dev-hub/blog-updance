@@ -1998,7 +1998,7 @@ textarea { overflow: hidden; }
 
 
 
-@media (prefers-reduced-motion: reduce) {
+/*@media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
@@ -2006,4 +2006,4 @@ textarea { overflow: hidden; }
         animation-duration:  0.01ms !important;
         animation-iteration-count: 1 !important;
     }
-}
+}*/
