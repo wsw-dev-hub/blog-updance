@@ -20,3 +20,5 @@ run_worker_first   = ["/api/*", "/membros/*"]
 binding = "KV"
 id      = "10d76ce53a5049fbab9cab01b68936e2"
 
+[vars]
+MAIL_FROM = "Up Dance <onboarding@resend.dev>"
