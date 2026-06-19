@@ -97,15 +97,9 @@ export default defineConfig(({ command }) => ({
         'posts/9-licoes': resolve(__dirname, 'src/posts/9-licoes.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
       },
-<<<<<<< HEAD
       external: ['ton-connect', 'ton-core'],
       output: {
         
-=======
-       external: ['ton-connect', 'ton-core'],
-     output: {
-       
->>>>>>> c07975138fd7315f2b81742efa556d675c104a46
         /*manualChunks: {
           'ton-connect': ['@tonconnect/ui', '@tonconnect/sdk'],
           'ton-core': ['@ton/ton', '@ton/core', '@ton/crypto'],
