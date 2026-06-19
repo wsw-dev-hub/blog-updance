@@ -29,6 +29,28 @@
     "@tonconnect/sdk": "^3.3.1",
     "@tonconnect/ui": "^2.3.1",
     "buffer": "^6.0.3",
-    "tonweb": "^0.0.27"
+    "node-msi": "^1.1.1",
+    "tonweb": "^0.0.66"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true,
+    "workerd@1.20260617.1": true
+  },
+  "overrides": {
+    "node-fetch": "^2.6.7",
+    "ethjs-unit": {
+      "bn.js": "4.12.3"
+    },
+    "number-to-bn": {
+      "bn.js": "4.12.3"
+    },
+    "tonweb": {
+      "bn.js": "^5.2.3"
+    },
+    "isomorphic-webcrypto": {
+      "expo-random": "npm:@favware/skip-dependency@latest"
+    }
   }
 }
