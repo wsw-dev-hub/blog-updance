@@ -1,4 +1,4 @@
-name                = "blog"
+name                = "blog-updance"
 compatibility_date  = "2026-06-17"
 main                = "./worker/index.js"
 
