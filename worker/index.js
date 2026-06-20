@@ -1,192 +1,212 @@
 /**
- * auth-modal.js — modal de Acessar / Solicitar acesso / Newsletter do blog Up Dance.
- * Versão MAGIC LINK, com a paleta e a tipografia oficiais do projeto.
+ * Worker do blog Up Dance — autenticação por MAGIC LINK (link mágico por e-mail).
  *
- * Inclua em cada página, no fim do <body>:
- *   <script src="/js/auth-modal.js" defer></script>
+ * Rotas:
+ *   POST /api/auth/request   → recebe um e-mail e envia o link de acesso
+ *   GET  /api/auth/verify    → valida o token do link e cria a sessão
+ *   GET  /api/auth/logout    → encerra a sessão
+ *   GET  /api/me             → retorna o usuário logado (ou 401)
+ *   POST /api/newsletter     → registra um e-mail na newsletter
+ *   /membros/*               → área protegida (exige sessão)
+ *   resto                    → arquivos estáticos do dist/ (env.ASSETS)
  *
- * Liga-se sozinho aos botões existentes:
- *   #btnAcessar    → abre na aba "Entrar"
- *   #btnCadastrar  → abre na aba "Solicitar acesso"
- * Também expõe window.openAuthModal('entrar' | 'acesso' | 'newsletter').
+ * ESTE ARQUIVO RODA NO SERVIDOR (Cloudflare Worker).
+ * NÃO use `document`, `window` nem nada de navegador aqui.
  */
-(function () {
-  'use strict';
 
-  // garante as fontes do projeto (inócuo se a página já as carrega)
-  if (!document.getElementById('udxa-fonts')) {
-    var f = document.createElement('link');
-    f.id = 'udxa-fonts';
-    f.rel = 'stylesheet';
-    f.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap';
-    document.head.appendChild(f);
-  }
+const RESEND_API   = 'https://api.resend.com/emails';
+const SESSION_TTL  = 60 * 60 * 24 * 7; // sessão dura 7 dias
+const MAGIC_TTL    = 60 * 15;          // link de acesso vale 15 minutos
+const COOLDOWN_TTL = 60;               // espera 60s entre pedidos do mesmo e-mail
 
-  // paleta oficial Up Dance (extraída do CSS do blog)
-  var css = `
-  .udxa-overlay{position:fixed;inset:0;background:rgba(2,1,24,.78);
-    backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;
-    z-index:9999;opacity:0;transition:opacity .25s ease;
-    font-family:'Poppins',sans-serif}
-  .udxa-overlay.is-open{display:flex;opacity:1}
-  .udxa-card{width:min(92vw,420px);background:#0c0b22;color:#DFE0F2;
-    border:1px solid #2a2748;border-radius:16px;overflow:hidden;
-    box-shadow:0 24px 60px rgba(0,0,0,.6);transform:translateY(12px) scale(.98);
-    transition:transform .25s ease}
-  .udxa-overlay.is-open .udxa-card{transform:translateY(0) scale(1)}
-  .udxa-head{display:flex;align-items:center;gap:.7rem;padding:1.1rem 1.25rem;
-    border-bottom:1px solid #221f3e}
-  .udxa-head img{width:36px;height:36px}
-  .udxa-head h3{margin:0;font-size:1.25rem;font-weight:400;font-style:italic;
-    font-family:'Playfair Display',serif;
-    background:linear-gradient(to top,#fb8460 0%,#f13aa1 100%);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .udxa-close{margin-left:auto;background:none;border:0;color:#8a86b0;
-    font-size:1.5rem;line-height:1;cursor:pointer;padding:.2rem .4rem;border-radius:8px}
-  .udxa-close:hover{color:#fff;background:#221f3e}
-  .udxa-tabs{display:flex;border-bottom:1px solid #221f3e}
-  .udxa-tab{flex:1;background:none;border:0;color:#8a86b0;padding:.85rem .4rem;
-    font-size:.8rem;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;
-    border-bottom:2px solid transparent;transition:color .2s}
-  .udxa-tab:hover{color:#DFE0F2}
-  .udxa-tab.is-active{color:#fff;border-bottom-color:#eb2f5b}
-  .udxa-panel{display:none;padding:1.4rem 1.25rem 1.6rem}
-  .udxa-panel.is-active{display:block}
-  .udxa-panel p{margin:0 0 1rem;color:#b9bad6;font-size:.9rem;line-height:1.55}
-  .udxa-input{width:100%;padding:.8rem .9rem;border-radius:9px;border:1px solid #2f2c52;
-    background:#020118;color:#fff;font-size:.95rem;margin-bottom:.8rem;
-    font-family:'Poppins',sans-serif}
-  .udxa-input::placeholder{color:#6f6c94}
-  .udxa-input:focus{outline:none;border-color:#BF0449}
-  .udxa-btn{width:100%;padding:.8rem;border-radius:9px;border:0;cursor:pointer;
-    background:#BF0449;color:#fff;font-weight:600;font-size:.95rem;
-    font-family:'Poppins',sans-serif;transition:background-image .25s ease,filter .2s ease}
-  .udxa-btn:hover{background-image:linear-gradient(to right,#F434A1 0%,#ff8442 100%)}
-  .udxa-btn:disabled{opacity:.6;cursor:default;background-image:none}
-  .udxa-msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em;line-height:1.4}
-  .udxa-msg.ok{color:#5fe0a4}.udxa-msg.err{color:#ff7591}
-  @media (prefers-reduced-motion:reduce){.udxa-overlay,.udxa-card{transition:none}}
-  `;
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const { pathname } = url;
 
-  var html = `
-  <div class="udxa-overlay" id="udxaOverlay" role="dialog" aria-modal="true" aria-labelledby="udxaTitle">
-    <div class="udxa-card">
-      <div class="udxa-head">
-        <img src="/images/icons/udx-icon.png" alt="">
-        <h3 id="udxaTitle">Up Dance</h3>
-        <button class="udxa-close" id="udxaClose" aria-label="Fechar">&times;</button>
-      </div>
-      <div class="udxa-tabs">
-        <button class="udxa-tab" data-tab="entrar">Entrar</button>
-        <button class="udxa-tab" data-tab="acesso">Solicitar acesso</button>
-        <button class="udxa-tab" data-tab="newsletter">Newsletter</button>
-      </div>
+    try {
+      if (pathname === '/api/auth/request' && request.method === 'POST')
+                                          return pedirLink(request, url, env);
+      if (pathname === '/api/auth/verify') return verificarLink(request, url, env);
+      if (pathname === '/api/auth/logout') return fazerLogout(request, env);
+      if (pathname === '/api/me')          return quemSouEu(request, env);
+      if (pathname === '/api/newsletter' && request.method === 'POST')
+                                          return assinarNewsletter(request, env);
 
-      <div class="udxa-panel" data-panel="entrar">
-        <p>Informe seu e-mail de membro. Enviaremos um link de acesso válido por 15 minutos.</p>
-        <input class="udxa-input" type="email" id="udxaLoginEmail" placeholder="seu@email.com" autocomplete="email">
-        <button class="udxa-btn" id="udxaLoginBtn">Receber link de acesso</button>
-        <div class="udxa-msg" id="udxaLoginMsg" role="status"></div>
-      </div>
+      // Área protegida — só passa quem tem sessão válida
+      if (pathname.startsWith('/membros')) {
+        const user = await getSession(request, env);
+        if (!user) return Response.redirect(url.origin + '/?login=required', 302);
+      }
+    } catch (err) {
+      return new Response('Erro interno: ' + err.message, { status: 500 });
+    }
 
-      <div class="udxa-panel" data-panel="acesso">
-        <p>A área de membros é exclusiva para alunos e clientes. Deixe seu e-mail
-           que avisamos assim que seu acesso for liberado.</p>
-        <input class="udxa-input" type="email" id="udxaAcessoEmail" placeholder="seu@email.com" autocomplete="email">
-        <button class="udxa-btn" id="udxaAcessoBtn">Solicitar acesso</button>
-        <div class="udxa-msg" id="udxaAcessoMsg" role="status"></div>
-      </div>
+    return env.ASSETS.fetch(request);
+  },
+};
 
-      <div class="udxa-panel" data-panel="newsletter">
-        <p>Receba nossas matérias exclusivas toda semana.</p>
-        <input class="udxa-input" type="email" id="udxaNewsEmail" placeholder="seu@email.com" autocomplete="email">
-        <button class="udxa-btn" id="udxaNewsBtn">Quero receber</button>
-        <div class="udxa-msg" id="udxaNewsMsg" role="status"></div>
-      </div>
-    </div>
-  </div>`;
+/* ───────────────────────── helpers ───────────────────────── */
 
-  var style = document.createElement('style');
-  style.textContent = css;
-  document.head.appendChild(style);
-  document.body.insertAdjacentHTML('beforeend', html);
+function randomToken(bytes = 32) {
+  const arr = new Uint8Array(bytes);
+  crypto.getRandomValues(arr);
+  return [...arr].map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-  var overlay = document.getElementById('udxaOverlay');
+function cookie(name, value, maxAge) {
+  const parts = [`${name}=${value}`, 'Path=/', 'HttpOnly', 'Secure', 'SameSite=Lax'];
+  if (maxAge !== undefined) parts.push(`Max-Age=${maxAge}`);
+  return parts.join('; ');
+}
 
-  function show(tab) { setTab(tab || 'entrar'); overlay.classList.add('is-open'); }
-  function hide() { overlay.classList.remove('is-open'); }
-  function setTab(name) {
-    overlay.querySelectorAll('.udxa-tab').forEach(function (t) {
-      t.classList.toggle('is-active', t.dataset.tab === name);
-    });
-    overlay.querySelectorAll('.udxa-panel').forEach(function (p) {
-      p.classList.toggle('is-active', p.dataset.panel === name);
-    });
-  }
-  window.openAuthModal = show;
+function readCookie(request, name) {
+  const header = request.headers.get('Cookie') || '';
+  const m = header.match(new RegExp('(?:^|; )' + name + '=([^;]+)'));
+  return m ? m[1] : null;
+}
 
-  overlay.querySelectorAll('.udxa-tab').forEach(function (t) {
-    t.addEventListener('click', function () { setTab(t.dataset.tab); });
+function json(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
   });
-  document.getElementById('udxaClose').addEventListener('click', hide);
-  overlay.addEventListener('click', function (e) { if (e.target === overlay) hide(); });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && overlay.classList.contains('is-open')) hide();
+}
+
+function emailValido(e) {
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e);
+}
+
+/* ───────────────────────── magic link ───────────────────────── */
+
+async function pedirLink(request, url, env) {
+  let email = '';
+  try {
+    const body = await request.json();
+    email = (body.email || '').trim().toLowerCase();
+  } catch {
+    return json({ ok: false, erro: 'Requisição inválida.' }, 400);
+  }
+
+  // Resposta SEMPRE genérica: não revelamos se o e-mail existe/está autorizado.
+  const respostaGenerica = json({ ok: true });
+
+  if (!emailValido(email)) return json({ ok: false, erro: 'Informe um e-mail válido.' }, 400);
+
+  // só e-mails da allowlist recebem link (grupo restrito)
+  const permitido = await env.KV.get('allow:' + email);
+  if (!permitido) return respostaGenerica;
+
+  // anti-flood: 1 pedido por e-mail a cada 60s
+  const emCooldown = await env.KV.get('cd:' + email);
+  if (emCooldown) return respostaGenerica;
+  await env.KV.put('cd:' + email, '1', { expirationTtl: COOLDOWN_TTL });
+
+  // gera o token de uso único e guarda apontando para o e-mail
+  const token = randomToken(32);
+  await env.KV.put('magic:' + token, email, { expirationTtl: MAGIC_TTL });
+
+  const link = url.origin + '/api/auth/verify?token=' + token;
+  await enviarEmailLogin(env, email, link);
+
+  return respostaGenerica;
+}
+
+async function verificarLink(request, url, env) {
+  const token = url.searchParams.get('token') || '';
+  if (!token) return Response.redirect(url.origin + '/?login=invalido', 302);
+
+  const email = await env.KV.get('magic:' + token);
+  if (!email) return Response.redirect(url.origin + '/?login=expirado', 302);
+
+  // token é de uso único: apaga assim que consumido
+  await env.KV.delete('magic:' + token);
+
+  // cria a sessão
+  const sid = randomToken(32);
+  await env.KV.put('sess:' + sid, JSON.stringify({ email }), { expirationTtl: SESSION_TTL });
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Location': url.origin + '/membros/',
+      'Set-Cookie': cookie('session', sid, SESSION_TTL),
+    },
+  });
+}
+
+async function getSession(request, env) {
+  const sid = readCookie(request, 'session');
+  if (!sid) return null;
+  const raw = await env.KV.get('sess:' + sid);
+  return raw ? JSON.parse(raw) : null;
+}
+
+async function fazerLogout(request, env) {
+  const sid = readCookie(request, 'session');
+  if (sid) await env.KV.delete('sess:' + sid);
+  return new Response(null, {
+    status: 302,
+    headers: { 'Location': '/', 'Set-Cookie': cookie('session', '', 0) },
+  });
+}
+
+async function quemSouEu(request, env) {
+  const user = await getSession(request, env);
+  if (!user) return json(null, 401);
+  return json(user);
+}
+
+/* ───────────────────────── envio de e-mail (Resend) ───────────────────────── */
+
+async function enviarEmailLogin(env, email, link) {
+  const html = `
+    <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:auto;
+                background:#020118;color:#DFE0F2;border-radius:14px;overflow:hidden">
+      <div style="padding:28px 28px 8px">
+        <h2 style="margin:0 0 12px;font-size:18px;color:#fff">Seu acesso à Up Dance</h2>
+        <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">
+          Clique no botão abaixo para entrar na área de membros. O link vale por 15 minutos
+          e só pode ser usado uma vez.</p>
+        <a href="${link}"
+           style="display:inline-block;background:#BF0449;color:#fff;text-decoration:none;
+                  font-weight:bold;padding:12px 22px;border-radius:9px;font-size:15px">
+          Entrar na área de membros</a>
+        <p style="color:#6f6c94;font-size:12px;line-height:1.6;margin:24px 0 0">
+          Se você não pediu este acesso, pode ignorar este e-mail com segurança.</p>
+      </div>
+    </div>`;
+
+  const res = await fetch(RESEND_API, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + env.RESEND_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: env.MAIL_FROM,
+      to: email,
+      subject: 'Seu link de acesso — Up Dance',
+      html,
+    }),
   });
 
-  bind('#btnAcessar',   function (e) { e.preventDefault(); show('entrar'); });
-  bind('#btnCadastrar', function (e) { e.preventDefault(); show('acesso'); });
-  function bind(sel, fn) {
-    document.querySelectorAll(sel).forEach(function (el) { el.addEventListener('click', fn); });
+  if (!res.ok) console.error('Resend falhou:', res.status, await res.text());
+}
+
+/* ───────────────────────── newsletter ───────────────────────── */
+
+async function assinarNewsletter(request, env) {
+  let email = '';
+  try {
+    const body = await request.json();
+    email = (body.email || '').trim().toLowerCase();
+  } catch {
+    return json({ ok: false, erro: 'Requisição inválida.' }, 400);
   }
 
-  // login por magic link → POST /api/auth/request
-  postForm('udxaLoginEmail', 'udxaLoginBtn', 'udxaLoginMsg', '/api/auth/request',
-           'Pronto! Verifique seu e-mail e clique no link de acesso.');
-  // solicitar acesso e newsletter → POST /api/newsletter
-  postForm('udxaAcessoEmail', 'udxaAcessoBtn', 'udxaAcessoMsg', '/api/newsletter',
-           'Pedido registrado. Avisaremos quando seu acesso for liberado.');
-  postForm('udxaNewsEmail', 'udxaNewsBtn', 'udxaNewsMsg', '/api/newsletter',
-           'Inscrição feita! Você receberá nossas novidades.');
+  if (!emailValido(email)) return json({ ok: false, erro: 'Informe um e-mail válido.' }, 400);
 
-  function postForm(inputId, btnId, msgId, endpoint, sucesso) {
-    var input = document.getElementById(inputId);
-    var btn   = document.getElementById(btnId);
-    var msg   = document.getElementById(msgId);
-    if (!input || !btn) return;
-
-    btn.addEventListener('click', function () {
-      var email = (input.value || '').trim();
-      msg.className = 'udxa-msg';
-      msg.textContent = '';
-      btn.disabled = true;
-
-      fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email }),
-      })
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          if (d.ok) { msg.className = 'udxa-msg ok'; msg.textContent = sucesso; input.value = ''; }
-          else      { msg.className = 'udxa-msg err'; msg.textContent = d.erro || 'Algo deu errado.'; }
-        })
-        .catch(function () { msg.className = 'udxa-msg err'; msg.textContent = 'Falha de conexão.'; })
-        .finally(function () { btn.disabled = false; });
-    });
-  }
-
-  var p = new URLSearchParams(location.search);
-  var avisos = {
-    required: 'Faça login para acessar a área de membros.',
-    expirado: 'Seu link expirou. Peça um novo abaixo.',
-    invalido: 'Link inválido. Peça um novo abaixo.',
-    negado:   'Este e-mail não tem acesso liberado.',
-  };
-  if (avisos[p.get('login')]) {
-    show('entrar');
-    var m = document.getElementById('udxaLoginMsg');
-    m.className = 'udxa-msg err';
-    m.textContent = avisos[p.get('login')];
-  }
-})();
+  await env.KV.put('news:' + email, JSON.stringify({ em: Date.now() }));
+  return json({ ok: true });
+}
