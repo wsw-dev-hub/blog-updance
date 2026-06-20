@@ -116,6 +116,7 @@
   });
 
   bind('#btnAcessar',   function (e) { e.preventDefault(); show('entrar'); });
+  bind('#btnMobilAcess',  function (e) { e.preventDefault(); show('entrar'); });
   bind('#btnCadastrar', function (e) { e.preventDefault(); show('acesso'); });
   function bind(sel, fn) {
     document.querySelectorAll(sel).forEach(function (el) { el.addEventListener('click', fn); });
