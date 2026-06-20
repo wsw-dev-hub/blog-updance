@@ -22,3 +22,8 @@ id      = "10d76ce53a5049fbab9cab01b68936e2"
 
 [vars]
 MAIL_FROM = "Up Dance <onboarding@resend.dev>"
+
+[[d1_databases]]
+binding       = "DB"
+database_name = "updance_db"
+database_id   = "191b7031-3739-449b-9d19-ba12c3c12b25"
