@@ -1,58 +1,52 @@
 /**
- * loader.js — tela de carregamento do blog Up Dance.
+ * loader.js — tela de carregamento do blog Up Dance, com barra de progresso real.
  *
- * IMPORTANTE: este script deve rodar CEDO, logo no início do <body>,
- * SEM 'defer', para cobrir a página desde o primeiro instante:
- *
+ * IMPORTANTE: rode CEDO, no início do <body>, SEM 'defer':
  *   <body>
  *     <script src="/js/loader.js"></script>
  *     ... resto da página ...
  *
- * A tela some sozinha quando a página termina de carregar (window load),
- * com um tempo mínimo de exibição para não "piscar" e um limite de
- * segurança caso o load demore demais.
+ * A barra reflete o carregamento das IMAGENS da página (os itens mais pesados):
+ * avança a cada imagem concluída e chega a 100% quando a página inteira termina
+ * (window load). A web não expõe o "total de bytes" da página de antemão, então
+ * as imagens são o sinal real e mensurável de progresso aqui.
  */
 (function () {
   'use strict';
 
   var MIN_MS = 500;    // tempo mínimo visível (evita flicker)
-  var MAX_MS = 8000;   // trava de segurança: esconde mesmo se 'load' não disparar
+  var MAX_MS = 12000;  // trava de segurança: conclui mesmo se 'load' não disparar
   var inicio = Date.now();
 
-  // fontes do projeto (inócuo se a página já as carrega)
   if (!document.getElementById('udxl-fonts')) {
-    var f = document.createElement('link');
-    f.id = 'udxl-fonts';
-    f.rel = 'stylesheet';
-    f.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:ital@1&display=swap';
-    document.head.appendChild(f);
+    var lk = document.createElement('link');
+    lk.id = 'udxl-fonts';
+    lk.rel = 'stylesheet';
+    lk.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:ital@1&display=swap';
+    document.head.appendChild(lk);
   }
 
   var css = `
   #udxl-overlay{position:fixed;inset:0;z-index:99999;display:flex;
-    flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;
+    flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;
     background:#020118;font-family:'Poppins',sans-serif;
     transition:opacity .5s ease,visibility .5s ease}
   #udxl-overlay.is-hidden{opacity:0;visibility:hidden}
-  .udxl-stage{position:relative;width:96px;height:96px;display:flex;
-    align-items:center;justify-content:center}
-  .udxl-ring{position:absolute;inset:0;border-radius:50%;
-    border:3px solid rgba(191,4,73,.18);
-    border-top-color:#BF0449;border-right-color:#eb2f5b;
-    animation:udxl-spin 1s linear infinite}
-  .udxl-logo{width:54px;height:54px;border-radius:50%;
+  .udxl-logo{width:64px;height:64px;border-radius:25%;
     animation:udxl-pulse 1.6s ease-in-out infinite}
   .udxl-name{font-family:'Playfair Display',serif;font-style:italic;
-    font-size:1.5rem;line-height:1;
+    font-size:1.6rem;line-height:1;
     background:linear-gradient(to top,#fb8460 0%,#f13aa1 100%);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .udxl-sub{color:#8a86b0;font-size:.78rem;letter-spacing:.18em;
-    text-transform:uppercase;margin-top:-.4rem}
-  @keyframes udxl-spin{to{transform:rotate(360deg)}}
+  .udxl-track{position:relative;width:240px;max-width:70vw;height:6px;
+    background:rgba(191,4,73,.16);border-radius:99px;overflow:hidden}
+  .udxl-fill{position:absolute;left:0;top:0;height:100%;width:0%;border-radius:99px;
+    background:linear-gradient(to right,#F434A1 0%,#ff8442 100%)}
+  .udxl-pct{color:#8a86b0;font-size:.78rem;letter-spacing:.14em;
+    font-variant-numeric:tabular-nums}
   @keyframes udxl-pulse{0%,100%{transform:scale(1);opacity:1}
-    50%{transform:scale(1.08);opacity:.78}}
-  @media (prefers-reduced-motion:reduce){
-    .udxl-ring,.udxl-logo{animation:none}
+    50%{transform:scale(1.07);opacity:.8}}
+  @media (prefers-reduced-motion:reduce){.udxl-logo{animation:none}
     #udxl-overlay{transition:opacity .2s ease}}
   `;
 
@@ -61,34 +55,88 @@
   style.textContent = css;
   document.head.appendChild(style);
 
-  // injeta a tela imediatamente (o script roda antes do resto do body)
   var ov = document.createElement('div');
   ov.id = 'udxl-overlay';
-  ov.setAttribute('role', 'status');
-  ov.setAttribute('aria-label', 'Carregando');
+  ov.setAttribute('role', 'progressbar');
+  ov.setAttribute('aria-label', 'Carregando a página');
+  ov.setAttribute('aria-valuemin', '0');
+  ov.setAttribute('aria-valuemax', '100');
+  ov.setAttribute('aria-valuenow', '0');
   ov.innerHTML =
-    '<div class="udxl-stage">' +
-      '<div class="udxl-ring"></div>' +
-      '<img class="udxl-logo" src="/images/icons/udx-icon.png" alt="">' +
-    '</div>' +
+    '<img class="udxl-logo" src="/images/icons/udx-icon.png" alt="">' +
     '<div class="udxl-name">Up Dance</div>' +
-    '<div class="udxl-sub">carregando</div>';
+    '<div class="udxl-track"><div class="udxl-fill" id="udxl-fill"></div></div>' +
+    '<div class="udxl-pct" id="udxl-pct">0%</div>';
 
   (document.body || document.documentElement).appendChild(ov);
 
-  function esconder() {
+  var fill = ov.querySelector('#udxl-fill');
+  var pct  = ov.querySelector('#udxl-pct');
+
+  var alvo = 0.04;     // fração-alvo real (começa com um leve avanço)
+  var atual = 0.04;    // fração exibida (persegue o alvo suavemente)
+  var concluido = false;
+
+  // anima a barra suavemente em direção ao alvo
+  function loop() {
+    atual += (alvo - atual) * 0.12;
+    if (alvo - atual < 0.001) atual = alvo;
+    var p = Math.round(atual * 100);
+    fill.style.width = p + '%';
+    pct.textContent = p + '%';
+    ov.setAttribute('aria-valuenow', String(p));
+    if (!concluido || atual < 0.999) requestAnimationFrame(loop);
+    else finalizar();
+  }
+  requestAnimationFrame(loop);
+
+  // calcula o alvo a partir das imagens já carregadas
+  function recalc(total, prontas) {
+    if (total === 0) { alvo = Math.max(alvo, 0.85); return; }
+    // 4% de base + até 92% conforme as imagens concluem (4% final fica para o load)
+    alvo = 0.04 + (prontas / total) * 0.92;
+  }
+
+  function rastrearImagens() {
+    var imgs = Array.prototype.slice.call(document.images);
+    var total = imgs.length;
+    var prontas = 0;
+
+    if (total === 0) { recalc(0, 0); return; }
+
+    imgs.forEach(function (img) {
+      if (img.complete) {
+        prontas++;
+      } else {
+        var feito = function () { prontas++; recalc(total, prontas); };
+        img.addEventListener('load', feito, { once: true });
+        img.addEventListener('error', feito, { once: true });
+      }
+    });
+    recalc(total, prontas);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', rastrearImagens);
+  } else {
+    rastrearImagens();
+  }
+
+  // quando TUDO termina, completa a barra e esconde
+  function terminar() { alvo = 1; concluido = true; }
+
+  function finalizar() {
     var restante = Math.max(0, MIN_MS - (Date.now() - inicio));
     setTimeout(function () {
       ov.classList.add('is-hidden');
-      // remove do DOM depois da transição
       setTimeout(function () { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 600);
     }, restante);
   }
 
   if (document.readyState === 'complete') {
-    esconder();
+    terminar();
   } else {
-    window.addEventListener('load', esconder);
-    setTimeout(esconder, MAX_MS); // trava de segurança
+    window.addEventListener('load', terminar);
+    setTimeout(terminar, MAX_MS); // trava de segurança
   }
 })();
