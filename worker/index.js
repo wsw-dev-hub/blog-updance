@@ -174,7 +174,7 @@ async function memberRegister(request, url, env) {
     await logEvent(env, email, 'member_cadastro', name || null);
   }
 
-  const res = await enviarEmail(env, email, 'Confirme sua conta — Up Dance',
+  const res = await enviarEmail(env, email, 'Confirme sua conta — Up Dance Xperience',
     emailConfirmacaoConta(name, url.origin + '/api/member/confirm?token=' + token));
   await logEvent(env, email, res.ok ? 'member_confirma_enviado' : 'member_confirma_erro', res.error || null);
   return json({ ok: true });
@@ -226,7 +226,7 @@ async function pedirLink(request, url, env) {
 
   const token = randomToken(32);
   await env.KV.put('magic:' + token, email, { expirationTtl: MAGIC_TTL });
-  const res = await enviarEmail(env, email, 'Seu link de acesso — Up Dance',
+  const res = await enviarEmail(env, email, 'Seu link de acesso — Up Dance Xperience',
     emailLogin(url.origin + '/api/auth/verify?token=' + token));
   await logEvent(env, email, res.ok ? 'magic_enviado' : 'magic_erro', res.error || null);
   return generica;
@@ -311,7 +311,7 @@ async function inscrever(request, url, env) {
       .bind(email, name, phone, 'pending', token, agora).run();
     await logEvent(env, email, 'news_pendente', null);
   }
-  const res = await enviarEmail(env, email, 'Confirme sua inscrição — Up Dance',
+  const res = await enviarEmail(env, email, 'Confirme sua inscrição — Up Dance Xperience',
     emailConfirmacao(name, url.origin + '/api/newsletter/confirm?token=' + token));
   await logEvent(env, email, res.ok ? 'news_confirma_enviado' : 'news_confirma_erro', res.error || null);
   return json({ ok: true });
@@ -338,7 +338,7 @@ async function enviarEmail(env, to, subject, html) {
       host: 'smtp.gmail.com', port: 587, startTls: true, authType: 'login',
       credentials: { username: env.GMAIL_USER, password: env.GMAIL_APP_PASSWORD },
     });
-    await mailer.send({ from: { name: 'Up Dance', email: env.GMAIL_USER }, to, subject, html });
+    await mailer.send({ from: { name: 'Up Dance Xperience', email: env.GMAIL_USER }, to, subject, html });
     if (typeof mailer.close === 'function') { try { await mailer.close(); } catch (_) {} }
     return { ok: true };
   } catch (err) {
@@ -353,7 +353,7 @@ function botao(href, t) {
   return `<a href="${href}" style="display:inline-block;background:#BF0449;color:#fff;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:9px;font-size:15px">${t}</a>`;
 }
 function emailLogin(link) {
-  return moldura(`<h2 style="margin:0 0 12px;font-size:18px;color:#fff">Seu acesso à Up Dance</h2>
+  return moldura(`<h2 style="margin:0 0 12px;font-size:18px;color:#fff">Seu acesso à Up Dance Xperience</h2>
     <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Clique para entrar. O link vale 15 minutos e é de uso único.</p>
     ${botao(link, 'Entrar na área de membros')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Não pediu acesso? Ignore este e-mail.</p>`);
@@ -361,14 +361,14 @@ function emailLogin(link) {
 function emailConfirmacaoConta(name, link) {
   const ola = name ? ('Olá, ' + name + '!') : 'Olá!';
   return moldura(`<h2 style="margin:0 0 12px;font-size:18px;color:#fff">${ola}</h2>
-    <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Confirme seu e-mail para ativar sua conta de membro na Up Dance.</p>
+    <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Confirme seu e-mail para ativar sua conta de membro na Up Dance Xperience.</p>
     ${botao(link, 'Ativar minha conta')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Não criou conta? Ignore este e-mail.</p>`);
 }
 function emailConfirmacao(name, link) {
   const ola = name ? ('Olá, ' + name + '!') : 'Olá!';
   return moldura(`<h2 style="margin:0 0 12px;font-size:18px;color:#fff">${ola}</h2>
-    <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Confirme sua inscrição na newsletter da Up Dance.</p>
+    <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Confirme sua inscrição na newsletter da Up Dance Xperience.</p>
     ${botao(link, 'Confirmar inscrição')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Não fez este cadastro? Ignore este e-mail.</p>`);
 }
