@@ -10,7 +10,7 @@ not_found_handling = "404-page"
 
 # o Worker roda ANTES dos assets só nestas rotas (resto continua estático e rápido)
 
-run_worker_first   = ["/api/*", "/membros/*"]
+run_worker_first   = ["/api/*", "/membros/*", "/admin/*"]
 
 # Namespace KV — guarda sessões, allowlist e inscritos da newsletter.
 # Crie com:  npx wrangler kv namespace create KV

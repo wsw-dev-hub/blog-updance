@@ -30,7 +30,8 @@
     "@tonconnect/ui": "^2.3.1",
     "buffer": "^6.0.3",
     "node-msi": "^1.1.1",
-    "tonweb": "^0.0.66"
+    "tonweb": "^0.0.66",
+    "worker-mailer": "^1.2.1"
   },
   "allowScripts": {
     "esbuild@0.27.7": true,
