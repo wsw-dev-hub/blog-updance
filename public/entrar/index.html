@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<style>
+  :root{--bg:#020118;--card:#0c0b22;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
+    --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;
+    display:flex;align-items:center;justify-content:center;padding:1.5rem}
+  .card{width:min(94vw,420px);background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .head{display:flex;align-items:center;gap:.7rem;padding:1.2rem 1.3rem;border-bottom:1px solid var(--line)}
+  .head img{width:36px;height:36px}
+  .head h1{margin:0;font-size:1.3rem;font-weight:400;font-style:italic;font-family:'Playfair Display',serif;
+    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .tabs{display:flex;border-bottom:1px solid var(--line)}
+  .tab{flex:1;background:none;border:0;color:var(--muted);padding:.9rem;font-size:.85rem;font-weight:600;
+    font-family:'Poppins',sans-serif;cursor:pointer;border-bottom:2px solid transparent}
+  .tab.on{color:#fff;border-bottom-color:var(--accent2)}
+  .panel{display:none;padding:1.5rem 1.3rem 1.7rem}.panel.on{display:block}
+  .panel p{margin:0 0 1rem;color:var(--muted);font-size:.88rem;line-height:1.5}
+  label{display:block;font-size:.78rem;color:var(--muted);margin:.2rem 0 .35rem}
+  .inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
+    color:#fff;font-size:.95rem;margin-bottom:.7rem;font-family:'Poppins',sans-serif}
+  .inp:focus{outline:none;border-color:var(--accent)}
+  .inp::placeholder{color:#6f6c94}
+  .opc{font-size:.7rem;color:#6f6c94;font-weight:400;text-transform:none}
+  .btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
+    color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;transition:background-image .25s}
+  .btn:hover{background-image:var(--grad)}.btn:disabled{opacity:.6;background-image:none}
+  .alt{margin-top:1.1rem;text-align:center;font-size:.82rem}
+  .alt a{color:var(--accent2);cursor:pointer;text-decoration:none}.alt a:hover{text-decoration:underline}
+  .msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em;line-height:1.4}
+  .msg.ok{color:#5fe0a4}.msg.err{color:#ff7591}
+  .voltar{display:block;text-align:center;margin-top:1.2rem;color:var(--muted);font-size:.82rem;text-decoration:none}
+  @media(max-width:420px){.card{border-radius:12px}.panel{padding:1.2rem 1rem 1.4rem}.head h1{font-size:1.15rem}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="head"><img src="/images/icons/udx-icon.png" alt=""><h1>Up Dance</h1></div>
+    <div class="tabs">
+      <button class="tab on" data-t="login">Entrar</button>
+      <button class="tab" data-t="criar">Criar conta</button>
+    </div>
+
+    <div class="panel on" data-p="login">
+      <p>Acesse sua área de membros.</p>
+      <input class="inp" type="email" id="lemail" placeholder="seu@email.com" autocomplete="email">
+      <input class="inp" type="password" id="lpass" placeholder="Sua senha" autocomplete="current-password">
+      <button class="btn" id="lbtn">Entrar</button>
+      <div class="msg" id="lmsg" role="status"></div>
+      <div class="alt">Prefere sem senha? <a id="magic">Receber link por e-mail</a></div>
+    </div>
+
+    <div class="panel" data-p="criar">
+      <p>Crie sua conta de membro.</p>
+      <label>Nome <span class="opc">(opcional)</span></label>
+      <input class="inp" type="text" id="cnome" placeholder="Seu nome" autocomplete="name">
+      <label>E-mail</label>
+      <input class="inp" type="email" id="cemail" placeholder="seu@email.com" autocomplete="email">
+      <label>Telefone <span class="opc">(opcional)</span></label>
+      <input class="inp" type="tel" id="cfone" placeholder="(00) 00000-0000" autocomplete="tel">
+      <label>Senha <span class="opc">(mín. 8 caracteres)</span></label>
+      <input class="inp" type="password" id="cpass" placeholder="Crie uma senha" autocomplete="new-password">
+      <button class="btn" id="cbtn">Criar conta</button>
+      <div class="msg" id="cmsg" role="status"></div>
+    </div>
+
+    <a class="voltar" href="/">← Voltar ao blog</a>
+  </div>
+
+<script>
+  function tab(name){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.t===name));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.dataset.p===name));
+  }
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>tab(t.dataset.t)));
+
+  function post(url,body){return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());}
+  function setMsg(el,cls,txt){el.className='msg '+cls;el.textContent=txt;}
+
+  // login com senha
+  var lbtn=document.getElementById('lbtn');
+  lbtn.addEventListener('click',function(){
+    var msg=document.getElementById('lmsg');setMsg(msg,'','');lbtn.disabled=true;
+    post('/api/member/login',{email:document.getElementById('lemail').value.trim(),password:document.getElementById('lpass').value})
+      .then(d=>{ if(d.ok){location.href='/membros/';} else {setMsg(msg,'err',d.erro||'Falha no login.');} })
+      .catch(()=>setMsg(msg,'err','Falha de conexão.')).finally(()=>lbtn.disabled=false);
+  });
+
+  // criar conta
+  var cbtn=document.getElementById('cbtn');
+  cbtn.addEventListener('click',function(){
+    var msg=document.getElementById('cmsg');setMsg(msg,'','');cbtn.disabled=true;
+    post('/api/member/register',{
+      name:document.getElementById('cnome').value.trim(),
+      email:document.getElementById('cemail').value.trim(),
+      phone:document.getElementById('cfone').value.trim(),
+      password:document.getElementById('cpass').value
+    }).then(d=>{
+      if(d.ok){setMsg(msg,'ok','Conta criada! Enviamos um e-mail para você ativar a conta.');}
+      else{setMsg(msg,'err',d.erro||'Não foi possível criar a conta.');}
+    }).catch(()=>setMsg(msg,'err','Falha de conexão.')).finally(()=>cbtn.disabled=false);
+  });
+
+  // magic link (alternativa)
+  document.getElementById('magic').addEventListener('click',function(){
+    var msg=document.getElementById('lmsg');var em=document.getElementById('lemail').value.trim();
+    if(!em){setMsg(msg,'err','Digite seu e-mail acima primeiro.');return;}
+    setMsg(msg,'','');
+    post('/api/auth/request',{email:em}).then(()=>setMsg(msg,'ok','Se este e-mail tiver acesso, enviamos um link para entrar.'))
+      .catch(()=>setMsg(msg,'err','Falha de conexão.'));
+  });
+
+  // mensagens de status (confirmação de conta / magic link)
+  var st=new URLSearchParams(location.search).get('status');
+  var avisos={confirmado:['ok','Conta ativada! Agora você já pode entrar.'],
+    invalido:['err','Link inválido ou já utilizado.'],expirado:['err','Seu link expirou. Tente novamente.']};
+  if(avisos[st]){var m=document.getElementById('lmsg');setMsg(m,avisos[st][0],avisos[st][1]);}
+</script>
+</body>
+</html>

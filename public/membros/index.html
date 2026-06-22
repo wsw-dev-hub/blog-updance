@@ -1,94 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Área de Membros — Up Dance</title>
-  <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
-  <style>
-    :root{
-      --bg:#020118; --card:#0c0b22; --panel:#0a0820; --line:#221f3e;
-      --txt:#DFE0F2; --muted:#8a86b0; --accent:#BF0449; --accent2:#eb2f5b;
-      --grad:linear-gradient(to right,#F434A1 0%,#ff8442 100%);
-    }
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);
-      font-family:'Poppins',sans-serif;display:flex;flex-direction:column}
-    .topo{display:flex;align-items:center;gap:.7rem;padding:1rem 1.4rem;
-      border-bottom:1px solid var(--line)}
-    .topo img{width:36px;height:36px}
-    .topo .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;
-      background:linear-gradient(to top,#fb8460 0%,#f13aa1 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .sair{margin-left:auto;color:var(--muted);text-decoration:none;font-size:.9rem;
-      font-weight:500;border:1px solid var(--line);padding:.45rem .95rem;border-radius:9px;
-      transition:.25s}
-    .sair:hover{color:#fff;border-color:var(--accent2)}
-    main{flex:1;display:flex;align-items:center;justify-content:center;padding:2.4rem 1.2rem}
-    .card{width:min(92vw,580px);background:var(--card);border:1px solid var(--line);
-      border-radius:18px;padding:2.6rem 2rem;text-align:center}
-    .card h1{margin:0 0 .5rem;font-size:1.6rem;font-weight:700;color:#fff}
-    .card h1 span{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
-      background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text}
-    .card .intro{color:var(--muted);line-height:1.6;margin:.2rem 0 0}
-    .chip{display:inline-block;margin-top:1.3rem;background:var(--panel);
-      border:1px solid var(--line);color:var(--txt);padding:.5rem 1.1rem;border-radius:999px;
-      font-size:.9rem;font-weight:500}
-    .grade{display:grid;gap:1rem;margin-top:2.2rem;text-align:left}
-    .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;
-      padding:1.15rem 1.25rem;border-left:4px solid var(--accent)}
-    .item h3{margin:0 0 .35rem;font-size:1rem;color:#fff;font-weight:600}
-    .item p{font-size:.86rem;color:var(--muted);margin:0;line-height:1.5}
-    footer{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;
-      border-top:1px solid var(--line)}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área de Membros — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<style>
+  :root{--bg:#020118;--card:#0c0b22;--panel:#0a0820;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
+    --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;display:flex;flex-direction:column}
+  .topo{display:flex;align-items:center;gap:.7rem;padding:1rem 1.4rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .topo img{width:34px;height:34px}
+  .topo .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.25rem;
+    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .sair{margin-left:auto;background:none;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.9rem;
+    border:1px solid var(--line);padding:.45rem .95rem;border-radius:9px;cursor:pointer}
+  .sair:hover{color:#fff;border-color:var(--accent2)}
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:2.4rem 1.2rem}
+  .card{width:min(94vw,580px);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:2.6rem 2rem;text-align:center}
+  .card h1{margin:0 0 .5rem;font-size:1.6rem;font-weight:700;color:#fff}
+  .card h1 span{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
+    background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .intro{color:var(--muted);line-height:1.6;margin:.2rem 0 0}
+  .chip{display:inline-block;margin-top:1.3rem;background:var(--panel);border:1px solid var(--line);
+    color:var(--txt);padding:.5rem 1.1rem;border-radius:999px;font-size:.9rem}
+  .grade{display:grid;gap:1rem;margin-top:2.2rem;text-align:left}
+  .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.15rem 1.25rem;border-left:4px solid var(--accent)}
+  .item h3{margin:0 0 .35rem;font-size:1rem;color:#fff}.item p{font-size:.86rem;color:var(--muted);margin:0;line-height:1.5}
+  footer{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
+  @media(max-width:520px){
+    .topo{padding:.8rem 1rem}.topo .marca{font-size:1.1rem}
+    main{padding:1.4rem .9rem}.card{padding:1.8rem 1.2rem;border-radius:14px}
+    .card h1{font-size:1.3rem}.grade{margin-top:1.6rem}}
+</style>
 </head>
 <body>
-  <script src="/js/loader.js"></script>
   <header class="topo">
-    <img src="/images/icons/udx-icon.png" alt="Up Dance">
-    <span class="marca">Up Dance</span>
-    <a class="sair" href="/api/auth/logout">Sair</a>
+    <img src="/images/icons/udx-icon.png" alt=""><span class="marca">Up Dance</span>
+    <button class="sair" id="sair">Sair</button>
   </header>
-
   <main>
     <div class="card">
       <h1>Bem-vindo(a) à <span>área de membros</span></h1>
       <p class="intro">Conteúdo exclusivo para alunos e clientes da Up Dance.</p>
       <div class="chip" id="usuario">carregando…</div>
-
       <div class="grade">
-        <div class="item">
-          <h3>Suas aulas</h3>
-          <p>Em breve: vídeos e materiais das suas turmas aparecerão aqui.</p>
-        </div>
-        <div class="item">
-          <h3>Conteúdo exclusivo</h3>
-          <p>Em breve: matérias e bastidores liberados só para membros.</p>
-        </div>
+        <div class="item"><h3>Suas aulas</h3><p>Em breve: vídeos e materiais das suas turmas.</p></div>
+        <div class="item"><h3>Conteúdo exclusivo</h3><p>Em breve: matérias e bastidores só para membros.</p></div>
       </div>
     </div>
   </main>
-
   <footer>© Up Dance — acesso restrito</footer>
-
-  <script>
-    fetch('/api/me')
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (user) {
-        var el = document.getElementById('usuario');
-        if (user && user.email) {
-          el.textContent = 'Conectado como ' + user.email;
-        } else {
-          window.location.href = '/?login=required';
-        }
-      })
-      .catch(function () {
-        document.getElementById('usuario').textContent = 'Sessão ativa';
-      });
-  </script>
+<script>
+  fetch('/api/me').then(r=>r.ok?r.json():null).then(u=>{
+    var el=document.getElementById('usuario');
+    if(u&&u.email){el.textContent='Conectado como '+u.email;}
+    else{location.href='/entrar/';}
+  }).catch(()=>{document.getElementById('usuario').textContent='Sessão ativa';});
+  document.getElementById('sair').addEventListener('click',function(){
+    fetch('/api/member/logout',{method:'POST'}).then(()=>location.href='/').catch(()=>location.href='/');
+  });
+</script>
 </body>
 </html>
