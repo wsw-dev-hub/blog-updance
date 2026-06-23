@@ -600,5 +600,24 @@
 }());
 </script>
 
+<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
+<script>
+(function () {
+    'use strict';
+    // Delegação por "name" (não por id): funciona no widget original e nos
+    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[name="btnCadastroEmail"]');
+        if (!btn) return;
+        e.preventDefault();
+        var widget = btn.closest('.widget-box') || document;
+        var input  = widget.querySelector('[name="txtEmail"]');
+        var email  = input ? (input.value || '').trim() : '';
+        var destino = '/cadastro/';
+        if (email) destino += '?email=' + encodeURIComponent(email);
+        window.location.href = destino;
+    });
+}());
+</script>
 </body>
 </html>
