@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Acesso</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<style>
+  :root{--bg:#020118;--card:#0c0b22;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
+    --accent:#BF0449;--grad:linear-gradient(to right,#F434A1,#ff8442)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;
+    display:flex;align-items:center;justify-content:center;padding:1.5rem}
+  .card{width:min(94vw,380px);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:2rem 1.6rem}
+  .head{display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem}
+  .head img{width:32px;height:32px}
+  .head .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;
+    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .tag{font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:.15rem .45rem;border-radius:6px}
+  p{color:var(--muted);font-size:.85rem;line-height:1.5;margin:.6rem 0 1.2rem}
+  .inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
+    color:#fff;font-size:.95rem;margin-bottom:.7rem;font-family:'Poppins',sans-serif}
+  .inp:focus{outline:none;border-color:var(--accent)}
+  .btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
+    color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;transition:background-image .25s}
+  .btn:hover{background-image:var(--grad)}.btn:disabled{opacity:.6;background-image:none}
+  .msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em}.msg.err{color:#ff7591}.msg.ok{color:#5fe0a4}
+  .voltar{display:block;text-align:center;margin-top:1.2rem;color:var(--muted);font-size:.8rem;text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="head"><img src="/images/icons/udx-icon.png" alt=""><span class="marca">Up Dance</span><span class="tag">Admin</span></div>
+    <p>Acesso restrito à administração.</p>
+    <input class="inp" type="email" id="email" placeholder="E-mail de admin" autocomplete="username">
+    <input class="inp" type="password" id="pass" placeholder="Senha" autocomplete="current-password">
+    <button class="btn" id="btn">Entrar</button>
+    <div class="msg" id="msg" role="status"></div>
+    <a class="voltar" href="/">← Voltar ao blog</a>
+  </div>
+<script>
+  var btn=document.getElementById('btn'),msg=document.getElementById('msg');
+  btn.addEventListener('click',function(){
+    msg.className='msg';msg.textContent='';btn.disabled=true;
+    fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:document.getElementById('email').value.trim(),password:document.getElementById('pass').value})})
+      .then(r=>r.json()).then(d=>{ if(d.ok){location.href='/admin/';}
+        else{msg.className='msg err';msg.textContent=d.erro||'Falha no login.';} })
+      .catch(()=>{msg.className='msg err';msg.textContent='Falha de conexão.';})
+      .finally(()=>btn.disabled=false);
+  });
+  document.getElementById('pass').addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+</script>
+</body>
+</html>
