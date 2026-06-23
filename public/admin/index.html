@@ -3,54 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin — Acesso</title>
+<title>Admin — Painel</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
 <style>
-  :root{--bg:#020118;--card:#0c0b22;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
-    --accent:#BF0449;--grad:linear-gradient(to right,#F434A1,#ff8442)}
+  :root{
+    --bg:#020118; --card:#0c0b22; --card-2:#0f0e2a; --line:#221f3e; --line-soft:#1a1834;
+    --txt:#DFE0F2; --muted:#8a86b0; --faint:#6f6c94;
+    --accent:#BF0449; --grad:linear-gradient(to right,#F434A1,#ff8442);
+    --ok:#5fe0a4; --warn:#ffce6a; --err:#ff7591;
+  }
   *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;
-    display:flex;align-items:center;justify-content:center;padding:1.5rem}
-  .card{width:min(94vw,380px);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:2rem 1.6rem}
-  .head{display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem}
-  .head img{width:32px;height:32px}
-  .head .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;
-    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .tag{font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:.15rem .45rem;border-radius:6px}
-  p{color:var(--muted);font-size:.85rem;line-height:1.5;margin:.6rem 0 1.2rem}
-  .inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
-    color:#fff;font-size:.95rem;margin-bottom:.7rem;font-family:'Poppins',sans-serif}
-  .inp:focus{outline:none;border-color:var(--accent)}
-  .btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
-    color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;transition:background-image .25s}
-  .btn:hover{background-image:var(--grad)}.btn:disabled{opacity:.6;background-image:none}
-  .msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em}.msg.err{color:#ff7591}.msg.ok{color:#5fe0a4}
-  .voltar{display:block;text-align:center;margin-top:1.2rem;color:var(--muted);font-size:.8rem;text-decoration:none}
+  html,body{margin:0}
+  body{
+    min-height:100vh;background:var(--bg);color:var(--txt);
+    font-family:'Poppins',sans-serif;font-size:14px;line-height:1.5;
+    padding:1.5rem;max-width:1180px;margin:0 auto;
+  }
+  a{color:inherit}
+
+  /* ── Cabeçalho ── */
+  .topbar{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1.6rem}
+  .topbar img{width:34px;height:34px}
+  .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.35rem;
+    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;background-clip:text}
+  .tag{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);padding:.16rem .5rem;border-radius:6px}
+  .spacer{flex:1}
+  .ghost-btn{background:transparent;border:1px solid var(--line);color:var(--muted);
+    font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;
+    padding:.5rem .9rem;border-radius:8px;transition:.2s}
+  .ghost-btn:hover{border-color:var(--accent);color:#fff}
+  .ghost-btn:disabled{opacity:.5;cursor:default}
+
+  /* ── Cartões de estatística ── */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-bottom:1.6rem}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.05rem 1.15rem}
+  .stat .n{font-size:1.9rem;font-weight:700;line-height:1;letter-spacing:-.02em}
+  .stat .l{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .stat.accent .n{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .stat.danger .n{color:var(--err)}
+
+  /* ── Abas ── */
+  .tabs{display:flex;gap:.4rem;border-bottom:1px solid var(--line);margin-bottom:1.1rem;flex-wrap:wrap}
+  .tab{background:transparent;border:0;border-bottom:2px solid transparent;color:var(--muted);
+    font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;
+    padding:.6rem .9rem;margin-bottom:-1px;transition:.2s}
+  .tab:hover{color:var(--txt)}
+  .tab.active{color:#fff;border-bottom-color:var(--accent)}
+  .tab .count{font-size:.72rem;color:var(--faint);margin-left:.35rem}
+
+  /* ── Tabelas ── */
+  .panel{display:none}
+  .panel.active{display:block}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+  table{width:100%;border-collapse:collapse;min-width:560px}
+  thead th{font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+    text-align:left;font-weight:600;padding:.8rem 1rem;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td{padding:.78rem 1rem;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--card-2)}
+  td.email{font-weight:500;color:#fff}
+  td.dim{color:var(--muted)}
+  td.mono{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted);font-size:.82rem}
+
+  .badge{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.03em;
+    padding:.2rem .55rem;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+  .badge.ok{color:var(--ok);border-color:rgba(95,224,164,.35);background:rgba(95,224,164,.08)}
+  .badge.pending{color:var(--warn);border-color:rgba(255,206,106,.35);background:rgba(255,206,106,.08)}
+  .badge.err{color:var(--err);border-color:rgba(255,117,145,.35);background:rgba(255,117,145,.08)}
+  .badge.neutral{color:var(--muted);border-color:var(--line)}
+
+  /* ── Estados ── */
+  .state{padding:3rem 1.2rem;text-align:center;color:var(--muted);font-size:.9rem}
+  .state.err{color:var(--err)}
+  .empty{padding:2.4rem 1.2rem;text-align:center;color:var(--faint);font-size:.86rem}
+  .updated{color:var(--faint);font-size:.74rem;margin-top:1rem;text-align:right}
+
+  @media (max-width:560px){
+    body{padding:1rem}
+    .stat .n{font-size:1.55rem}
+  }
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="head"><img src="/images/icons/udx-icon.png" alt=""><span class="marca">Up Dance</span><span class="tag">Admin</span></div>
-    <p>Acesso restrito à administração.</p>
-    <input class="inp" type="email" id="email" placeholder="E-mail de admin" autocomplete="username">
-    <input class="inp" type="password" id="pass" placeholder="Senha" autocomplete="current-password">
-    <button class="btn" id="btn">Entrar</button>
-    <div class="msg" id="msg" role="status"></div>
-    <a class="voltar" href="/">← Voltar ao blog</a>
-  </div>
+  <header class="topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="tag">Admin</span>
+    <span class="spacer"></span>
+    <button class="ghost-btn" id="refresh">Atualizar</button>
+    <button class="ghost-btn" id="logout">Sair</button>
+  </header>
+
+  <main id="root">
+    <div class="state" id="loading">Carregando dados…</div>
+    <div id="content" hidden>
+      <section class="stats" id="stats"></section>
+
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="members">Membros<span class="count" id="c-members"></span></button>
+        <button class="tab" data-tab="subscribers">Inscritos<span class="count" id="c-subscribers"></span></button>
+        <button class="tab" data-tab="events">Eventos<span class="count" id="c-events"></span></button>
+      </nav>
+
+      <section class="panel active" id="panel-members"></section>
+      <section class="panel" id="panel-subscribers"></section>
+      <section class="panel" id="panel-events"></section>
+
+      <p class="updated" id="updated"></p>
+    </div>
+  </main>
+
 <script>
-  var btn=document.getElementById('btn'),msg=document.getElementById('msg');
-  btn.addEventListener('click',function(){
-    msg.className='msg';msg.textContent='';btn.disabled=true;
-    fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:document.getElementById('email').value.trim(),password:document.getElementById('pass').value})})
-      .then(r=>r.json()).then(d=>{ if(d.ok){location.href='/admin/';}
-        else{msg.className='msg err';msg.textContent=d.erro||'Falha no login.';} })
-      .catch(()=>{msg.className='msg err';msg.textContent='Falha de conexão.';})
-      .finally(()=>btn.disabled=false);
+  "use strict";
+
+  /* ── helpers ── */
+  function esc(v){
+    if(v===null||v===undefined||v==="") return "";
+    return String(v).replace(/[&<>"']/g,function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function fmtDate(v){
+    if(!v) return "—";
+    var d=new Date(v);
+    if(isNaN(d)) return esc(v);
+    return d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  }
+  function statusBadge(s){
+    var v=(s||"").toLowerCase(), cls="neutral", label=s||"—";
+    if(v==="active"||v==="confirmed"){cls="ok";label=v==="active"?"ativo":"confirmado";}
+    else if(v==="pending"){cls="pending";label="pendente";}
+    return '<span class="badge '+cls+'">'+esc(label)+'</span>';
+  }
+  function eventBadge(type){
+    var t=(type||"").toLowerCase(), cls="neutral";
+    if(t.indexOf("_erro")>-1) cls="err";
+    else if(t.indexOf("login")>-1||t.indexOf("confirmado")>-1||t.indexOf("_ok")>-1) cls="ok";
+    else if(t.indexOf("pendente")>-1||t.indexOf("enviado")>-1) cls="pending";
+    return '<span class="badge '+cls+'">'+esc(type||"—")+'</span>';
+  }
+  function el(id){return document.getElementById(id);}
+
+  /* ── tabela genérica de pessoas (membros / inscritos) ── */
+  function peopleTable(rows){
+    if(!rows||!rows.length) return '<div class="empty">Nenhum registro ainda.</div>';
+    var body=rows.map(function(r){
+      return '<tr>'+
+        '<td class="email">'+esc(r.email)+'</td>'+
+        '<td class="dim">'+(esc(r.name)||"—")+'</td>'+
+        '<td class="dim">'+(esc(r.phone)||"—")+'</td>'+
+        '<td>'+statusBadge(r.status)+'</td>'+
+        '<td class="mono">'+fmtDate(r.created_at)+'</td>'+
+        '<td class="mono">'+fmtDate(r.confirmed_at)+'</td>'+
+      '</tr>';
+    }).join("");
+    return '<div class="table-wrap"><table>'+
+      '<thead><tr><th>E-mail</th><th>Nome</th><th>Telefone</th><th>Status</th><th>Criado em</th><th>Confirmado em</th></tr></thead>'+
+      '<tbody>'+body+'</tbody></table></div>';
+  }
+
+  /* ── tabela de eventos ── */
+  function eventsTable(rows){
+    if(!rows||!rows.length) return '<div class="empty">Nenhum evento registrado.</div>';
+    var body=rows.map(function(r){
+      return '<tr>'+
+        '<td>'+eventBadge(r.type)+'</td>'+
+        '<td class="email">'+(esc(r.email)||"—")+'</td>'+
+        '<td class="dim">'+(esc(r.detail)||"—")+'</td>'+
+        '<td class="mono">'+fmtDate(r.created_at)+'</td>'+
+      '</tr>';
+    }).join("");
+    return '<div class="table-wrap"><table>'+
+      '<thead><tr><th>Tipo</th><th>E-mail</th><th>Detalhe</th><th>Quando</th></tr></thead>'+
+      '<tbody>'+body+'</tbody></table></div>';
+  }
+
+  /* ── cartões de estatística ── */
+  function renderStats(s){
+    s=s||{};
+    var cards=[
+      {n:s.membros,          l:"Membros",            cls:""},
+      {n:s.membros_ativos,   l:"Membros ativos",     cls:"accent"},
+      {n:s.news_confirmados, l:"Newsletter conf.",   cls:""},
+      {n:s.erros,            l:"Erros registrados",  cls:"danger"}
+    ];
+    el("stats").innerHTML=cards.map(function(c){
+      return '<div class="stat '+c.cls+'"><div class="n">'+(c.n==null?0:c.n)+'</div><div class="l">'+c.l+'</div></div>';
+    }).join("");
+  }
+
+  /* ── abas ── */
+  function setupTabs(){
+    var tabs=document.querySelectorAll(".tab");
+    tabs.forEach(function(t){
+      t.addEventListener("click",function(){
+        tabs.forEach(function(x){x.classList.remove("active");});
+        document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+        t.classList.add("active");
+        el("panel-"+t.dataset.tab).classList.add("active");
+      });
+    });
+  }
+
+  /* ── carregamento dos dados ── */
+  function load(){
+    el("loading").className="state";
+    el("loading").textContent="Carregando dados…";
+    el("loading").hidden=false;
+    el("content").hidden=true;
+
+    fetch("/api/admin/data",{credentials:"same-origin",headers:{"Accept":"application/json"}})
+      .then(function(r){
+        if(r.status===401||r.status===403){ location.href="/admin-login/"; return null; }
+        if(!r.ok) throw new Error("HTTP "+r.status);
+        return r.json();
+      })
+      .then(function(d){
+        if(!d) return;
+        renderStats(d.stats);
+
+        var members=d.members||[], subs=d.subscribers||[], events=d.events||[];
+        el("c-members").textContent="("+members.length+")";
+        el("c-subscribers").textContent="("+subs.length+")";
+        el("c-events").textContent="("+events.length+")";
+
+        el("panel-members").innerHTML=peopleTable(members);
+        el("panel-subscribers").innerHTML=peopleTable(subs);
+        el("panel-events").innerHTML=eventsTable(events);
+
+        el("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
+        el("loading").hidden=true;
+        el("content").hidden=false;
+      })
+      .catch(function(err){
+        el("loading").className="state err";
+        el("loading").textContent="Não foi possível carregar os dados ("+err.message+"). Tente atualizar.";
+      });
+  }
+
+  /* ── sair ── */
+  el("logout").addEventListener("click",function(){
+    var b=el("logout"); b.disabled=true;
+    fetch("/api/admin/logout",{method:"POST",credentials:"same-origin"})
+      .catch(function(){})
+      .finally(function(){ location.href="/admin-login/"; });
   });
-  document.getElementById('pass').addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+
+  el("refresh").addEventListener("click",load);
+
+  setupTabs();
+  load();
 </script>
 </body>
 </html>
