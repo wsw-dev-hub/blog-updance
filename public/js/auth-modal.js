@@ -6,10 +6,9 @@
  * Inclua em cada página, no fim do <body>:
  *   <script src="/js/auth-modal.js" defer></script>
  *
- * Liga-se sozinho aos botões existentes:
- *   #btnAcessar / #btnMobilAcess → abre na aba "Entrar"
- *   #btnCadastrar                → abre na aba "Solicitar acesso"
- * Também expõe window.openAuthModal('entrar' | 'acesso' | 'newsletter').
+ * Os botões #btnAcessar / #btnMobilAcess / #btnCadastrar NÃO são mais ligados
+ * a este modal: eles navegam direto para /entrar/ e /cadastro/ via href.
+ * O modal segue disponível via window.openAuthModal('entrar' | 'acesso' | 'newsletter').
  */
 (function () {
   'use strict';
@@ -135,13 +134,9 @@
     if (e.key === 'Escape' && overlay.classList.contains('is-open')) hide();
   });
 
-  // botões existentes (desktop e mobile)
-  bind('#btnAcessar',    function (e) { e.preventDefault(); show('entrar'); });
-  bind('#btnMobilAcess', function (e) { e.preventDefault(); show('entrar'); });
-  bind('#btnCadastrar',  function (e) { e.preventDefault(); show('acesso'); });
-  function bind(sel, fn) {
-    document.querySelectorAll(sel).forEach(function (el) { el.addEventListener('click', fn); });
-  }
+  // Os botões "Acessar" e "Cadastrar" (desktop e mobile) NÃO abrem mais o modal:
+  // eles navegam diretamente para suas páginas via href (/entrar/ e /cadastro/).
+  // O modal continua disponível via window.openAuthModal(...) e pelo parâmetro ?login=.
 
   // login por magic link → POST /api/auth/request
   postForm('udxaLoginEmail', 'udxaLoginBtn', 'udxaLoginMsg', '/api/auth/request',
