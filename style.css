@@ -149,7 +149,7 @@ header{
 }
 
 /*BUTTONS*/
-button{ margin:5px; margin-right:5px; margin-bottom:12px; padding-right:1.5rem!important;}
+button{ /*margin:5px;*/ margin-right:5px; margin-bottom:12px; /*padding-right:1.5rem!important;*/}
 
 .btn-custon-white, .btn-custon-white{ background-color:#fff; }
 

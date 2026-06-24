@@ -1974,6 +1974,8 @@ textarea { overflow: hidden; }
     font-size: 380px;
     color: rgba(255, 255, 255, 0.08);
     line-height: 0.85;
+    overflow-x: hidden;
+    width: 100%;
 }
 .club-banner__txt { position: relative; z-index: 1; }
 .club-banner .eyebrow {
