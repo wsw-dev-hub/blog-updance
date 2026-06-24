@@ -14,7 +14,24 @@
 ================================================================ */
 @media screen and (max-width: 360px) {
     .page-title .content h1 { font-size: 1.15rem; }
+
     .news-block-two .inner-box .upper-content h4 { font-size: 0.95rem; }
+    /* ── MENU FLUTUANTE (FAB) — ajustes para telas muito estreitas ── */
+    .udx-fab                    { bottom: 14px; gap: 10px; padding: 0 12px; }
+    .udx-fab__hint              { max-width: 320px; font-size: 12px; padding: 8px 10px; }
+    .udx-fab__hint .mdi         { font-size: 18px; }
+    .udx-fab__radial            { width: 56px; height: 56px; }
+    .udx-fab__core              { width: 56px; height: 56px; }
+    .udx-fab__core-icon         { font-size: 24px; }
+    .udx-fab__item              { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+    .udx-fab__item .mdi         { font-size: 20px; }
+
+    /* Raio reduzido para caber na largura disponível */
+    .udx-fab__radial.is-open .udx-fab__item--tl  { transform: translate(-78px, -48px) scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--top { transform: translate(0,    -96px)  scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--tr  { transform: translate( 78px, -48px) scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-92px, 0)     scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 92px, 0)     
 }
 
 
@@ -121,6 +138,10 @@
     .blog-footer__cols        { row-gap: 28px; padding-bottom: 32px; }
     /*.blog-footer__gallery     { max-width: 200px; }*/
 
+    /* ── MENU FLUTUANTE (FAB) — mobile padrão ─────────────── */
+    .udx-fab__hint-text         { font-size: 12.5px; }
+    .udx-fab__tab               { padding: 7px 14px; font-size: 12px; }
+    .udx-fab__item em           { font-size: 10px; bottom: -18px; }
 }
 
 
@@ -160,6 +181,11 @@
     .blog-footer__col     { padding-left: 12px; padding-right: 12px; }
     .blog-footer__cols    { row-gap: 28px; padding-bottom: 32px; }
     /*.blog-footer__gallery { max-width: 200px; }*/
+
+    /* ── MENU FLUTUANTE (FAB) — phablet: pode expandir um pouco ── */
+    .udx-fab__hint              { max-width: 400px; }
+    .udx-fab__radial.is-open .udx-fab__item--bl { transform: translate(-118px, 0) scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--br { transform: translate( 118px, 0) scale(1); }
 
 }
 
@@ -251,6 +277,14 @@
         visibility: visible !important;
     }
 
+    /* ── MENU FLUTUANTE (FAB) — sm: hint mais largo, leque mais aberto ── */
+    .udx-fab__hint              { max-width: 440px; }
+    .udx-fab__radial.is-open .udx-fab__item--tl  { transform: translate(-110px, -64px) scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--top { transform: translate(0,     -124px) scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--tr  { transform: translate( 110px, -64px) scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-128px, 0)     scale(1); }
+    .udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 128px, 0)     scale(1); }
+
 }
 
 
@@ -333,6 +367,14 @@
     header.blog-header .menu-list {
         visibility: visible !important;
     }
+
+    /* ── MENU FLUTUANTE (FAB) — tablet portrait: tamanhos um pouco maiores ── */
+    .udx-fab                    { bottom: 24px; }
+    .udx-fab__radial            { width: 68px; height: 68px; }
+    .udx-fab__core              { width: 68px; height: 68px; }
+    .udx-fab__core-icon         { font-size: 30px; }
+    .udx-fab__item              { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
+    .udx-fab__item .mdi         { font-size: 24px; }
     
 }
 
@@ -415,6 +457,9 @@
    DESKTOP PEQUENO — 992px a 1023px
 ================================================================ */
 @media screen and (min-width: 992px) {
+    /* ── MENU FLUTUANTE (FAB) — oculto a partir do breakpoint do menu desktop ── */
+    .udx-fab { display: none !important; }
+    
     .cleanner { margin-top: 0; }
 
     /* HEADER */

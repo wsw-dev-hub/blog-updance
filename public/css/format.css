@@ -703,3 +703,202 @@ div {
 }
 .to-top:hover { background: var(--udx-primary-hot); }
 .to-top .mdi { font-size: 24px; }
+
+/* ====================================================================
+   MENU FLUTUANTE RADIAL (FAB) — inspirado em apps fintech
+   Visível apenas em telas <=991px e somente após o header sair de tela
+==================================================================== */
+.udx-fab {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    z-index: 340;                       /* abaixo de .to-top (350) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    pointer-events: none;               /* não bloqueia conteúdo quando oculto */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(28px);
+    transition: opacity 320ms ease, transform 320ms ease, visibility 320ms;
+}
+.udx-fab.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ---------- Sugestão contextual ---------- */
+.udx-fab__hint {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(2, 2, 26, 0.86);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--udx-border);
+    border-radius: 999px;
+    color: var(--udx-text);
+    font-family: var(--udx-font);
+    font-size: 13px;
+    box-shadow: var(--udx-shadow-card);
+    transition: opacity 260ms ease, transform 260ms ease;
+}
+.udx-fab__hint.is-hidden { opacity: 0; transform: translateY(8px); pointer-events: none; height: 0; padding: 0; margin: 0; border: 0; }
+.udx-fab__hint .mdi { color: var(--udx-primary-hot); font-size: 20px; }
+.udx-fab__hint-text { flex: 1; line-height: 1.2; }
+.udx-fab__hint-go,
+.udx-fab__hint-close {
+    background: transparent;
+    border: 0;
+    color: var(--udx-text);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 220ms ease, color 220ms ease;
+}
+.udx-fab__hint-go:hover    { background: var(--udx-primary); color: #fff; }
+.udx-fab__hint-close:hover { background: var(--udx-border); }
+
+/* ---------- Pílula de abas ---------- */
+.udx-fab__tabs {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+    background: rgba(2, 2, 26, 0.86);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--udx-border);
+    border-radius: 999px;
+    box-shadow: var(--udx-shadow-card);
+}
+.udx-fab__tab {
+    border: 0;
+    background: transparent;
+    color: var(--udx-text-muted);
+    font-family: var(--udx-font);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 260ms ease, color 260ms ease, box-shadow 260ms ease;
+    margin-bottom:0;
+}
+.udx-fab__tab.is-active {
+    background: linear-gradient(135deg, var(--udx-primary) 0%, var(--udx-primary-hot) 100%);
+    color: #fff;
+    box-shadow: var(--udx-shadow-btn);
+}
+
+/* ---------- Núcleo do menu radial ---------- */
+.udx-fab__radial {
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+
+/* Botão central (FAB) */
+.udx-fab__core {
+    position: absolute;
+    inset: 0;
+    width: 64px;
+    height: 64px;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--udx-primary) 0%, var(--udx-primary-hot) 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--udx-shadow-btn), 0 0 0 6px rgba(2, 2, 26, 0.55);
+    transition: transform 320ms cubic-bezier(.34,1.56,.64,1), box-shadow 280ms ease;
+}
+.udx-fab__core:hover { box-shadow: var(--udx-shadow-hover), 0 0 0 6px rgba(2, 2, 26, 0.55); }
+.udx-fab__core-icon  { font-size: 28px; transition: transform 320ms ease; }
+
+/* Estado aberto */
+.udx-fab__radial.is-open .udx-fab__core { transform: rotate(135deg); }
+.udx-fab__radial.is-open .udx-fab__core-icon { /* mdi-menu vira "X" pela rotação */ }
+
+/* Ícones-satélite */
+.udx-fab__item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 52px;
+    height: 52px;
+    margin: -26px 0 0 -26px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(2, 2, 26, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    text-decoration: none;
+    box-shadow: var(--udx-shadow-card);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(0, 0) scale(0.4);
+    transition: transform 360ms cubic-bezier(.34,1.56,.64,1),
+                opacity  240ms ease,
+                background-color 220ms ease,
+                border-color 220ms ease;
+}
+.udx-fab__item .mdi { font-size: 22px; color: var(--udx-primary-hot); }
+.udx-fab__item em   {
+    position: absolute;
+    bottom: -20px;
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--udx-text);
+    white-space: nowrap;
+    text-shadow: 0 2px 8px rgba(0,0,0,.7);
+    opacity: 0;
+    transition: opacity 220ms ease 80ms;
+}
+.udx-fab__item:hover {
+    background: var(--udx-primary);
+    border-color: var(--udx-primary-hot);
+}
+.udx-fab__item:hover .mdi { color: #fff; }
+
+/* Posições do leque quando aberto
+   (raio = 96px; ângulos distribuídos em arco superior) */
+.udx-fab__radial.is-open .udx-fab__item {
+    opacity: 1;
+    pointer-events: auto;
+}
+.udx-fab__radial.is-open .udx-fab__item em { opacity: 1; }
+
+.udx-fab__radial.is-open .udx-fab__item--tl  { transform: translate(-81px, -76px) scale(1); }
+.udx-fab__radial.is-open .udx-fab__item--top { transform: translate(0,    -110px) scale(1); }
+.udx-fab__radial.is-open .udx-fab__item--tr  { transform: translate( 81px, -76px) scale(1); }
+.udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-110px, 0)    scale(1); }
+.udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 110px, 0)    scale(1); }
+
+/* Overlay sutil atrás do menu quando aberto */
+.udx-fab.is-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at bottom, rgba(2,2,26,.55) 0%, rgba(2,2,26,0) 60%);
+    z-index: -1;
+    pointer-events: none;
+}

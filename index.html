@@ -542,6 +542,61 @@
     </div>
 </footer>
 
+<!-- ======================================================
+     MENU FLUTUANTE RADIAL (mobile/tablet)
+     Aparece após o usuário rolar e o header sair da viewport
+====================================================== -->
+<div class="udx-fab" id="udxFab" aria-hidden="true">
+
+    <!-- Sugestão contextual (equivalente ao "Depositar via PIX") -->
+    <!--<div class="udx-fab__hint" id="udxFabHint" role="status">
+        <span class="mdi mdi-email-fast-outline" aria-hidden="true"></span>
+        <span class="udx-fab__hint-text">Receba a Newsletter semanal</span>
+        <a href="#newsletter" class="udx-fab__hint-go" aria-label="Ir para newsletter">
+            <span class="mdi mdi-chevron-right" aria-hidden="true"></span>
+        </a>
+        <button class="udx-fab__hint-close" id="udxFabHintClose" aria-label="Fechar sugestão">
+            <span class="mdi mdi-close" aria-hidden="true"></span>
+        </button>
+    </div>-->
+
+    <!-- Pílula de abas (equivalente ao Principal/Trading/IA) -->
+    <!--<div class="udx-fab__tabs" role="tablist" aria-label="Sessões do blog">
+        <button class="udx-fab__tab is-active" data-target="#trilhas"    role="tab" aria-selected="true">Trilhas</button>
+        <button class="udx-fab__tab"           data-target="#destaque"   role="tab" aria-selected="false">Destaques</button>
+        <button class="udx-fab__tab"           data-target="#clube"      role="tab" aria-selected="false">Clube</button>
+    </div>-->
+
+    <!-- Menu radial: 4 ícones em leque + botão central -->
+    <nav class="udx-fab__radial" id="udxFabRadial" aria-label="Atalhos do blog">
+        <a href="#trilhas"  class="udx-fab__item udx-fab__item--tl" aria-label="Trilhas">
+            <span class="mdi mdi-compass-outline" aria-hidden="true"></span>
+            <em>Trilhas</em>
+        </a>
+        <a href="#recentes" class="udx-fab__item udx-fab__item--top" aria-label="Artigos recentes">
+            <span class="mdi mdi-newspaper-variant-multiple-outline" aria-hidden="true"></span>
+            <em>Recentes</em>
+        </a>
+        <a href="#clube"    class="udx-fab__item udx-fab__item--tr" aria-label="Clube do Groove">
+            <span class="mdi mdi-message-video" aria-hidden="true"></span>
+            <em>Clube</em>
+        </a>
+        <a href="/entrar/"  class="udx-fab__item udx-fab__item--bl" aria-label="Acessar conta">
+            <span class="mdi mdi-account-outline" aria-hidden="true"></span>
+            <em>Acessar</em>
+        </a>
+        <a href="#topo"     class="udx-fab__item udx-fab__item--br" aria-label="Voltar ao topo">
+            <span class="mdi mdi-arrow-up" aria-hidden="true"></span>
+            <em>Topo</em>
+        </a>
+
+        <button class="udx-fab__core" id="udxFabCore"
+                aria-label="Abrir menu de atalhos" aria-expanded="false" aria-controls="udxFabRadial">
+            <span class="mdi mdi-menu udx-fab__core-icon" aria-hidden="true"></span>
+        </button>
+    </nav>
+</div>
+
 <!-- Voltar ao topo -->
 <button class="to-top" id="toTop" aria-label="Voltar ao topo"><span class="mdi mdi-arrow-up" aria-hidden="true"></span></button>
 
@@ -594,6 +649,91 @@
     btn.addEventListener("click", function () {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
+}());
+
+/* ===========================================================
+   Menu flutuante radial (FAB)
+   - Aparece quando o header sai da viewport (ou após 320px)
+   - Abre/fecha ao tocar no botão central
+   - Fecha ao tocar fora ou em um item
+=========================================================== */
+(function () {
+    "use strict";
+    var fab      = document.getElementById("udxFab");
+    var radial   = document.getElementById("udxFabRadial");
+    var core     = document.getElementById("udxFabCore");
+    var hint     = document.getElementById("udxFabHint");
+    var hintX    = document.getElementById("udxFabHintClose");
+    //var header   = document.querySelector("header.blog-header");
+    if (!fab || !radial || !core) return;
+
+    /* 1. Mostrar/ocultar com base no scroll
+          Threshold = altura aproximada do hero (header sticky permanece visível,
+          mas o FAB só faz sentido após o usuário começar a navegar o conteúdo) */
+    function updateVisibility() {
+        var threshold = Math.max(window.innerHeight * 0.6, 380);
+        var show = window.pageYOffset > threshold;
+        fab.classList.toggle("is-visible", show);
+        fab.setAttribute("aria-hidden", show ? "false" : "true");
+        if (!show) closeRadial();
+    }
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+
+    /* 2. Abrir/fechar o leque */
+    function openRadial()  {
+        radial.classList.add("is-open");
+        fab.classList.add("is-open");
+        core.setAttribute("aria-expanded", "true");
+        core.querySelector(".udx-fab__core-icon")
+            .classList.replace("mdi-menu", "mdi-close");
+    }
+    function closeRadial() {
+        radial.classList.remove("is-open");
+        fab.classList.remove("is-open");
+        core.setAttribute("aria-expanded", "false");
+        var ic = core.querySelector(".udx-fab__core-icon");
+        if (ic.classList.contains("mdi-close")) {
+            ic.classList.replace("mdi-close", "mdi-menu");
+        }
+    }
+    core.addEventListener("click", function (e) {
+        e.stopPropagation();
+        radial.classList.contains("is-open") ? closeRadial() : openRadial();
+    });
+
+    /* 3. Fechar ao clicar em qualquer item */
+    radial.querySelectorAll(".udx-fab__item").forEach(function (a) {
+        a.addEventListener("click", closeRadial);
+    });
+
+    /* 4. Fechar ao tocar fora */
+    document.addEventListener("click", function (e) {
+        if (!fab.contains(e.target)) closeRadial();
+    });
+
+    /* 5. Pílula de abas — rola até a seção alvo */
+    fab.querySelectorAll(".udx-fab__tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+            fab.querySelectorAll(".udx-fab__tab").forEach(function (t) {
+                t.classList.remove("is-active");
+                t.setAttribute("aria-selected", "false");
+            });
+            tab.classList.add("is-active");
+            tab.setAttribute("aria-selected", "true");
+            var sel = tab.getAttribute("data-target");
+            var target = sel && document.querySelector(sel);
+            if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    });
+
+    /* 6. Fechar a sugestão contextual */
+    if (hintX && hint) {
+        hintX.addEventListener("click", function () {
+            hint.classList.add("is-hidden");
+        });
+    }
 }());
 
 /* Newsletter banner */
