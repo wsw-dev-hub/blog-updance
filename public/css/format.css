@@ -127,7 +127,7 @@ img {
     display: inline-block;
     margin-right: 10px;
     padding-right: 10px;
-    color: #eb2f5b;
+    /*color: #eb2f5b;*/
     font-size: 16px;
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
@@ -239,7 +239,7 @@ img {
 /* FORMATAÇÃO DE TEXTOS */
 .blog-single .inner-box h4 {
     position: relative;
-    color: #BF0449;
+    /*color: #BF0449;*/
     font-weight: 700;
     line-height: 1.6em;
     /*margin-top: 12px;*/
