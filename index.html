@@ -581,7 +581,7 @@
             <span class="mdi mdi-message-video" aria-hidden="true"></span>
             <em>Clube</em>
         </a>
-        <a href="/entrar/"  class="udx-fab__item udx-fab__item--bl" aria-label="Acessar conta">
+        <a href="/entrar/" id="udxFabAcessar" class="udx-fab__item udx-fab__item--bl" aria-label="Acessar conta">
             <span class="mdi mdi-account-outline" aria-hidden="true"></span>
             <em>Acessar</em>
         </a>
@@ -666,6 +666,17 @@
     var hintX    = document.getElementById("udxFabHintClose");
     //var header   = document.querySelector("header.blog-header");
     if (!fab || !radial || !core) return;
+
+    /* 0. Espelha o href do "Acessar" do header no atalho do FAB.
+          Garante que ambos sempre apontem para a mesma rota de login,
+          mesmo se o caminho mudar futuramente. */
+    (function syncAcessar() {
+        var fabAcessar    = document.getElementById("udxFabAcessar");
+        var headerAcessar = document.getElementById("btnAcessar");
+        if (fabAcessar && headerAcessar && headerAcessar.getAttribute("href")) {
+            fabAcessar.setAttribute("href", headerAcessar.getAttribute("href"));
+        }
+    }());
 
     /* 1. Mostrar/ocultar com base no scroll
           Threshold = altura aproximada do hero (header sticky permanece visível,
