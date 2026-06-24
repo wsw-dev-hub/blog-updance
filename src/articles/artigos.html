@@ -15,10 +15,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
 <!-- Folhas de estilo do projeto -->
-<link rel="stylesheet" href="/style.css">
-<link rel="stylesheet" href="/css/blog.css">
-<link rel="stylesheet" href="/css/mediaQuery.css">
-<link rel="stylesheet" href="/css/format.css">
+<link rel="stylesheet" href="/css/blog.css">       <!-- 1º: define :root (tokens) -->
+<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
+<link rel="stylesheet" href="/css/format.css">     <!-- 3º: complementa tipografia -->
+<link rel="stylesheet" href="/css/mediaQuery.css"> <!-- 4º: sobrescreve por largura -->
 <!--<script type="module" src="/public/main.js" defer></script>-->
 <!--<link rel="stylesheet" href="css/slider-carrossel.css">-->
 
@@ -99,7 +99,7 @@
             </div>
         </div>
     </section>
-    <div class="sidebar_cleanner"></div>
+    <!--<div class="sidebar_cleanner"></div>-->
     <!-- ======================================================
          CONTEÚDO PRINCIPAL
     ====================================================== -->

@@ -30,10 +30,10 @@
 </noscript>
 
 <!-- Folhas de estilo do projeto (críticos — carregam normalmente) -->
-<link rel="stylesheet" href="/style.css">
-<link rel="stylesheet" href="/css/blog.css">
-<link rel="stylesheet" href="/css/mediaQuery.css">
-<link rel="stylesheet" href="/css/format.css">
+<link rel="stylesheet" href="/css/blog.css">       <!-- 1º: define :root (tokens) -->
+<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
+<link rel="stylesheet" href="/css/format.css">     <!-- 3º: complementa tipografia -->
+<link rel="stylesheet" href="/css/mediaQuery.css"> <!-- 4º: sobrescreve por largura -->
 <!--<script type="module" src="/public/main.js" defer></script>-->
 <!--<link rel="stylesheet" href="css/slider-carrossel.css">-->
 <!-- Scripts movidos para o final do <body> -->
@@ -112,7 +112,7 @@
             </div>
         </div>
     </section>
-
+    <!--<div class="sidebar_cleanner"></div>-->
     <!-- ======================================================
          CONTEÚDO PRINCIPAL
     ====================================================== -->

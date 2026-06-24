@@ -107,7 +107,28 @@ li.dots.selected{
     padding: 20px 0;
     margin: 0 3%;}
 
-body{background-color:#020118 }
+/*body{background-color:#020118 }*/
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    font-family: var(--udx-font);
+    color: var(--udx-text);
+    background-color: var(--udx-bg);
+    background-image:
+        radial-gradient(1200px 700px at 88% -10%, rgba(87, 8, 166, 0.55) 0%, rgba(87, 8, 166, 0) 62%),
+        radial-gradient(950px 580px at -8% 8%, rgba(191, 4, 73, 0.42) 0%, rgba(191, 4, 73, 0) 60%),
+        linear-gradient(180deg, #02021a 0%, #050329 50%, #02021a 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Acessibilidade — anel de foco visível em todo o site */
+:focus-visible {
+    outline: 2px solid var(--udx-primary-hot);
+    outline-offset: 3px;
+}
 
 /*LOGIN*/
 body.bg_titulos{
@@ -661,7 +682,7 @@ li img{border-radius:0.7em;}
 .news-infos p text, .medida-infos p text, .estrelas-infos p text, .firme-infos p text {color:#fff;}
 
 
-section{margin-bottom:-100px; position:relative; z-index:9;}
+section{/*margin-bottom:-100px;*/ position:relative; z-index:9;}
 section:hover{z-index:99;}
 
 

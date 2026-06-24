@@ -177,6 +177,13 @@
     .outer-box  { margin-top: 0; }
     .menu-list  { visibility: hidden; }
 
+    /* HOME — sm: grids começam a abrir + form em linha */
+    .recent-grid          { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .news-banner__form    { flex-direction: row; align-items: center; padding: 10px; }
+    .news-banner__form .mdi.email-i { display: inline-block; }
+    .news-banner__form input  { background: transparent; padding: 12px 8px; border-radius: 0; }
+    .news-banner__form button { width: auto; }
+
     /* HERO / PLAYLIST */
     #hero-descricao     { height: 768px; top: -160px; }
     #hero, #hero-watch  { height: 650px; }
@@ -260,6 +267,9 @@
     .nav-outer  { float: right; padding-right: 1%; }
     .menu-list  { visibility: hidden; }
 
+    /* HOME — md: trilhas em 2 colunas */
+    .trail-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
     /* DESTAQUES */
     #hero-infos img.logo       { width: 280px; padding-bottom: 0; }
     #hero, #hero-watch         { height: 650px; }
@@ -323,6 +333,7 @@
     header.blog-header .menu-list {
         visibility: visible !important;
     }
+    
 }
 
 
@@ -414,6 +425,36 @@
     .nav-outer  { float: right; padding-right: 7%; }
     .menu-list  { visibility: hidden; }
 
+    /* HOME — lg: layout desktop principal */
+    .home-hero__inner {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 56px;
+    }
+    .home-hero__art {
+        aspect-ratio: 1 / 1.05;
+        max-width: none;
+        margin: 0;
+    }
+    .home-hero__art .glyph        { font-size: 320px; }
+    .home-hero__stats             { gap: 36px; }
+    .home-hero__stats .stat b     { font-size: 1.6rem; }
+
+    .pick-grid  { grid-template-columns: 1.4fr 1fr; }
+    .pick-main  { min-height: 460px; padding: 32px; }
+    .pick-mini  { grid-template-columns: 110px 1fr; gap: 16px; padding: 14px; }
+    .pick-mini__thumb       { min-height: 100px; }
+    .pick-mini__thumb .mdi  { font-size: 42px; }
+
+    .recent-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .club-banner {
+        grid-template-columns: 1.3fr 1fr;
+        gap: 36px;
+        padding: clamp(36px, 6vw, 64px);
+    }
+
+    .news-banner__inner { grid-template-columns: 1.1fr 1fr; gap: 40px; }
+
     /* DESTAQUES */
     #hero-infos img.logo { width: 280px; }
     #hero, #hero-watch   { height: 650px; }
@@ -498,6 +539,9 @@
     header.main-watch            { visibility: visible; }
     .nav-outer  { visibility: hidden; }
     .menu-list  { font-size: 1rem; visibility: visible; }
+
+    /* HOME — xl: trilhas em 4 colunas */
+    .trail-grid { grid-template-columns: repeat(4, 1fr); }
 
     /* DESTAQUES */
     #hero                { top: -70px; }

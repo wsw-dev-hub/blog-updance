@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Up Dance | Blog</title>
+<title>Up Dance Xperience | Destaques</title>
+<meta name="description" content="A porta de entrada da Up Dance Xperience. Trilhas de leitura, artigos em destaque, Clube do Groove e newsletter semanal para quem leva a danca a serio.">
 
 <!-- Favicon -->
 <link rel="icon"       type="image/png" href="/public/images/icons/udx-icon.ico">
@@ -13,28 +14,44 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<!-- Tipografia -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 
 <!-- Folhas de estilo do projeto -->
 <link rel="stylesheet" href="/style.css">
 <link rel="stylesheet" href="/css/blog.css">
 <link rel="stylesheet" href="/css/mediaQuery.css">
 <link rel="stylesheet" href="/css/format.css">
-<!--<script type="module" src="/public/main.js" defer></script>-->
-<!--<link rel="stylesheet" href="css/slider-carrossel.css">-->
 
-<!-- jQuery (versão única, sem duplicata) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <script src="/js/loader.js"></script>
 <!-- ======================================================
-     HEADER
+     HEADER  (identico ao das outras paginas do projeto)
 ====================================================== -->
 <div class="container-fluid p-0">
     <header class="row g-0 blog-header">
 
         <!-- Logo -->
+        <!--<div class="col-6 col-md-4 col-lg-3 d-flex align-items-center">
+            <a href="#topo" class="blog-logo-link" aria-label="Up Dance Xperience">
+                <svg class="blog-logo-img" viewBox="0 0 188 46" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Up Dance Xperience">
+                    <defs>
+                        <linearGradient id="udxg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#FA33A1"/>
+                            <stop offset="0.55" stop-color="#8C0783"/>
+                            <stop offset="1" stop-color="#430ABF"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="0" y="3" width="40" height="40" rx="11" fill="url(#udxg)"/>
+                    <path d="M11 14 v11 a9 9 0 0 0 18 0 v-11" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round"/>
+                    <text x="50" y="21" font-family="Poppins, sans-serif" font-size="15" font-weight="700" letter-spacing="0.5" fill="#DFE0F2">UP DANCE</text>
+                    <text x="50" y="37" font-family="Poppins, sans-serif" font-size="10.5" font-weight="600" letter-spacing="4.2" fill="#FA33A1">XPERIENCE</text>
+                </svg>
+            </a>
+        </div>-->
         <div class="col-4 col-md-3 col-lg-2">
             <a href="/home.html" class="blog-logo-link">
                 <img src="/images/icons/udx-icon.png"
@@ -43,10 +60,7 @@
             </a>
         </div>
 
-        <!-- Nav / Hamburger -->
         <div class="col-8 col-md-9 col-lg-11 d-flex justify-content-end align-items-center pe-0">
-
-            <!-- Menu desktop (≥ lg) -->
             <ul class="menu-list d-none d-lg-inline-flex" role="menubar">
                 <li role="none">
                     <a id="btnAcessar" class="fa-submit" href="/entrar/" role="menuitem">
@@ -58,592 +72,578 @@
                 </li>
             </ul>
 
-            <!-- Botão hambúrguer (< lg) -->
-            <button class="btn-mobile-menu d-flex d-lg-none"
-                    id="btnMobileMenu"
-                    aria-label="Abrir menu"
-                    aria-expanded="false"
-                    aria-controls="mobileNav">
+            <button class="btn-mobile-menu d-flex d-lg-none" id="btnMobileMenu"
+                    aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
                 <span class="mdi mdi-menu" aria-hidden="true"></span>
             </button>
         </div>
 
-        <!-- Nav dropdown mobile -->
         <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
             <ul>
-                <li id="btnMobilAcess"><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="#trilhas"><span class="mdi mdi-compass-outline" aria-hidden="true"></span> Por onde comecar</a></li>
+                <li><a href="#destaque"><span class="mdi mdi-star-outline" aria-hidden="true"></span> Em destaque</a></li>
+                <li><a href="#recentes"><span class="mdi mdi-newspaper-variant-multiple-outline" aria-hidden="true"></span> Artigos recentes</a></li>
+                <li><a href="#clube"><span class="mdi mdi-message-video" aria-hidden="true"></span> Clube do Groove</a></li>
+                <li><a href="/artigos.html"><span class="mdi mdi-format-list-bulleted" aria-hidden="true"></span> Ver todos os artigos</a></li>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
                 <li><a href="/cadastro/">Cadastrar</a></li>
             </ul>
         </nav>
-
     </header>
 </div>
 
-<!-- ======================================================
-     HERO / PAGE TITLE
-====================================================== -->
-<div id="hero-blog" class="container-fluid p-0">
+<a id="topo"></a>
 
-    <section class="page-title" aria-label="Título da página">
-        <div class="row auto-container">
-            <div class="col-12">
-                <div class="container content">
-                    <h1>Bem-vindo <span class="destaque">Wellington Santos</span></h1>
-                    <nav aria-label="Trilha de navegação">
-                        <ul class="page-perfil-scrum">
-                            <li><a href="home.html">Destaques</a></li>
-                            <li><span class="breadcrumb-current">Artigos</span></li>
-                        </ul>
-                    </nav>
+<!-- ======================================================
+     HERO HOME
+====================================================== -->
+<section class="home-hero" aria-label="Boas-vindas">
+    <div class="auto-container">
+        <div class="home-hero__inner">
+            <div class="home-hero__text">
+                <span class="home-hero__eyebrow">Destaques &middot; Up Dance Xperience</span>
+                <h1>A danca explicada por dentro do <span class="destaque">groove</span>.</h1>
+                <p class="home-hero__lead">
+                    Tecnica, performance, coreografia e a ciencia do movimento &mdash;
+                    em artigos praticos para quem treina, ensina e vive a danca todos os dias.
+                </p>
+                <div class="home-hero__ctas">
+                    <a href="#trilhas" class="home-cta home-cta--solid">
+                        <span class="mdi mdi-compass-outline" aria-hidden="true"></span>
+                        Por onde comecar
+                    </a>
+                    <a href="/artigos.html" class="home-cta home-cta--ghost">
+                        <span class="mdi mdi-format-list-bulleted" aria-hidden="true"></span>
+                        Ver todos os artigos
+                    </a>
+                </div>
+                <div class="home-hero__stats">
+                    <div class="stat"><b>+120</b><span>Artigos</span></div>
+                    <div class="stat"><b>9</b><span>Trilhas</span></div>
+                    <div class="stat"><b>Toda semana</b><span>Conteudo novo</span></div>
+                </div>
+            </div>
+
+            <div class="home-hero__art" aria-hidden="true">
+                <span class="glyph mdi mdi-music"></span>
+                <div class="pose"></div>
+                <div class="badge-floating">
+                    <span class="mdi mdi-headphones"></span>
+                    <div><b>Decodifique o groove</b><span>Aula 08 disponivel</span></div>
                 </div>
             </div>
         </div>
-    </section>
-    <div class="sidebar_cleanner"></div>
-    <!-- ======================================================
-         CONTEÚDO PRINCIPAL
-    ====================================================== -->
-    <section aria-label="Lista de artigos">
-        <div id="main-content" class="main-blog-content">
-            <div class="row" id="blog-list-infos">
+    </div>
+</section>
 
-                <!-- ── COLUNA PRINCIPAL ─────────────────────────────── -->
-                <div class="content-side col-12 col-lg-8">
-                    <div class="container">
-                        <div class="blog-list">
+<!-- ======================================================
+     TRILHAS — Por onde comecar
+====================================================== -->
+<section class="section section--soft" id="trilhas" aria-labelledby="trilhasH">
+    <div class="auto-container">
+        <div class="section-head section-head__row">
+            <div>
+                <span class="eyebrow"><span class="mdi mdi-compass-outline" aria-hidden="true"></span> Por onde comecar</span>
+                <h2 id="trilhasH">Quatro <em>trilhas</em> para entrar na danca.</h2>
+                <p class="lead">Sequencias guiadas de artigos para voce ir do basico ao avancado em cada area &mdash; sem se perder em meio aos +120 textos do blog.</p>
+            </div>
+            <a href="/artigos.html" class="section-link">Ver todas as trilhas <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
+        </div>
 
-                            <!-- Card 1 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Estratégia</span>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/9-licoes.html">
-                                            <h4 class="text-white">9 Lições Estratégicas Escondidas no Filme Matrix</h4>
-                                        </a>
-                                        <div class="text">Estratégias de visão sistêmica, liderança e tomada de decisão sob pressão extraídas do universo Matrix — aplicadas ao mundo real.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/9-licoes.html">
-                                            <img src="/images/blog/1.jpg" alt="9 Lições Estratégicas Escondidas no Filme Matrix" loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/9-licoes.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
-                                    </div>
-                                </div>
-                            </div>
+        <div class="trail-grid">
+            <a href="/artigos.html?trilha=tecnica" class="trail-card" data-trail="tecnica">
+                <div class="trail-card__icon"><span class="mdi mdi-foot-print" aria-hidden="true"></span></div>
+                <span class="trail-card__num">Trilha 01 &middot; 14 artigos</span>
+                <h3>Tecnica &amp; Fundamentos</h3>
+                <p>Alinhamento, base, transferencia de peso e os fundamentos que tornam qualquer estilo possivel.</p>
+                <span class="trail-card__cta">Comecar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span></span>
+            </a>
 
-                            <!-- Card 2 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Mentalidade</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">A Pílula Vermelha ou a Pílula Azul: Escolhas que Definem Carreiras</h4>
-                                        <div class="text">Como a perseverança e a escolha consciente entre conforto e verdade moldam a trajetória de qualquer profissional de alta performance.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="A Pílula Vermelha ou a Pílula Azul" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl1$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_1"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
+            <a href="/artigos.html?trilha=coreografia" class="trail-card" data-trail="coreo">
+                <div class="trail-card__icon"><span class="mdi mdi-vector-polyline" aria-hidden="true"></span></div>
+                <span class="trail-card__num">Trilha 02 &middot; 11 artigos</span>
+                <h3>Coreografia &amp; Composicao</h3>
+                <p>Como construir sequencias que respiram: dinamica, contraste, repeticao e a logica da composicao cenica.</p>
+                <span class="trail-card__cta">Comecar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span></span>
+            </a>
 
-                            <!-- Card 3 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Alta Performance</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">Dentro da Matrix: Foco, Valor e Inovação na Dança</h4>
-                                        <div class="text">Uma jornada pela mente que é também uma aula sobre foco, proposta de valor e inovação disruptiva aplicada à vida real.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="Dentro da Matrix: Foco, Valor e Inovação na Dança" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl2$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_2"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
+            <a href="/artigos.html?trilha=bemestar" class="trail-card" data-trail="bemestar">
+                <div class="trail-card__icon"><span class="mdi mdi-meditation" aria-hidden="true"></span></div>
+                <span class="trail-card__num">Trilha 03 &middot; 9 artigos</span>
+                <h3>Bem-Estar &amp; Recuperacao</h3>
+                <p>Aquecimento inteligente, mobilidade, recuperacao muscular e nutricao para sustentar a temporada inteira.</p>
+                <span class="trail-card__cta">Comecar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span></span>
+            </a>
 
-                            <!-- Card 4 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Profissional</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">Você é o que Faz Quando Ninguém Está Olhando</h4>
-                                        <div class="text">Pequenas decisões diárias de disciplina e integridade que formam o caráter de quem se destaca em qualquer área.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="Você é o que Faz Quando Ninguém Está Olhando" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl3$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_3"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
+            <a href="/artigos.html?trilha=mentalidade" class="trail-card" data-trail="mentalidade">
+                <div class="trail-card__icon"><span class="mdi mdi-lightbulb-on-outline" aria-hidden="true"></span></div>
+                <span class="trail-card__num">Trilha 04 &middot; 12 artigos</span>
+                <h3>Mentalidade &amp; Palco</h3>
+                <p>Foco sob pressao, presenca cenica, mindset de crescimento e a parte invisivel que separa quem brilha de quem trava.</p>
+                <span class="trail-card__cta">Comecar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span></span>
+            </a>
+        </div>
+    </div>
+</section>
 
-                        </div><!-- /.blog-list -->
+<!-- ======================================================
+     EDITOR'S PICK — Em destaque
+====================================================== -->
+<section class="section" id="destaque" aria-labelledby="destH">
+    <div class="auto-container">
+        <div class="section-head">
+            <span class="eyebrow"><span class="mdi mdi-star-outline" aria-hidden="true"></span> Em destaque esta semana</span>
+            <h2 id="destH">A escolha dos <em>editores</em>.</h2>
+            <p class="lead">Um artigo aprofundado + tres leituras curtas para acompanhar.</p>
+        </div>
 
-                        <!-- Sentinela + indicador de scroll infinito -->
-                        <div id="scroll-sentinel"></div>
-                        <div id="loading-indicator" class="loading-indicator" aria-live="polite">
-                            <span class="mdi mdi-loading mdi-spin" aria-hidden="true"></span>
-                            <span>Carregando mais artigos...</span>
+        <div class="pick-grid">
+            <a href="#" class="pick-main">
+                <span class="card-category">Musicalidade</span>
+                <h3>Por dentro do Groove: como a musica vira movimento</h3>
+                <p>A escuta ativa e o segredo dos dancarinos que parecem <i>sentir</i> a batida. Um metodo pratico para traduzir camadas ritmicas em corpo &mdash; sem decorar passos.</p>
+                <ul class="pick-main__meta" style="padding:0;list-style:none;margin:0;">
+                    <li><span class="mdi mdi-calendar-outline" aria-hidden="true"></span>18/06/2026</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span>8 min de leitura</li>
+                    <li><span class="mdi mdi-account-outline" aria-hidden="true"></span>Wellington Santos</li>
+                </ul>
+            </a>
+
+            <div class="pick-side">
+                <a href="#" class="pick-mini" data-cat="warm">
+                    <div class="pick-mini__thumb"><span class="mdi mdi-run-fast" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="cat">Warm-Ups</span>
+                        <h4>Aquecimento inteligente em 8 minutos</h4>
+                        <span class="meta"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 5 min &middot; 12/06/2026</span>
+                    </div>
+                </a>
+                <a href="#" class="pick-mini" data-cat="expr">
+                    <div class="pick-mini__thumb"><span class="mdi mdi-drama-masks" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="cat">Expressao</span>
+                        <h4>A arte da expressao corporal consciente</h4>
+                        <span class="meta"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 7 min &middot; 05/06/2026</span>
+                    </div>
+                </a>
+                <a href="#" class="pick-mini" data-cat="neuro">
+                    <div class="pick-mini__thumb"><span class="mdi mdi-brain" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="cat">Neurociencia</span>
+                        <h4>Coreografia e neurociencia: o cerebro que danca</h4>
+                        <span class="meta"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 8 min &middot; 28/05/2026</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     ARTIGOS RECENTES — reusa .news-block-two do blog.css
+====================================================== -->
+<section class="section section--soft" id="recentes" aria-labelledby="recH">
+    <div class="auto-container">
+        <div class="section-head section-head__row">
+            <div>
+                <span class="eyebrow"><span class="mdi mdi-fire" aria-hidden="true"></span> Mais lidos da semana</span>
+                <h2 id="recH">O que esta <em>em alta</em> no blog.</h2>
+                <p class="lead">Selecao automatica baseada nas leituras dos ultimos sete dias.</p>
+            </div>
+            <a href="/artigos.html" class="section-link">Ver todos os artigos <span class="mdi mdi-arrow-right" aria-hidden="true"></span></a>
+        </div>
+
+        <div class="recent-grid">
+            <div class="news-block-two grid-box">
+                <div class="inner-box">
+                    <span class="card-category">Coreografia</span>
+                    <div class="upper-content">
+                        <a href="#"><h4 class="text-white">Como Construir uma Coreografia que Respira</h4></a>
+                        <div class="text">Dinamica, pausa e respiracao cenica: o que faz uma sequencia parecer viva em vez de uma lista de passos encadeados.</div>
+                        <ul class="post-meta">
+                            <li class="style-two text-white"><span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 14/05/2026</li>
+                            <li class="style-two text-white"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 5 min</li>
+                        </ul>
+                    </div>
+                    <div class="images">
+                        <div class="cover" data-cat="coreo">
+                            <span class="cover__brand">Up Dance &middot; Xperience</span>
+                            <span class="cover__glyph mdi mdi-vector-polyline" aria-hidden="true"></span>
                         </div>
-                    </div><!-- /.container -->
-                </div><!-- /.content-side -->
+                    </div>
+                    <div class="lower-content">
+                        <a href="#"><div class="theme-btn btn-style-one"><span class="mdi mdi-arrow-right" aria-hidden="true"></span> Ler artigo</div></a>
+                    </div>
+                </div>
+            </div>
 
-                <!-- ── SIDEBAR ──────────────────────────────────────── -->
-                <div class="sidebar-side col-12 col-lg-4">
-                    <aside class="sidebar" aria-label="Barra lateral">
-
-                        <!-- Widget: Busca -->
-                        <div class="row widget-box" id="widget-search">
-                            <div class="sidebar-widget search-box">
-                                <div class="form-group-blog">
-                                    <!--<span class="mdi mdi-magnify search-icon" aria-hidden="true"></span>-->
-                                    <input name="txtBusca" type="search" id="txtBusca"
-                                           placeholder="Pesquisar artigos..."
-                                           aria-label="Campo de busca">
-                                    <input type="submit" name="btnBuscar" value="" id="btnBuscar" class="fa-scr" aria-label="Buscar">
-                                </div>
-                            </div>
+            <div class="news-block-two grid-box">
+                <div class="inner-box">
+                    <span class="card-category">Nutricao</span>
+                    <div class="upper-content">
+                        <a href="#"><h4 class="text-white">Nutricao Estrategica para Alta Performance</h4></a>
+                        <div class="text">Como a alimentacao inteligente potencializa treinos e melhora a resistencia cenica e a recuperacao entre ensaios.</div>
+                        <ul class="post-meta">
+                            <li class="style-two text-white"><span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 08/05/2026</li>
+                            <li class="style-two text-white"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 6 min</li>
+                        </ul>
+                    </div>
+                    <div class="images">
+                        <div class="cover" data-cat="nutr">
+                            <span class="cover__brand">Up Dance &middot; Xperience</span>
+                            <span class="cover__glyph mdi mdi-food-apple-outline" aria-hidden="true"></span>
                         </div>
+                    </div>
+                    <div class="lower-content">
+                        <a href="#"><div class="theme-btn btn-style-one"><span class="mdi mdi-arrow-right" aria-hidden="true"></span> Ler artigo</div></a>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="sidebar_cleanner"></div>
-
-                        <!-- Widget: Comece Por Aqui -->
-                        <div class="row widget-box" id="widget-comece">
-                            <div class="widget-header">
-                                <span class="icon mdi mdi-book-multiple-outline" aria-hidden="true"></span>
-                                <h5 class="text-white">Comece Por Aqui</h5>
-                            </div>
-                            <ul class="lista-titulos">
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <span class="temas"><a href="#">Mentalize</a></span>
-                                            <a href="#"><h6>Tudo o que Não Te Contaram Sobre o Talento</h6></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <span class="temas"><a href="#">Inteligência Emocional</a></span>
-                                            <a href="#"><h6>9 Maneiras de Sair da Matrix</h6></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <span class="temas"><a href="#">Profissional</a></span>
-                                            <a href="#"><h6>Você é O que Você Faz Quando Ninguém Está Olhando</h6></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <span class="temas"><a href="#">Otimização de Treinos</a></span>
-                                            <a href="#"><h6>3 Coisas que Não Podem Faltar nos Seus Treinos</h6></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <span class="temas"><a href="#">Dicas &amp; Sacadas</a></span>
-                                            <a href="#"><h6>Os Segredos da Arte Performática</h6></a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+            <div class="news-block-two grid-box">
+                <div class="inner-box">
+                    <span class="card-category">Tecnica</span>
+                    <div class="upper-content">
+                        <a href="#"><h4 class="text-white">O Guia do En Dehors Sem Forcar o Joelho</h4></a>
+                        <div class="text">Rotacao a partir do quadril, alinhamento e consciencia de pe: o caminho seguro para ganhar abertura sem dor.</div>
+                        <ul class="post-meta">
+                            <li class="style-two text-white"><span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 22/04/2026</li>
+                            <li class="style-two text-white"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 7 min</li>
+                        </ul>
+                    </div>
+                    <div class="images">
+                        <div class="cover" data-cat="tec">
+                            <span class="cover__brand">Up Dance &middot; Xperience</span>
+                            <span class="cover__glyph mdi mdi-foot-print" aria-hidden="true"></span>
                         </div>
+                    </div>
+                    <div class="lower-content">
+                        <a href="#"><div class="theme-btn btn-style-one"><span class="mdi mdi-arrow-right" aria-hidden="true"></span> Ler artigo</div></a>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="sidebar_cleanner"></div>
-
-                        <!-- Widget: Novas Publicações -->
-                        <div class="row widget-box" id="widget-novas">
-                            <div class="widget-header">
-                                <span class="icon mdi mdi-newspaper-variant-multiple-outline" aria-hidden="true"></span>
-                                <h5 class="text-white">Novas Publicações</h5>
-                            </div>
-                            <ul class="lista-posts">
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+            <div class="news-block-two grid-box">
+                <div class="inner-box">
+                    <span class="card-category">Bem-Estar</span>
+                    <div class="upper-content">
+                        <a href="#"><h4 class="text-white">Tecnicas de Recuperacao Muscular para Bailarinos</h4></a>
+                        <div class="text">Um guia pratico das melhores rotinas de recuperacao para otimizar performance e evitar lesoes durante a temporada.</div>
+                        <ul class="post-meta">
+                            <li class="style-two text-white"><span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 20/05/2026</li>
+                            <li class="style-two text-white"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 7 min</li>
+                        </ul>
+                    </div>
+                    <div class="images">
+                        <div class="cover" data-cat="bem">
+                            <span class="cover__brand">Up Dance &middot; Xperience</span>
+                            <span class="cover__glyph mdi mdi-meditation" aria-hidden="true"></span>
                         </div>
+                    </div>
+                    <div class="lower-content">
+                        <a href="#"><div class="theme-btn btn-style-one"><span class="mdi mdi-arrow-right" aria-hidden="true"></span> Ler artigo</div></a>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="sidebar_cleanner"></div>
-
-                        <!-- Widget: Newsletter -->
-                        <div class="row widget-box" id="widget-email">
-                            <div class="sidebar-widget search-box">
-                                <div class="widget-header">
-                                    <h6 class="text-white newsletter-cta">
-                                        Cadastre-se e <span class="destaque">receba</span> nossas
-                                        newsletters com <span class="destaque">matérias exclusivas</span> toda semana!
-                                    </h6>
-                                </div>
-                                <div class="form-group-blog">
-                                    <div class="email-input-wrap">
-                                        <span class="icon mdi mdi-email-fast-outline" aria-hidden="true"></span>
-                                        <input name="txtEmail" type="email" id="txtEmail"
-                                               placeholder="Digite seu e-mail"
-                                               aria-label="Endereço de e-mail">
-                                    </div>
-                                    <input type="submit" name="btnCadastroEmail" value="Cadastrar"
-                                           id="btnCadastroEmail" class="fa-submit">
-                                </div>
-                            </div>
+            <div class="news-block-two grid-box">
+                <div class="inner-box">
+                    <span class="card-category">Musicalidade</span>
+                    <div class="upper-content">
+                        <a href="#"><h4 class="text-white">Subdivisoes Ritmicas: Sentir o &ldquo;e&rdquo; Entre as Batidas</h4></a>
+                        <div class="text">A escuta da subdivisao e o passe que separa quem pisa no tempo de quem realmente dialoga com a musica.</div>
+                        <ul class="post-meta">
+                            <li class="style-two text-white"><span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 30/04/2026</li>
+                            <li class="style-two text-white"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 6 min</li>
+                        </ul>
+                    </div>
+                    <div class="images">
+                        <div class="cover" data-cat="musi">
+                            <span class="cover__brand">Up Dance &middot; Xperience</span>
+                            <span class="cover__glyph mdi mdi-music" aria-hidden="true"></span>
                         </div>
+                    </div>
+                    <div class="lower-content">
+                        <a href="#"><div class="theme-btn btn-style-one"><span class="mdi mdi-arrow-right" aria-hidden="true"></span> Ler artigo</div></a>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="sidebar_cleanner"></div>
-
-                        <!-- Widget: Clube do Groove -->
-                        <div class="row widget-box blog-club-content" id="widget-clube">
-                            <div class="widget-header">
-                                <span class="icon mdi mdi-message-video" aria-hidden="true"></span>
-                                <h5 class="text-white">Clube do Groove</h5>
-                                <p><a href="#" aria-label="Ver todos os vídeos do Clube do Groove">ver todos →</a></p>
-                            </div>
-                            <div class="blog-club-mask">
-                                <div class="play-circle" role="button" aria-label="Reproduzir">
-                                    <span class="icon mdi mdi-play-circle-outline" aria-hidden="true"></span>
-                                </div>
-                                <div class="slider">
-                                    <div class="slider_box">
-                                        <article class="slider_item active" slider-bg="/images/titulos/expressao.png">
-                                            <div class="slider_content"></div>
-                                        </article>
-                                        <article class="slider_item" slider-bg="/images/titulos/dgroove.png">
-                                            <div class="slider_content"></div>
-                                        </article>
-                                        <article class="slider_item" slider-bg="/images/titulos/boost-a-move.png">
-                                            <div class="slider_content"></div>
-                                        </article>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="blog-club-footer">
-                                <div class="prev" role="button" aria-label="Slide anterior">&#8249;</div>
-                                <div class="go"   role="button" aria-label="Próximo slide">&#8250;</div>
-                            </div>
+            <div class="news-block-two grid-box">
+                <div class="inner-box">
+                    <span class="card-category">Mentalidade</span>
+                    <div class="upper-content">
+                        <a href="#"><h4 class="text-white">Mentalidade de Crescimento no Universo da Danca</h4></a>
+                        <div class="text">Por que alguns dancarinos evoluem mais rapido e como desenvolver o mindset que transforma limitacao em oportunidade.</div>
+                        <ul class="post-meta">
+                            <li class="style-two text-white"><span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 30/04/2026</li>
+                            <li class="style-two text-white"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> 8 min</li>
+                        </ul>
+                    </div>
+                    <div class="images">
+                        <div class="cover" data-cat="ment">
+                            <span class="cover__brand">Up Dance &middot; Xperience</span>
+                            <span class="cover__glyph mdi mdi-lightbulb-on-outline" aria-hidden="true"></span>
                         </div>
+                    </div>
+                    <div class="lower-content">
+                        <a href="#"><div class="theme-btn btn-style-one"><span class="mdi mdi-arrow-right" aria-hidden="true"></span> Ler artigo</div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                        <div class="sidebar_cleanner"></div>
+<!-- ======================================================
+     CLUBE DO GROOVE — banner wide
+====================================================== -->
+<section class="section" id="clube" aria-labelledby="clubeH">
+    <div class="auto-container">
+        <div class="club-banner">
+            <div class="club-banner__txt">
+                <span class="eyebrow">Clube do Groove</span>
+                <h2 id="clubeH">Aulas em <em>video</em>, toda quinta.</h2>
+                <p>Acesso a sequencias guiadas, decifragens de musica e analises de coreografia &mdash; tudo gravado em formato curto para encaixar no seu treino, na sua escola ou no seu palco.</p>
+                <div class="club-banner__ctas">
+                    <a href="/clube/" class="home-cta home-cta--solid">
+                        <span class="mdi mdi-play-circle-outline" aria-hidden="true"></span>
+                        Acessar o Clube
+                    </a>
+                    <a href="#" class="home-cta home-cta--ghost">
+                        <span class="mdi mdi-information-outline" aria-hidden="true"></span>
+                        Saiba mais
+                    </a>
+                </div>
+            </div>
+            <div class="club-banner__player" role="img" aria-label="Previa da aula em destaque">
+                <button class="club-banner__play" type="button" aria-label="Reproduzir previa">
+                    <span class="mdi mdi-play" aria-hidden="true"></span>
+                </button>
+                <span class="tag"><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Aula 08 &middot; 11 min</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-                        <!-- Widget: Navegue por Assuntos -->
-                        <div class="row widget-box" id="widget-assuntos">
-                            <div class="widget-header">
-                                <span class="icon mdi mdi-layers-triple-outline" aria-hidden="true"></span>
-                                <h5 class="text-white">Navegue por Assuntos</h5>
-                            </div>
-                            <ul class="lista-tags">
-                                <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <a href="#"><h6>Bem-Estar</h6></a>
-                                            <a href="#"><h6>Dicas &amp; Sacadas</h6></a>
-                                            <a href="#"><h6>Alta Performance</h6></a>
-                                            <a href="#"><h6>Produção Visual</h6></a>
-                                            <a href="#"><h6>Warm-Ups</h6></a>
-                                            <a href="#"><h6>Mentorias</h6></a>
-                                            <a href="#"><h6>Desafios</h6></a>
-                                            <a href="#"><h6>Concepção Coreográfica</h6></a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+<!-- ======================================================
+     NEWSLETTER BANNER
+====================================================== -->
+<section class="news-banner" id="newsletter" aria-labelledby="newsH">
+    <div class="auto-container">
+        <div class="news-banner__inner">
+            <div>
+                <h2 id="newsH">Receba uma <em>materia exclusiva</em> toda semana.</h2>
+                <p>Selecao curta, direto no seu e-mail: um artigo profundo, uma dica rapida e um video do Clube do Groove. Sem spam &mdash; voce pode cancelar quando quiser.</p>
+            </div>
+            <div>
+                <form class="news-banner__form" id="newsForm" novalidate>
+                    <span class="mdi mdi-email-fast-outline email-i" aria-hidden="true"></span>
+                    <input type="email" id="newsEmail" placeholder="Digite seu e-mail" aria-label="Endereco de e-mail" required>
+                    <button type="submit">
+                        Cadastrar <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                    </button>
+                </form>
+                <div class="news-banner__small">
+                    <span class="mdi mdi-shield-check-outline" aria-hidden="true"></span>
+                    Seu e-mail e seu. Nada de spam, prometemos.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                    </aside>
-                </div><!-- /.sidebar-side -->
+<!-- ======================================================
+     RODAPE  (usa as classes .blog-footer* ja estilizadas)
+====================================================== -->
+<footer class="blog-footer" aria-label="Rodape">
+    <div class="auto-container">
+        <div class="row blog-footer__cols">
 
-            </div><!-- /#blog-list-infos -->
-        </div><!-- /#main-content -->
-    </section>
+            <div class="col-12 col-md-6 col-lg-4 blog-footer__col">
+                <!--<a href="#topo" class="blog-logo-link" aria-label="Up Dance Xperience">
+                    <svg class="blog-logo-img" viewBox="0 0 188 46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="udxgf" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#FA33A1"/>
+                                <stop offset="0.55" stop-color="#8C0783"/>
+                                <stop offset="1" stop-color="#430ABF"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="3" width="40" height="40" rx="11" fill="url(#udxgf)"/>
+                        <path d="M11 14 v11 a9 9 0 0 0 18 0 v-11" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round"/>
+                        <text x="50" y="21" font-family="Poppins, sans-serif" font-size="15" font-weight="700" letter-spacing="0.5" fill="#DFE0F2">UP DANCE</text>
+                        <text x="50" y="37" font-family="Poppins, sans-serif" font-size="10.5" font-weight="600" letter-spacing="4.2" fill="#FA33A1">XPERIENCE</text>
+                    </svg>
+                </a>-->
+                <div class="col-4 col-md-3 col-lg-2">
+                    <a href="/home.html" class="blog-logo-link">
+                        <img src="/images/icons/udx-icon.png"
+                            alt="Up Dance — voltar para Destaques"
+                            class="blog-logo-img">
+                    </a>
+                </div>
+                <p style="color: var(--udx-text-muted); font-size: 13px; line-height: 1.7; margin: 14px 0 18px; max-width: 280px;">
+                    Conteudo e formacao para dancarinos, professores e criadores.
+                    A danca levada a serio &mdash; do aquecimento ao palco.
+                </p>
+                <h3 class="blog-footer__title">Siga a UDX</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-instagram" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                    <li><span class="mdi mdi-youtube" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Up Dance no YouTube</a></li>
+                    <li><span class="mdi mdi-spotify" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Playlists oficiais</a></li>
+                    <li><span class="mdi mdi-tiktok" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                </ul>
+            </div>
 
-    <div class="clear"></div>
-</div><!-- /#hero-blog -->
+            <div class="col-6 col-md-6 col-lg-2 blog-footer__col">
+                <h3 class="blog-footer__title">Explorar</h3>
+                <ul class="blog-footer__list">
+                    <li><a href="#topo">Destaques</a></li>
+                    <li><a href="/artigos.html">Artigos</a></li>
+                    <li><a href="#clube">Clube do Groove</a></li>
+                    <li><a href="#trilhas">Trilhas</a></li>
+                    <li><a href="#newsletter">Newsletter</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Contato</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
+                        <a href="mailto:contato@updancexperience.com">contato@updancexperience.com</a></li>
+                    <li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
+                    <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Seg a Sex, 9h&ndash;18h</li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Da Galeria</h3>
+                <ul class="blog-footer__gallery" aria-hidden="true">
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="blog-footer__bar">
+        <small>
+            &copy; <span id="udx-year">2026</span> <b>Up Dance Xperience</b> &middot;
+            Todos os direitos reservados &middot;
+            Feito com <i>groove</i> no Rio de Janeiro.
+        </small>
+    </div>
+</footer>
+
+<!-- Voltar ao topo -->
+<button class="to-top" id="toTop" aria-label="Voltar ao topo"><span class="mdi mdi-arrow-up" aria-hidden="true"></span></button>
 
 <!-- ======================================================
      SCRIPTS
 ====================================================== -->
-<script id="dsq-count-scr" src="//https-updancexperience-com.disqus.com/count.js" async></script>
-<script src="js/jquery-slider-carrossel.js"></script>
-<script src="js/slider-carrossel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Scroll infinito com injeção de widgets no mobile -->
 <script>
+/* Ano automatico */
 (function () {
-    'use strict';
-
-    var PAGE_SIZE = 4;
-    var page      = 2;
-    var loading   = false;
-    var ended     = false;
-    var MAX_PAGES = 12;
-
-    var blogList  = document.querySelector('.blog-list');
-    var sentinel  = document.getElementById('scroll-sentinel');
-    var indicator = document.getElementById('loading-indicator');
-
-    /* Sequência de widgets injetados no mobile entre lotes de posts */
-    var WIDGET_STEPS = [
-        ['widget-comece'],
-        ['widget-search'],
-        ['widget-clube'],
-        ['widget-email'],
-        ['widget-novas'],
-        ['widget-assuntos']
-    ];
-
-    /* Pool de posts de amostra
-       Em produção, substitua por: fetch('/api/posts?page=' + page + '&size=' + PAGE_SIZE) */
-    var SAMPLE = [
-        { date: '10/09/2021', author: 'Wellington Santos', category: 'Alta Performance',
-          title: 'Como Manter o Foco em Períodos de Alta Pressão',
-          text: 'Estratégias mentais utilizadas por dançarinos profissionais para sustentar alto nível de atenção mesmo sob pressão extrema durante temporadas.' },
-        { date: '20/10/2021', author: 'Wellington Santos', category: 'Bem-Estar',
-          title: 'Técnicas de Recuperação Muscular para Bailarinos',
-          text: 'Um guia completo sobre as melhores práticas de recuperação para otimizar sua performance e evitar lesões crônicas ao longo da temporada.' },
-        { date: '05/11/2021', author: 'Wellington Santos', category: 'Expressão',
-          title: 'A Arte da Expressão Corporal Consciente',
-          text: 'Como desenvolver sua linguagem corporal e transformar movimentos técnicos em experiências emocionais autênticas que conectam com o público.' },
-        { date: '18/11/2021', author: 'Wellington Santos', category: 'Nutrição',
-          title: 'Nutrição Estratégica para Dançarinos de Alta Performance',
-          text: 'Descubra como a alimentação inteligente potencializa treinos e melhora a resistência cênica e a recuperação entre ensaios.' },
-        { date: '02/12/2021', author: 'Wellington Santos', category: 'Mentalidade',
-          title: 'Mentalidade de Crescimento no Universo da Dança',
-          text: 'Por que alguns dançarinos evoluem mais rápido e como você pode desenvolver o mindset que transforma limitações em oportunidades.' },
-        { date: '15/12/2021', author: 'Wellington Santos', category: 'Neurociência',
-          title: 'Coreografia e Neurociência: O Cérebro que Dança',
-          text: 'Estudos recentes revelam como a prática regular da dança reconfigura o cérebro e aprimora funções cognitivas essenciais para a vida.' }
-    ];
-    var poolIdx = 0;
-
-    function isMobile() { return window.innerWidth < 992; }
-    function nextPost()  { return SAMPLE[poolIdx++ % SAMPLE.length]; }
-
-    function buildCard(p) {
-        var wrap = document.createElement('div');
-        wrap.className = 'news-block-two grid-box';
-        wrap.innerHTML =
-            '<div class="inner-box">' +
-            '  <span class="card-category">' + (p.category || 'Artigo') + '</span>' +
-            '  <div class="upper-content">' +
-            '    <h4 class="text-white">' + p.title + '</h4>' +
-            '    <div class="text">' + p.text + '</div>' +
-            '    <ul class="post-meta">' +
-            '      <li class="style-two text-white">' +
-            '        <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> ' + p.date +
-            '      </li>' +
-            '      <li class="style-two text-white">' +
-            '        <span class="mdi mdi-account-outline" aria-hidden="true"></span> ' + p.author +
-            '      </li>' +
-            '    </ul>' +
-            '  </div>' +
-            '  <div class="images">' +
-            '    <img src="/images/blog/1.jpg" alt="' + p.title + '" loading="lazy">' +
-            '  </div>' +
-            '  <div class="lower-content">' +
-            '    <input type="submit" value="Saiba mais" class="theme-btn btn-style-one">' +
-            '  </div>' +
-            '</div>';
-        return wrap;
-    }
-
-    function cloneWidget(id) {
-        var original = document.getElementById(id);
-        if (!original) return null;
-        var clone = original.cloneNode(true);
-        clone.removeAttribute('id');
-        clone.querySelectorAll('[id]').forEach(function (el) {
-            el.id = el.id + '-mob';
-        });
-        clone.classList.add('mobile-widget-inline');
-        return clone;
-    }
-
-    function injectWidgets(step) {
-        var ids = WIDGET_STEPS[step];
-        if (!ids) return;
-        ids.forEach(function (id) {
-            var clone = cloneWidget(id);
-            if (clone) blogList.appendChild(clone);
-        });
-    }
-
-    function loadMore() {
-        if (loading || ended) return;
-        loading = true;
-        indicator.style.display = 'flex';
-
-        setTimeout(function () {
-            var widgetStep = page - 2;
-            if (isMobile() && widgetStep < WIDGET_STEPS.length) {
-                injectWidgets(widgetStep);
-            }
-            if (page > MAX_PAGES) {
-                ended = true;
-                indicator.innerHTML = '<span class="scroll-end-msg">&#10003; Você viu todos os artigos disponíveis.</span>';
-                indicator.style.display = 'flex';
-                return;
-            }
-            for (var i = 0; i < PAGE_SIZE; i++) {
-                blogList.appendChild(buildCard(nextPost()));
-            }
-            page++;
-            loading = false;
-            indicator.style.display = 'none';
-        }, 900);
-    }
-
-    if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries) {
-            if (entries[0].isIntersecting) loadMore();
-        }, { rootMargin: '350px' }).observe(sentinel);
-    } else {
-        window.addEventListener('scroll', function () {
-            if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 450) {
-                loadMore();
-            }
-        });
-    }
-
+    var y = document.getElementById("udx-year");
+    if (y) y.textContent = new Date().getFullYear();
 }());
-</script>
 
-<!-- Toggle do menu mobile -->
-<script>
+/* Menu mobile */
 (function () {
-    'use strict';
-    var btn = document.getElementById('btnMobileMenu');
-    var nav = document.getElementById('mobileNav');
+    "use strict";
+    var btn = document.getElementById("btnMobileMenu");
+    var nav = document.getElementById("mobileNav");
     if (!btn || !nav) return;
-    btn.addEventListener('click', function () {
-        var isOpen = nav.classList.toggle('open');
-        btn.setAttribute('aria-expanded', isOpen);
-        var icon = btn.querySelector('.mdi');
-        icon.classList.toggle('mdi-menu',  !isOpen);
-        icon.classList.toggle('mdi-close',  isOpen);
+    btn.addEventListener("click", function () {
+        var isOpen = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen);
+        var icon = btn.querySelector(".mdi");
+        icon.classList.toggle("mdi-menu", !isOpen);
+        icon.classList.toggle("mdi-close", isOpen);
+    });
+    /* fecha ao clicar em link */
+    nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+            nav.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            var ic = btn.querySelector(".mdi");
+            ic.classList.add("mdi-menu");
+            ic.classList.remove("mdi-close");
+        });
     });
 }());
-</script>
 
-<script src="/js/auth-modal.js" defer></script>
-
-<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
-<script>
+/* Voltar ao topo */
 (function () {
-    'use strict';
-    // Delegação por "name" (não por id): funciona no widget original e nos
-    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('[name="btnCadastroEmail"]');
-        if (!btn) return;
-        e.preventDefault();
-        var widget = btn.closest('.widget-box') || document;
-        var input  = widget.querySelector('[name="txtEmail"]');
-        var email  = input ? (input.value || '').trim() : '';
-        var destino = '/cadastro/';
-        if (email) destino += '?email=' + encodeURIComponent(email);
-        window.location.href = destino;
+    "use strict";
+    var btn = document.getElementById("toTop");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.pageYOffset > 600);
+    }, { passive: true });
+    btn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
+}());
+
+/* Newsletter banner */
+(function () {
+    "use strict";
+    var form = document.getElementById("newsForm");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var input = document.getElementById("newsEmail");
+        var email = (input.value || "").trim();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!ok) { input.focus(); input.style.borderBottom = "1px solid var(--udx-primary-hot)"; return; }
+        form.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--udx-text);font-size:14px;padding:10px 6px;"><span class="mdi mdi-check-circle" style="color:#FA33A1;font-size:24px;"></span>Pronto! Voce esta na lista. Confira sua caixa de entrada.</div>`;
+    });
+}());
+
+/* Clube — botao play (placeholder) */
+(function () {
+    "use strict";
+    var play = document.querySelector(".club-banner__play");
+    if (!play) return;
+    play.addEventListener("click", function () {
+        play.innerHTML = `<span class="mdi mdi-progress-clock" aria-hidden="true"></span>`;
+        setTimeout(function () {
+            play.innerHTML = `<span class="mdi mdi-play" aria-hidden="true"></span>`;
+        }, 1500);
+    });
+}());
+
+/* Reveal-on-scroll suave para as secoes */
+(function () {
+    "use strict";
+    if (!("IntersectionObserver" in window)) return;
+    var els = document.querySelectorAll(".section, .home-hero, .news-banner");
+    els.forEach(function (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(14px)";
+        el.style.transition = "opacity 600ms ease, transform 600ms ease";
+    });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
 }());
 </script>
 </body>
