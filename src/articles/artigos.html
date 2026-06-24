@@ -553,10 +553,99 @@
 </div>
 <!-- Atualiza o ano automaticamente -->
 <script>
-    (function () {
-        var y = document.getElementById('udx-year');
-        if (y) y.textContent = new Date().getFullYear();
-    }());
+/* Ano automatico */
+(function () {
+    var y = document.getElementById("udx-year");
+    if (y) y.textContent = new Date().getFullYear();
+}());
+
+/* Menu mobile */
+(function () {
+    "use strict";
+    var btn = document.getElementById("btnMobileMenu");
+    var nav = document.getElementById("mobileNav");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+        var isOpen = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen);
+        var icon = btn.querySelector(".mdi");
+        icon.classList.toggle("mdi-menu", !isOpen);
+        icon.classList.toggle("mdi-close", isOpen);
+    });
+    /* fecha ao clicar em link */
+    nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+            nav.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            var ic = btn.querySelector(".mdi");
+            ic.classList.add("mdi-menu");
+            ic.classList.remove("mdi-close");
+        });
+    });
+}());
+
+/* Voltar ao topo */
+(function () {
+    "use strict";
+    var btn = document.getElementById("toTop");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.pageYOffset > 600);
+    }, { passive: true });
+    btn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}());
+
+/* Newsletter banner */
+(function () {
+    "use strict";
+    var form = document.getElementById("newsForm");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var input = document.getElementById("newsEmail");
+        var email = (input.value || "").trim();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!ok) { input.focus(); input.style.borderBottom = "1px solid var(--udx-primary-hot)"; return; }
+        form.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--udx-text);font-size:14px;padding:10px 6px;"><span class="mdi mdi-check-circle" style="color:#FA33A1;font-size:24px;"></span>Pronto! Voce esta na lista. Confira sua caixa de entrada.</div>`;
+    });
+}());
+
+/* Clube — botao play (placeholder) */
+(function () {
+    "use strict";
+    var play = document.querySelector(".club-banner__play");
+    if (!play) return;
+    play.addEventListener("click", function () {
+        play.innerHTML = `<span class="mdi mdi-progress-clock" aria-hidden="true"></span>`;
+        setTimeout(function () {
+            play.innerHTML = `<span class="mdi mdi-play" aria-hidden="true"></span>`;
+        }, 1500);
+    });
+}());
+
+/* Reveal-on-scroll suave para as secoes */
+(function () {
+    "use strict";
+    if (!("IntersectionObserver" in window)) return;
+    var els = document.querySelectorAll(".section, .home-hero, .news-banner");
+    els.forEach(function (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(14px)";
+        el.style.transition = "opacity 600ms ease, transform 600ms ease";
+    });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+}());
 </script>
 
 <!-- ======================================================
@@ -745,5 +834,7 @@
     });
 }());
 </script>
+
+
 </body>
 </html>
