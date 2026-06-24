@@ -508,70 +508,91 @@
 <!--</div> /#hero-blog -->
 
 <!-- ======================================================
-     FOOTER
+     RODAPE  (usa as classes .blog-footer* ja estilizadas)
 ====================================================== -->
-<footer class="blog-footer" aria-label="Rodapé">
-    <div class="container">
+<footer class="blog-footer" aria-label="Rodape">
+    <div class="auto-container">
         <div class="row blog-footer__cols">
 
-            <!-- Coluna: Contato -->
-            <div class="col-12 col-sm-6 col-md-4 blog-footer__col">
-                <h5 class="blog-footer__title">Contato</h5>
+            <div class="col-12 col-md-6 col-lg-4 blog-footer__col">
+                <!--<a href="#topo" class="blog-logo-link" aria-label="Up Dance Xperience">
+                    <svg class="blog-logo-img" viewBox="0 0 188 46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="udxgf" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#FA33A1"/>
+                                <stop offset="0.55" stop-color="#8C0783"/>
+                                <stop offset="1" stop-color="#430ABF"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="3" width="40" height="40" rx="11" fill="url(#udxgf)"/>
+                        <path d="M11 14 v11 a9 9 0 0 0 18 0 v-11" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round"/>
+                        <text x="50" y="21" font-family="Poppins, sans-serif" font-size="15" font-weight="700" letter-spacing="0.5" fill="#DFE0F2">UP DANCE</text>
+                        <text x="50" y="37" font-family="Poppins, sans-serif" font-size="10.5" font-weight="600" letter-spacing="4.2" fill="#FA33A1">XPERIENCE</text>
+                    </svg>
+                </a>-->
+                <div class="col-4 col-md-3 col-lg-2">
+                    <a href="/home.html" class="blog-logo-link">
+                        <img src="/images/icons/udx-icon.png"
+                            alt="Up Dance — voltar para Destaques"
+                            class="blog-logo-img">
+                    </a>
+                </div>
+                <p style="color: var(--udx-text-muted); font-size: 13px; line-height: 1.7; margin: 14px 0 18px; max-width: 280px;">
+                    Conteudo e formacao para dancarinos, professores e criadores.
+                    A danca levada a serio &mdash; do aquecimento ao palco.
+                </p>
+                <h3 class="blog-footer__title">Siga a UDX</h3>
                 <ul class="blog-footer__list">
-                    <li>
-                        <span class="mdi mdi-email-outline" aria-hidden="true"></span>
-                        <a href="mailto:contato@updancexperience.com">
-                            contato@updancexperience.com
-                        </a>
-                    </li>
-                    <li>
-                        <span class="mdi mdi-instagram" aria-hidden="true"></span>
-                        <a href="#" aria-label="Instagram">@updancexperience</a>
-                    </li>
-                    <li>
-                        <span class="mdi mdi-youtube" aria-hidden="true"></span>
-                        <a href="#" aria-label="YouTube">Up Dance no YouTube</a>
-                    </li>
+                    <li><span class="mdi mdi-instagram" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                    <li><span class="mdi mdi-youtube" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Up Dance no YouTube</a></li>
+                    <li><span class="mdi mdi-spotify" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Playlists oficiais</a></li>
+                    <li><span class="mdi mdi-tiktok" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
                 </ul>
             </div>
 
-            <!-- Coluna: Links -->
-            <div class="col-12 col-sm-6 col-md-4 blog-footer__col">
-                <h5 class="blog-footer__title">Conteúdo</h5>
+            <div class="col-5 col-md-6 col-lg-2 blog-footer__col">
+                <h3 class="blog-footer__title">Explorar</h3>
                 <ul class="blog-footer__list">
-                    <li><a href="#">Performance</a></li>
-                    <li><a href="#">Aperfeiçoamento</a></li>
-                    <li><a href="#">Desenvolvimento Pessoal</a></li>
-                    <li><a href="#">Dicas &amp; Sacadas</a></li>
-                    <li><a href="#">Programa de Treinos</a></li>
-                    <li><a href="#">Artigos</a></li>
-                    <li><a href="#">Preparação Física</a></li>
+                    <li><a href="#topo">Destaques</a></li>
+                    <li><a href="/src/articles/artigos.html">Artigos</a></li>
+                    <li><a href="#clube">Clube do Groove</a></li>
+                    <li><a href="#trilhas">Trilhas</a></li>
+                    <li><a href="#newsletter">Newsletter</a></li>
                 </ul>
             </div>
 
-            <!-- Coluna: Galeria -->
-            <div class="col-12 col-sm-6 col-md-4 blog-footer__col">
-                <h5 class="blog-footer__title">Galeria</h5>
-                <ul class="blog-footer__gallery" aria-label="Fotos da galeria">
-                    <li><span aria-hidden="true"></span></li>
-                    <li><span aria-hidden="true"></span></li>
-                    <li><span aria-hidden="true"></span></li>
-                    <li><span aria-hidden="true"></span></li>
-                    <li><span aria-hidden="true"></span></li>
-                    <li><span aria-hidden="true"></span></li>
+            <div class="col-5 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Contato</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
+                        <a href="mailto:contato@updancexperience.com">contato@updancexperience.com</a></li>
+                    <li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
+                    <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Seg a Sex, 9h&ndash;18h</li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Da Galeria</h3>
+                <ul class="blog-footer__gallery" aria-hidden="true">
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
                 </ul>
             </div>
 
         </div>
     </div>
-
-    <!-- Barra de copyright -->
     <div class="blog-footer__bar">
-        <div class="container">
-            <small>
-                &copy; 2022 <b><i>updancexperience.com</i></b> — Todos os direitos reservados.
-            </small>
-        </div>
+        <small>
+            &copy; <span id="udx-year">2026</span> <b>Up Dance Xperience</b> &middot;
+            Todos os direitos reservados &middot;
+            Feito com <i>groove</i> no Rio de Janeiro.
+        </small>
     </div>
 </footer>
 
