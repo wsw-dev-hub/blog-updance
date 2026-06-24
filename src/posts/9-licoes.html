@@ -608,23 +608,6 @@
 <script src="/js/jquery-slider-carrossel.js" defer></script>
 <script src="/js/slider-carrossel.js" defer></script>
 
-<!-- Toggle do menu mobile -->
-<script>
-(function () {
-    'use strict';
-    var btn = document.getElementById('btnMobileMenu');
-    var nav = document.getElementById('mobileNav');
-    if (!btn || !nav) return;
-    btn.addEventListener('click', function () {
-        var isOpen = nav.classList.toggle('open');
-        btn.setAttribute('aria-expanded', isOpen);
-        var icon = btn.querySelector('.mdi');
-        icon.classList.toggle('mdi-menu',  !isOpen);
-        icon.classList.toggle('mdi-close',  isOpen);
-    });
-}());
-</script>
-
 <!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
 <script>
 (function () {
