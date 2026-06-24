@@ -119,7 +119,7 @@
     .blog-footer              { padding: 36px 0 0; margin-top: 40px; }
     .blog-footer__col         { padding-left: 12px; padding-right: 12px; }
     .blog-footer__cols        { row-gap: 28px; padding-bottom: 32px; }
-    .blog-footer__gallery     { max-width: 200px; }
+    /*.blog-footer__gallery     { max-width: 200px; }*/
 
 }
 
@@ -159,7 +159,7 @@
     .blog-footer          { padding: 36px 0 0; margin-top: 40px; }
     .blog-footer__col     { padding-left: 12px; padding-right: 12px; }
     .blog-footer__cols    { row-gap: 28px; padding-bottom: 32px; }
-    .blog-footer__gallery { max-width: 200px; }
+    /*.blog-footer__gallery { max-width: 200px; }*/
 
 }
 
@@ -243,7 +243,7 @@
     .blog-logo-img      { height: 40px; }
 
     /* ── Rodapé blog (576–767px): limita galeria em tela estreita */
-    .blog-footer__gallery { max-width: 180px; }
+    /*.blog-footer__gallery { max-width: 180px; }*/
 
     /* Desfaz visibility:hidden do .menu-list acima para blog-header.
        display NÃO é forçado aqui — Bootstrap d-none/d-lg-inline-flex controla */
