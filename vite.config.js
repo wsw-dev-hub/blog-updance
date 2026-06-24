@@ -95,6 +95,7 @@ export default defineConfig(({ command }) => ({
       input:{
         main: resolve(__dirname, 'index.html'),
         'posts/9-licoes': resolve(__dirname, 'src/posts/9-licoes.html'),
+        'articles/artigos': resolve(__dirname, 'src/articles/artigos.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
       },
       external: ['ton-connect', 'ton-core'],

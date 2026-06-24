@@ -27,6 +27,7 @@ AZUL-CIANO    #66FFFF
 /*RESET*/
 *{margin:0; padding:0;box-sizing:border-box}
 .clear{clear:both;margin-top:330px;}
+.clear-footer{clear:both;margin-top:130px;}
 .cleanner{clear:both;margin-top:90px;}
 .sidebar_cleanner{clear:both; height:90px;}
 
