@@ -372,3 +372,4 @@ function emailConfirmacao(name, link) {
     ${botao(link, 'Confirmar inscrição')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Não fez este cadastro? Ignore este e-mail.</p>`);
 }
+
