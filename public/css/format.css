@@ -185,6 +185,11 @@ img {
 
 .blog-single .inner-box{
 	position:relative;	
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-md);
+    padding: 16px 14px 14px;
+    box-shadow: var(--udx-shadow-card);
+    transition: border-color 300ms ease, box-shadow 300ms ease;
 }
 
 .blog-single .inner-box .post-meta {
