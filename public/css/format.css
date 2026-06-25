@@ -781,6 +781,40 @@ div {
     border: 1px solid var(--udx-border);
     border-radius: 999px;
     box-shadow: var(--udx-shadow-card);
+
+    /* ▼ NOVO — oculta e recolhe enquanto o leque está fechado ▼ */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px) scale(.96);
+    transform-origin: center bottom;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    overflow: hidden;
+    transition: transform  360ms cubic-bezier(.34, 1.56, .64, 1),
+                opacity    240ms ease,
+                max-height 320ms ease,
+                padding    320ms ease,
+                visibility 0s   linear 360ms;   /* só some no fim, ao fechar */
+}
+
+/* ▼ NOVO — aparece junto com o leque (núcleo/"hambúrguer" aberto) ▼ */
+.udx-fab.is-open .udx-fab__tabs {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    max-height: 64px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-width: 1px;
+    transition: transform  360ms cubic-bezier(.34, 1.56, .64, 1),
+                opacity    240ms ease,
+                max-height 320ms ease,
+                padding    320ms ease,
+                visibility 0s   linear 0s;      /* visível imediatamente, ao abrir */
 }
 .udx-fab__tab {
     position: relative;                 /* base para a camada de degradê */
