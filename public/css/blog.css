@@ -1110,7 +1110,7 @@ blockquote { margin: 0 0 1rem; }
 }
 
 blockquote #quote-icon {
-    background: url(/public/images/social/quote-right.png) 50% 50% no-repeat;
+    background: url(../images/social/quote-right.png) 50% 50% no-repeat;
     position: absolute;
     width: 80px;
     height: 80px;
