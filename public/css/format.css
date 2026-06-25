@@ -848,13 +848,13 @@ div {
 
 /* Degradês distintos por botão — todos dentro da paleta oficial */
 .udx-fab__tab:nth-child(1)::before {   /* Trilhas  — rosa opaco → rosa choque */
-    background: linear-gradient(135deg, var(--udx-primary-hot) 0%, var(--udx-primary) 100%);
+    background: linear-gradient(135deg, var(--udx-primary-hot) 0%, var(--udx-blood-red) 100%);
 }
 .udx-fab__tab:nth-child(2)::before {   /* Destaques — roxo médio → azul médio */
-    background: linear-gradient(135deg, var(--udx-accent-blue) 0%, var(--udx-bg-mid) 100%);
+    background: linear-gradient(135deg, var(--udx-primary) 0%, var(--bs-indigo) 100%);
 }
 .udx-fab__tab:nth-child(3)::before {   /* Clube     — laranja → rosa choque */
-    background: linear-gradient(135deg, var(--bs-indigo) 0%, var(--udx-primary) 100%);
+    background: linear-gradient(135deg, var(--udx-spark-blue) 0%, var(--udx-bg-mid) 100%);
 }
 
 /* Prévia sutil no hover (sem "saltar" o degradê) */
