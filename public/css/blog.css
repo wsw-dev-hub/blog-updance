@@ -1090,7 +1090,8 @@ figure {
     padding: 45px 30px 45px 110px;
     margin-top: 40px;
     margin-bottom: 30px;
-    background-color: #f4f4f4;
+    background-color: #DFE0F2;
+    border-radius:20px;
 }
 blockquote { margin: 0 0 1rem; }
 
@@ -1105,8 +1106,22 @@ blockquote { margin: 0 0 1rem; }
     line-height: 113px;
     text-align: center;
     border-radius: 50%;
-    background-color: #ffffff;
+    background-color: #DFE0F2;
 }
+
+blockquote #quote-icon {
+    background: url(/public/images/social/quote-right.png) 50% 50% no-repeat;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    float: left;
+    top: 10px;
+    left: 15px;
+    background-size: 100%;
+    rotate: -180deg;
+}
+
+
 .blog-single .inner-box .lower-content blockquote .quote-text {
     position: relative;
     color: #222222;
