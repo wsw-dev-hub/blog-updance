@@ -31,7 +31,7 @@
     .udx-fab__radial.is-open .udx-fab__item--top { transform: translate(0,    -96px)  scale(1); }
     .udx-fab__radial.is-open .udx-fab__item--tr  { transform: translate( 78px, -48px) scale(1); }
     .udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-92px, 0)     scale(1); }
-    .udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 92px, 0)     
+    .udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 92px, 0)     scale(1); }
 }
 
 
@@ -459,7 +459,7 @@
 @media screen and (min-width: 992px) {
     /* ── MENU FLUTUANTE (FAB) — oculto a partir do breakpoint do menu desktop ── */
     .udx-fab { display: none !important; }
-    
+
     .cleanner { margin-top: 0; }
 
     /* HEADER */
