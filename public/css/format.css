@@ -783,6 +783,10 @@ div {
     box-shadow: var(--udx-shadow-card);
 }
 .udx-fab__tab {
+    position: relative;                 /* base para a camada de degradê */
+    z-index: 0;
+    isolation: isolate;
+    overflow: hidden;                   /* mantém o degradê dentro da pílula */
     border: 0;
     background: transparent;
     color: var(--udx-text-muted);
@@ -792,14 +796,42 @@ div {
     padding: 8px 18px;
     border-radius: 999px;
     cursor: pointer;
-    transition: background-color 260ms ease, color 260ms ease, box-shadow 260ms ease;
-    margin-bottom:0;
+    transition: color 280ms ease, box-shadow 280ms ease, transform 280ms ease;
+    margin-bottom: 0;
 }
-.udx-fab__tab.is-active {
+
+/* Camada de degradê — transiciona via opacity (fade suave entre abas) */
+.udx-fab__tab::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 320ms ease;
+}
+
+/* Degradês distintos por botão — todos dentro da paleta oficial */
+.udx-fab__tab:nth-child(1)::before {   /* Trilhas  — rosa opaco → rosa choque */
     background: linear-gradient(135deg, var(--udx-primary) 0%, var(--udx-primary-hot) 100%);
+}
+.udx-fab__tab:nth-child(2)::before {   /* Destaques — roxo médio → azul médio */
+    background: linear-gradient(135deg, var(--udx-accent) 0%, var(--udx-accent-blue) 100%);
+}
+.udx-fab__tab:nth-child(3)::before {   /* Clube     — laranja → rosa choque */
+    background: linear-gradient(135deg, #F27405 0%, var(--udx-primary-hot) 100%);
+}
+
+/* Prévia sutil no hover (sem "saltar" o degradê) */
+.udx-fab__tab:hover::before           { opacity: .28; }
+
+/* Aba ativa: degradê pleno + texto branco */
+.udx-fab__tab.is-active {
     color: #fff;
     box-shadow: var(--udx-shadow-btn);
 }
+.udx-fab__tab.is-active::before       { opacity: 1; }
+.udx-fab__tab.is-active:hover::before { opacity: 1; }
 
 /* ---------- Núcleo do menu radial ---------- */
 .udx-fab__radial {
