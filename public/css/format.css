@@ -1024,10 +1024,10 @@ div {
 }
 
 .udx-fab[data-pane="trilhas"]{
-    --fab-accent:      #FA33A1;
-    --fab-accent-deep: #d60126;
-    --fab-core-from:   #FA33A1;
-    --fab-core-to:     #d60126;
+    --fab-accent:      #F20505;
+    --fab-accent-deep: #BF0449;
+    --fab-core-from:   #F20505;
+    --fab-core-to:     #BF0449;
     --fab-glow:        rgba(214, 1, 38, .42);
 }
 .udx-fab[data-pane="destaques"]{

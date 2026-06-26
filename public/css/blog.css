@@ -10,7 +10,8 @@
   --udx-bg:            #02021a;          /* fundo base */
   --udx-bg-mid:        #110273;          /* azul marinho */
   --udx-primary:       #BF0449;          /* rosa/opaco — CTA principal */
-  --udx-blood-red:     #d60126;          /* vermelho sangue - dstaques */
+  --udx-primary-heat:  #F20505;          /* vermelhor/fogo */
+  --udx-blood-red:     #d60126;          /* vermelho/sangue - destaques */
   --udx-primary-hot:   #FA33A1;          /* rosa/choque — hover, destaques */
   --udx-spark-blue:    #6f42c1;          /* roxo/stars - transições suaves */
   --udx-accent:        #5708A6;          /* roxo médio */
@@ -19,6 +20,11 @@
   --udx-text-muted:    #b0b3cc;          /* texto secundário */
   --udx-border:        rgba(223, 224, 242, 0.12); /* borda sutil */
   --udx-border-hover:  rgba(191, 4, 73, 0.32);    /* borda hover nos cards */
+
+
+  --udx-purple-back:#5708A6; /* --udx-accent */
+  --udx-wine-mid:   #BF0449; /* --udx-primary */
+  --udx-red-front:  #F20505; /* --udx-primary-heat */
 
   /* Tipografia */
   --udx-font:          'Poppins', sans-serif;
