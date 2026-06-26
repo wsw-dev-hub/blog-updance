@@ -546,7 +546,7 @@
      MENU FLUTUANTE RADIAL (mobile/tablet)
      Aparece após o usuário rolar e o header sair da viewport
 ====================================================== -->
-<div class="udx-fab" id="udxFab" aria-hidden="true">
+<div class="udx-fab" id="udxFab" data-pane="trilhas" aria-hidden="true">
 
     <!-- Sugestão contextual (equivalente ao "Depositar via PIX") -->
     <!--<div class="udx-fab__hint" id="udxFabHint" role="status">
@@ -562,29 +562,8 @@
 
     
 
-    <!-- Menu radial: 4 ícones em leque + botão central -->
     <nav class="udx-fab__radial" id="udxFabRadial" aria-label="Atalhos do blog">
-        <a href="#trilhas"  class="udx-fab__item udx-fab__item--tl" aria-label="Trilhas">
-            <span class="mdi mdi-compass-outline" aria-hidden="true"></span>
-            <em>Trilhas</em>
-        </a>
-        <a href="#recentes" class="udx-fab__item udx-fab__item--top" aria-label="Artigos recentes">
-            <span class="mdi mdi-newspaper-variant-multiple-outline" aria-hidden="true"></span>
-            <em>Recentes</em>
-        </a>
-        <a href="#clube"    class="udx-fab__item udx-fab__item--tr" aria-label="Clube do Groove">
-            <span class="mdi mdi-message-video" aria-hidden="true"></span>
-            <em>Clube</em>
-        </a>
-        <a href="/entrar/" id="udxFabAcessar" class="udx-fab__item udx-fab__item--bl" aria-label="Acessar conta">
-            <span class="mdi mdi-account-outline" aria-hidden="true"></span>
-            <em>Acessar</em>
-        </a>
-        <a href="#topo"     class="udx-fab__item udx-fab__item--br" aria-label="Voltar ao topo">
-            <span class="mdi mdi-arrow-up" aria-hidden="true"></span>
-            <em>Topo</em>
-        </a>
-
+        <!-- Itens injetados via JS conforme a pílula ativa -->
         <button class="udx-fab__core" id="udxFabCore"
                 aria-label="Abrir menu de atalhos" aria-expanded="false" aria-controls="udxFabRadial">
             <span class="mdi mdi-menu udx-fab__core-icon" aria-hidden="true"></span>
@@ -593,9 +572,10 @@
 
     <!-- Pílula de abas (equivalente ao Principal/Trading/IA) -->
     <div class="udx-fab__tabs" role="tablist" aria-label="Sessões do blog">
-        <button class="udx-fab__tab is-active" data-target="#trilhas"    role="tab" aria-selected="true">Trilhas</button>
-        <button class="udx-fab__tab"           data-target="#destaque"   role="tab" aria-selected="false">Destaques</button>
-        <button class="udx-fab__tab"           data-target="#clube"      role="tab" aria-selected="false">Clube</button>
+        <span class="udx-fab__tabs-thumb" aria-hidden="true"></span>
+        <button class="udx-fab__tab is-active" data-pane="trilhas"   role="tab" aria-selected="true">Trilhas</button>
+        <button class="udx-fab__tab"           data-pane="destaques" role="tab" aria-selected="false">Destaques</button>
+        <button class="udx-fab__tab"           data-pane="clube"     role="tab" aria-selected="false">Clube</button>
     </div>
 
 </div>
@@ -655,36 +635,81 @@
 }());
 
 /* ===========================================================
-   Menu flutuante radial (FAB)
-   - Aparece quando o header sai da viewport (ou após 320px)
-   - Abre/fecha ao tocar no botão central
-   - Fecha ao tocar fora ou em um item
+   Menu flutuante radial (FAB) — pílulas trocam camadas
+   1. Trilhas / Destaques / Clube → 5 itens cada
+   2. Polegar deslizante atrás da pílula ativa
+   3. Substituição com implosão + pulso + ejeção
 =========================================================== */
 (function () {
     "use strict";
-    var fab      = document.getElementById("udxFab");
-    var radial   = document.getElementById("udxFabRadial");
-    var core     = document.getElementById("udxFabCore");
-    var hint     = document.getElementById("udxFabHint");
-    var hintX    = document.getElementById("udxFabHintClose");
-    //var header   = document.querySelector("header.blog-header");
+
+    var fab    = document.getElementById("udxFab");
+    var radial = document.getElementById("udxFabRadial");
+    var core   = document.getElementById("udxFabCore");
     if (!fab || !radial || !core) return;
 
-    /* 0. Espelha o href do "Acessar" do header no atalho do FAB.
-          Garante que ambos sempre apontem para a mesma rota de login,
-          mesmo se o caminho mudar futuramente. */
-    (function syncAcessar() {
-        var fabAcessar    = document.getElementById("udxFabAcessar");
-        var headerAcessar = document.getElementById("btnAcessar");
-        if (fabAcessar && headerAcessar && headerAcessar.getAttribute("href")) {
-            fabAcessar.setAttribute("href", headerAcessar.getAttribute("href"));
-        }
-    }());
+    var tabsContainer = fab.querySelector(".udx-fab__tabs");
+    var thumb         = fab.querySelector(".udx-fab__tabs-thumb");
+    var tabs          = fab.querySelectorAll(".udx-fab__tab");
 
-    /* 1. Mostrar/ocultar com base no scroll
-          Threshold = altura aproximada do hero (header sticky permanece visível,
-          mas o FAB só faz sentido após o usuário começar a navegar o conteúdo) */
-    function updateVisibility() {
+    /* href de "Acessar" copiado do header (mesmo comportamento do original) */
+    var headerAcessar = document.getElementById("btnAcessar");
+    var acessarHref = (headerAcessar && headerAcessar.getAttribute("href")) || "/entrar/";
+
+    var PANES = {
+        trilhas: [
+            { pos:"tl",  icon:"mdi-compass-outline",                    label:"Trilhas",  href:"#trilhas"  },
+            { pos:"top", icon:"mdi-newspaper-variant-multiple-outline", label:"Recentes", href:"#recentes" },
+            { pos:"tr",  icon:"mdi-message-video",                      label:"Clube",    href:"#clube"    },
+            { pos:"bl",  icon:"mdi-account-outline",                    label:"Acessar",  href: acessarHref },
+            { pos:"br",  icon:"mdi-arrow-up",                           label:"Topo",     href:"#topo"     }
+        ],
+        destaques: [
+            { pos:"tl",  icon:"mdi-book-open-variant",                  label:"Ebooks",   href:"/destaques/ebooks"   },
+            { pos:"top", icon:"mdi-school-outline",                     label:"Tutorial", href:"/destaques/tutorial" },
+            { pos:"tr",  icon:"mdi-map-marker-path",                    label:"Guias",    href:"/destaques/guias"    },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",               label:"Dicas",    href:"/destaques/dicas"    },
+            { pos:"br",  icon:"mdi-web",                                label:"Online",   href:"/destaques/online"   }
+        ],
+        clube: [
+            { pos:"tl",  icon:"mdi-music-circle-outline",               label:"UDX",      href:"/clube/udx"      },
+            { pos:"top", icon:"mdi-broadcast",                          label:"Lives",    href:"/clube/lives"    },
+            { pos:"tr",  icon:"mdi-account-circle-outline",             label:"Quem Sou", href:"/clube/sobre"    },
+            { pos:"bl",  icon:"mdi-play-circle-outline",                label:"Aulas",    href:"/clube/aulas"    },
+            { pos:"br",  icon:"mdi-storefront-outline",                 label:"Produtos", href:"/clube/produtos" }
+        ]
+    };
+
+    var swapLock = false;
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function renderPane(name){
+        var items = radial.querySelectorAll(".udx-fab__item");
+        for (var i = 0; i < items.length; i++) items[i].remove();
+
+        PANES[name].forEach(function(it){
+            var a = document.createElement("a");
+            a.className = "udx-fab__item udx-fab__item--" + it.pos;
+            a.href = it.href;
+            a.setAttribute("aria-label", it.label);
+            a.innerHTML = '<span class="mdi ' + it.icon + '" aria-hidden="true"></span><em>' + it.label + '</em>';
+            a.addEventListener("click", closeRadial);
+            radial.insertBefore(a, core);
+        });
+
+        fab.setAttribute("data-pane", name);
+    }
+
+    function moveThumbTo(tab){
+        var tabsRect = tabsContainer.getBoundingClientRect();
+        var tabRect  = tab.getBoundingClientRect();
+        var offsetX  = tabRect.left - tabsRect.left;
+        thumb.style.width = tabRect.width + "px";
+        thumb.style.transform = "translateX(" + offsetX + "px)";
+    }
+
+    /* Visibilidade controlada por scroll (mesma lógica do original) */
+    function updateVisibility(){
         var threshold = Math.max(window.innerHeight * 0.6, 380);
         var show = window.pageYOffset > threshold;
         fab.classList.toggle("is-visible", show);
@@ -695,59 +720,97 @@
     window.addEventListener("resize", updateVisibility);
     updateVisibility();
 
-    /* 2. Abrir/fechar o leque */
-    function openRadial()  {
+    function openRadial(){
         radial.classList.add("is-open");
         fab.classList.add("is-open");
         core.setAttribute("aria-expanded", "true");
-        core.querySelector(".udx-fab__core-icon")
-            .classList.replace("mdi-menu", "mdi-close");
+        core.querySelector(".udx-fab__core-icon").classList.replace("mdi-menu", "mdi-close");
+        requestAnimationFrame(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
     }
-    function closeRadial() {
-        radial.classList.remove("is-open");
+    function closeRadial(){
+        radial.classList.remove("is-open", "is-collapsing");
         fab.classList.remove("is-open");
         core.setAttribute("aria-expanded", "false");
         var ic = core.querySelector(".udx-fab__core-icon");
-        if (ic.classList.contains("mdi-close")) {
-            ic.classList.replace("mdi-close", "mdi-menu");
-        }
+        if (ic.classList.contains("mdi-close")) ic.classList.replace("mdi-close", "mdi-menu");
     }
-    core.addEventListener("click", function (e) {
+
+    /* Coreografia da substituição: implosão → pulso → ejeção */
+    async function substitutePane(paneName){
+        if (swapLock) return;
+        swapLock = true;
+
+        radial.classList.add("is-collapsing");
+        fab.setAttribute("data-pane", paneName);
+
+        await wait(420);
+
+        renderPane(paneName);
+
+        core.classList.remove("is-pulsing");
+        void core.offsetWidth;
+        core.classList.add("is-pulsing");
+
+        void radial.offsetWidth;
+
+        await wait(80);
+        radial.classList.remove("is-collapsing");
+
+        await wait(640);
+        swapLock = false;
+    }
+
+    /* Handlers */
+    core.addEventListener("click", function(e){
         e.stopPropagation();
-        radial.classList.contains("is-open") ? closeRadial() : openRadial();
+        if (radial.classList.contains("is-open")) closeRadial();
+        else openRadial();
     });
 
-    /* 3. Fechar ao clicar em qualquer item */
-    radial.querySelectorAll(".udx-fab__item").forEach(function (a) {
-        a.addEventListener("click", closeRadial);
-    });
+    tabs.forEach(function(tab){
+        tab.addEventListener("click", function(e){
+            e.stopPropagation();
+            if (tab.classList.contains("is-active") && radial.classList.contains("is-open")) return;
 
-    /* 4. Fechar ao tocar fora */
-    document.addEventListener("click", function (e) {
-        if (!fab.contains(e.target)) closeRadial();
-    });
-
-    /* 5. Pílula de abas — rola até a seção alvo */
-    fab.querySelectorAll(".udx-fab__tab").forEach(function (tab) {
-        tab.addEventListener("click", function () {
-            fab.querySelectorAll(".udx-fab__tab").forEach(function (t) {
+            tabs.forEach(function(t){
                 t.classList.remove("is-active");
                 t.setAttribute("aria-selected", "false");
             });
             tab.classList.add("is-active");
             tab.setAttribute("aria-selected", "true");
-            var sel = tab.getAttribute("data-target");
-            var target = sel && document.querySelector(sel);
-            if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            moveThumbTo(tab);
+
+            if (radial.classList.contains("is-open")) {
+                substitutePane(tab.dataset.pane);
+            } else {
+                renderPane(tab.dataset.pane);
+                openRadial();
+            }
         });
     });
 
-    /* 6. Fechar a sugestão contextual */
-    if (hintX && hint) {
-        hintX.addEventListener("click", function () {
-            hint.classList.add("is-hidden");
+    document.addEventListener("click", function(e){
+        if (!fab.contains(e.target)) closeRadial();
+    });
+
+    window.addEventListener("resize", function(){
+        var active = fab.querySelector(".udx-fab__tab.is-active");
+        if (active) moveThumbTo(active);
+    });
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
         });
     }
+
+    /* Render inicial */
+    renderPane("trilhas");
 }());
 
 /* Newsletter banner */

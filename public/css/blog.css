@@ -33,6 +33,13 @@
   --udx-radius-sm:     6px;
   --udx-radius-md:     10px;
   --udx-radius-lg:     16px;
+
+  /* Modo cromático do FAB — sobrescrito por [data-pane="…"] */
+  --fab-accent:        #FA33A1;
+  --fab-accent-deep:   #d60126;
+  --fab-core-from:     #FA33A1;
+  --fab-core-to:       #d60126;
+  --fab-glow:          rgba(214, 1, 38, 0.42);
 }
 
 

@@ -1,6 +1,10 @@
 ﻿@charset "utf-8";
 /* CSS Document */
 
+@property --fab-core-from   { syntax: '<color>'; inherits: true; initial-value: #BF0449; }
+@property --fab-core-to     { syntax: '<color>'; inherits: true; initial-value: #FA33A1; }
+@property --fab-accent      { syntax: '<color>'; inherits: true; initial-value: #FA33A1; }
+@property --fab-accent-deep { syntax: '<color>'; inherits: true; initial-value: #BF0449; }
 
 
 /*RESET*/
@@ -772,6 +776,8 @@ div {
 
 /* ---------- Pílula de abas ---------- */
 .udx-fab__tabs {
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     padding: 4px;
@@ -816,6 +822,29 @@ div {
                 padding    320ms ease,
                 visibility 0s   linear 0s;      /* visível imediatamente, ao abrir */
 }
+
+/* Indicador deslizante atrás da pílula ativa */
+.udx-fab__tabs-thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--fab-core-from) 0%, var(--fab-core-to) 100%);
+    box-shadow: var(--udx-shadow-btn);
+    transform: translateX(0);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 460ms cubic-bezier(.34, 1.56, .64, 1),
+                width     460ms cubic-bezier(.34, 1.56, .64, 1),
+                --fab-core-from 460ms ease,
+                --fab-core-to   460ms ease,
+                opacity 220ms ease;
+}
+.udx-fab.is-open .udx-fab__tabs-thumb { opacity: 1; }
+
 .udx-fab__tab {
     position: relative;                 /* base para a camada de degradê */
     z-index: 0;
@@ -846,27 +875,19 @@ div {
 }
 
 
-/* Degradês distintos por botão — todos dentro da paleta oficial */
-.udx-fab__tab:nth-child(1)::before {   /* Trilhas  — rosa opaco → rosa choque */
+.udx-fab__tab:nth-child(2)::before {   /* Trilhas */
     background: linear-gradient(135deg, var(--udx-primary-hot) 0%, var(--udx-blood-red) 100%);
 }
-.udx-fab__tab:nth-child(2)::before {   /* Destaques — roxo médio → azul médio */
+.udx-fab__tab:nth-child(3)::before {   /* Destaques */
     background: linear-gradient(135deg, var(--udx-primary) 0%, var(--bs-indigo) 100%);
 }
-.udx-fab__tab:nth-child(3)::before {   /* Clube     — laranja → rosa choque */
+.udx-fab__tab:nth-child(4)::before {   /* Clube */
     background: linear-gradient(135deg, var(--udx-spark-blue) 0%, var(--udx-bg-mid) 100%);
 }
 
-/* Prévia sutil no hover (sem "saltar" o degradê) */
-.udx-fab__tab:hover::before           { opacity: .28; }
+.udx-fab__tab:not(.is-active):hover::before { opacity: .22; }
 
-/* Aba ativa: degradê pleno + texto branco */
-.udx-fab__tab.is-active {
-    color: #fff;
-    box-shadow: var(--udx-shadow-btn);
-}
-.udx-fab__tab.is-active::before       { opacity: 1; }
-.udx-fab__tab.is-active:hover::before { opacity: 1; }
+.udx-fab__tab.is-active { color: #fff; }
 
 /* ---------- Núcleo do menu radial ---------- */
 .udx-fab__radial {
@@ -883,16 +904,27 @@ div {
     height: 64px;
     border: 0;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--udx-primary) 0%, var(--udx-primary-hot) 100%);
+    background: linear-gradient(135deg, var(--fab-core-from) 0%, var(--fab-core-to) 100%);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: var(--udx-shadow-btn), 0 0 0 6px rgba(2, 2, 26, 0.55);
-    transition: transform 320ms cubic-bezier(.34,1.56,.64,1), box-shadow 280ms ease;
+    box-shadow: 0 4px 16px var(--fab-glow), 0 0 0 6px rgba(2, 2, 26, 0.55);
+    transition: transform 320ms cubic-bezier(.34,1.56,.64,1),
+                box-shadow 460ms ease,
+                --fab-core-from 460ms ease,
+                --fab-core-to   460ms ease;
 }
-.udx-fab__core:hover { box-shadow: var(--udx-shadow-hover), 0 0 0 6px rgba(2, 2, 26, 0.55); }
+.udx-fab__core:hover { box-shadow: 0 8px 36px var(--fab-glow), 0 0 0 6px rgba(2, 2, 26, 0.55); }
+@keyframes udxFabCorePulse {
+    0%   { box-shadow: 0 4px 16px var(--fab-glow),  0 0 0 6px  rgba(2,2,26,.55); }
+    45%  { box-shadow: 0 12px 44px var(--fab-glow), 0 0 0 18px var(--fab-glow); }
+    100% { box-shadow: 0 4px 16px var(--fab-glow),  0 0 0 6px  rgba(2,2,26,.55); }
+}
+.udx-fab__core.is-pulsing {
+    animation: udxFabCorePulse 520ms cubic-bezier(.34,1.56,.64,1);
+}
 .udx-fab__core-icon  { font-size: 28px; transition: transform 320ms ease; }
 
 /* Estado aberto */
@@ -927,7 +959,11 @@ div {
                 background-color 220ms ease,
                 border-color 220ms ease;
 }
-.udx-fab__item .mdi { font-size: 22px; color: var(--udx-primary-hot); }
+.udx-fab__item .mdi {
+    font-size: 22px;
+    color: var(--fab-accent);
+    transition: --fab-accent 460ms ease, color 460ms ease, transform 380ms ease;
+}
 .udx-fab__item em   {
     position: absolute;
     bottom: -20px;
@@ -941,8 +977,8 @@ div {
     transition: opacity 220ms ease 80ms;
 }
 .udx-fab__item:hover {
-    background: var(--udx-primary);
-    border-color: var(--udx-primary-hot);
+    background: var(--fab-accent-deep);
+    border-color: var(--fab-accent);
 }
 .udx-fab__item:hover .mdi { color: #fff; }
 
@@ -954,11 +990,28 @@ div {
 }
 .udx-fab__radial.is-open .udx-fab__item em { opacity: 1; }
 
-.udx-fab__radial.is-open .udx-fab__item--tl  { transform: translate(-81px, -76px) scale(1); }
-.udx-fab__radial.is-open .udx-fab__item--top { transform: translate(0,    -110px) scale(1); }
-.udx-fab__radial.is-open .udx-fab__item--tr  { transform: translate( 81px, -76px) scale(1); }
-.udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-110px, 0)    scale(1); }
-.udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 110px, 0)    scale(1); }
+.udx-fab__radial.is-open .udx-fab__item--tl  { transform: translate(-81px, -76px) scale(1); transition-delay:   0ms; }
+.udx-fab__radial.is-open .udx-fab__item--top { transform: translate(0,    -110px) scale(1); transition-delay:  50ms; }
+.udx-fab__radial.is-open .udx-fab__item--tr  { transform: translate( 81px, -76px) scale(1); transition-delay: 100ms; }
+.udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-110px, 0)    scale(1); transition-delay: 150ms; }
+.udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 110px, 0)    scale(1); transition-delay: 200ms; }
+
+/* Implosão durante a substituição: itens são "sugados" para o core */
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--tl,
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--top,
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--tr,
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--bl,
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--br {
+    transform: translate(0,0) scale(.35) rotate(80deg);
+    opacity: 0;
+}
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--br  { transition-delay:   0ms; }
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--bl  { transition-delay:  40ms; }
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--tr  { transition-delay:  80ms; }
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--top { transition-delay: 120ms; }
+.udx-fab__radial.is-open.is-collapsing .udx-fab__item--tl  { transition-delay: 160ms; }
+
+.udx-fab__radial.is-collapsing .udx-fab__item .mdi { transform: scale(.6); }
 
 /* Overlay sutil atrás do menu quando aberto */
 .udx-fab.is-open::before {
@@ -968,4 +1021,26 @@ div {
     background: radial-gradient(ellipse at bottom, rgba(2,2,26,.55) 0%, rgba(2,2,26,0) 60%);
     z-index: -1;
     pointer-events: none;
+}
+
+.udx-fab[data-pane="trilhas"]{
+    --fab-accent:      #FA33A1;
+    --fab-accent-deep: #d60126;
+    --fab-core-from:   #FA33A1;
+    --fab-core-to:     #d60126;
+    --fab-glow:        rgba(214, 1, 38, .42);
+}
+.udx-fab[data-pane="destaques"]{
+    --fab-accent:      #BF0449;
+    --fab-accent-deep: #6610f2;
+    --fab-core-from:   #BF0449;
+    --fab-core-to:     #6610f2;
+    --fab-glow:        rgba(102, 16, 242, .42);
+}
+.udx-fab[data-pane="clube"]{
+    --fab-accent:      #6f42c1;
+    --fab-accent-deep: #110273;
+    --fab-core-from:   #6f42c1;
+    --fab-core-to:     #110273;
+    --fab-glow:        rgba(111, 66, 193, .45);
 }
