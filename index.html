@@ -660,7 +660,7 @@
         trilhas: [
             { pos:"tl",  icon:"mdi-compass-outline",                    label:"Trilhas",  href:"#trilhas"  },
             { pos:"top", icon:"mdi-newspaper-variant-multiple-outline", label:"Recentes", href:"#recentes" },
-            { pos:"tr",  icon:"mdi-message-video",                      label:"Clube",    href:"#clube"    },
+            { pos:"tr",  icon:"mdi-message-video",                      label:"Clube",    href:"https://app.updance.workers.dev"    },
             { pos:"bl",  icon:"mdi-account-outline",                    label:"Acessar",  href: acessarHref },
             { pos:"br",  icon:"mdi-arrow-up",                           label:"Topo",     href:"#topo"     }
         ],
@@ -690,6 +690,7 @@
         PANES[name].forEach(function(it){
             var a = document.createElement("a");
             a.className = "udx-fab__item udx-fab__item--" + it.pos;
+			a.target = "_blank";
             a.href = it.href;
             a.setAttribute("aria-label", it.label);
             a.innerHTML = '<span class="mdi ' + it.icon + '" aria-hidden="true"></span><em>' + it.label + '</em>';
