@@ -1025,9 +1025,9 @@ div {
 
 .udx-fab[data-pane="trilhas"]{
     --fab-accent:      #F20505;
-    --fab-accent-deep: #BF0449;
+    --fab-accent-deep: #5708A6;
     --fab-core-from:   #F20505;
-    --fab-core-to:     #BF0449;
+    --fab-core-to:     #5708A6;
     --fab-glow:        rgba(214, 1, 38, .42);
 }
 .udx-fab[data-pane="destaques"]{
