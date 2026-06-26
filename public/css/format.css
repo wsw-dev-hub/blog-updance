@@ -1024,17 +1024,17 @@ div {
 }
 
 .udx-fab[data-pane="trilhas"]{
-    --fab-accent:      #d60126;
+    --fab-accent:      #F20505;
     --fab-accent-deep: #BF0449;
-    --fab-core-from:   #d60126;
+    --fab-core-from:   #F20505;
     --fab-core-to:     #BF0449;
     --fab-glow:        rgba(214, 1, 38, .42);
 }
 .udx-fab[data-pane="destaques"]{
     --fab-accent:      #BF0449;
-    --fab-accent-deep: #6610f2;
+    --fab-accent-deep: #6f42c1;
     --fab-core-from:   #BF0449;
-    --fab-core-to:     #6610f2;
+    --fab-core-to:     #6f42c1;
     --fab-glow:        rgba(102, 16, 242, .42);
 }
 .udx-fab[data-pane="clube"]{
