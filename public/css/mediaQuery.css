@@ -36,6 +36,44 @@
     /* Abas (tablist) — compactas e com fade mais curto em telas estreitas */
     .udx-fab__tab          { padding: 6px 12px; font-size: 11.5px; }
     .udx-fab__tab::before  { transition-duration: 240ms; }
+
+    /* Hero: chip e título mais compactos */
+    .trail-page-hero__chip{
+        letter-spacing: 0.16em;
+        font-size: 10px;
+    }
+ 
+    /* Badge do módulo um pouco menor */
+    .module-block__badge{
+        width: 46px; height: 46px;
+        font-size: 1.25rem;
+        border-radius: 12px;
+    }
+    .module-block__head{ gap: 12px; }
+    .module-block{ padding: 20px 18px 6px; }
+ 
+    /* Próxima trilha: layout em coluna no mobile */
+    .next-trail-card{
+        grid-template-columns: 1fr;
+        text-align: left;
+        padding: 22px 20px;
+    }
+    .next-trail-card__arrow{
+        align-self: flex-end;
+        font-size: 24px;
+    }
+ 
+    /* Trilho vertical mais à esquerda quando o badge encolhe */
+    .journey-rail::before{ left: 23px; }
+ 
+    /* Lista de artigos: CTA menor */
+    .article-item{
+        grid-template-columns: 30px 1fr auto;
+        gap: 10px;
+    }
+    .article-item__cta{
+        width: 32px; height: 32px;
+    }
 }
 
 
@@ -289,6 +327,26 @@
     .udx-fab__radial.is-open .udx-fab__item--bl  { transform: translate(-128px, 0)     scale(1); }
     .udx-fab__radial.is-open .udx-fab__item--br  { transform: translate( 128px, 0)     scale(1); }
 
+    /* Métricas do hero em 4 colunas */
+    .trails-stats{
+        grid-template-columns: repeat(4, 1fr);
+    }
+ 
+    /* "Como funciona" em 2 colunas */
+    .how-steps{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+      /* Stats do hero em 2 colunas */
+    .trail-page-stats{
+        grid-template-columns: repeat(2, 1fr);
+    }
+ 
+    /* Outcomes em 2 colunas */
+    .outcomes-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
 }
 
 
@@ -379,6 +437,24 @@
     .udx-fab__core-icon         { font-size: 30px; }
     .udx-fab__item              { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
     .udx-fab__item .mdi         { font-size: 24px; }
+
+
+        /* Cartões das 4 trilhas lado a lado */
+    .trails-list{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+        /* Cabeçalho do módulo com mais respiro */
+    .module-block{
+        padding: 28px 28px 12px;
+    }
+ 
+    /* Card "Próxima trilha" alinha o ícone ao lado do texto com
+       o body podendo crescer livre */
+    .next-trail-card{
+        padding: 28px 32px;
+        gap: 26px;
+    }
     
 }
 
@@ -570,10 +646,25 @@
     .blog-club-content     { height: 450px; }
     .blog-logo-img         { height: 44px; }
 
+    /* "Como funciona" em 4 colunas (passos 01–04 numa única linha) */
+    .how-steps{
+        grid-template-columns: repeat(4, 1fr);
+    }
+
     /* Menu do blog visível no desktop */
     header.blog-header .menu-list {
         visibility: visible !important;
         display: inline-flex !important;
+    }
+
+        /* Stats do hero em 4 colunas */
+    .trail-page-stats{
+        grid-template-columns: repeat(4, 1fr);
+    }
+ 
+    /* Outcomes em 3 colunas */
+    .outcomes-grid{
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 

@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Up Dance Xperience | Trilhas de Leitura</title>
+<meta name="description" content="As trilhas guiadas da Up Dance Xperience — sequências de artigos para você ir do basico ao avancado em tecnica, coreografia, bem-estar e mentalidade.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+
+<!-- Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<!-- Tipografia -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+
+<!-- Folhas de estilo do projeto -->
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/mediaQuery.css">
+<link rel="stylesheet" href="/css/format.css">
+
+
+</head>
+<body class="page-trails">
+<script src="/js/loader.js"></script>
+
+<!-- HEADER -->
+<div class="container-fluid p-0">
+    <header class="row g-0 blog-header">
+
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="/index.html" class="blog-logo-link">
+                <img src="/images/icons/udx-icon.png"
+                     alt="Up Dance — voltar para Destaques"
+                     class="blog-logo-img">
+            </a>
+        </div>
+
+        <div class="col-8 col-md-9 col-lg-10 d-flex justify-content-end align-items-center pe-0">
+            <ul class="menu-list d-none d-lg-inline-flex" role="menubar">
+                <li role="none">
+                    <a id="btnAcessar" class="fa-submit" href="/entrar/" role="menuitem">
+                        <span class="blog-menu-icon mdi mdi-account-outline" aria-hidden="true"></span>Acessar
+                    </a>
+                </li>
+                <li role="none">
+                    <a id="btnCadastrar" class="fa-submit" href="/cadastro/" role="menuitem">Cadastrar</a>
+                </li>
+            </ul>
+
+            <button class="btn-mobile-menu d-flex d-lg-none" id="btnMobileMenu"
+                    aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="mdi mdi-menu" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
+            <ul>
+                <li><a href="#como"><span class="mdi mdi-information-outline" aria-hidden="true"></span> Como funciona</a></li>
+                <li><a href="#trilhas"><span class="mdi mdi-compass-outline" aria-hidden="true"></span> As trilhas</a></li>
+                <li><a href="/index.html"><span class="mdi mdi-home-outline" aria-hidden="true"></span> Voltar ao blog</a></li>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="/cadastro/">Cadastrar</a></li>
+            </ul>
+        </nav>
+    </header>
+</div>
+
+<a id="topo"></a>
+
+<!-- HERO -->
+<section class="trails-hero" aria-label="Trilhas de leitura">
+    <div class="auto-container">
+        <div class="trails-hero__inner">
+            <span class="eyebrow">
+                <b>01</b> Segmento Trilhas
+            </span>
+            <h1>Sequências <em>guiadas</em> &mdash; do primeiro passo ao palco.</h1>
+            <p class="lead">
+                As Trilhas reúnem nossos melhores artigos em percursos ordenados, pensados para você
+                evoluir de forma contínua dentro de cada área da dança &mdash; sem se perder em meio
+                aos +120 textos do blog. Gratuito e aberto a todos os leitores.
+            </p>
+
+            <div class="trails-hero__ctas">
+                <a href="#trilhas" class="home-cta home-cta--solid">
+                    <span class="mdi mdi-compass-outline" aria-hidden="true"></span>
+                    Ver as trilhas
+                </a>
+                <a href="#como" class="home-cta home-cta--ghost">
+                    <span class="mdi mdi-information-outline" aria-hidden="true"></span>
+                    Como funciona
+                </a>
+            </div>
+
+            <div class="trails-stats">
+                <div class="trails-stats__item"><b>4</b><span>Trilhas ativas</span></div>
+                <div class="trails-stats__item"><b>46</b><span>Artigos curados</span></div>
+                <div class="trails-stats__item"><b>~6h</b><span>Leitura média</span></div>
+                <div class="trails-stats__item"><b>100%</b><span>Gratuito</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="how-section" id="como" aria-labelledby="comoH">
+    <div class="auto-container">
+        <div class="how-head">
+            <span class="eyebrow">
+                <span class="mdi mdi-information-outline" aria-hidden="true"></span> Como funciona
+            </span>
+            <h2 id="comoH">Quatro passos para <em>entrar</em> numa trilha.</h2>
+            <p class="lead">
+                Cada trilha é uma sequência ordenada de artigos. Você lê no seu ritmo, marca o que já passou
+                e avança até concluir o percurso.
+            </p>
+        </div>
+
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="how-step__num">01</div>
+                <h4>Escolha sua trilha</h4>
+                <p>Quatro áreas: Técnica, Coreografia, Bem-Estar e Mentalidade. Pegue aquela que conversa com o que você precisa agora.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step__num">02</div>
+                <h4>Leia em ordem</h4>
+                <p>Os artigos foram organizados em uma curva de progressão &mdash; do fundamento ao avançado, sem pular etapas.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step__num">03</div>
+                <h4>Pratique entre leituras</h4>
+                <p>Cada artigo termina com um exercício ou ponto de aplicação. A trilha vira matéria do seu treino.</p>
+            </div>
+            <div class="how-step">
+                <div class="how-step__num">04</div>
+                <h4>Conclua &amp; aprofunde</h4>
+                <p>Ao fim da trilha, indicamos os próximos passos: artigos correlatos, leituras de apoio e materiais avançados.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AS QUATRO TRILHAS -->
+<section class="trails-section" id="trilhas" aria-labelledby="trilhasH">
+    <div class="auto-container">
+        <div class="trails-section__head">
+            <div>
+                <span class="eyebrow">
+                    <span class="mdi mdi-compass-outline" aria-hidden="true"></span> As trilhas disponíveis
+                </span>
+                <h2 id="trilhasH">Quatro <em>percursos</em>. Um ritmo só.</h2>
+                <p class="lead">
+                    Cada trilha cobre uma área específica da dança, com artigos selecionados e ordenados pela equipe
+                    editorial da Up Dance. Comece pela que faz mais sentido para o seu momento.
+                </p>
+            </div>
+            <a href="/index.html" class="trails-section__link">
+                Voltar ao blog <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="trails-list">
+
+            <article class="trail-x">
+                <div class="trail-x__top">
+                    <div class="trail-x__icon"><span class="mdi mdi-foot-print" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="trail-x__num">Trilha 01</span>
+                        <h3>Técnica &amp; Fundamentos</h3>
+                    </div>
+                </div>
+                <p class="trail-x__desc">
+                    Alinhamento, base, transferência de peso e os fundamentos que tornam qualquer estilo possível.
+                    A trilha que recomendamos como ponto de partida para quem está chegando agora.
+                </p>
+                <ul class="trail-x__meta">
+                    <li><span class="mdi mdi-bookmark-multiple-outline" aria-hidden="true"></span> 14 artigos</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> ~1h45 de leitura</li>
+                    <li><span class="mdi mdi-signal-cellular-1" aria-hidden="true"></span> Iniciante</li>
+                </ul>
+                <ul class="trail-x__modules">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 1</b> Postura, eixo e centro</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 2</b> Peso, apoio e transferência</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 3</b> Ritmo, contagem e musicalidade básica</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 4</b> Coordenação e isolamentos</li>
+                </ul>
+                <a href="/src/tracks/trilha-tecnica.html" class="trail-x__cta">
+                    Começar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <article class="trail-x">
+                <div class="trail-x__top">
+                    <div class="trail-x__icon"><span class="mdi mdi-vector-polyline" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="trail-x__num">Trilha 02</span>
+                        <h3>Coreografia &amp; Composição</h3>
+                    </div>
+                </div>
+                <p class="trail-x__desc">
+                    Como construir sequências que respiram: dinâmica, contraste, repetição e a lógica da composição
+                    cênica. Para quem já dança e quer começar a criar.
+                </p>
+                <ul class="trail-x__meta">
+                    <li><span class="mdi mdi-bookmark-multiple-outline" aria-hidden="true"></span> 11 artigos</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> ~1h25 de leitura</li>
+                    <li><span class="mdi mdi-signal-cellular-2" aria-hidden="true"></span> Intermediário</li>
+                </ul>
+                <ul class="trail-x__modules">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 1</b> Frase, motivo e variação</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 2</b> Espaço, níveis e desenhos</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 3</b> Dinâmica e qualidade de movimento</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 4</b> Estrutura cênica e fechamento</li>
+                </ul>
+                <a href="/artigos.html?trilha=coreografia" class="trail-x__cta">
+                    Começar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <article class="trail-x">
+                <div class="trail-x__top">
+                    <div class="trail-x__icon"><span class="mdi mdi-meditation" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="trail-x__num">Trilha 03</span>
+                        <h3>Bem-Estar &amp; Recuperação</h3>
+                    </div>
+                </div>
+                <p class="trail-x__desc">
+                    Aquecimento inteligente, mobilidade, recuperação muscular e nutrição estratégica para sustentar
+                    a temporada inteira sem lesão e sem queda de rendimento.
+                </p>
+                <ul class="trail-x__meta">
+                    <li><span class="mdi mdi-bookmark-multiple-outline" aria-hidden="true"></span> 9 artigos</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> ~1h10 de leitura</li>
+                    <li><span class="mdi mdi-signal-cellular-2" aria-hidden="true"></span> Todos os níveis</li>
+                </ul>
+                <ul class="trail-x__modules">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 1</b> Aquecimento e mobilidade</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 2</b> Nutrição para alta performance</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 3</b> Recuperação ativa e sono</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 4</b> Prevenção de lesões</li>
+                </ul>
+                <a href="/artigos.html?trilha=bemestar" class="trail-x__cta">
+                    Começar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <article class="trail-x">
+                <div class="trail-x__top">
+                    <div class="trail-x__icon"><span class="mdi mdi-lightbulb-on-outline" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="trail-x__num">Trilha 04</span>
+                        <h3>Mentalidade &amp; Palco</h3>
+                    </div>
+                </div>
+                <p class="trail-x__desc">
+                    Foco sob pressão, presença cênica, mindset de crescimento e a parte invisível que separa quem
+                    brilha de quem trava na hora do palco.
+                </p>
+                <ul class="trail-x__meta">
+                    <li><span class="mdi mdi-bookmark-multiple-outline" aria-hidden="true"></span> 12 artigos</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> ~1h30 de leitura</li>
+                    <li><span class="mdi mdi-signal-cellular-3" aria-hidden="true"></span> Intermediário/Avançado</li>
+                </ul>
+                <ul class="trail-x__modules">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 1</b> Foco, ansiedade e respiração</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 2</b> Presença e expressão cênica</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 3</b> Mindset de crescimento</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Módulo 4</b> Audições e estreias</li>
+                </ul>
+                <a href="/artigos.html?trilha=mentalidade" class="trail-x__cta">
+                    Começar trilha <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="trails-cta" aria-labelledby="ctaH">
+    <div class="auto-container">
+        <div class="trails-cta__box">
+            <h2 id="ctaH">Comece pela trilha que <em>fala com você</em>.</h2>
+            <p>
+                Não existe ordem obrigatória entre as quatro trilhas &mdash; só dentro de cada uma.
+                Escolha a área que faz mais sentido para o seu momento e dê o primeiro passo hoje.
+            </p>
+            <div class="trails-cta__ctas">
+                <a href="#trilhas" class="home-cta home-cta--solid">
+                    <span class="mdi mdi-compass-outline" aria-hidden="true"></span>
+                    Escolher uma trilha
+                </a>
+                <a href="/index.html" class="home-cta home-cta--ghost">
+                    <span class="mdi mdi-home-outline" aria-hidden="true"></span>
+                    Voltar ao blog
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RODAPÉ -->
+<footer class="blog-footer" aria-label="Rodape">
+    <div class="auto-container">
+        <div class="row blog-footer__cols">
+
+            <div class="col-12 col-md-6 col-lg-4 blog-footer__col">
+                <div class="col-4 col-md-3 col-lg-2">
+                    <a href="/index.html" class="blog-logo-link">
+                        <img src="/images/icons/udx-icon.png"
+                            alt="Up Dance — voltar para Destaques"
+                            class="blog-logo-img">
+                    </a>
+                </div>
+                <p style="color: var(--udx-text-muted); font-size: 13px; line-height: 1.7; margin: 14px 0 18px; max-width: 280px;">
+                    Conteúdo e formação para dançarinos, professores e criadores.
+                    A dança levada a sério &mdash; do aquecimento ao palco.
+                </p>
+                <h3 class="blog-footer__title">Siga a UDX</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-instagram" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                    <li><span class="mdi mdi-youtube" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Up Dance no YouTube</a></li>
+                    <li><span class="mdi mdi-spotify" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Playlists oficiais</a></li>
+                    <li><span class="mdi mdi-tiktok" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-2 blog-footer__col">
+                <h3 class="blog-footer__title">Trilhas</h3>
+                <ul class="blog-footer__list">
+                    <li><a href="/artigos.html?trilha=tecnica">Técnica &amp; Fundamentos</a></li>
+                    <li><a href="/artigos.html?trilha=coreografia">Coreografia &amp; Composição</a></li>
+                    <li><a href="/artigos.html?trilha=bemestar">Bem-Estar &amp; Recuperação</a></li>
+                    <li><a href="/artigos.html?trilha=mentalidade">Mentalidade &amp; Palco</a></li>
+                    <li><a href="/index.html">Voltar ao blog</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Contato</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
+                        <a href="mailto:contato@updancexperience.com">contato@updancexperience.com</a></li>
+                    <li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
+                    <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Seg a Sex, 9h&ndash;18h</li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Da Galeria</h3>
+                <ul class="blog-footer__gallery" aria-hidden="true">
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="blog-footer__bar">
+        <small>
+            &copy; <span id="udx-year">2026</span> <b>Up Dance Xperience</b> &middot;
+            Todos os direitos reservados &middot;
+            Feito com <i>groove</i> no Rio de Janeiro.
+        </small>
+    </div>
+</footer>
+
+<!-- MENU FLUTUANTE RADIAL -->
+<div class="udx-fab" id="udxFab" data-pane="trilhas" aria-hidden="true">
+    <nav class="udx-fab__radial" id="udxFabRadial" aria-label="Atalhos do blog">
+        <button class="udx-fab__core" id="udxFabCore"
+                aria-label="Abrir menu de atalhos" aria-expanded="false" aria-controls="udxFabRadial">
+            <span class="mdi mdi-menu udx-fab__core-icon" aria-hidden="true"></span>
+        </button>
+    </nav>
+    <div class="udx-fab__tabs" role="tablist" aria-label="Sessões do blog">
+        <span class="udx-fab__tabs-thumb" aria-hidden="true"></span>
+        <button class="udx-fab__tab is-active" data-pane="trilhas"   role="tab" aria-selected="true">Trilhas</button>
+        <button class="udx-fab__tab"           data-pane="destaques" role="tab" aria-selected="false">Apps</button>
+        <button class="udx-fab__tab"           data-pane="clube"     role="tab" aria-selected="false">Clube</button>
+    </div>
+</div>
+
+<button class="to-top" id="toTop" aria-label="Voltar ao topo"><span class="mdi mdi-arrow-up" aria-hidden="true"></span></button>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+(function () { var y = document.getElementById("udx-year"); if (y) y.textContent = new Date().getFullYear(); }());
+
+(function () {
+    "use strict";
+    var btn = document.getElementById("btnMobileMenu");
+    var nav = document.getElementById("mobileNav");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+        var isOpen = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen);
+        var icon = btn.querySelector(".mdi");
+        icon.classList.toggle("mdi-menu", !isOpen);
+        icon.classList.toggle("mdi-close", isOpen);
+    });
+    nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+            nav.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            var ic = btn.querySelector(".mdi");
+            ic.classList.add("mdi-menu");
+            ic.classList.remove("mdi-close");
+        });
+    });
+}());
+
+(function () {
+    "use strict";
+    var btn = document.getElementById("toTop");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.pageYOffset > 600);
+    }, { passive: true });
+    btn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}());
+
+/* FAB radial — apenas pane "trilhas" populado.
+   Os panes "destaques" (Apps) e "clube" serão preenchidos quando
+   essas páginas forem construídas. */
+(function () {
+    "use strict";
+
+    var fab    = document.getElementById("udxFab");
+    var radial = document.getElementById("udxFabRadial");
+    var core   = document.getElementById("udxFabCore");
+    if (!fab || !radial || !core) return;
+
+    var tabsContainer = fab.querySelector(".udx-fab__tabs");
+    var thumb         = fab.querySelector(".udx-fab__tabs-thumb");
+    var tabs          = fab.querySelectorAll(".udx-fab__tab");
+
+    var headerAcessar = document.getElementById("btnAcessar");
+    var acessarHref = (headerAcessar && headerAcessar.getAttribute("href")) || "/entrar/";
+
+    var PANES = {
+        trilhas: [
+            { pos:"tl",  icon:"mdi-foot-print",            label:"Técnica",     href:"/artigos.html?trilha=tecnica"     },
+            { pos:"top", icon:"mdi-vector-polyline",       label:"Coreografia", href:"/artigos.html?trilha=coreografia" },
+            { pos:"tr",  icon:"mdi-meditation",            label:"Bem-Estar",   href:"/artigos.html?trilha=bemestar"    },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Palco",       href:"/artigos.html?trilha=mentalidade" },
+            { pos:"br",  icon:"mdi-arrow-up",              label:"Topo",        href:"#topo"                            }
+        ],
+        destaques: [],
+        clube: []
+    };
+
+    var swapLock = false;
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function renderPane(name){
+        var items = radial.querySelectorAll(".udx-fab__item");
+        for (var i = 0; i < items.length; i++) items[i].remove();
+
+        PANES[name].forEach(function(it){
+            var a = document.createElement("a");
+            a.className = "udx-fab__item udx-fab__item--" + it.pos;
+            a.href = it.href;
+            a.setAttribute("aria-label", it.label);
+            a.innerHTML = '<span class="mdi ' + it.icon + '" aria-hidden="true"></span><em>' + it.label + '</em>';
+            a.addEventListener("click", closeRadial);
+            radial.insertBefore(a, core);
+        });
+
+        fab.setAttribute("data-pane", name);
+    }
+
+    function moveThumbTo(tab){
+        var tabsRect = tabsContainer.getBoundingClientRect();
+        var tabRect  = tab.getBoundingClientRect();
+        var offsetX  = tabRect.left - tabsRect.left;
+        thumb.style.width = tabRect.width + "px";
+        thumb.style.transform = "translateX(" + offsetX + "px)";
+    }
+
+    function updateVisibility(){
+        var threshold = Math.max(window.innerHeight * 0.6, 380);
+        var show = window.pageYOffset > threshold;
+        fab.classList.toggle("is-visible", show);
+        fab.setAttribute("aria-hidden", show ? "false" : "true");
+        if (!show) closeRadial();
+    }
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+
+    function openRadial(){
+        radial.classList.add("is-open");
+        fab.classList.add("is-open");
+        core.setAttribute("aria-expanded", "true");
+        core.querySelector(".udx-fab__core-icon").classList.replace("mdi-menu", "mdi-close");
+        requestAnimationFrame(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+    function closeRadial(){
+        radial.classList.remove("is-open", "is-collapsing");
+        fab.classList.remove("is-open");
+        core.setAttribute("aria-expanded", "false");
+        var ic = core.querySelector(".udx-fab__core-icon");
+        if (ic.classList.contains("mdi-close")) ic.classList.replace("mdi-close", "mdi-menu");
+    }
+
+    async function substitutePane(paneName){
+        if (swapLock) return;
+        swapLock = true;
+        radial.classList.add("is-collapsing");
+        fab.setAttribute("data-pane", paneName);
+        await wait(420);
+        renderPane(paneName);
+        core.classList.remove("is-pulsing");
+        void core.offsetWidth;
+        core.classList.add("is-pulsing");
+        void radial.offsetWidth;
+        await wait(80);
+        radial.classList.remove("is-collapsing");
+        await wait(640);
+        swapLock = false;
+    }
+
+    core.addEventListener("click", function(e){
+        e.stopPropagation();
+        if (radial.classList.contains("is-open")) closeRadial();
+        else openRadial();
+    });
+
+    tabs.forEach(function(tab){
+        tab.addEventListener("click", function(e){
+            e.stopPropagation();
+            if (tab.classList.contains("is-active") && radial.classList.contains("is-open")) return;
+            tabs.forEach(function(t){
+                t.classList.remove("is-active");
+                t.setAttribute("aria-selected", "false");
+            });
+            tab.classList.add("is-active");
+            tab.setAttribute("aria-selected", "true");
+            moveThumbTo(tab);
+            if (radial.classList.contains("is-open")) {
+                substitutePane(tab.dataset.pane);
+            } else {
+                renderPane(tab.dataset.pane);
+                openRadial();
+            }
+        });
+    });
+
+    document.addEventListener("click", function(e){
+        if (!fab.contains(e.target)) closeRadial();
+    });
+
+    window.addEventListener("resize", function(){
+        var active = fab.querySelector(".udx-fab__tab.is-active");
+        if (active) moveThumbTo(active);
+    });
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+
+    renderPane("trilhas");
+}());
+
+(function () {
+    "use strict";
+    if (!("IntersectionObserver" in window)) return;
+    var els = document.querySelectorAll(".trails-hero, .how-section, .trails-section, .trails-cta");
+    els.forEach(function (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(14px)";
+        el.style.transition = "opacity 600ms ease, transform 600ms ease";
+    });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
