@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Up Dance Xperience | Apps de Aprendizado</title>
+<meta name="description" content="Os cinco apps de aprendizado da Up Dance Xperience: Ebooks, Tutoriais, Guias, Dicas e Cursos Online. Conteudo aprofundado, no seu ritmo, no seu formato.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+
+<!-- Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<!-- Tipografia -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+
+<!-- Folhas de estilo do projeto -->
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/mediaQuery.css">
+<link rel="stylesheet" href="/css/format.css">
+</head>
+
+<!-- .page-apps injeta os tokens da camada rosa-vinho → roxo lavanda
+     (definidos em blog.css). Espelha o FAB [data-pane="destaques"]. -->
+<body class="page-apps">
+<script src="/js/loader.js"></script>
+
+<!-- ======================================================
+     HEADER (padrão do projeto)
+====================================================== -->
+<div class="container-fluid p-0">
+    <header class="row g-0 blog-header">
+
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="/index.html" class="blog-logo-link">
+                <img src="/images/icons/udx-icon.png"
+                     alt="Up Dance — voltar para Destaques"
+                     class="blog-logo-img">
+            </a>
+        </div>
+
+        <div class="col-8 col-md-9 col-lg-10 d-flex justify-content-end align-items-center pe-0">
+            <ul class="menu-list d-none d-lg-inline-flex" role="menubar">
+                <li role="none">
+                    <a id="btnAcessar" class="fa-submit" href="/entrar/" role="menuitem">
+                        <span class="blog-menu-icon mdi mdi-account-outline" aria-hidden="true"></span>Acessar
+                    </a>
+                </li>
+                <li role="none">
+                    <a id="btnCadastrar" class="fa-submit" href="/cadastro/" role="menuitem">Cadastrar</a>
+                </li>
+            </ul>
+
+            <button class="btn-mobile-menu d-flex d-lg-none" id="btnMobileMenu"
+                    aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="mdi mdi-menu" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
+            <ul>
+                <li><a href="#como"><span class="mdi mdi-information-outline" aria-hidden="true"></span> Como funciona</a></li>
+                <li><a href="#apps"><span class="mdi mdi-apps" aria-hidden="true"></span> Os apps</a></li>
+                <li><a href="/trilhas.html"><span class="mdi mdi-compass-outline" aria-hidden="true"></span> Trilhas</a></li>
+                <li><a href="/index.html"><span class="mdi mdi-home-outline" aria-hidden="true"></span> Voltar ao blog</a></li>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="/cadastro/">Cadastrar</a></li>
+            </ul>
+        </nav>
+    </header>
+</div>
+
+<a id="topo"></a>
+
+<!-- ======================================================
+     HERO — Segmento Apps
+====================================================== -->
+<section class="apps-hero" aria-label="Apps de aprendizado">
+    <div class="auto-container">
+        <div class="apps-hero__inner">
+            <span class="apps-hero__chip">
+                <b>02</b> Segmento Apps
+            </span>
+            <h1>Cinco <em>formatos</em> &mdash; um só ecossistema de aprendizado.</h1>
+            <p class="lead">
+                Os Apps são nossos materiais aprofundados: ebooks para ler, tutoriais para assistir,
+                guias para seguir, dicas para aplicar e cursos para se formar. Você escolhe o formato
+                certo para cada momento &mdash; o conteúdo se encaixa no seu ritmo.
+            </p>
+
+            <div class="apps-hero__ctas">
+                <a href="#apps" class="home-cta home-cta--solid apps-hero__cta-solid">
+                    <span class="mdi mdi-apps" aria-hidden="true"></span>
+                    Ver os 5 apps
+                </a>
+                <a href="#como" class="home-cta home-cta--ghost">
+                    <span class="mdi mdi-information-outline" aria-hidden="true"></span>
+                    Como funciona
+                </a>
+            </div>
+
+            <div class="apps-stats">
+                <div class="apps-stats__item"><b>5</b><span>Apps disponíveis</span></div>
+                <div class="apps-stats__item"><b>+60</b><span>Materiais</span></div>
+                <div class="apps-stats__item"><b>100%</b><span>Responsivo</span></div>
+                <div class="apps-stats__item"><b>Offline</b><span>Em PDF e EPUB</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     COMO FUNCIONA
+====================================================== -->
+<section class="apps-how" id="como" aria-labelledby="comoH">
+    <div class="auto-container">
+        <div class="apps-how-head">
+            <span class="eyebrow">
+                <span class="mdi mdi-information-outline" aria-hidden="true"></span> Como funciona
+            </span>
+            <h2 id="comoH">Quatro passos para tirar <em>proveito</em> dos apps.</h2>
+            <p class="lead">
+                Cada app tem um formato e uma proposta. Saber qual usar em cada situação é metade do caminho
+                &mdash; a outra metade é só praticar.
+            </p>
+        </div>
+
+        <div class="apps-how-steps">
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">01</div>
+                <h4>Escolha o formato</h4>
+                <p>Ler, assistir, ouvir ou seguir um roteiro &mdash; cada app foi pensado para um tipo de aprendizado.</p>
+            </div>
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">02</div>
+                <h4>Baixe ou faça stream</h4>
+                <p>Materiais disponíveis offline em PDF/EPUB ou direto no navegador, sem instalar nada.</p>
+            </div>
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">03</div>
+                <h4>Pratique com o material</h4>
+                <p>Cada app traz exercícios, checklists ou aplicações práticas para o seu próximo treino.</p>
+            </div>
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">04</div>
+                <h4>Acompanhe a biblioteca</h4>
+                <p>Favoritos, histórico e progresso salvos &mdash; volte de onde parou em qualquer dispositivo.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     OS CINCO APPS
+====================================================== -->
+<section class="apps-section" id="apps" aria-labelledby="appsH">
+    <div class="auto-container">
+        <div class="apps-section__head">
+            <div>
+                <span class="eyebrow">
+                    <span class="mdi mdi-apps" aria-hidden="true"></span> Os apps disponíveis
+                </span>
+                <h2 id="appsH">Cinco <em>ferramentas</em>. Cada uma com sua melhor hora.</h2>
+                <p class="lead">
+                    Não há ordem certa &mdash; alguns apps combinam (ebook + tutorial), outros funcionam isoladamente.
+                    Comece pelo formato que mais conversa com o seu estilo de estudo.
+                </p>
+            </div>
+            <a href="/index.html" class="apps-section__link">
+                Voltar ao blog <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="apps-list">
+
+            <!-- App 01 — Ebooks -->
+            <article class="app-card">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-book-open-variant" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 01 &middot; Leitura</span>
+                        <h3>Ebooks</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Livros digitais aprofundados sobre técnica, coreografia, carreira e bem-estar.
+                    Leitura sem pressa, do tablet ao papel &mdash; com índice navegável e exercícios ao fim de cada capítulo.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 12 títulos</li>
+                    <li><span class="mdi mdi-file-document-outline" aria-hidden="true"></span> PDF + EPUB</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> ~2h por livro</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Coleção 1</b> Técnica &amp; estilo</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Coleção 2</b> Coreografia &amp; composição</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Coleção 3</b> Carreira &amp; mercado</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Coleção 4</b> Anatomia &amp; saúde</li>
+                </ul>
+                <a href="/apps/ebooks" class="app-card__cta">
+                    Abrir biblioteca <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 02 — Tutoriais -->
+            <article class="app-card">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-school-outline" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 02 &middot; Vídeo</span>
+                        <h3>Tutoriais</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Passo a passo em vídeo de movimentos, sequências e correções. Cápsulas curtas
+                    com replay sem pressa &mdash; pause, volte, refaça, dance junto.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 80+ vídeos</li>
+                    <li><span class="mdi mdi-play-circle-outline" aria-hidden="true"></span> 5&ndash;15 min</li>
+                    <li><span class="mdi mdi-video-outline" aria-hidden="true"></span> Full HD</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Trilha 1</b> Movimentos isolados</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Trilha 2</b> Sequências curtas</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Trilha 3</b> Correções &amp; ajustes</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Trilha 4</b> Variações de nível</li>
+                </ul>
+                <a href="/apps/tutoriais" class="app-card__cta">
+                    Assistir agora <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 03 — Guias -->
+            <article class="app-card">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-map-marker-path" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 03 &middot; Roteiro</span>
+                        <h3>Guias Práticos</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Roteiros completos para montar aulas, planejar ensaios, criar coreografias e
+                    preparar audições &mdash; com método, checklists e checkpoints de progresso.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 9 guias</li>
+                    <li><span class="mdi mdi-file-document-edit-outline" aria-hidden="true"></span> PDF interativo</li>
+                    <li><span class="mdi mdi-check-circle-outline" aria-hidden="true"></span> Checklists</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Guia 1</b> Para o professor</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Guia 2</b> Para o estudante</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Guia 3</b> Para audições</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Guia 4</b> Para o ensaio</li>
+                </ul>
+                <a href="/apps/guias" class="app-card__cta">
+                    Explorar guias <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 04 — Dicas -->
+            <article class="app-card">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-lightbulb-on-outline" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 04 &middot; Cápsulas</span>
+                        <h3>Dicas Rápidas</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Cápsulas curtíssimas para aplicar hoje &mdash; truques, atalhos e correções de efeito
+                    imediato. Conteúdo novo toda semana, no formato que seu dia comporta.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 200+ dicas</li>
+                    <li><span class="mdi mdi-clock-fast" aria-hidden="true"></span> 30s&ndash;2min</li>
+                    <li><span class="mdi mdi-update" aria-hidden="true"></span> Semanal</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Momento 1</b> Antes da aula</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Momento 2</b> Durante a aula</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Momento 3</b> Depois da aula</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Momento 4</b> No palco</li>
+                </ul>
+                <a href="/apps/dicas" class="app-card__cta">
+                    Ver dicas <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 05 — Cursos Online -->
+            <article class="app-card">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-web" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 05 &middot; Formação</span>
+                        <h3>Cursos Online</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Formações completas com módulos sequenciais, exercícios práticos, comunidade ativa
+                    e certificado digital &mdash; estude de onde estiver, no horário que combinar com você.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 6 cursos</li>
+                    <li><span class="mdi mdi-shape-outline" aria-hidden="true"></span> Módulos</li>
+                    <li><span class="mdi mdi-certificate-outline" aria-hidden="true"></span> Certificado</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Nível 1</b> Iniciante</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Nível 2</b> Intermediário</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Nível 3</b> Avançado</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Nível 4</b> Para professores</li>
+                </ul>
+                <a href="/apps/cursos" class="app-card__cta">
+                    Conhecer cursos <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     CTA FINAL
+====================================================== -->
+<section class="apps-cta" aria-labelledby="ctaH">
+    <div class="auto-container">
+        <div class="apps-cta__box">
+            <h2 id="ctaH">Pronto para escolher o <em>seu formato</em>?</h2>
+            <p>
+                Os 5 apps se complementam &mdash; mas cada um funciona sozinho. Escolha o que combina com seu jeito
+                de estudar e comece pelo que estiver mais à mão hoje.
+            </p>
+            <div class="apps-cta__ctas">
+                <a href="#apps" class="home-cta home-cta--solid apps-hero__cta-solid">
+                    <span class="mdi mdi-apps" aria-hidden="true"></span>
+                    Escolher um app
+                </a>
+                <a href="/index.html" class="home-cta home-cta--ghost">
+                    <span class="mdi mdi-home-outline" aria-hidden="true"></span>
+                    Voltar ao blog
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     RODAPÉ
+====================================================== -->
+<footer class="blog-footer" aria-label="Rodape">
+    <div class="auto-container">
+        <div class="row blog-footer__cols">
+
+            <div class="col-12 col-md-6 col-lg-4 blog-footer__col">
+                <div class="col-4 col-md-3 col-lg-2">
+                    <a href="/index.html" class="blog-logo-link">
+                        <img src="/images/icons/udx-icon.png"
+                            alt="Up Dance — voltar para Destaques"
+                            class="blog-logo-img">
+                    </a>
+                </div>
+                <p class="blog-footer__about">
+                    Conteúdo e formação para dançarinos, professores e criadores.
+                    A dança levada a sério &mdash; do aquecimento ao palco.
+                </p>
+                <h3 class="blog-footer__title">Siga a UDX</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-instagram" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                    <li><span class="mdi mdi-youtube" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Up Dance no YouTube</a></li>
+                    <li><span class="mdi mdi-spotify" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Playlists oficiais</a></li>
+                    <li><span class="mdi mdi-tiktok" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-2 blog-footer__col">
+                <h3 class="blog-footer__title">Apps</h3>
+                <ul class="blog-footer__list">
+                    <li><a href="/apps/ebooks">Ebooks</a></li>
+                    <li><a href="/apps/tutoriais">Tutoriais</a></li>
+                    <li><a href="/apps/guias">Guias Práticos</a></li>
+                    <li><a href="/apps/dicas">Dicas Rápidas</a></li>
+                    <li><a href="/apps/cursos">Cursos Online</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Contato</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
+                        <a href="mailto:contato@updancexperience.com">contato@updancexperience.com</a></li>
+                    <li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
+                    <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Seg a Sex, 9h&ndash;18h</li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Da Galeria</h3>
+                <ul class="blog-footer__gallery" aria-hidden="true">
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="blog-footer__bar">
+        <small>
+            &copy; <span id="udx-year">2026</span> <b>Up Dance Xperience</b> &middot;
+            Todos os direitos reservados &middot;
+            Feito com <i>groove</i> no Rio de Janeiro.
+        </small>
+    </div>
+</footer>
+
+<!-- ======================================================
+     MENU FLUTUANTE RADIAL
+     Inicia em "destaques" (aba Apps ativa). O pane traz atalhos
+     diretos para os 5 apps. Pane "trilhas" mantém os atalhos
+     das 4 trilhas; "clube" segue como placeholder.
+====================================================== -->
+<div class="udx-fab" id="udxFab" data-pane="destaques" aria-hidden="true">
+    <nav class="udx-fab__radial" id="udxFabRadial" aria-label="Atalhos do blog">
+        <button class="udx-fab__core" id="udxFabCore"
+                aria-label="Abrir menu de atalhos" aria-expanded="false" aria-controls="udxFabRadial">
+            <span class="mdi mdi-menu udx-fab__core-icon" aria-hidden="true"></span>
+        </button>
+    </nav>
+    <div class="udx-fab__tabs" role="tablist" aria-label="Sessões do blog">
+        <span class="udx-fab__tabs-thumb" aria-hidden="true"></span>
+        <button class="udx-fab__tab"           data-pane="trilhas"   role="tab" aria-selected="false">Trilhas</button>
+        <button class="udx-fab__tab is-active" data-pane="destaques" role="tab" aria-selected="true">Apps</button>
+        <button class="udx-fab__tab"           data-pane="clube"     role="tab" aria-selected="false">Clube</button>
+    </div>
+</div>
+
+<button class="to-top" id="toTop" aria-label="Voltar ao topo">
+    <span class="mdi mdi-arrow-up" aria-hidden="true"></span>
+</button>
+
+<!-- ======================================================
+     SCRIPTS
+====================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+(function () { var y = document.getElementById("udx-year"); if (y) y.textContent = new Date().getFullYear(); }());
+
+(function () {
+    "use strict";
+    var btn = document.getElementById("btnMobileMenu");
+    var nav = document.getElementById("mobileNav");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+        var isOpen = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen);
+        var icon = btn.querySelector(".mdi");
+        icon.classList.toggle("mdi-menu", !isOpen);
+        icon.classList.toggle("mdi-close", isOpen);
+    });
+    nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+            nav.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            var ic = btn.querySelector(".mdi");
+            ic.classList.add("mdi-menu");
+            ic.classList.remove("mdi-close");
+        });
+    });
+}());
+
+(function () {
+    "use strict";
+    var btn = document.getElementById("toTop");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.pageYOffset > 600);
+    }, { passive: true });
+    btn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}());
+
+/* FAB radial — aba inicial "destaques" (Apps) */
+(function () {
+    "use strict";
+
+    var fab    = document.getElementById("udxFab");
+    var radial = document.getElementById("udxFabRadial");
+    var core   = document.getElementById("udxFabCore");
+    if (!fab || !radial || !core) return;
+
+    var tabsContainer = fab.querySelector(".udx-fab__tabs");
+    var thumb         = fab.querySelector(".udx-fab__tabs-thumb");
+    var tabs          = fab.querySelectorAll(".udx-fab__tab");
+
+    var PANES = {
+        trilhas: [
+            { pos:"tl",  icon:"mdi-foot-print",            label:"Técnica",     href:"/trilha-tecnica.html" },
+            { pos:"top", icon:"mdi-vector-polyline",       label:"Coreografia", href:"/trilhas.html"        },
+            { pos:"tr",  icon:"mdi-meditation",            label:"Bem-Estar",   href:"/trilhas.html"        },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Palco",       href:"/trilhas.html"        },
+            { pos:"br",  icon:"mdi-compass-outline",       label:"Todas",       href:"/trilhas.html"        }
+        ],
+        destaques: [
+            { pos:"tl",  icon:"mdi-book-open-variant",     label:"Ebooks",    href:"/apps/ebooks"    },
+            { pos:"top", icon:"mdi-school-outline",        label:"Tutoriais", href:"/apps/tutoriais" },
+            { pos:"tr",  icon:"mdi-map-marker-path",       label:"Guias",     href:"/apps/guias"     },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Dicas",     href:"/apps/dicas"     },
+            { pos:"br",  icon:"mdi-web",                   label:"Cursos",    href:"/apps/cursos"    }
+        ],
+        clube: []
+    };
+
+    var swapLock = false;
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function renderPane(name){
+        var items = radial.querySelectorAll(".udx-fab__item");
+        for (var i = 0; i < items.length; i++) items[i].remove();
+        PANES[name].forEach(function(it){
+            var a = document.createElement("a");
+            a.className = "udx-fab__item udx-fab__item--" + it.pos;
+            a.href = it.href;
+            a.setAttribute("aria-label", it.label);
+            a.innerHTML = '<span class="mdi ' + it.icon + '" aria-hidden="true"></span><em>' + it.label + '</em>';
+            a.addEventListener("click", closeRadial);
+            radial.insertBefore(a, core);
+        });
+        fab.setAttribute("data-pane", name);
+    }
+    function moveThumbTo(tab){
+        var tabsRect = tabsContainer.getBoundingClientRect();
+        var tabRect  = tab.getBoundingClientRect();
+        thumb.style.width = tabRect.width + "px";
+        thumb.style.transform = "translateX(" + (tabRect.left - tabsRect.left) + "px)";
+    }
+    function updateVisibility(){
+        var threshold = Math.max(window.innerHeight * 0.6, 380);
+        var show = window.pageYOffset > threshold;
+        fab.classList.toggle("is-visible", show);
+        fab.setAttribute("aria-hidden", show ? "false" : "true");
+        if (!show) closeRadial();
+    }
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+
+    function openRadial(){
+        radial.classList.add("is-open");
+        fab.classList.add("is-open");
+        core.setAttribute("aria-expanded", "true");
+        core.querySelector(".udx-fab__core-icon").classList.replace("mdi-menu", "mdi-close");
+        requestAnimationFrame(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+    function closeRadial(){
+        radial.classList.remove("is-open", "is-collapsing");
+        fab.classList.remove("is-open");
+        core.setAttribute("aria-expanded", "false");
+        var ic = core.querySelector(".udx-fab__core-icon");
+        if (ic.classList.contains("mdi-close")) ic.classList.replace("mdi-close", "mdi-menu");
+    }
+    async function substitutePane(paneName){
+        if (swapLock) return;
+        swapLock = true;
+        radial.classList.add("is-collapsing");
+        fab.setAttribute("data-pane", paneName);
+        await wait(420);
+        renderPane(paneName);
+        core.classList.remove("is-pulsing");
+        void core.offsetWidth;
+        core.classList.add("is-pulsing");
+        void radial.offsetWidth;
+        await wait(80);
+        radial.classList.remove("is-collapsing");
+        await wait(640);
+        swapLock = false;
+    }
+
+    core.addEventListener("click", function(e){
+        e.stopPropagation();
+        if (radial.classList.contains("is-open")) closeRadial();
+        else openRadial();
+    });
+    tabs.forEach(function(tab){
+        tab.addEventListener("click", function(e){
+            e.stopPropagation();
+            if (tab.classList.contains("is-active") && radial.classList.contains("is-open")) return;
+            tabs.forEach(function(t){
+                t.classList.remove("is-active");
+                t.setAttribute("aria-selected", "false");
+            });
+            tab.classList.add("is-active");
+            tab.setAttribute("aria-selected", "true");
+            moveThumbTo(tab);
+            if (radial.classList.contains("is-open")) substitutePane(tab.dataset.pane);
+            else { renderPane(tab.dataset.pane); openRadial(); }
+        });
+    });
+    document.addEventListener("click", function(e){ if (!fab.contains(e.target)) closeRadial(); });
+    window.addEventListener("resize", function(){
+        var active = fab.querySelector(".udx-fab__tab.is-active");
+        if (active) moveThumbTo(active);
+    });
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+    renderPane("destaques");
+}());
+
+/* Reveal-on-scroll */
+(function () {
+    "use strict";
+    if (!("IntersectionObserver" in window)) return;
+    var els = document.querySelectorAll(".apps-hero, .apps-how, .apps-section, .apps-cta");
+    els.forEach(function (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(14px)";
+        el.style.transition = "opacity 600ms ease, transform 600ms ease";
+    });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>

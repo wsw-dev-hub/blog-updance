@@ -1038,9 +1038,9 @@ div {
     --fab-glow:        rgba(166, 0, 183, .42);
 }
 .udx-fab[data-pane="clube"]{
-    --fab-accent:      #6f42c1;
+    --fab-accent:      #FA33A1; 
     --fab-accent-deep: #110273;
-    --fab-core-from:   #6f42c1;
+    --fab-core-from:   #FA33A1; 
     --fab-core-to:     #110273;
     --fab-glow:        rgba(111, 66, 193, .45);
 }
