@@ -170,7 +170,7 @@
 
         <div class="trails-list">
 
-            <article class="trail-x">
+            <article class="trail-x" id="tecnica">
                 <div class="trail-x__top">
                     <div class="trail-x__icon"><span class="mdi mdi-foot-print" aria-hidden="true"></span></div>
                     <div>
@@ -198,7 +198,7 @@
                 </a>
             </article>
 
-            <article class="trail-x">
+            <article class="trail-x" id="coreografia">
                 <div class="trail-x__top">
                     <div class="trail-x__icon"><span class="mdi mdi-vector-polyline" aria-hidden="true"></span></div>
                     <div>
@@ -226,7 +226,7 @@
                 </a>
             </article>
 
-            <article class="trail-x">
+            <article class="trail-x" id="bemestar">
                 <div class="trail-x__top">
                     <div class="trail-x__icon"><span class="mdi mdi-meditation" aria-hidden="true"></span></div>
                     <div>
@@ -254,7 +254,7 @@
                 </a>
             </article>
 
-            <article class="trail-x">
+            <article class="trail-x" id="mentalidade">
                 <div class="trail-x__top">
                     <div class="trail-x__icon"><span class="mdi mdi-lightbulb-on-outline" aria-hidden="true"></span></div>
                     <div>
@@ -461,10 +461,11 @@
 
     var PANES = {
         trilhas: [
-            { pos:"tl",  icon:"mdi-foot-print",            label:"Técnica",     href:"/artigos.html?trilha=tecnica"     },
-            { pos:"top", icon:"mdi-vector-polyline",       label:"Coreografia", href:"/artigos.html?trilha=coreografia" },
-            { pos:"tr",  icon:"mdi-meditation",            label:"Bem-Estar",   href:"/artigos.html?trilha=bemestar"    },
-            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Palco",       href:"/artigos.html?trilha=mentalidade" },
+            { pos:"tl",  icon:"mdi-foot-print",            label:"Técnica",     href:"#tecnica"     },
+            { pos:"top", icon:"mdi-vector-polyline",       label:"Coreografia", href:"#coreografia" },
+            { pos:"tr",  icon:"mdi-meditation",            label:"Bem-Estar",   href:"#bemestar"    },
+            /*{ pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Palco",       href:"/artigos.html?trilha=mentalidade" },*/
+            { pos:"bl",  icon:"mdi-account-outline",       label:"Acessar",     href:"#acessarHref" },
             { pos:"br",  icon:"mdi-arrow-up",              label:"Topo",        href:"#topo"                            }
         ],
         destaques: [
