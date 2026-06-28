@@ -519,15 +519,21 @@
             { pos:"br",  icon:"mdi-compass-outline",       label:"Todas",       href:"/trilhas.html"        }
         ],
         destaques: [
-            { pos:"tl",  icon:"mdi-book-open-variant",     label:"Ebooks",    href:"/apps/ebooks"    },
-            { pos:"top", icon:"mdi-school-outline",        label:"Tutoriais", href:"/apps/tutoriais" },
-            { pos:"tr",  icon:"mdi-map-marker-path",       label:"Guias",     href:"/apps/guias"     },
-            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Dicas",     href:"/apps/dicas"     },
-            { pos:"br",  icon:"mdi-web",                   label:"Cursos",    href:"/apps/cursos"    }
+            { pos:"tl",  icon:"mdi-human-greeting",        label:"Performance",    href:"/clube/ebooks"    },
+            { pos:"top", icon:"mdi-metronome-tick",        label:"Ritmo",          href:"/clube/tutoriais" },
+            { pos:"tr",  icon:"mdi-head-snowflake",        label:"Percepção",      href:"/clube/guias"     },
+            { pos:"bl",  icon:"mdi-cog-sync",              label:"Composição",     href:"/clube/dicas"     },
+            { pos:"br",  icon:"mdi-consolidate",           label:"Movimento",      href:"/clue/cursos"    }
         ],
-        clube: []
+        clube: [
+            { pos:"tl",  icon:"mdi-book-open-variant",     label:"Ebooks",    href:"#ebooks"    },
+            { pos:"top", icon:"mdi-school-outline",        label:"Tutoriais", href:"#tutoriais" },
+            { pos:"tr",  icon:"mdi-map-marker-path",       label:"Guias",     href:"#guias"     },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Dicas",     href:"#dicas"     },
+            { pos:"br",  icon:"mdi-google-classroom",      label:"Cursos",    href:"#cursos"    }
+        ]
     };
-
+    
     var swapLock = false;
     function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
