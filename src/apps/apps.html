@@ -512,11 +512,11 @@
 
     var PANES = {
         trilhas: [
-            { pos:"tl",  icon:"mdi-foot-print",            label:"Técnica",     href:"/trilha-tecnica.html" },
-            { pos:"top", icon:"mdi-vector-polyline",       label:"Coreografia", href:"/trilhas.html"        },
-            { pos:"tr",  icon:"mdi-meditation",            label:"Bem-Estar",   href:"/trilhas.html"        },
-            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Palco",       href:"/trilhas.html"        },
-            { pos:"br",  icon:"mdi-compass-outline",       label:"Todas",       href:"/trilhas.html"        }
+            { pos:"tl",  icon:"mdi-compass-outline",                    label:"Trilhas",  href:"#trilhas"  },
+            { pos:"top", icon:"mdi-newspaper-variant-multiple-outline", label:"Recentes", href:"#recentes" },
+            { pos:"tr",  icon:"mdi-message-video",                      label:"Clube",    href:"https://app.updance.workers.dev"    },
+            { pos:"bl",  icon:"mdi-account-outline",                    label:"Acessar",  href: acessarHref },
+            { pos:"br",  icon:"mdi-arrow-up",                           label:"Topo",     href:"#topo"     }
         ],
         destaques: [
             { pos:"tl",  icon:"mdi-human-greeting",        label:"Performance",    href:"/clube/ebooks"    },
@@ -533,7 +533,7 @@
             { pos:"br",  icon:"mdi-google-classroom",      label:"Cursos",    href:"#cursos"    }
         ]
     };
-    
+
     var swapLock = false;
     function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
