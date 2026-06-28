@@ -98,6 +98,7 @@ export default defineConfig(({ command }) => ({
         'articles/artigos': resolve(__dirname, 'src/articles/artigos.html'),
         'tracks/trilhas': resolve(__dirname, 'src/tracks/trilhas.html'),
         'tracks/trilha-tecnica':resolve(__dirname, 'src/tracks/trilha-tecnica.html'),
+        'clube/clube': resolve(__dirname, '/src/clube/clube.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
       },
       external: ['ton-connect', 'ton-core'],
