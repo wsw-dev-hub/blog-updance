@@ -1,35 +1,139 @@
 /* ================================================================
-   ====  ADICIONAR AO FINAL DE /css/blog.css  ======================
-   Componentes da PÁGINA DE SEGMENTO TRILHAS (/trilhas.html).
+   ADICIONAR AO FINAL DE /css/blog.css
+   ----------------------------------------------------------------
+   Componentes das PÁGINAS DE SEGMENTO (Trilhas, Apps, Clube)
+   + página de TRILHA INDIVIDUAL.
 
-   Os tokens .page-trails { --t-grad, --t-red, --t-glow, ... }
-   já foram adicionados a este arquivo na etapa anterior
-   (página /trilha-tecnica.html). Não duplicar aqui.
-
-   Nenhuma classe deste bloco colide com as classes já adicionadas
-   para a página de trilha individual:
-     .trails-hero        ≠ .trail-page-hero
-     .trails-stats       ≠ .trail-page-stats
-     .trails-section     ≠ .journey-section
-     .trail-x            ≠ .module-block
-     .trails-cta         ≠ .trail-cta-final
+   REFATORAÇÃO:
+   - Tokens específicos (--t-*, --a-*, --c-*) preservados para
+     compatibilidade com o restante do projeto.
+   - Adicionados aliases genéricos (--seg-*) por escopo de página,
+     permitindo aglutinar via uma única regra os componentes que
+     têm a mesma estrutura nas três camadas.
+   - Corrigidos seletores quebrados do bloco Clube original
+     (vírgulas mal posicionadas em descendentes/pseudo-elementos
+     que faziam o estilo de um <b>/__icon/::before vazar para o
+     elemento-pai, e que sobrescreviam .apps-* com tokens de
+     Clube por cascata).
 ================================================================ */
 
 
-/* ----------------------------------------------------------------
-   HERO da página de segmento (com chip-eyebrow numerado + stats)
----------------------------------------------------------------- */
-.trails-hero{
+/* ================================================================
+   1) TOKENS POR PÁGINA  (originais + aliases --seg-*)
+================================================================ */
+
+/* --- Trilhas: vermelho → roxo ---------------------------------- */
+.page-trails{
+    /* originais */
+    --t-grad:        linear-gradient(135deg, #F20505 0%, #5708A6 100%);
+    --t-grad-soft:   linear-gradient(135deg, rgba(242,5,5,.18) 0%, rgba(87,8,166,.22) 100%);
+    --t-red:         #F20505;
+    --t-red-deep:    #BF0449;
+    --t-purple:      #5708A6;
+    --t-purple-soft: #6f42c1;
+    --t-glow:        rgba(242, 5, 5, 0.32);
+    --t-glow-cool:   rgba(87, 8, 166, 0.38);
+
+    /* aliases genéricos usados pelos blocos aglutinados */
+    --seg-grad:      var(--t-grad);
+    --seg-grad-soft: var(--t-grad-soft);
+    --seg-grad-text: var(--t-grad);     /* em Trails, texto usa o mesmo gradiente */
+    --seg-accent:    var(--t-red);
+    --seg-accent-2:  var(--t-purple);
+    --seg-glow:      var(--t-glow);
+
+    /* RGBA bruto para os radial-gradients do hero/CTA (camada Trails) */
+    --seg-hero-rgba-a: rgba(242, 5, 5, 0.22);
+    --seg-hero-rgba-b: rgba(87,  8, 166, 0.30);
+    --seg-cta-rgba-a:  rgba(242, 5, 5, 0.18);
+    --seg-cta-rgba-b:  rgba(87,  8, 166, 0.25);
+    --seg-how-rgba-a:  rgba(242, 5, 5, 0.06);
+    --seg-how-rgba-b:  rgba(87,  8, 166, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+}
+
+/* --- Apps: vinho → roxo lavanda ------------------------------- */
+.page-apps{
+    /* originais */
+    --a-grad:        linear-gradient(135deg, #BF0449 0%, #6f42c1 100%);
+    --a-grad-soft:   linear-gradient(135deg, rgba(191,4,73,.18) 0%, rgba(111,66,193,.22) 100%);
+    --a-rose:        #BF0449;
+    --a-pink:        #F434A1;
+    --a-purple:      #6f42c1;
+    --a-purple-deep: #5708A6;
+    --a-glow:        rgba(191, 4, 73, 0.32);
+    --a-glow-cool:   rgba(111, 66, 193, 0.38);
+
+    /* aliases */
+    --seg-grad:      var(--a-grad);
+    --seg-grad-soft: var(--a-grad-soft);
+    --seg-grad-text: var(--a-grad);
+    --seg-accent:    var(--a-rose);
+    --seg-accent-2:  var(--a-purple);
+    --seg-glow:      var(--a-glow);
+
+    --seg-hero-rgba-a: rgba(191, 4, 73, 0.22);
+    --seg-hero-rgba-b: rgba(111, 66, 193, 0.30);
+    --seg-cta-rgba-a:  rgba(191, 4, 73, 0.18);
+    --seg-cta-rgba-b:  rgba(111, 66, 193, 0.25);
+    --seg-how-rgba-a:  rgba(191, 4, 73, 0.06);
+    --seg-how-rgba-b:  rgba(111, 66, 193, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+}
+
+/* --- Clube: rosa-pink → navy ---------------------------------- */
+/*  Observação: o navy (#110273) fica praticamente invisível como
+    text-gradient sobre fundo escuro, então o gradiente do TEXTO
+    (--c-grad-text) é deslocado para uma faixa visível.            */
+.page-clube{
+    /* originais */
+    --c-grad:        linear-gradient(135deg, #FA33A1 0%, #110273 100%);
+    --c-grad-soft:   linear-gradient(135deg, rgba(111,66,193,.18) 0%, rgba(17,2,115,.30) 100%);
+    --c-grad-text:   linear-gradient(135deg, #b394e8 0%, #FA33A1 100%);
+    --c-purple:      #FA33A1;
+    --c-purple-soft: #b394e8;
+    --c-purple-deep: #5708A6;
+    --c-navy:        #110273;
+    --c-glow:        rgba(111, 66, 193, 0.38);
+    --c-glow-cool:   rgba(17,  2, 115, 0.45);
+
+    /* aliases */
+    --seg-grad:      var(--c-grad);
+    --seg-grad-soft: var(--c-grad-soft);
+    --seg-grad-text: var(--c-grad-text);   /* única camada com grad-text distinto */
+    --seg-accent:    var(--c-purple-soft);
+    --seg-accent-2:  var(--c-navy);
+    --seg-glow:      var(--c-glow);
+
+    --seg-hero-rgba-a: rgba(111, 66, 193, 0.28);
+    --seg-hero-rgba-b: rgba(17,  2, 115, 0.55);
+    --seg-cta-rgba-a:  rgba(111, 66, 193, 0.22);
+    --seg-cta-rgba-b:  rgba(17,  2, 115, 0.40);
+    --seg-how-rgba-a:  rgba(111, 66, 193, 0.08);
+    --seg-how-rgba-b:  rgba(17,  2, 115, 0.18);
+    --seg-step-bg:     rgba(17, 2, 115, 0.22);
+}
+
+
+/* ================================================================
+   2) HERO DOS SEGMENTOS  (Trilhas / Apps / Clube)
+================================================================ */
+
+.trails-hero,
+.apps-hero,
+.clube-hero{
     position: relative;
     padding: clamp(70px, 9vw, 120px) 0 clamp(40px, 6vw, 70px);
     overflow: hidden;
     background:
-        radial-gradient(55% 65% at 12% 20%, rgba(242, 5, 5, 0.22), transparent 60%),
-        radial-gradient(55% 65% at 88% 80%, rgba(87, 8, 166, 0.30), transparent 60%),
+        radial-gradient(55% 65% at 12% 20%, var(--seg-hero-rgba-a), transparent 60%),
+        radial-gradient(55% 65% at 88% 80%, var(--seg-hero-rgba-b), transparent 60%),
         linear-gradient(180deg, #02021a 0%, #0a0436 100%);
     border-bottom: 1px solid var(--udx-border);
 }
-.trails-hero::before{
+.trails-hero::before,
+.apps-hero::before,
+.clube-hero::before{
     content: "";
     position: absolute; inset: 0;
     background: repeating-linear-gradient(120deg,
@@ -37,14 +141,19 @@
         transparent 1px 80px);
     pointer-events: none;
 }
-.trails-hero__inner{
+.trails-hero__inner,
+.apps-hero__inner,
+.clube-hero__inner{
     position: relative;
     max-width: 860px;
 }
 
-/* Eyebrow do hero do segmento — versão CHIP (com gradiente e numeral).
-   Escopado a .trails-hero para não afetar o eyebrow padrão do projeto. */
-.trails-hero .eyebrow{
+/* Chip-eyebrow numerado do hero.
+   Trails usa o seletor legado ".eyebrow" escopado em .trails-hero;
+   Apps/Clube usam a classe BEM "__chip". Estrutura idêntica. */
+.trails-hero .eyebrow,
+.apps-hero__chip,
+.clube-hero__chip{
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -56,10 +165,12 @@
     margin-bottom: 14px;
     padding: 6px 14px 6px 8px;
     border-radius: 50px;
-    background: var(--t-grad);
-    box-shadow: 0 8px 22px var(--t-glow);
+    background: var(--seg-grad);
+    box-shadow: 0 8px 22px var(--seg-glow);
 }
-.trails-hero .eyebrow b{
+.trails-hero .eyebrow b,
+.apps-hero__chip b,
+.clube-hero__chip b{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -69,8 +180,13 @@
     font-size: 11px;
     font-weight: 800;
 }
+/* Clube usa fundo ligeiramente mais opaco no numeral do chip */
+.clube-hero__chip b{ background: rgba(255,255,255,.22); }
 
-.trails-hero h1{
+/* Título e lead */
+.trails-hero h1,
+.apps-hero h1,
+.clube-hero h1{
     color: var(--udx-text);
     font-family: var(--udx-font);
     font-weight: 700;
@@ -78,43 +194,67 @@
     line-height: 1.12;
     margin: 0 0 16px;
 }
-.trails-hero h1 em{
+.trails-hero h1 em,
+.apps-hero h1 em,
+.clube-hero h1 em{
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-weight: 600;
-    background: var(--t-grad);
+    background: var(--seg-grad-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-.trails-hero p.lead{
+.trails-hero p.lead,
+.apps-hero p.lead,
+.clube-hero p.lead{
     color: var(--udx-text-muted);
     font-size: 1.02rem;
     line-height: 1.75;
-    max-width: 640px;
+    max-width: 660px;
     margin: 0 0 26px;
 }
 
-.trails-hero__ctas{
+/* CTAs do hero */
+.trails-hero__ctas,
+.apps-hero__ctas,
+.clube-hero__ctas{
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 34px;
 }
+/* Variante "solid" pintada com o gradiente do segmento.
+   Trails reaproveita a classe utilitária .home-cta--solid;
+   Apps e Clube têm classe própria __cta-solid. */
 .trails-hero__ctas .home-cta--solid{
-    background: var(--t-grad);
-    box-shadow: 0 10px 30px var(--t-glow);
+    background: var(--seg-grad);
+    box-shadow: 0 10px 30px var(--seg-glow);
     border-color: transparent;
 }
+.apps-hero__cta-solid,
+.clube-hero__cta-solid{
+    background: var(--seg-grad) !important;
+    box-shadow: 0 10px 30px var(--seg-glow);
+    border-color: transparent !important;
+}
 
-/* Métricas — cards com borda-acento à esquerda */
-.trails-stats{
+
+/* ================================================================
+   3) MÉTRICAS DO HERO  (Stats)
+================================================================ */
+
+.trails-stats,
+.apps-stats,
+.clube-stats{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     max-width: 640px;
 }
-.trails-stats__item{
+.trails-stats__item,
+.apps-stats__item,
+.clube-stats__item{
     position: relative;
     padding: 16px 18px;
     border: 1px solid var(--udx-border);
@@ -123,13 +263,17 @@
     backdrop-filter: blur(6px);
     overflow: hidden;
 }
-.trails-stats__item::before{
+.trails-stats__item::before,
+.apps-stats__item::before,
+.clube-stats__item::before{
     content: "";
     position: absolute; left: 0; top: 0; bottom: 0;
     width: 3px;
-    background: var(--t-grad);
+    background: var(--seg-grad);
 }
-.trails-stats__item b{
+.trails-stats__item b,
+.apps-stats__item b,
+.clube-stats__item b{
     display: block;
     font-size: 1.45rem;
     font-weight: 700;
@@ -137,7 +281,9 @@
     line-height: 1.1;
     font-family: var(--udx-font);
 }
-.trails-stats__item span{
+.trails-stats__item span,
+.apps-stats__item span,
+.clube-stats__item span{
     display: block;
     font-size: 11.5px;
     color: var(--udx-text-muted);
@@ -146,23 +292,29 @@
 }
 
 
-/* ----------------------------------------------------------------
-   "COMO FUNCIONA UMA TRILHA" — 4 passos
----------------------------------------------------------------- */
-.how-section{
+/* ================================================================
+   4) "COMO FUNCIONA"  (Trilhas: .how-section / Apps: .apps-how /
+   Clube: .clube-how — mesma estrutura, nomes diferentes)
+================================================================ */
+
+.how-section,
+.apps-how,
+.clube-how{
     position: relative;
     padding: clamp(50px, 7vw, 80px) 0;
     background:
-        radial-gradient(50% 60% at 0% 0%, rgba(242, 5, 5, 0.06), transparent 60%),
-        radial-gradient(50% 60% at 100% 100%, rgba(87, 8, 166, 0.08), transparent 60%);
+        radial-gradient(50% 60% at 0% 0%,   var(--seg-how-rgba-a), transparent 60%),
+        radial-gradient(50% 60% at 100% 100%, var(--seg-how-rgba-b), transparent 60%);
 }
-.how-head{
+.how-head,
+.apps-how-head,
+.clube-how-head{
     max-width: 760px;
     margin-bottom: 38px;
 }
-
-/* Eyebrow padrão escopado em .how-head — tinge na cor da camada */
-.how-head .eyebrow{
+.how-head .eyebrow,
+.apps-how-head .eyebrow,
+.clube-how-head .eyebrow{
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -170,11 +322,12 @@
     letter-spacing: 0.18em;
     font-size: 10.5px;
     font-weight: 700;
-    color: var(--t-red);
+    color: var(--seg-accent);
     margin-bottom: 12px;
 }
-
-.how-head h2{
+.how-head h2,
+.apps-how-head h2,
+.clube-how-head h2{
     color: var(--udx-text);
     font-family: var(--udx-font);
     font-weight: 700;
@@ -182,16 +335,20 @@
     line-height: 1.18;
     margin: 0 0 10px;
 }
-.how-head h2 em{
+.how-head h2 em,
+.apps-how-head h2 em,
+.clube-how-head h2 em{
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-weight: 600;
-    background: var(--t-grad);
+    background: var(--seg-grad-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-.how-head .lead{
+.how-head .lead,
+.apps-how-head .lead,
+.clube-how-head .lead{
     color: var(--udx-text-muted);
     font-size: 0.96rem;
     line-height: 1.7;
@@ -199,47 +356,59 @@
     max-width: 620px;
 }
 
-.how-steps{
+.how-steps,
+.apps-how-steps,
+.clube-how-steps{
     display: grid;
     grid-template-columns: 1fr;
     gap: 14px;
 }
-.how-step{
+.how-step,
+.apps-how-step,
+.clube-how-step{
     position: relative;
     padding: 22px 20px 20px;
     border: 1px solid var(--udx-border);
     border-radius: var(--udx-radius-md);
-    background: rgba(17, 2, 115, 0.18);
+    background: var(--seg-step-bg);
     transition: all 320ms ease;
 }
-.how-step:hover{
+.how-step:hover,
+.apps-how-step:hover,
+.clube-how-step:hover{
     transform: translateY(-3px);
     border-color: transparent;
-    box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 1px var(--t-red);
+    box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 1px var(--seg-accent);
 }
-.how-step__num{
+.how-step__num,
+.apps-how-step__num,
+.clube-how-step__num{
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 38px; height: 38px;
     border-radius: 10px;
-    background: var(--t-grad);
+    background: var(--seg-grad);
     color: #fff;
     font-weight: 700;
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 1.1rem;
     margin-bottom: 14px;
-    box-shadow: 0 6px 18px var(--t-glow);
+    box-shadow: 0 6px 18px var(--seg-glow);
 }
-.how-step h4{
+.how-step h4,
+.apps-how-step h4,
+.clube-how-step h4{
     font-size: 1rem;
     font-weight: 700;
     color: var(--udx-text);
     margin: 0 0 8px;
     line-height: 1.3;
 }
-.how-step p{
+.how-step p,
+.apps-how-step p,
+.clube-how-step p{
     font-size: 13px;
     line-height: 1.65;
     color: var(--udx-text-muted);
@@ -247,16 +416,21 @@
 }
 
 
-/* ----------------------------------------------------------------
-   SEÇÃO DAS 4 TRILHAS — cartões expandidos
----------------------------------------------------------------- */
-.trails-section{
+/* ================================================================
+   5) SEÇÃO PRINCIPAL (4 trilhas / 5 apps / 5 caminhos do clube)
+================================================================ */
+
+.trails-section,
+.apps-section,
+.clube-section{
     position: relative;
     padding: clamp(50px, 7vw, 80px) 0;
     background: rgba(255,255,255,0.015);
     border-block: 1px solid var(--udx-border);
 }
-.trails-section__head{
+.trails-section__head,
+.apps-section__head,
+.clube-section__head{
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -264,9 +438,9 @@
     flex-wrap: wrap;
     margin-bottom: 38px;
 }
-
-/* Eyebrow padrão escopado em .trails-section__head — tinge na camada */
-.trails-section__head .eyebrow{
+.trails-section__head .eyebrow,
+.apps-section__head .eyebrow,
+.clube-section__head .eyebrow{
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -274,11 +448,12 @@
     letter-spacing: 0.18em;
     font-size: 10.5px;
     font-weight: 700;
-    color: var(--t-red);
+    color: var(--seg-accent);
     margin-bottom: 12px;
 }
-
-.trails-section__head h2{
+.trails-section__head h2,
+.apps-section__head h2,
+.clube-section__head h2{
     color: var(--udx-text);
     font-family: var(--udx-font);
     font-weight: 700;
@@ -286,23 +461,29 @@
     line-height: 1.18;
     margin: 0 0 10px;
 }
-.trails-section__head h2 em{
+.trails-section__head h2 em,
+.apps-section__head h2 em,
+.clube-section__head h2 em{
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-weight: 600;
-    background: var(--t-grad);
+    background: var(--seg-grad-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-.trails-section__head .lead{
+.trails-section__head .lead,
+.apps-section__head .lead,
+.clube-section__head .lead{
     color: var(--udx-text-muted);
     font-size: 0.96rem;
     line-height: 1.7;
     margin: 0;
     max-width: 620px;
 }
-.trails-section__link{
+.trails-section__link,
+.apps-section__link,
+.clube-section__link{
     color: var(--udx-text);
     text-decoration: none;
     font-size: 13px;
@@ -316,21 +497,32 @@
     transition: all 260ms ease;
     background: rgba(2,2,26,.45);
 }
-.trails-section__link:hover{
+.trails-section__link:hover,
+.apps-section__link:hover,
+.clube-section__link:hover{
     color: #fff;
     border-color: transparent;
-    background: var(--t-grad);
-    box-shadow: 0 8px 24px var(--t-glow);
+    background: var(--seg-grad);
+    box-shadow: 0 8px 24px var(--seg-glow);
 }
 
-/* Lista de cartões */
-.trails-list{
+
+/* ================================================================
+   6) LISTAS E CARTÕES DAS SEÇÕES
+   Trails: .trail-x  /  Apps: .app-card  /  Clube: .clube-card
+================================================================ */
+
+.trails-list,
+.apps-list,
+.clube-list{
     display: grid;
     grid-template-columns: 1fr;
     gap: 18px;
 }
 
-.trail-x{
+.trail-x,
+.app-card,
+.clube-card{
     position: relative;
     background: #0c0b22;
     border: 1px solid var(--udx-border);
@@ -344,50 +536,72 @@
     text-decoration: none;
     color: var(--udx-text);
 }
-.trail-x::before{
+.trail-x::before,
+.app-card::before,
+.clube-card::before{
     content: "";
     position: absolute; left: 0; top: 0; bottom: 0;
     width: 4px;
-    background: var(--t-grad);
+    background: var(--seg-grad);
 }
-.trail-x::after{
+.trail-x::after,
+.app-card::after,
+.clube-card::after{
     content: "";
     position: absolute; right: -30%; top: -30%;
     width: 320px; height: 320px;
     border-radius: 50%;
-    background: var(--t-grad-soft);
+    background: var(--seg-grad-soft);
     opacity: 0.4;
     filter: blur(40px);
     pointer-events: none;
     transition: opacity 320ms ease;
     z-index: 0;
 }
-.trail-x > *{ position: relative; z-index: 1; }
-.trail-x:hover{
+.trail-x > *,
+.app-card > *,
+.clube-card > *{
+    position: relative;
+    z-index: 1;
+}
+.trail-x:hover,
+.app-card:hover,
+.clube-card:hover{
     transform: translateY(-4px);
     border-color: transparent;
-    box-shadow: 0 24px 50px rgba(0,0,0,.5), 0 0 0 1px var(--t-red);
+    box-shadow: 0 24px 50px rgba(0,0,0,.5), 0 0 0 1px var(--seg-accent);
 }
-.trail-x:hover::after{ opacity: 0.7; }
+.trail-x:hover::after,
+.app-card:hover::after,
+.clube-card:hover::after{ opacity: 0.7; }
 
-.trail-x__top{
+.trail-x__top,
+.app-card__top,
+.clube-card__top{
     display: flex;
     align-items: center;
     gap: 14px;
 }
-.trail-x__icon{
+.trail-x__icon,
+.app-card__icon,
+.clube-card__icon{
     width: 54px; height: 54px;
     border-radius: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--t-grad);
+    background: var(--seg-grad);
     color: #fff;
-    box-shadow: 0 8px 22px var(--t-glow);
+    box-shadow: 0 8px 22px var(--seg-glow);
     flex-shrink: 0;
 }
-.trail-x__icon .mdi{ font-size: 28px; }
-.trail-x__num{
+.trail-x__icon .mdi,
+.app-card__icon .mdi,
+.clube-card__icon .mdi{ font-size: 28px; }
+
+.trail-x__num,
+.app-card__num,
+.clube-card__num{
     font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 0.18em;
@@ -396,20 +610,28 @@
     display: block;
     margin-bottom: 4px;
 }
-.trail-x h3{
+.trail-x h3,
+.app-card h3,
+.clube-card h3{
     font-size: 1.18rem;
     font-weight: 700;
     margin: 0;
     color: var(--udx-text);
     line-height: 1.25;
 }
-.trail-x__desc{
+.trail-x__desc,
+.app-card__desc,
+.clube-card__desc{
     margin: 0;
     font-size: 13.5px;
     line-height: 1.65;
     color: var(--udx-text-muted);
 }
-.trail-x__meta{
+
+/* Meta (chips de badges no rodapé do header do card) */
+.trail-x__meta,
+.app-card__meta,
+.clube-card__meta{
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -417,7 +639,9 @@
     margin: 0;
     list-style: none;
 }
-.trail-x__meta li{
+.trail-x__meta li,
+.app-card__meta li,
+.clube-card__meta li{
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -429,12 +653,17 @@
     background: rgba(2, 2, 26, 0.65);
     border: 1px solid var(--udx-border);
 }
-.trail-x__meta li .mdi{
+.trail-x__meta li .mdi,
+.app-card__meta li .mdi,
+.clube-card__meta li .mdi{
     font-size: 14px;
-    color: var(--t-red);
+    color: var(--seg-accent);
 }
 
-.trail-x__modules{
+/* Lista interna (módulos da trilha / categorias do app / etc.) */
+.trail-x__modules,
+.app-card__categories,
+.clube-card__categories{
     margin: 6px 0 0;
     padding: 14px 0 0;
     border-top: 1px dashed var(--udx-border);
@@ -442,19 +671,25 @@
     display: grid;
     gap: 8px;
 }
-.trail-x__modules li{
+.trail-x__modules li,
+.app-card__categories li,
+.clube-card__categories li{
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 13px;
     color: var(--udx-text);
 }
-.trail-x__modules li .mdi{
+.trail-x__modules li .mdi,
+.app-card__categories li .mdi,
+.clube-card__categories li .mdi{
     font-size: 16px;
-    color: var(--t-red);
+    color: var(--seg-accent);
     flex-shrink: 0;
 }
-.trail-x__modules li b{
+.trail-x__modules li b,
+.app-card__categories li b,
+.clube-card__categories li b{
     font-weight: 600;
     color: var(--udx-text-muted);
     font-size: 11px;
@@ -462,43 +697,61 @@
     margin-right: 2px;
 }
 
-.trail-x__cta{
+/* CTA do card */
+.trail-x__cta,
+.app-card__cta,
+.clube-card__cta{
     margin-top: 6px;
     display: inline-flex;
     align-items: center;
     gap: 10px;
     padding: 12px 18px;
     border-radius: 50px;
-    background: var(--t-grad);
+    background: var(--seg-grad);
     color: #fff;
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
     align-self: flex-start;
-    box-shadow: 0 8px 22px var(--t-glow);
+    box-shadow: 0 8px 22px var(--seg-glow);
     transition: transform 280ms ease, box-shadow 280ms ease;
 }
-.trail-x__cta .mdi{
+.trail-x__cta .mdi,
+.app-card__cta .mdi,
+.clube-card__cta .mdi{
     font-size: 16px;
     transition: transform 280ms ease;
 }
-.trail-x:hover .trail-x__cta{ box-shadow: 0 12px 30px var(--t-glow); }
-.trail-x:hover .trail-x__cta .mdi{ transform: translateX(4px); }
+.trail-x:hover .trail-x__cta,
+.app-card:hover .app-card__cta,
+.clube-card:hover .clube-card__cta{
+    box-shadow: 0 12px 30px var(--seg-glow);
+}
+.trail-x:hover .trail-x__cta .mdi,
+.app-card:hover .app-card__cta .mdi,
+.clube-card:hover .clube-card__cta .mdi{
+    transform: translateX(4px);
+}
 
 
-/* ----------------------------------------------------------------
-   CTA FINAL — caixa centralizada
----------------------------------------------------------------- */
-.trails-cta{
+/* ================================================================
+   7) CTA FINAL DA PÁGINA DE SEGMENTO
+================================================================ */
+
+.trails-cta,
+.apps-cta,
+.clube-cta{
     position: relative;
     padding: clamp(50px, 7vw, 90px) 0;
     border-top: 1px solid var(--udx-border);
     background:
-        radial-gradient(80% 100% at 50% 0%, rgba(242, 5, 5, 0.18), transparent 60%),
-        radial-gradient(80% 100% at 50% 100%, rgba(87, 8, 166, 0.25), transparent 60%),
+        radial-gradient(80% 100% at 50% 0%,   var(--seg-cta-rgba-a), transparent 60%),
+        radial-gradient(80% 100% at 50% 100%, var(--seg-cta-rgba-b), transparent 60%),
         linear-gradient(180deg, #02021a 0%, #0a0436 100%);
 }
-.trails-cta__box{
+.trails-cta__box,
+.apps-cta__box,
+.clube-cta__box{
     position: relative;
     text-align: center;
     max-width: 720px;
@@ -510,15 +763,22 @@
     backdrop-filter: blur(8px);
     overflow: hidden;
 }
-.trails-cta__box::before{
+.trails-cta__box::before,
+.apps-cta__box::before,
+.clube-cta__box::before{
     content: "";
     position: absolute; inset: 0;
-    background: var(--t-grad-soft);
+    background: var(--seg-grad-soft);
     z-index: 0;
     opacity: .7;
 }
-.trails-cta__box > *{ position: relative; z-index: 1; }
-.trails-cta h2{
+.trails-cta__box > *,
+.apps-cta__box > *,
+.clube-cta__box > *{ position: relative; z-index: 1; }
+
+.trails-cta h2,
+.apps-cta h2,
+.clube-cta h2{
     color: var(--udx-text);
     font-family: var(--udx-font);
     font-weight: 700;
@@ -526,62 +786,47 @@
     line-height: 1.2;
     margin: 0 0 12px;
 }
-.trails-cta h2 em{
+.trails-cta h2 em,
+.apps-cta h2 em,
+.clube-cta h2 em{
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-weight: 600;
-    background: var(--t-grad);
+    background: var(--seg-grad-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-.trails-cta p{
+.trails-cta p,
+.apps-cta p,
+.clube-cta p{
     color: var(--udx-text-muted);
     font-size: 0.96rem;
     line-height: 1.7;
     margin: 0 0 22px;
 }
-.trails-cta__ctas{
+.trails-cta__ctas,
+.apps-cta__ctas,
+.clube-cta__ctas{
     display: flex;
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
 }
+/* Variante solid no CTA final — só Trails usa a utilitária .home-cta--solid aqui */
 .trails-cta__ctas .home-cta--solid{
-    background: var(--t-grad);
-    box-shadow: 0 10px 30px var(--t-glow);
+    background: var(--seg-grad);
+    box-shadow: 0 10px 30px var(--seg-glow);
     border-color: transparent;
 }
 
-/* ================================================================
-   ====  ADICIONAR AO FINAL DE /css/blog.css  ======================
-   Componentes da página de TRILHA INDIVIDUAL (ex.: Trilha 01 —
-   Técnica & Fundamentos) + tokens compartilhados do segmento.
 
-   Estes mesmos tokens (--t-grad, --t-red, etc.) também servem
-   à página /trilhas.html, então definem-se uma única vez aqui.
+/* ================================================================
+   8) PÁGINA DE TRILHA INDIVIDUAL  (/trilha-tecnica.html etc.)
+   Estes blocos NÃO têm equivalentes em Apps/Clube e ficam isolados.
 ================================================================ */
 
-
-/* ----------------------------------------------------------------
-   TOKENS DO SEGMENTO TRILHAS (vermelho → roxo)
-   Espelha o FAB [data-pane="trilhas"] do format.css (linha 1026).
----------------------------------------------------------------- */
-.page-trails{
-    --t-grad:       linear-gradient(135deg, #F20505 0%, #5708A6 100%);
-    --t-grad-soft:  linear-gradient(135deg, rgba(242,5,5,.18) 0%, rgba(87,8,166,.22) 100%);
-    --t-red:        #F20505;
-    --t-red-deep:   #BF0449;
-    --t-purple:     #5708A6;
-    --t-purple-soft:#6f42c1;
-    --t-glow:       rgba(242, 5, 5, 0.32);
-    --t-glow-cool:  rgba(87, 8, 166, 0.38);
-}
-
-
-/* ----------------------------------------------------------------
-   EYEBROW utilitário usado pelas seções desta página
----------------------------------------------------------------- */
+/* Eyebrow utilitário da página individual */
 .page-trails .eyebrow-x{
     display: inline-flex;
     align-items: center;
@@ -596,9 +841,7 @@
 .page-trails .eyebrow-x .mdi{ font-size: 13px; }
 
 
-/* ----------------------------------------------------------------
-   HERO da trilha individual (com breadcrumb)
----------------------------------------------------------------- */
+/* ---- HERO da trilha individual ------------------------------- */
 .trail-page-hero{
     position: relative;
     padding: clamp(60px, 8vw, 100px) 0 clamp(40px, 6vw, 70px);
@@ -651,7 +894,7 @@
     font-weight: 600;
 }
 
-/* Chip do hero */
+/* Chip do hero individual */
 .trail-page-hero__chip{
     display: inline-flex;
     align-items: center;
@@ -702,21 +945,20 @@
     margin: 0 0 26px;
 }
 
-/* CTAs do hero */
+/* CTAs do hero individual */
 .trail-page-hero__ctas{
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 34px;
 }
-/* Variante solid pintada com o gradiente do segmento */
 .trail-page-hero__cta-solid{
     background: var(--t-grad) !important;
     box-shadow: 0 10px 30px var(--t-glow);
     border-color: transparent !important;
 }
 
-/* Stats em linha */
+/* Stats do hero individual (1 coluna, com ícone) */
 .trail-page-stats{
     display: grid;
     grid-template-columns: 1fr;
@@ -764,9 +1006,7 @@
 }
 
 
-/* ----------------------------------------------------------------
-   "O QUE VOCÊ VAI APRENDER" — grid de outcomes
----------------------------------------------------------------- */
+/* ---- "O QUE VOCÊ VAI APRENDER" — outcomes -------------------- */
 .outcomes-section{
     position: relative;
     padding: clamp(50px, 7vw, 80px) 0;
@@ -854,9 +1094,7 @@
 }
 
 
-/* ----------------------------------------------------------------
-   "SUA JORNADA" — módulos + artigos
----------------------------------------------------------------- */
+/* ---- "SUA JORNADA" — módulos + artigos ----------------------- */
 .journey-section{
     position: relative;
     padding: clamp(50px, 7vw, 80px) 0;
@@ -1043,9 +1281,7 @@
 }
 
 
-/* ----------------------------------------------------------------
-   "PRÓXIMA TRILHA" — card de recomendação
----------------------------------------------------------------- */
+/* ---- "PRÓXIMA TRILHA" — card de recomendação ----------------- */
 .next-trail-section{
     position: relative;
     padding: clamp(50px, 7vw, 80px) 0;
@@ -1186,9 +1422,7 @@
 .next-trail-card:hover .next-trail-card__arrow{ transform: translateX(5px); }
 
 
-/* ----------------------------------------------------------------
-   CTA FINAL
----------------------------------------------------------------- */
+/* ---- CTA FINAL da página de trilha individual ---------------- */
 .trail-cta-final{
     position: relative;
     padding: clamp(50px, 7vw, 90px) 0;
@@ -1249,1146 +1483,14 @@
 }
 
 
-/* ----------------------------------------------------------------
-   Pequenos ajustes de classe utilitária do rodapé
-   (se já existe regra equivalente no seu blog.css, ignore este bloco)
----------------------------------------------------------------- */
+/* ================================================================
+   9) UTILITÁRIO DE RODAPÉ
+   (ignore este bloco se já existir regra equivalente no blog.css)
+================================================================ */
 .blog-footer__about{
     color: var(--udx-text-muted);
     font-size: 13px;
     line-height: 1.7;
     margin: 14px 0 18px;
     max-width: 280px;
-}
-
-
-/* ================================================================
-   ====  ADICIONAR AO FINAL DE /css/blog.css  ======================
-   Componentes da PÁGINA DE SEGMENTO APPS (/apps.html).
-
-   Camada 02 — rosa-vinho → roxo lavanda.
-   Espelha o FAB [data-pane="destaques"] do format.css.
-
-   Nenhuma classe deste bloco colide com as classes já adicionadas
-   nas etapas anteriores (Trilhas):
-     .apps-hero       ≠ .trails-hero       ≠ .trail-page-hero
-     .apps-stats      ≠ .trails-stats      ≠ .trail-page-stats
-     .apps-how        ≠ .how-section
-     .apps-section    ≠ .trails-section    ≠ .journey-section
-     .app-card        ≠ .trail-x           ≠ .module-block
-     .apps-cta        ≠ .trails-cta        ≠ .trail-cta-final
-================================================================ */
-
-
-/* ----------------------------------------------------------------
-   TOKENS DO SEGMENTO APPS (vinho → roxo lavanda)
----------------------------------------------------------------- */
-.page-apps{
-    --a-grad:       linear-gradient(135deg, #BF0449 0%, #6f42c1 100%);
-    --a-grad-soft:  linear-gradient(135deg, rgba(191,4,73,.18) 0%, rgba(111,66,193,.22) 100%);
-    --a-rose:       #BF0449;
-    --a-pink:       #F434A1;
-    --a-purple:     #6f42c1;
-    --a-purple-deep:#5708A6;
-    --a-glow:       rgba(191, 4, 73, 0.32);
-    --a-glow-cool:  rgba(111, 66, 193, 0.38);
-}
-
-
-/* ----------------------------------------------------------------
-   HERO da página de segmento (chip + stats)
----------------------------------------------------------------- */
-.apps-hero{
-    position: relative;
-    padding: clamp(70px, 9vw, 120px) 0 clamp(40px, 6vw, 70px);
-    overflow: hidden;
-    background:
-        radial-gradient(55% 65% at 12% 20%, rgba(191, 4, 73, 0.22), transparent 60%),
-        radial-gradient(55% 65% at 88% 80%, rgba(111, 66, 193, 0.30), transparent 60%),
-        linear-gradient(180deg, #02021a 0%, #0a0436 100%);
-    border-bottom: 1px solid var(--udx-border);
-}
-.apps-hero::before{
-    content: "";
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(120deg,
-        rgba(255,255,255,0.025) 0 1px,
-        transparent 1px 80px);
-    pointer-events: none;
-}
-.apps-hero__inner{
-    position: relative;
-    max-width: 860px;
-}
-
-/* Chip-eyebrow numerado do hero */
-.apps-hero__chip{
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-size: 11px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 14px;
-    padding: 6px 14px 6px 8px;
-    border-radius: 50px;
-    background: var(--a-grad);
-    box-shadow: 0 8px 22px var(--a-glow);
-}
-.apps-hero__chip b{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.18);
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.apps-hero h1{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.9rem, 4.2vw, 3rem);
-    line-height: 1.12;
-    margin: 0 0 16px;
-}
-.apps-hero h1 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--a-grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.apps-hero p.lead{
-    color: var(--udx-text-muted);
-    font-size: 1.02rem;
-    line-height: 1.75;
-    max-width: 640px;
-    margin: 0 0 26px;
-}
-
-.apps-hero__ctas{
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 34px;
-}
-/* Variante solid pintada com o gradiente do segmento Apps */
-.apps-hero__cta-solid{
-    background: var(--a-grad) !important;
-    box-shadow: 0 10px 30px var(--a-glow);
-    border-color: transparent !important;
-}
-
-/* Métricas — mesmo padrão de borda-acento à esquerda */
-.apps-stats{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    max-width: 640px;
-}
-.apps-stats__item{
-    position: relative;
-    padding: 16px 18px;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-md);
-    background: rgba(2, 2, 26, 0.55);
-    backdrop-filter: blur(6px);
-    overflow: hidden;
-}
-.apps-stats__item::before{
-    content: "";
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--a-grad);
-}
-.apps-stats__item b{
-    display: block;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.1;
-    font-family: var(--udx-font);
-}
-.apps-stats__item span{
-    display: block;
-    font-size: 11.5px;
-    color: var(--udx-text-muted);
-    letter-spacing: 0.04em;
-    margin-top: 4px;
-}
-
-
-/* ----------------------------------------------------------------
-   "COMO FUNCIONA" — 4 passos
----------------------------------------------------------------- */
-.apps-how{
-    position: relative;
-    padding: clamp(50px, 7vw, 80px) 0;
-    background:
-        radial-gradient(50% 60% at 0% 0%, rgba(191, 4, 73, 0.06), transparent 60%),
-        radial-gradient(50% 60% at 100% 100%, rgba(111, 66, 193, 0.08), transparent 60%);
-}
-.apps-how-head{
-    max-width: 760px;
-    margin-bottom: 38px;
-}
-.apps-how-head .eyebrow{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--a-rose);
-    margin-bottom: 12px;
-}
-.apps-how-head h2{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.4rem, 2.6vw, 1.95rem);
-    line-height: 1.18;
-    margin: 0 0 10px;
-}
-.apps-how-head h2 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--a-grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.apps-how-head .lead{
-    color: var(--udx-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin: 0;
-    max-width: 620px;
-}
-
-.apps-how-steps{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-}
-.apps-how-step{
-    position: relative;
-    padding: 22px 20px 20px;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-md);
-    background: rgba(17, 2, 115, 0.18);
-    transition: all 320ms ease;
-}
-.apps-how-step:hover{
-    transform: translateY(-3px);
-    border-color: transparent;
-    box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 1px var(--a-rose);
-}
-.apps-how-step__num{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    background: var(--a-grad);
-    color: #fff;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1.1rem;
-    margin-bottom: 14px;
-    box-shadow: 0 6px 18px var(--a-glow);
-}
-.apps-how-step h4{
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--udx-text);
-    margin: 0 0 8px;
-    line-height: 1.3;
-}
-.apps-how-step p{
-    font-size: 13px;
-    line-height: 1.65;
-    color: var(--udx-text-muted);
-    margin: 0;
-}
-
-
-/* ----------------------------------------------------------------
-   SEÇÃO DOS 5 APPS — cartões expandidos
----------------------------------------------------------------- */
-.apps-section{
-    position: relative;
-    padding: clamp(50px, 7vw, 80px) 0;
-    background: rgba(255,255,255,0.015);
-    border-block: 1px solid var(--udx-border);
-}
-.apps-section__head{
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-bottom: 38px;
-}
-.apps-section__head .eyebrow{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--a-rose);
-    margin-bottom: 12px;
-}
-.apps-section__head h2{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.4rem, 2.6vw, 1.95rem);
-    line-height: 1.18;
-    margin: 0 0 10px;
-}
-.apps-section__head h2 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--a-grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.apps-section__head .lead{
-    color: var(--udx-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin: 0;
-    max-width: 620px;
-}
-.apps-section__link{
-    color: var(--udx-text);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    border-radius: 50px;
-    border: 1px solid var(--udx-border);
-    transition: all 260ms ease;
-    background: rgba(2,2,26,.45);
-}
-.apps-section__link:hover{
-    color: #fff;
-    border-color: transparent;
-    background: var(--a-grad);
-    box-shadow: 0 8px 24px var(--a-glow);
-}
-
-/* Lista de cartões */
-.apps-list{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
-}
-
-.app-card{
-    position: relative;
-    background: #0c0b22;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-lg);
-    padding: 26px 24px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: all 320ms ease;
-    overflow: hidden;
-    text-decoration: none;
-    color: var(--udx-text);
-}
-.app-card::before{
-    content: "";
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 4px;
-    background: var(--a-grad);
-}
-.app-card::after{
-    content: "";
-    position: absolute; right: -30%; top: -30%;
-    width: 320px; height: 320px;
-    border-radius: 50%;
-    background: var(--a-grad-soft);
-    opacity: 0.4;
-    filter: blur(40px);
-    pointer-events: none;
-    transition: opacity 320ms ease;
-    z-index: 0;
-}
-.app-card > *{ position: relative; z-index: 1; }
-.app-card:hover{
-    transform: translateY(-4px);
-    border-color: transparent;
-    box-shadow: 0 24px 50px rgba(0,0,0,.5), 0 0 0 1px var(--a-rose);
-}
-.app-card:hover::after{ opacity: 0.7; }
-
-.app-card__top{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-.app-card__icon{
-    width: 54px; height: 54px;
-    border-radius: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--a-grad);
-    color: #fff;
-    box-shadow: 0 8px 22px var(--a-glow);
-    flex-shrink: 0;
-}
-.app-card__icon .mdi{ font-size: 28px; }
-.app-card__num{
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--udx-text-muted);
-    display: block;
-    margin-bottom: 4px;
-}
-.app-card h3{
-    font-size: 1.18rem;
-    font-weight: 700;
-    margin: 0;
-    color: var(--udx-text);
-    line-height: 1.25;
-}
-.app-card__desc{
-    margin: 0;
-    font-size: 13.5px;
-    line-height: 1.65;
-    color: var(--udx-text-muted);
-}
-.app-card__meta{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-.app-card__meta li{
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--udx-text);
-    padding: 5px 11px;
-    border-radius: 50px;
-    background: rgba(2, 2, 26, 0.65);
-    border: 1px solid var(--udx-border);
-}
-.app-card__meta li .mdi{
-    font-size: 14px;
-    color: var(--a-rose);
-}
-
-.app-card__categories{
-    margin: 6px 0 0;
-    padding: 14px 0 0;
-    border-top: 1px dashed var(--udx-border);
-    list-style: none;
-    display: grid;
-    gap: 8px;
-}
-.app-card__categories li{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    color: var(--udx-text);
-}
-.app-card__categories li .mdi{
-    font-size: 16px;
-    color: var(--a-rose);
-    flex-shrink: 0;
-}
-.app-card__categories li b{
-    font-weight: 600;
-    color: var(--udx-text-muted);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    margin-right: 2px;
-}
-
-.app-card__cta{
-    margin-top: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    border-radius: 50px;
-    background: var(--a-grad);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    align-self: flex-start;
-    box-shadow: 0 8px 22px var(--a-glow);
-    transition: transform 280ms ease, box-shadow 280ms ease;
-}
-.app-card__cta .mdi{
-    font-size: 16px;
-    transition: transform 280ms ease;
-}
-.app-card:hover .app-card__cta{ box-shadow: 0 12px 30px var(--a-glow); }
-.app-card:hover .app-card__cta .mdi{ transform: translateX(4px); }
-
-
-/* ----------------------------------------------------------------
-   CTA FINAL
----------------------------------------------------------------- */
-.apps-cta{
-    position: relative;
-    padding: clamp(50px, 7vw, 90px) 0;
-    border-top: 1px solid var(--udx-border);
-    background:
-        radial-gradient(80% 100% at 50% 0%, rgba(191, 4, 73, 0.18), transparent 60%),
-        radial-gradient(80% 100% at 50% 100%, rgba(111, 66, 193, 0.25), transparent 60%),
-        linear-gradient(180deg, #02021a 0%, #0a0436 100%);
-}
-.apps-cta__box{
-    position: relative;
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 38px 28px;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-lg);
-    background: rgba(2, 2, 26, 0.65);
-    backdrop-filter: blur(8px);
-    overflow: hidden;
-}
-.apps-cta__box::before{
-    content: "";
-    position: absolute; inset: 0;
-    background: var(--a-grad-soft);
-    z-index: 0;
-    opacity: .7;
-}
-.apps-cta__box > *{ position: relative; z-index: 1; }
-.apps-cta h2{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
-    line-height: 1.2;
-    margin: 0 0 12px;
-}
-.apps-cta h2 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--a-grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.apps-cta p{
-    color: var(--udx-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin: 0 0 22px;
-}
-.apps-cta__ctas{
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-
-/* ================================================================
-   ====  ADICIONAR AO FINAL DE /css/blog.css  ======================
-   Componentes da PÁGINA DE SEGMENTO CLUBE (/clube.html).
-
-   Camada 03 — roxo → azul marinho.
-   Espelha o FAB [data-pane="clube"] do format.css.
-
-   Observação sobre legibilidade do gradiente:
-   o azul-marinho (#110273) fica praticamente invisível como
-   text-gradient no fundo escuro. Por isso definimos --c-grad
-   (para SUPERFÍCIES — chips, ícones, botões, bordas) e
-   --c-grad-text (para TÍTULOS em <em>) — com o gradiente
-   deslocado para a faixa visível do roxo.
-
-   Nenhuma classe deste bloco colide com as anteriores:
-     .clube-hero      ≠ .apps-hero      ≠ .trails-hero      ≠ .trail-page-hero
-     .clube-stats     ≠ .apps-stats     ≠ .trails-stats     ≠ .trail-page-stats
-     .clube-how       ≠ .apps-how       ≠ .how-section
-     .clube-section   ≠ .apps-section   ≠ .trails-section   ≠ .journey-section
-     .clube-card, .app-card      ≠ .app-card       ≠ .trail-x          ≠ .module-block
-     .clube-cta       ≠ .apps-cta       ≠ .trails-cta       ≠ .trail-cta-final
-================================================================ */
-
-
-/* ----------------------------------------------------------------
-   TOKENS DO SEGMENTO CLUBE (roxo → azul marinho)
----------------------------------------------------------------- */
-.page-clube{
-    /* Para SUPERFÍCIES (chips, botões, ícones, bordas) */
-    --c-grad:        linear-gradient(135deg, #FA33A1  0%, #110273 100%);
-    --c-grad-soft:   linear-gradient(135deg, rgba(111,66,193,.18) 0%, rgba(17,2,115,.30) 100%);
-
-    /* Para TEXTO em <em> — deslocado para a faixa visível do roxo,
-       evita que o navy desapareça no fundo escuro */
-    --c-grad-text:   linear-gradient(135deg, #b394e8 0%, #FA33A1  100%);
-
-    --c-purple:      #FA33A1; 
-    --c-purple-soft: #b394e8;
-    --c-purple-deep: #5708A6;
-    --c-navy:        #110273;
-    --c-glow:        rgba(111, 66, 193, 0.38);
-    --c-glow-cool:   rgba(17, 2, 115, 0.45);
-}
-
-
-/* ----------------------------------------------------------------
-   HERO da página de segmento (chip + stats)
----------------------------------------------------------------- */
-.clube-hero, .apps-hero{
-    position: relative;
-    padding: clamp(70px, 9vw, 120px) 0 clamp(40px, 6vw, 70px);
-    overflow: hidden;
-    background:
-        radial-gradient(55% 65% at 12% 20%, rgba(111, 66, 193, 0.28), transparent 60%),
-        radial-gradient(55% 65% at 88% 80%, rgba(17, 2, 115, 0.55), transparent 60%),
-        linear-gradient(180deg, #02021a 0%, #0a0436 100%);
-    border-bottom: 1px solid var(--udx-border);
-}
-.clube-hero::before, .apps-hero::before{
-    content: "";
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(120deg,
-        rgba(255,255,255,0.025) 0 1px,
-        transparent 1px 80px);
-    pointer-events: none;
-}
-.clube-hero__inner, .apps-hero__inner{
-    position: relative;
-    max-width: 860px;
-}
-
-/* Chip-eyebrow numerado do hero */
-.clube-hero__chip, .apps-hero__chip{
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-size: 11px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 14px;
-    padding: 6px 14px 6px 8px;
-    border-radius: 50px;
-    background: var(--c-grad);
-    box-shadow: 0 8px 22px var(--c-glow);
-}
-.clube-hero__chip, .apps-hero__chip b, .apps-hero__chip b{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.22);
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.clube-hero h1, .apps-hero h1{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.9rem, 4.2vw, 3rem);
-    line-height: 1.12;
-    margin: 0 0 16px;
-}
-.clube-hero h1, .apps-hero h1 em, .apps-hero h1 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--c-grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.clube-hero p.lead, .apps-hero p.lead{
-    color: var(--udx-text-muted);
-    font-size: 1.02rem;
-    line-height: 1.75;
-    max-width: 660px;
-    margin: 0 0 26px;
-}
-
-.clube-hero__ctas, .apps-hero__ctas{
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 34px;
-}
-/* Variante solid pintada com o gradiente do segmento Clube */
-.clube-hero__cta-solid{
-    background: var(--c-grad) !important;
-    box-shadow: 0 10px 30px var(--c-glow);
-    border-color: transparent !important;
-}
-
-/* Métricas — borda-acento à esquerda no padrão da camada */
-.clube-stats{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    max-width: 640px;
-}
-.clube-stats__item, .apps-stats__item{
-    position: relative;
-    padding: 16px 18px;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-md);
-    background: rgba(2, 2, 26, 0.55);
-    backdrop-filter: blur(6px);
-    overflow: hidden;
-}
-.clube-stats__item::before, .apps-stats__item::before{
-    content: "";
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--c-grad);
-}
-.clube-stats__item b, .apps-stats__item b{
-    display: block;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.1;
-    font-family: var(--udx-font);
-}
-.clube-stats__item span, .apps-stats__item span{
-    display: block;
-    font-size: 11.5px;
-    color: var(--udx-text-muted);
-    letter-spacing: 0.04em;
-    margin-top: 4px;
-}
-
-
-/* ----------------------------------------------------------------
-   "COMO FUNCIONA" — 4 etapas
----------------------------------------------------------------- */
-.clube-how, .apps-how{
-    position: relative;
-    padding: clamp(50px, 7vw, 80px) 0;
-    background:
-        radial-gradient(50% 60% at 0% 0%, rgba(111, 66, 193, 0.08), transparent 60%),
-        radial-gradient(50% 60% at 100% 100%, rgba(17, 2, 115, 0.18), transparent 60%);
-}
-.clube-how-head, .apps-how-head{
-    max-width: 760px;
-    margin-bottom: 38px;
-}
-.clube-how-head .eyebrow, .apps-how-head .eyebrow{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--c-purple-soft);
-    margin-bottom: 12px;
-}
-.clube-how-head h2, .apps-how-head h2{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.4rem, 2.6vw, 1.95rem);
-    line-height: 1.18;
-    margin: 0 0 10px;
-}
-.clube-how-head h2, .apps-how-head h2 em, .apps-how-head h2 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--c-grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.clube-how-head .lead, .apps-how-head .lead{
-    color: var(--udx-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin: 0;
-    max-width: 620px;
-}
-
-.clube-how-steps, .apps-how-steps{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-}
-.clube-how-step, .apps-how-step{
-    position: relative;
-    padding: 22px 20px 20px;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-md);
-    background: rgba(17, 2, 115, 0.22);
-    transition: all 320ms ease;
-}
-.clube-how-step:hover, .apps-how-step:hover{
-    transform: translateY(-3px);
-    border-color: transparent;
-    box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 1px var(--c-purple);
-}
-.clube-how-step__num, .apps-how-step__num{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    background: var(--c-grad);
-    color: #fff;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1.1rem;
-    margin-bottom: 14px;
-    box-shadow: 0 6px 18px var(--c-glow);
-}
-.clube-how-step h4, .apps-how-step h4{
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--udx-text);
-    margin: 0 0 8px;
-    line-height: 1.3;
-}
-.clube-how-step p, .apps-how-step p{
-    font-size: 13px;
-    line-height: 1.65;
-    color: var(--udx-text-muted);
-    margin: 0;
-}
-
-
-/* ----------------------------------------------------------------
-   SEÇÃO DOS 5 CAMINHOS — cartões expandidos
----------------------------------------------------------------- */
-.clube-section, .apps-section{
-    position: relative;
-    padding: clamp(50px, 7vw, 80px) 0;
-    background: rgba(255,255,255,0.015);
-    border-block: 1px solid var(--udx-border);
-}
-.clube-section__head, .apps-section__head{
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-bottom: 38px;
-}
-.clube-section__head .eyebrow, .apps-section__head .eyebrow{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--c-purple-soft);
-    margin-bottom: 12px;
-}
-.clube-section__head h2, .apps-section__head h2{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.4rem, 2.6vw, 1.95rem);
-    line-height: 1.18;
-    margin: 0 0 10px;
-}
-.clube-section__head h2, .apps-section__head h2 em, .apps-section__head h2 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--c-grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.clube-section__head .lead, .apps-section__head .lead{
-    color: var(--udx-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin: 0;
-    max-width: 620px;
-}
-.clube-section__link, .apps-section__link{
-    color: var(--udx-text);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    border-radius: 50px;
-    border: 1px solid var(--udx-border);
-    transition: all 260ms ease;
-    background: rgba(2,2,26,.45);
-}
-.clube-section__link:hover, .apps-section__link:hover{
-    color: #fff;
-    border-color: transparent;
-    background: var(--c-grad);
-    box-shadow: 0 8px 24px var(--c-glow);
-}
-
-/* Lista de cartões */
-.clube-list, .apps-list{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
-}
-
-.clube-card, .app-card{
-    position: relative;
-    background: #0c0b22;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-lg);
-    padding: 26px 24px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: all 320ms ease;
-    overflow: hidden;
-    text-decoration: none;
-    color: var(--udx-text);
-}
-.clube-card, .app-card::before, .app-card::before{
-    content: "";
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 4px;
-    background: var(--c-grad);
-}
-.clube-card, .app-card::after, .app-card::after{
-    content: "";
-    position: absolute; right: -30%; top: -30%;
-    width: 320px; height: 320px;
-    border-radius: 50%;
-    background: var(--c-grad-soft);
-    opacity: 0.4;
-    filter: blur(40px);
-    pointer-events: none;
-    transition: opacity 320ms ease;
-    z-index: 0;
-}
-.clube-card, .app-card > *, .app-card > *{ position: relative; z-index: 1; }
-.clube-card, .app-card:hover, .app-card:hover{
-    transform: translateY(-4px);
-    border-color: transparent;
-    box-shadow: 0 24px 50px rgba(0,0,0,.5), 0 0 0 1px var(--c-purple);
-}
-.clube-card, .app-card:hover, .app-card:hover::after, .app-card:hover::after{ opacity: 0.75; }
-
-.clube-card, .app-card__top, .app-card__top{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-.clube-card, .app-card__icon, .app-card__icon{
-    width: 54px; height: 54px;
-    border-radius: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--c-grad);
-    color: #fff;
-    box-shadow: 0 8px 22px var(--c-glow);
-    flex-shrink: 0;
-}
-.clube-card, .app-card__icon, .app-card__icon .mdi, .app-card__icon .mdi{ font-size: 28px; }
-.clube-card, .app-card__num, .app-card__num{
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--udx-text-muted);
-    display: block;
-    margin-bottom: 4px;
-}
-.clube-card, .app-card h3, .app-card h3{
-    font-size: 1.18rem;
-    font-weight: 700;
-    margin: 0;
-    color: var(--udx-text);
-    line-height: 1.25;
-}
-.clube-card, .app-card__desc, .app-card__desc{
-    margin: 0;
-    font-size: 13.5px;
-    line-height: 1.65;
-    color: var(--udx-text-muted);
-}
-.clube-card, .app-card__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-.clube-card, .app-card__meta, .app-card__meta li {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--udx-text);
-    padding: 5px 11px;
-    border-radius: 50px;
-    background: rgba(2, 2, 26, 0.65);
-    border: 1px solid var(--udx-border);
-}
-.clube-card, .app-card__meta, .app-card__meta li, .app-card__meta li .mdi {
-    font-size: 14px;
-    color: var(--c-purple-soft);
-}
-
-.clube-card, .app-card__categories {
-    margin: 6px 0 0;
-    padding: 14px 0 0;
-    border-top: 1px dashed var(--udx-border);
-    list-style: none;
-    display: grid;
-    gap: 8px;
-}
-.clube-card, .app-card__categories, .app-card__categories li {
-    /*display: flex;*/
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    color: var(--udx-text);
-}
-.clube-card, .app-card__categories, .app-card__categories li, .app-card__categories li .mdi {
-    font-size: 16px;
-    color: var(--c-purple-soft);
-    flex-shrink: 0;
-}
-.clube-card, .app-card__categories, .app-card__categories li, .app-card__categories li b {
-    font-weight: 600;
-    color: var(--udx-text-muted);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    margin-right: 2px;
-}
-
-.clube-card, .app-card__cta, .app-card__cta{
-    margin-top: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    border-radius: 50px;
-    background: var(--c-grad);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    align-self: flex-start;
-    box-shadow: 0 8px 22px var(--c-glow);
-    transition: transform 280ms ease, box-shadow 280ms ease;
-}
-.clube-card, .app-card__cta, .app-card__cta .mdi, .app-card__cta .mdi{
-    font-size: 16px;
-    transition: transform 280ms ease;
-}
-.clube-card, .app-card:hover, .app-card:hover .clube-card, .app-card__cta, .app-card__cta, .app-card:hover .app-card__cta{ box-shadow: 0 12px 30px var(--c-glow); }
-.clube-card, .app-card:hover, .app-card:hover .clube-card, .app-card__cta, .app-card__cta, .app-card:hover .app-card__cta .mdi, .app-card:hover .app-card__cta .mdi{ transform: translateX(4px); }
-
-
-/* ----------------------------------------------------------------
-   CTA FINAL
----------------------------------------------------------------- */
-.clube-cta, .apps-cta{
-    position: relative;
-    padding: clamp(50px, 7vw, 90px) 0;
-    border-top: 1px solid var(--udx-border);
-    background:
-        radial-gradient(80% 100% at 50% 0%, rgba(111, 66, 193, 0.22), transparent 60%),
-        radial-gradient(80% 100% at 50% 100%, rgba(17, 2, 115, 0.40), transparent 60%),
-        linear-gradient(180deg, #02021a 0%, #0a0436 100%);
-}
-.clube-cta__box, .apps-cta__box{
-    position: relative;
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 38px 28px;
-    border: 1px solid var(--udx-border);
-    border-radius: var(--udx-radius-lg);
-    background: rgba(2, 2, 26, 0.65);
-    backdrop-filter: blur(8px);
-    overflow: hidden;
-}
-.clube-cta__box::before, .apps-cta__box::before{
-    content: "";
-    position: absolute; inset: 0;
-    background: var(--c-grad-soft);
-    z-index: 0;
-    opacity: .8;
-}
-.clube-cta__box > *, .apps-cta__box > *{ position: relative; z-index: 1; }
-.clube-cta h2, .apps-cta h2{
-    color: var(--udx-text);
-    font-family: var(--udx-font);
-    font-weight: 700;
-    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
-    line-height: 1.2;
-    margin: 0 0 12px;
-}
-.clube-cta h2, .apps-cta h2 em, .apps-cta h2 em{
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 600;
-    background: var(--c-grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.clube-cta p, .apps-cta p{
-    color: var(--udx-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    margin: 0 0 22px;
-}
-.clube-cta__ctas, .apps-cta__ctas{
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
 }

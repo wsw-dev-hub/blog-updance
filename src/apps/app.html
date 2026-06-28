@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Up Dance Xperience | Apps — Os 5 eixos temáticos</title>
+<meta name="description" content="Os cinco eixos temáticos da Up Dance Xperience: Performance, Ritmo, Percepção, Composição e Movimento. Conteúdos, produtos e serviços organizados por lente de estudo.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+
+<!-- Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<!-- Tipografia -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+
+<!-- Folhas de estilo do projeto -->
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/mediaQuery.css">
+<link rel="stylesheet" href="/css/format.css">
+</head>
+
+<!-- .page-apps injeta os tokens da camada rosa-vinho → roxo lavanda
+     (definidos em trailsFormat.css). Espelha o FAB [data-pane="destaques"]. -->
+<body class="page-apps">
+<script src="/js/loader.js"></script>
+
+<!-- ======================================================
+     HEADER (padrão do projeto)
+====================================================== -->
+<div class="container-fluid p-0">
+    <header class="row g-0 blog-header">
+
+        <div class="col-4 col-md-3 col-lg-2">
+            <a href="/index.html" class="blog-logo-link">
+                <img src="/images/icons/udx-icon.png"
+                     alt="Up Dance — voltar para Destaques"
+                     class="blog-logo-img">
+            </a>
+        </div>
+
+        <div class="col-8 col-md-9 col-lg-10 d-flex justify-content-end align-items-center pe-0">
+            <ul class="menu-list d-none d-lg-inline-flex" role="menubar">
+                <li role="none">
+                    <a id="btnAcessar" class="fa-submit" href="/entrar/" role="menuitem">
+                        <span class="blog-menu-icon mdi mdi-account-outline" aria-hidden="true"></span>Acessar
+                    </a>
+                </li>
+                <li role="none">
+                    <a id="btnCadastrar" class="fa-submit" href="/cadastro/" role="menuitem">Cadastrar</a>
+                </li>
+            </ul>
+
+            <button class="btn-mobile-menu d-flex d-lg-none" id="btnMobileMenu"
+                    aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="mdi mdi-menu" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
+            <ul>
+                <li><a href="#como"><span class="mdi mdi-information-outline" aria-hidden="true"></span> Como funciona</a></li>
+                <li><a href="#eixos"><span class="mdi mdi-apps" aria-hidden="true"></span> Apps</a></li>
+                <li><a href="/src/clube/clube.html"><span class="mdi mdi-account-group-outline" aria-hidden="true"></span> Clube</a></li>
+                <li><a href="/src/tracks/trilhas.html"><span class="mdi mdi-compass-outline" aria-hidden="true"></span> Trilhas</a></li>
+                <li><a href="/index.html"><span class="mdi mdi-home-outline" aria-hidden="true"></span> Voltar ao blog</a></li>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="/cadastro/">Cadastrar</a></li>
+            </ul>
+        </nav>
+    </header>
+</div>
+
+<a id="topo"></a>
+
+<!-- ======================================================
+     HERO — Segmento Apps
+====================================================== -->
+<section class="apps-hero" aria-label="Apps temáticos do blog">
+    <div class="auto-container">
+        <div class="apps-hero__inner">
+            <span class="apps-hero__chip">
+                <b>01</b> Segmento Apps
+            </span>
+            <h1>Cinco <em>eixos</em> &mdash; uma só lente para estudar dança.</h1>
+            <p class="lead">
+                Antes do formato vem o tema. Os Apps são as cinco lentes pelas quais o blog organiza
+                conteúdos, produtos e serviços: <b>Performance</b>, <b>Ritmo</b>, <b>Percepção</b>,
+                <b>Composição</b> e <b>Movimento</b>. Cada eixo agrupa materiais de todas as trilhas e
+                todos os formatos &mdash; você navega pelo assunto, não pelo recipiente.
+            </p>
+
+            <div class="apps-hero__ctas">
+                <a href="#eixos" class="home-cta home-cta--solid apps-hero__cta-solid">
+                    <span class="mdi mdi-apps" aria-hidden="true"></span>
+                    Ver os 5 eixos
+                </a>
+                <a href="#como" class="home-cta home-cta--ghost">
+                    <span class="mdi mdi-information-outline" aria-hidden="true"></span>
+                    Como funciona
+                </a>
+            </div>
+
+            <div class="apps-stats">
+                <div class="apps-stats__item"><b>5</b><span>Eixos temáticos</span></div>
+                <div class="apps-stats__item"><b>+120</b><span>Conteúdos catalogados</span></div>
+                <div class="apps-stats__item"><b>4</b><span>Trilhas cruzadas</span></div>
+                <div class="apps-stats__item"><b>Multi</b><span>Formato e nível</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     COMO FUNCIONA
+====================================================== -->
+<section class="apps-how" id="como" aria-labelledby="comoH">
+    <div class="auto-container">
+        <div class="apps-how-head">
+            <span class="eyebrow">
+                <span class="mdi mdi-information-outline" aria-hidden="true"></span> Como funciona
+            </span>
+            <h2 id="comoH">Quatro passos para navegar pelos <em>eixos</em>.</h2>
+            <p class="lead">
+                Os eixos cortam as trilhas e os formatos &mdash; o mesmo movimento pode aparecer em
+                Performance (palco) e em Movimento (técnica). A diferença está na <i>lente</i> com
+                que o conteúdo é montado.
+            </p>
+        </div>
+
+        <div class="apps-how-steps">
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">01</div>
+                <h4>Identifique a lente</h4>
+                <p>O mesmo gesto vira tema diferente conforme o foco: presença, ritmo, consciência, criação ou técnica.</p>
+            </div>
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">02</div>
+                <h4>Cruze com a trilha</h4>
+                <p>Cada eixo dialoga com Técnica, Coreografia, Bem-Estar e Palco &mdash; combine para aprofundar.</p>
+            </div>
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">03</div>
+                <h4>Escolha o formato</h4>
+                <p>Dentro do eixo, filtre por ebook, tutorial, guia, dica ou curso &mdash; o formato é o recipiente.</p>
+            </div>
+            <div class="apps-how-step">
+                <div class="apps-how-step__num">04</div>
+                <h4>Salve e progrida</h4>
+                <p>Favoritos, histórico e marcos por eixo &mdash; o mapa do seu repertório, sempre à mão.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     OS CINCO EIXOS / APPS
+====================================================== -->
+<section class="apps-section" id="eixos" aria-labelledby="eixosH">
+    <div class="auto-container">
+        <div class="apps-section__head">
+            <div>
+                <span class="eyebrow">
+                    <span class="mdi mdi-apps" aria-hidden="true"></span> Os apps disponíveis
+                </span>
+                <h2 id="eixosH">Cinco <em>eixos</em>. Cada um com sua escuta própria.</h2>
+                <p class="lead">
+                    Não existe ordem &mdash; alguns eixos se reforçam (Ritmo + Movimento), outros se complementam
+                    (Percepção + Performance). Comece pela lente que mais conversa com o que você quer destravar agora.
+                </p>
+            </div>
+            <a href="/index.html" class="apps-section__link">
+                Voltar ao blog <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="apps-list">
+
+            <!-- App 01 — Performance -->
+            <article class="app-card" id="performance">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-human-greeting" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 01 &middot; Palco</span>
+                        <h3>Performance</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Tudo o que liga o bailarino ao público: presença, expressão, intenção e energia em cena.
+                    Conteúdos para quem quer sair da técnica fria e <i>habitar</i> o movimento.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 28 conteúdos</li>
+                    <li><span class="mdi mdi-eye-outline" aria-hidden="true"></span> Foco em cena</li>
+                    <li><span class="mdi mdi-account-voice" aria-hidden="true"></span> Com mentoria</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 1</b> Presença e olhar</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 2</b> Expressão e intenção</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 3</b> Energia e dinâmica</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 4</b> Audição e prova</li>
+                </ul>
+                <a href="/apps/performance" class="app-card__cta">
+                    Abrir o eixo <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 02 — Ritmo -->
+            <article class="app-card" id="ritmo">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-metronome-tick" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 02 &middot; Musicalidade</span>
+                        <h3>Ritmo</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Musicalidade aplicada: contagem, frase musical, acentos, síncope e sincronia.
+                    Materiais para quem ouve a música <i>antes</i> de dançar &mdash; e dança o que ouve.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 22 conteúdos</li>
+                    <li><span class="mdi mdi-music-clef-treble" aria-hidden="true"></span> Áudio guiado</li>
+                    <li><span class="mdi mdi-timer-outline" aria-hidden="true"></span> Exercícios cronometrados</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 1</b> Contagem e frase</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 2</b> Acentos e síncope</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 3</b> Sincronia em grupo</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 4</b> Polirritmia aplicada</li>
+                </ul>
+                <a href="/apps/ritmo" class="app-card__cta">
+                    Abrir o eixo <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 03 — Percepção -->
+            <article class="app-card" id="percepcao">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-head-snowflake" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 03 &middot; Consciência</span>
+                        <h3>Percepção</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Consciência corporal, propriocepção, foco e respiração. A camada invisível que sustenta
+                    qualquer técnica &mdash; e que separa o gesto reproduzido do gesto <i>compreendido</i>.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 18 conteúdos</li>
+                    <li><span class="mdi mdi-meditation" aria-hidden="true"></span> Práticas guiadas</li>
+                    <li><span class="mdi mdi-heart-pulse" aria-hidden="true"></span> Foco em bem-estar</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 1</b> Eixo e centro</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 2</b> Respiração e fluxo</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 3</b> Foco e atenção</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 4</b> Escuta corporal</li>
+                </ul>
+                <a href="/apps/percepcao" class="app-card__cta">
+                    Abrir o eixo <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 04 — Composição -->
+            <article class="app-card" id="composicao">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-cog-sync" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 04 &middot; Criação</span>
+                        <h3>Composição</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Da ideia à coreografia montada: estrutura, dramaturgia, escolhas musicais e arquitetura
+                    do palco. Para professores, criadores e bailarinos que querem <i>autoria</i>, não cópia.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 26 conteúdos</li>
+                    <li><span class="mdi mdi-vector-polyline" aria-hidden="true"></span> Roteiros + esboços</li>
+                    <li><span class="mdi mdi-account-group-outline" aria-hidden="true"></span> Solo e grupo</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 1</b> Frase e motivo</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 2</b> Estrutura e arco</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 3</b> Espaço cênico</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 4</b> Trilha e edição</li>
+                </ul>
+                <a href="/apps/composicao" class="app-card__cta">
+                    Abrir o eixo <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+            <!-- App 05 — Movimento -->
+            <article class="app-card" id="movimento">
+                <div class="app-card__top">
+                    <div class="app-card__icon"><span class="mdi mdi-consolidate" aria-hidden="true"></span></div>
+                    <div>
+                        <span class="app-card__num">App 05 &middot; Técnica</span>
+                        <h3>Movimento</h3>
+                    </div>
+                </div>
+                <p class="app-card__desc">
+                    Vocabulário técnico, biomecânica e qualidade do gesto. Tudo o que faz o corpo
+                    responder com precisão &mdash; do isolamento mais simples ao salto mais complexo.
+                </p>
+                <ul class="app-card__meta">
+                    <li><span class="mdi mdi-format-list-numbered" aria-hidden="true"></span> 34 conteúdos</li>
+                    <li><span class="mdi mdi-foot-print" aria-hidden="true"></span> Drills + correções</li>
+                    <li><span class="mdi mdi-stairs" aria-hidden="true"></span> 4 níveis de progressão</li>
+                </ul>
+                <ul class="app-card__categories">
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 1</b> Isolamentos</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 2</b> Vocabulário base</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 3</b> Qualidade e textura</li>
+                    <li><span class="mdi mdi-circle-medium" aria-hidden="true"></span><b>Lente 4</b> Acrobacia e salto</li>
+                </ul>
+                <a href="/apps/movimento" class="app-card__cta">
+                    Abrir o eixo <span class="mdi mdi-arrow-right" aria-hidden="true"></span>
+                </a>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     CTA FINAL
+====================================================== -->
+<section class="apps-cta" aria-labelledby="ctaH">
+    <div class="auto-container">
+        <div class="apps-cta__box">
+            <h2 id="ctaH">Por qual <em>lente</em> você quer começar?</h2>
+            <p>
+                Os 5 eixos se cruzam &mdash; mas cada um abre uma porta diferente. Escolha o que mais
+                conversa com o que você quer destravar hoje e siga; o resto se encaixa no caminho.
+            </p>
+            <div class="apps-cta__ctas">
+                <a href="#eixos" class="home-cta home-cta--solid apps-hero__cta-solid">
+                    <span class="mdi mdi-apps" aria-hidden="true"></span>
+                    Escolher um eixo
+                </a>
+                <a href="/index.html" class="home-cta home-cta--ghost">
+                    <span class="mdi mdi-home-outline" aria-hidden="true"></span>
+                    Voltar ao blog
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================
+     RODAPÉ
+====================================================== -->
+<footer class="blog-footer" aria-label="Rodape">
+    <div class="auto-container">
+        <div class="row blog-footer__cols">
+
+            <div class="col-12 col-md-6 col-lg-4 blog-footer__col">
+                <div class="col-4 col-md-3 col-lg-2">
+                    <a href="/index.html" class="blog-logo-link">
+                        <img src="/images/icons/udx-icon.png"
+                            alt="Up Dance — voltar para Destaques"
+                            class="blog-logo-img">
+                    </a>
+                </div>
+                <p class="blog-footer__about">
+                    Conteúdo e formação para dançarinos, professores e criadores.
+                    A dança levada a sério &mdash; do aquecimento ao palco.
+                </p>
+                <h3 class="blog-footer__title">Siga a UDX</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-instagram" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                    <li><span class="mdi mdi-youtube" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Up Dance no YouTube</a></li>
+                    <li><span class="mdi mdi-spotify" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Playlists oficiais</a></li>
+                    <li><span class="mdi mdi-tiktok" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-2 blog-footer__col">
+                <h3 class="blog-footer__title">Apps</h3>
+                <ul class="blog-footer__list">
+                    <li><a href="/apps/performance">Performance</a></li>
+                    <li><a href="/apps/ritmo">Ritmo</a></li>
+                    <li><a href="/apps/percepcao">Percepção</a></li>
+                    <li><a href="/apps/composicao">Composição</a></li>
+                    <li><a href="/apps/movimento">Movimento</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Contato</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
+                        <a href="mailto:contato@updancexperience.com">contato@updancexperience.com</a></li>
+                    <li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
+                    <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Seg a Sex, 9h&ndash;18h</li>
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Da Galeria</h3>
+                <ul class="blog-footer__gallery" aria-hidden="true">
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="blog-footer__bar">
+        <small>
+            &copy; <span id="udx-year">2026</span> <b>Up Dance Xperience</b> &middot;
+            Todos os direitos reservados &middot;
+            Feito com <i>groove</i> no Rio de Janeiro.
+        </small>
+    </div>
+</footer>
+
+<!-- ======================================================
+     MENU FLUTUANTE RADIAL
+     Inicia em "destaques" (aba Apps ativa). O pane traz os
+     atalhos diretos dos 5 eixos temáticos. Panes "trilhas" e
+     "clube" seguem com seus próprios atalhos.
+====================================================== -->
+<div class="udx-fab" id="udxFab" data-pane="destaques" aria-hidden="true">
+    <nav class="udx-fab__radial" id="udxFabRadial" aria-label="Atalhos do blog">
+        <button class="udx-fab__core" id="udxFabCore"
+                aria-label="Abrir menu de atalhos" aria-expanded="false" aria-controls="udxFabRadial">
+            <span class="mdi mdi-menu udx-fab__core-icon" aria-hidden="true"></span>
+        </button>
+    </nav>
+    <div class="udx-fab__tabs" role="tablist" aria-label="Sessões do blog">
+        <span class="udx-fab__tabs-thumb" aria-hidden="true"></span>
+        <button class="udx-fab__tab"           data-pane="trilhas"   role="tab" aria-selected="false">Trilhas</button>
+        <button class="udx-fab__tab is-active" data-pane="destaques" role="tab" aria-selected="true">Apps</button>
+        <button class="udx-fab__tab"           data-pane="clube"     role="tab" aria-selected="false">Clube</button>
+    </div>
+</div>
+
+<button class="to-top" id="toTop" aria-label="Voltar ao topo">
+    <span class="mdi mdi-arrow-up" aria-hidden="true"></span>
+</button>
+
+<!-- ======================================================
+     SCRIPTS
+====================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+(function () { var y = document.getElementById("udx-year"); if (y) y.textContent = new Date().getFullYear(); }());
+
+(function () {
+    "use strict";
+    var btn = document.getElementById("btnMobileMenu");
+    var nav = document.getElementById("mobileNav");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+        var isOpen = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen);
+        var icon = btn.querySelector(".mdi");
+        icon.classList.toggle("mdi-menu", !isOpen);
+        icon.classList.toggle("mdi-close", isOpen);
+    });
+    nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+            nav.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            var ic = btn.querySelector(".mdi");
+            ic.classList.add("mdi-menu");
+            ic.classList.remove("mdi-close");
+        });
+    });
+}());
+
+(function () {
+    "use strict";
+    var btn = document.getElementById("toTop");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.pageYOffset > 600);
+    }, { passive: true });
+    btn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}());
+
+/* FAB radial — aba inicial "destaques" (Apps) */
+(function () {
+    "use strict";
+
+    var fab    = document.getElementById("udxFab");
+    var radial = document.getElementById("udxFabRadial");
+    var core   = document.getElementById("udxFabCore");
+    if (!fab || !radial || !core) return;
+
+    var tabsContainer = fab.querySelector(".udx-fab__tabs");
+    var thumb         = fab.querySelector(".udx-fab__tabs-thumb");
+    var tabs          = fab.querySelectorAll(".udx-fab__tab");
+
+    var PANES = {
+        trilhas: [
+            { pos:"tl",  icon:"mdi-foot-print",            label:"Técnica",     href:"/trilha-tecnica.html" },
+            { pos:"top", icon:"mdi-vector-polyline",       label:"Coreografia", href:"/trilhas.html"        },
+            { pos:"tr",  icon:"mdi-meditation",            label:"Bem-Estar",   href:"/trilhas.html"        },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Palco",       href:"/trilhas.html"        },
+            { pos:"br",  icon:"mdi-compass-outline",       label:"Todas",       href:"/trilhas.html"        }
+        ],
+        destaques: [
+            { pos:"tl",  icon:"mdi-human-greeting",        label:"Performance", href:"#performance" },
+            { pos:"top", icon:"mdi-metronome-tick",        label:"Ritmo",       href:"#ritmo"       },
+            { pos:"tr",  icon:"mdi-head-snowflake",        label:"Percepção",   href:"#percepcao"   },
+            { pos:"bl",  icon:"mdi-cog-sync",              label:"Composição",  href:"#composicao"  },
+            { pos:"br",  icon:"mdi-consolidate",           label:"Movimento",   href:"#movimento"   }
+        ],
+        clube: [
+            { pos:"tl",  icon:"mdi-book-open-variant",     label:"Ebooks",    href:"/clube/ebooks"    },
+            { pos:"top", icon:"mdi-school-outline",        label:"Tutoriais", href:"/clube/tutoriais" },
+            { pos:"tr",  icon:"mdi-map-marker-path",       label:"Guias",     href:"/clube/guias"     },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",  label:"Dicas",     href:"/clube/dicas"     },
+            { pos:"br",  icon:"mdi-google-classroom",      label:"Cursos",    href:"/clube/cursos"    }
+        ]
+    };
+
+    var swapLock = false;
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function renderPane(name){
+        var items = radial.querySelectorAll(".udx-fab__item");
+        for (var i = 0; i < items.length; i++) items[i].remove();
+        PANES[name].forEach(function(it){
+            var a = document.createElement("a");
+            a.className = "udx-fab__item udx-fab__item--" + it.pos;
+            a.href = it.href;
+            a.setAttribute("aria-label", it.label);
+            a.innerHTML = '<span class="mdi ' + it.icon + '" aria-hidden="true"></span><em>' + it.label + '</em>';
+            a.addEventListener("click", closeRadial);
+            radial.insertBefore(a, core);
+        });
+        fab.setAttribute("data-pane", name);
+    }
+    function moveThumbTo(tab){
+        var tabsRect = tabsContainer.getBoundingClientRect();
+        var tabRect  = tab.getBoundingClientRect();
+        thumb.style.width = tabRect.width + "px";
+        thumb.style.transform = "translateX(" + (tabRect.left - tabsRect.left) + "px)";
+    }
+    function updateVisibility(){
+        var threshold = Math.max(window.innerHeight * 0.6, 380);
+        var show = window.pageYOffset > threshold;
+        fab.classList.toggle("is-visible", show);
+        fab.setAttribute("aria-hidden", show ? "false" : "true");
+        if (!show) closeRadial();
+    }
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+
+    function openRadial(){
+        radial.classList.add("is-open");
+        fab.classList.add("is-open");
+        core.setAttribute("aria-expanded", "true");
+        core.querySelector(".udx-fab__core-icon").classList.replace("mdi-menu", "mdi-close");
+        requestAnimationFrame(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+    function closeRadial(){
+        radial.classList.remove("is-open", "is-collapsing");
+        fab.classList.remove("is-open");
+        core.setAttribute("aria-expanded", "false");
+        var ic = core.querySelector(".udx-fab__core-icon");
+        if (ic.classList.contains("mdi-close")) ic.classList.replace("mdi-close", "mdi-menu");
+    }
+    async function substitutePane(paneName){
+        if (swapLock) return;
+        swapLock = true;
+        radial.classList.add("is-collapsing");
+        fab.setAttribute("data-pane", paneName);
+        await wait(420);
+        renderPane(paneName);
+        core.classList.remove("is-pulsing");
+        void core.offsetWidth;
+        core.classList.add("is-pulsing");
+        void radial.offsetWidth;
+        await wait(80);
+        radial.classList.remove("is-collapsing");
+        await wait(640);
+        swapLock = false;
+    }
+
+    core.addEventListener("click", function(e){
+        e.stopPropagation();
+        if (radial.classList.contains("is-open")) closeRadial();
+        else openRadial();
+    });
+    tabs.forEach(function(tab){
+        tab.addEventListener("click", function(e){
+            e.stopPropagation();
+            if (tab.classList.contains("is-active") && radial.classList.contains("is-open")) return;
+            tabs.forEach(function(t){
+                t.classList.remove("is-active");
+                t.setAttribute("aria-selected", "false");
+            });
+            tab.classList.add("is-active");
+            tab.setAttribute("aria-selected", "true");
+            moveThumbTo(tab);
+            if (radial.classList.contains("is-open")) substitutePane(tab.dataset.pane);
+            else { renderPane(tab.dataset.pane); openRadial(); }
+        });
+    });
+    document.addEventListener("click", function(e){ if (!fab.contains(e.target)) closeRadial(); });
+    window.addEventListener("resize", function(){
+        var active = fab.querySelector(".udx-fab__tab.is-active");
+        if (active) moveThumbTo(active);
+    });
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+    renderPane("destaques");
+}());
+
+/* Reveal-on-scroll */
+(function () {
+    "use strict";
+    if (!("IntersectionObserver" in window)) return;
+    var els = document.querySelectorAll(".apps-hero, .apps-how, .apps-section, .apps-cta");
+    els.forEach(function (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(14px)";
+        el.style.transition = "opacity 600ms ease, transform 600ms ease";
+    });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
