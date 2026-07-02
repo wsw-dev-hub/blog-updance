@@ -182,8 +182,10 @@ header.blog-header .menu-list {
     transition: max-height 0.35s ease, padding 0.35s ease;
 }
 .mobile-nav.open {
-    max-height: 240px;
+    max-height: 360px;
     padding: 10px 15px 14px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 .mobile-nav ul {
     list-style: none;
