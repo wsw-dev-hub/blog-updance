@@ -6,15 +6,20 @@
 <title>Área de Membros — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
 <style>
   :root{--bg:#020118;--card:#0c0b22;--panel:#0a0820;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
     --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
   *{box-sizing:border-box}
-  .item span{ display: block; width:15px; }
+  .item span{ display: block; width:25px; height:25px; color:white; background:var(--grad); -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   ul {
     text-decoration:none;
     position: relative;
-    margin-left: 2px;}
+    margin-left: 2px;
+  }
   a, li { 
     text-decoration:none;
     position: relative;
@@ -41,7 +46,7 @@
   .chip{display:inline-block;margin-top:1.3rem;background:var(--panel);border:1px solid var(--line);
     color:var(--txt);padding:.5rem 1.1rem;border-radius:999px;font-size:.9rem}
   .grade{display:grid;gap:1rem;margin-top:2.2rem;text-align:left}
-  .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.15rem 1.25rem;border-left:4px solid var(--accent)}
+  .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.15rem 1.25rem;border-left:4px solid var(--accent); display:ruby}
   .item h3{margin:0 0 .35rem;font-size:1rem;color:#fff}.item p{font-size:.86rem;color:var(--muted);margin:0;line-height:1.5}
   footer{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
   @media(max-width:520px){
@@ -61,17 +66,17 @@
       <p class="intro">Conteúdo exclusivo para alunos e clientes da Up Dance.</p>
       <div class="chip" id="usuario">carregando…</div>
       <div class="grade">
-        <div class="item"><h3>Suas aulas</h3><p>Em breve: vídeos e materiais das suas turmas.</p></div>
-        <div class="item"><h3>Conteúdo exclusivo</h3><p>Em breve: matérias e bastidores só para membros.</p></div>
-        <div class="item"><span class="mdi mdi-book-open-variant"></span><h3>Ebooks</h3>
+        <div class="item"><span class="mdi mdi-lan-connect" aria-hidden="true"></span><h3>Suas aulas</h3><p>Em breve: vídeos e materiais das suas turmas.</p></div>
+        <div class="item"><span class="mdi mdi-card-account-details-star-outline" aria-hidden="true"></span><h3>Conteúdo exclusivo</h3><p>Em breve: matérias e bastidores só para membros.</p></div>
+        <div class="item"><span class="mdi mdi-book-open-variant" aria-hidden="true"></span><h3>Ebooks</h3>
           <p></p>
-          <p>Ebook's disponíveis: 
+          <p>disponíveis: 
             <ul class="lista-ebooks">
               <a target="_blank" href="https://mega.nz/file/5xMkTQRS#6EbtzJdiPHcn7Vv7j4t1yrN5bTvXKoGYYvM-QD77HME"><li>» Guia Prático de Produção de Relatórios de Danças Urbanas.</li></a>
             </ul>
           </p>
         </div>
-        <div class="item"><h3>Apps exclusivos</h3><p>Em breve: apps que vão mudar sua forma de enxergar a dança.</p></div>
+        <div class="item"><span class="mdi mdi-apps" aria-hidden="true"></span><h3>Apps exclusivos</h3><p>Em breve: apps que vão mudar sua forma de enxergar a dança.</p></div>
       </div>
     </div>
   </main>
