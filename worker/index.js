@@ -161,8 +161,8 @@ async function memberRegister(request, url, env) {
     type  = (b.type  || 'Free').trim();
   } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
 
-  //if (!MEMBER_TYPES.includes(type)) type = 'Free';   <-- MODIFICAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
-  if (!MEMBER_TYPES.includes(type)) type = 'Aluno(a)';
+  if (!MEMBER_TYPES.includes(type)) type = 'Free';   //<-- MODIFICAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  //if (!MEMBER_TYPES.includes(type)) type = 'Aluno(a)';
 
   if (!emailValido(email)) return json({ ok: false, erro: 'Informe um e-mail válido.' }, 400);
   if (password.length < 8) return json({ ok: false, erro: 'A senha precisa ter ao menos 8 caracteres.' }, 400);
@@ -213,8 +213,8 @@ async function memberLogin(request, env) {
   if (m.status !== 'active') return json({ ok: false, erro: 'Confirme seu e-mail antes de entrar.' }, 403);
   if (!await conferirSenha(password, m.pass_salt, m.pass_hash)) return invalido;
 
-  //const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Free' }); <-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
-  const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Aluno' });
+  const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Free' }); //<-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  //const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Aluno(a)' });
   await logEvent(env, m.email, 'member_login', null);
   return json({ ok: true }, 200, { 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) });
 }
@@ -321,8 +321,8 @@ async function verificarLink(request, url, env) {
   await env.KV.delete('magic:' + token);
   //const sid = await criarSessao(env, 'msess', { email, role: 'member' });
   const t = await env.DB.prepare('SELECT type FROM members WHERE email=?').bind(email).first(); 
-  //const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Free' }); <-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
-  const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Aluno' });
+  const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Free' }); //<-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  //const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Aluno(a)' });
   await logEvent(env, email, 'magic_login_ok', null);
   return new Response(null, { status: 302, headers: { 'Location': url.origin + '/membros/', 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) } });
 }
