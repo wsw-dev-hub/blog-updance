@@ -363,7 +363,7 @@ async function dadosAdmin(env) {
   const subs = await env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM subscribers ORDER BY id DESC LIMIT 100').all();
   const mem  = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 100').all();
   const evs  = await env.DB.prepare('SELECT email, type, detail, created_at FROM events ORDER BY id DESC LIMIT 100').all();
-  const types = await env.DB.prepare('SELECT email, type, detail, created_at FROM members ORDER BY id DESC LIMIT 100').all();
+  const types = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 100').all();
   const stats = await env.DB.prepare(
     "SELECT (SELECT COUNT(*) FROM members) AS membros," +
     " (SELECT COUNT(*) FROM members WHERE status='active') AS membros_ativos," +
