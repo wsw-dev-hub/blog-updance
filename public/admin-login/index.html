@@ -6,6 +6,8 @@
 <title>Admin — Acesso</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 <style>
   :root{--bg:#020118;--card:#0c0b22;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
     --accent:#BF0449;--grad:linear-gradient(to right,#F434A1,#ff8442)}
@@ -21,10 +23,35 @@
   p{color:var(--muted);font-size:.85rem;line-height:1.5;margin:.6rem 0 1.2rem}
   .inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
     color:#fff;font-size:.95rem;margin-bottom:.7rem;font-family:'Poppins',sans-serif}
-  .inp:focus{outline:none;border-color:var(--accent)}
-  .btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
-    color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;transition:background-image .25s}
-  .btn:hover{background-image:var(--grad)}.btn:disabled{opacity:.6;background-image:none}
+  /* wrapper para campos com ícone e/ou botão de olho */
+.campo{position:relative;margin:0 0 .7rem;transition:margin .2s}
+.campo > .mdi{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:1.05rem;transition:color .2s;pointer-events:none}
+.campo .olho{position:absolute;right:.55rem;top:50%;transform:translateY(-50%);
+  background:none;border:0;color:var(--muted);cursor:pointer;padding:.3rem;
+  border-radius:6px;font-size:1.05rem;transition:color .15s,background .15s}
+.campo .olho:hover{color:#fff;background:var(--line)}
+.campo .olho[aria-pressed="true"]{color:#fff}
+.campo .olho[aria-pressed="true"] .mdi{background:var(--grad);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
+  color:#fff;font-size:.95rem;font-family:'Poppins',sans-serif;transition:border-color .2s}
+.inp:focus{outline:none;border-color:var(--accent)}
+.campo.tem-icone .inp{padding-left:2.4rem}
+.campo.tem-olho  .inp{padding-right:2.3rem}
+
+/* estados de validação */
+.campo.is-ok  .inp{border-color:#5fe0a4}
+.campo.is-ok  > .mdi{color:#5fe0a4}
+.campo.is-err .inp{border-color:#ff7591}
+.campo.is-err > .mdi{color:#ff7591}
+
+.btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
+  color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;
+  transition:background-image .25s,opacity .2s}
+.btn:hover:not(:disabled){background-image:var(--grad)}
+.btn:disabled{opacity:.5;cursor:not-allowed;background-image:none}
   .msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em}.msg.err{color:#ff7591}.msg.ok{color:#5fe0a4}
   .voltar{display:block;text-align:center;margin-top:1.2rem;color:var(--muted);font-size:.8rem;text-decoration:none}
 </style>
@@ -33,24 +60,89 @@
   <div class="card">
     <div class="head"><img src="/images/icons/udx-icon.png" alt=""><span class="marca">Up Dance</span><span class="tag">Admin</span></div>
     <p>Acesso restrito à administração.</p>
-    <input class="inp" type="email" id="email" placeholder="E-mail de admin" autocomplete="username">
-    <input class="inp" type="password" id="pass" placeholder="Senha" autocomplete="current-password">
-    <button class="btn" id="btn">Entrar</button>
-    <div class="msg" id="msg" role="status"></div>
+    <div class="campo tem-icone" id="campoEmail">
+      <span class="mdi mdi-shield-account-outline" aria-hidden="true"></span>
+      <input class="inp" type="email" id="email" placeholder="E-mail de admin" autocomplete="username">
+    </div>
+
+    <div class="campo tem-icone tem-olho" id="campoPass">
+      <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+      <input class="inp" type="password" id="pass" placeholder="Senha" autocomplete="current-password">
+      <button class="olho" type="button" data-alvo="pass" aria-label="Mostrar senha" aria-pressed="false">
+        <span class="mdi mdi-eye-outline"></span>
+      </button>
+    </div>
+
+    <button class="btn" id="btn" disabled>Entrar</button>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
     <a class="voltar" href="/">← Voltar ao blog</a>
   </div>
 <script>
-  var btn=document.getElementById('btn'),msg=document.getElementById('msg');
-  btn.addEventListener('click',function(){
-    msg.className='msg';msg.textContent='';btn.disabled=true;
-    fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:document.getElementById('email').value.trim(),password:document.getElementById('pass').value})})
-      .then(r=>r.json()).then(d=>{ if(d.ok){location.href='/admin/';}
-        else{msg.className='msg err';msg.textContent=d.erro||'Falha no login.';} })
-      .catch(()=>{msg.className='msg err';msg.textContent='Falha de conexão.';})
-      .finally(()=>btn.disabled=false);
+  (function(){
+  var btn      = document.getElementById('btn');
+  var msg      = document.getElementById('msg');
+  var email    = document.getElementById('email');
+  var pass     = document.getElementById('pass');
+  var cEmail   = document.getElementById('campoEmail');
+  var cPass    = document.getElementById('campoPass');
+
+  var MIN_SENHA = 10; // admin: mínimo 10 (coerente com o worker)
+
+  function setMsg(cls, txt){ msg.className = 'msg' + (cls ? ' ' + cls : ''); msg.textContent = txt || ''; }
+  function setEstado(campo, estado){
+    campo.classList.remove('is-ok','is-err');
+    if (estado) campo.classList.add('is-' + estado);
+  }
+  function emailValido(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
+
+  /* mostrar/ocultar senha (aria-pressed) */
+  document.querySelectorAll('.olho').forEach(function(b){
+    b.addEventListener('click', function(){
+      var alvo = document.getElementById(b.dataset.alvo);
+      var icon = b.querySelector('.mdi');
+      var mostrando = alvo.type === 'text';
+      alvo.type = mostrando ? 'password' : 'text';
+      b.setAttribute('aria-pressed', String(!mostrando));
+      b.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+      icon.classList.toggle('mdi-eye-outline',     mostrando);
+      icon.classList.toggle('mdi-eye-off-outline', !mostrando);
+      alvo.focus({ preventScroll: true });
+    });
   });
-  document.getElementById('pass').addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+
+  /* validação em tempo real */
+  function verificar(){
+    var e = email.value.trim();
+    var s = pass.value;
+    setEstado(cEmail, !e ? '' : (emailValido(e) ? 'ok' : 'err'));
+    setEstado(cPass,  !s ? '' : (s.length >= MIN_SENHA ? 'ok' : 'err'));
+    btn.disabled = !(emailValido(e) && s.length >= MIN_SENHA);
+  }
+  email.addEventListener('input', verificar);
+  pass .addEventListener('input', verificar);
+  pass .addEventListener('keydown', function(e){ if (e.key === 'Enter' && !btn.disabled) btn.click(); });
+  email.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); pass.focus(); } });
+
+  /* envio */
+  btn.addEventListener('click', function(){
+    setMsg('','');
+    btn.disabled = true;
+    fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.value.trim(), password: pass.value })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) { location.href = '/admin/'; }
+      else      { setMsg('err', d.erro || 'Falha no login.'); verificar(); }
+    })
+    .catch(function(){ setMsg('err','Falha de conexão.'); verificar(); });
+  });
+
+  /* estado inicial */
+  verificar();
+})();
 </script>
 </body>
 </html>
