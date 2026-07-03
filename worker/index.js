@@ -31,6 +31,8 @@ import { WorkerMailer } from 'worker-mailer';
 const SESSION_TTL  = 60 * 60 * 24 * 7;
 const MAGIC_TTL    = 60 * 15;
 const COOLDOWN_TTL = 60;
+const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
+const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Aluno','Free'];
 
 export default {
   async fetch(request, env) {
@@ -43,6 +45,9 @@ export default {
       if (pathname === '/api/member/confirm')                               return memberConfirm(request, url, env);
       if (pathname === '/api/member/login'    && request.method === 'POST') return memberLogin(request, env);
       if (pathname === '/api/member/logout'   && request.method === 'POST') return logoutCookie('m_session', 'msess', request, env);
+      if (pathname === '/api/member/forgot'   && request.method === 'POST') return memberForgot(request, url, env);
+      if (pathname === '/api/member/reset'    && request.method === 'POST') return memberReset(request, env);
+      if (pathname === '/reset-senha'         || pathname === '/reset-senha/') return paginaReset(request, url, env);
       if (pathname === '/api/auth/request'    && request.method === 'POST') return pedirLink(request, url, env);
       if (pathname === '/api/auth/verify')                                  return verificarLink(request, url, env);
       if (pathname === '/api/me')                                           return quemSouEu(request, env);
@@ -149,11 +154,15 @@ async function quemSouEu(request, env) {
 /* ───────────────────────── membros: senha ───────────────────────── */
 
 async function memberRegister(request, url, env) {
-  let email = '', password = '', phone = '', name = '';
+  let email = '', password = '', phone = '', name = '', type = 'Free';
   try { const b = await request.json();
     email = (b.email || '').trim().toLowerCase(); password = b.password || '';
     phone = (b.phone || '').trim().slice(0, 30); name = (b.name || '').trim().slice(0, 80);
+    type  = (b.type  || 'Free').trim();
   } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  //if (!MEMBER_TYPES.includes(type)) type = 'Free';   <-- MODIFICAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  if (!MEMBER_TYPES.includes(type)) type = 'Aluno(a)';
 
   if (!emailValido(email)) return json({ ok: false, erro: 'Informe um e-mail válido.' }, 400);
   if (password.length < 8) return json({ ok: false, erro: 'A senha precisa ter ao menos 8 caracteres.' }, 400);
@@ -166,11 +175,11 @@ async function memberRegister(request, url, env) {
   const agora = new Date().toISOString();
 
   if (existe) {
-    await env.DB.prepare('UPDATE members SET name=?, phone=?, pass_hash=?, pass_salt=?, confirm_token=?, created_at=? WHERE email=?')
-      .bind(name, phone, hash, salt, token, agora, email).run();
+    await env.DB.prepare('UPDATE members SET name=?, phone=?, pass_hash=?, pass_salt=?, type=?, confirm_token=?, created_at=? WHERE email=?')
+      .bind(name, phone, hash, salt, type, token, agora, email).run();
   } else {
-    await env.DB.prepare('INSERT INTO members (email, name, phone, pass_hash, pass_salt, status, confirm_token, created_at) VALUES (?,?,?,?,?,?,?,?)')
-      .bind(email, name, phone, hash, salt, 'pending', token, agora).run();
+    await env.DB.prepare('INSERT INTO members (email, name, phone, pass_hash, pass_salt, status, type, confirm_token, created_at) VALUES (?,?,?,?,?,?,?,?,?)')
+      .bind(email, name, phone, hash, salt, 'pending', type, token, agora).run();
     await logEvent(env, email, 'member_cadastro', name || null);
   }
 
@@ -199,14 +208,86 @@ async function memberLogin(request, env) {
   catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
 
   const invalido = json({ ok: false, erro: 'E-mail ou senha incorretos.' }, 401);
-  const m = await env.DB.prepare('SELECT email, pass_hash, pass_salt, status FROM members WHERE email = ?').bind(email).first();
+  const m = await env.DB.prepare('SELECT email, pass_hash, pass_salt, status, type FROM members WHERE email = ?').bind(email).first();
   if (!m) return invalido;
   if (m.status !== 'active') return json({ ok: false, erro: 'Confirme seu e-mail antes de entrar.' }, 403);
   if (!await conferirSenha(password, m.pass_salt, m.pass_hash)) return invalido;
 
-  const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member' });
+  //const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Free' }); <-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Aluno' });
   await logEvent(env, m.email, 'member_login', null);
   return json({ ok: true }, 200, { 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) });
+}
+
+/* ─────────── membros: recuperação de senha ─────────── */
+
+async function memberForgot(request, url, env) {
+  let email = '';
+  try { email = ((await request.json()).email || '').trim().toLowerCase(); }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  // resposta genérica: nunca revelamos se o e-mail existe
+  const generica = json({ ok: true });
+  if (!emailValido(email)) return json({ ok: false, erro: 'Informe um e-mail válido.' }, 400);
+
+  // cooldown reutilizando a chave já existente
+  if (await env.KV.get('cd:' + email)) return generica;
+  await env.KV.put('cd:' + email, '1', { expirationTtl: COOLDOWN_TTL });
+
+  const m = await env.DB.prepare("SELECT email FROM members WHERE email=? AND status='active'").bind(email).first();
+  if (!m) { await logEvent(env, email, 'reset_ignorado', 'sem_conta_ativa'); return generica; }
+
+  const token   = randomToken(32);
+  const expires = new Date(Date.now() + RESET_TTL * 1000).toISOString();
+  await env.DB.prepare('UPDATE members SET reset_token=?, reset_expires=? WHERE email=?')
+    .bind(token, expires, email).run();
+
+  const link = url.origin + '/reset-senha/?token=' + token;
+  const res  = await enviarEmail(env, email, 'Redefinir sua senha — Up Dance Xperience', emailReset(link));
+  await logEvent(env, email, res.ok ? 'reset_enviado' : 'reset_erro', res.error || null);
+  return generica;
+}
+
+async function memberReset(request, env) {
+  let token = '', password = '';
+  try { const b = await request.json(); token = (b.token || '').trim(); password = b.password || ''; }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  if (!token) return json({ ok: false, erro: 'Token ausente.' }, 400);
+  if (password.length < 8) return json({ ok: false, erro: 'A nova senha precisa ter ao menos 8 caracteres.' }, 400);
+
+  const m = await env.DB.prepare('SELECT email, reset_expires FROM members WHERE reset_token=?').bind(token).first();
+  if (!m) return json({ ok: false, erro: 'Link inválido.' }, 400);
+  if (!m.reset_expires || new Date(m.reset_expires).getTime() < Date.now()) {
+    await env.DB.prepare('UPDATE members SET reset_token=NULL, reset_expires=NULL WHERE email=?').bind(m.email).run();
+    return json({ ok: false, erro: 'Link expirado. Solicite outro.' }, 400);
+  }
+
+  const { hash, salt } = await hashSenha(password);
+  await env.DB.prepare('UPDATE members SET pass_hash=?, pass_salt=?, reset_token=NULL, reset_expires=NULL WHERE email=?')
+    .bind(hash, salt, m.email).run();
+
+  // invalida todas as sessões ativas desse e-mail (varre por prefixo)
+  try {
+    let cursor;
+    do {
+      const list = await env.KV.list({ prefix: 'msess:', cursor });
+      for (const k of list.keys) {
+        const raw = await env.KV.get(k.name);
+        if (raw) { try { const s = JSON.parse(raw); if (s.email === m.email) await env.KV.delete(k.name); } catch {} }
+      }
+      cursor = list.list_complete ? undefined : list.cursor;
+    } while (cursor);
+  } catch (e) { console.error('purge sessions:', e.message); }
+
+  await logEvent(env, m.email, 'reset_concluido', null);
+  return json({ ok: true });
+}
+
+async function paginaReset(request, url, env) {
+  // Redireciona para a página estática se ela existir nos ASSETS;
+  // caso o worker precise servir inline, troque isto por um HTML simples.
+  return env.ASSETS.fetch(request);
 }
 
 /* ───────────────────────── membros: magic link (alternativa) ───────────────────────── */
@@ -238,7 +319,10 @@ async function verificarLink(request, url, env) {
   const email = await env.KV.get('magic:' + token);
   if (!email) return Response.redirect(url.origin + '/entrar/?status=expirado', 302);
   await env.KV.delete('magic:' + token);
-  const sid = await criarSessao(env, 'msess', { email, role: 'member' });
+  //const sid = await criarSessao(env, 'msess', { email, role: 'member' });
+  const t = await env.DB.prepare('SELECT type FROM members WHERE email=?').bind(email).first(); 
+  //const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Free' }); <-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Aluno' });
   await logEvent(env, email, 'magic_login_ok', null);
   return new Response(null, { status: 302, headers: { 'Location': url.origin + '/membros/', 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) } });
 }
@@ -277,7 +361,7 @@ async function adminLogin(request, env) {
 
 async function dadosAdmin(env) {
   const subs = await env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM subscribers ORDER BY id DESC LIMIT 200').all();
-  const mem  = await env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 200').all();
+  const mem  = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 200').all();
   const evs  = await env.DB.prepare('SELECT email, type, detail, created_at FROM events ORDER BY id DESC LIMIT 100').all();
   const stats = await env.DB.prepare(
     "SELECT (SELECT COUNT(*) FROM members) AS membros," +
@@ -371,5 +455,12 @@ function emailConfirmacao(name, link) {
     <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Confirme sua inscrição na newsletter da Up Dance Xperience.</p>
     ${botao(link, 'Confirmar inscrição')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Não fez este cadastro? Ignore este e-mail.</p>`);
+}
+
+function emailReset(link) {
+  return moldura(`<h2 style="margin:0 0 12px;font-size:18px;color:#fff">Redefinir sua senha</h2>
+    <p style="color:#b9bad6;font-size:14px;line-height:1.6;margin:0 0 22px">Recebemos um pedido para redefinir sua senha. O link abaixo vale 30 minutos e é de uso único.</p>
+    ${botao(link, 'Criar nova senha')}
+    <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Se não foi você, ignore este e-mail — sua senha atual continua válida.</p>`);
 }
 

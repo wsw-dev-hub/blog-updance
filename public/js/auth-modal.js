@@ -78,6 +78,7 @@
       </div>
       <div class="udxa-tabs">
         <button class="udxa-tab" data-tab="entrar">Entrar</button>
+        <button class="udxa-tab" data-tab="recuperar">Esqueci a senha</button>
         <button class="udxa-tab" data-tab="acesso">Solicitar acesso</button>
         <button class="udxa-tab" data-tab="newsletter">Newsletter</button>
       </div>
@@ -87,6 +88,13 @@
         <input class="udxa-input" type="email" id="udxaLoginEmail" placeholder="seu@email.com" autocomplete="email">
         <button class="udxa-btn" id="udxaLoginBtn">Receber link de acesso</button>
         <div class="udxa-msg" id="udxaLoginMsg" role="status"></div>
+      </div>
+
+      <div class="udxa-panel" data-panel="recuperar">
+        <p>Informe o e-mail da sua conta. Enviaremos um link para você criar uma nova senha. O link vale 30 minutos.</p>
+        <input class="udxa-input" type="email" id="udxaResetEmail" placeholder="seu@email.com" autocomplete="email">
+        <button class="udxa-btn" id="udxaResetBtn">Enviar link de redefinição</button>
+        <div class="udxa-msg" id="udxaResetMsg" role="status"></div>
       </div>
 
       <div class="udxa-panel" data-panel="acesso">
@@ -140,12 +148,15 @@
 
   // login por magic link → POST /api/auth/request
   postForm('udxaLoginEmail', 'udxaLoginBtn', 'udxaLoginMsg', '/api/auth/request',
-           'Pronto! Verifique seu e-mail e clique no link de acesso.');
+         'Pronto! Verifique seu e-mail e clique no link de acesso. Confira também  SPAM e Lixeira, caso não encontre nosso e-mail na Caixa de Entrada.');
+  // envio de e-mail para recuperação de senha para o e-mail cadastrado         
+  postForm('udxaResetEmail', 'udxaResetBtn', 'udxaResetMsg', '/api/member/forgot',
+         'Se este e-mail estiver cadastrado, enviaremos um link para redefinir a senha.');
   // solicitar acesso e newsletter → POST /api/newsletter
-  postForm('udxaAcessoEmail', 'udxaAcessoBtn', 'udxaAcessoMsg', '/api/newsletter',
-           'Pedido registrado. Avisaremos quando seu acesso for liberado.');
-  postForm('udxaNewsEmail', 'udxaNewsBtn', 'udxaNewsMsg', '/api/newsletter',
-           'Inscrição feita! Você receberá nossas novidades.');
+  postForm('udxaAcessoEmail', 'udxaAcessoBtn', 'udxaAcessoMsg', '/api/newsletter/subscribe',
+         'Pedido registrado. Avisaremos quando seu acesso for liberado.');
+  postForm('udxaNewsEmail', 'udxaNewsBtn', 'udxaNewsMsg', '/api/newsletter/subscribe',
+         'Inscrição concluída! Em breve você receberá nossas novidades.');
 
   function postForm(inputId, btnId, msgId, endpoint, sucesso) {
     var input = document.getElementById(inputId);
@@ -176,15 +187,18 @@
 
   var p = new URLSearchParams(location.search);
   var avisos = {
-    required: 'Faça login para acessar a área de membros.',
-    expirado: 'Seu link expirou. Peça um novo abaixo.',
-    invalido: 'Link inválido. Peça um novo abaixo.',
-    negado:   'Este e-mail não tem acesso liberado.',
-  };
-  if (avisos[p.get('login')]) {
-    show('entrar');
-    var m = document.getElementById('udxaLoginMsg');
-    m.className = 'udxa-msg err';
-    m.textContent = avisos[p.get('login')];
-  }
+  required: 'Faça login para acessar a área de membros.',
+  expirado: 'Seu link expirou. Peça um novo abaixo.',
+  invalido: 'Link inválido. Peça um novo abaixo.',
+  negado:   'Este e-mail não tem acesso liberado.',
+  esqueci:  'Informe seu e-mail para receber o link de redefinição.',
+};
+if (avisos[p.get('login')]) {
+  var qs = p.get('login');
+  show(qs === 'esqueci' ? 'recuperar' : 'entrar');
+  var alvo = qs === 'esqueci' ? 'udxaResetMsg' : 'udxaLoginMsg';
+  var m = document.getElementById(alvo);
+  m.className = 'udxa-msg ' + (qs === 'esqueci' ? '' : 'err');
+  m.textContent = avisos[qs];
+}
 })();

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova senha — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<style>
+  :root{--bg:#020118;--card:#0c0b22;--panel:#0a0820;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
+    --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;display:flex;flex-direction:column}
+
+  .topo{display:flex;align-items:center;gap:.7rem;padding:1rem 1.4rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .topo img{width:34px;height:34px}
+  .topo .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.25rem;
+    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .voltar{margin-left:auto;background:none;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.9rem;
+    border:1px solid var(--line);padding:.45rem .95rem;border-radius:9px;cursor:pointer;text-decoration:none;display:inline-block}
+  .voltar:hover{color:#fff;border-color:var(--accent2)}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:2.4rem 1.2rem}
+  .card{width:min(94vw,480px);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:2.6rem 2rem;text-align:center}
+  .card h1{margin:0 0 .5rem;font-size:1.6rem;font-weight:700;color:#fff}
+  .card h1 span{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
+    background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .intro{color:var(--muted);line-height:1.6;margin:.2rem 0 1.6rem;font-size:.95rem}
+
+  .campo{position:relative;margin:0 0 .9rem;text-align:left;transition:margin .2s}
+  .campo .mdi{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1.1rem;transition:color .2s}
+  .campo input{width:100%;padding:.85rem 2.4rem .85rem 2.5rem;border-radius:9px;border:1px solid #2f2c52;
+    background:#020118;color:#fff;font-size:.95rem;font-family:'Poppins',sans-serif;transition:border-color .2s}
+  .campo input::placeholder{color:#6f6c94}
+  .campo input:focus{outline:none;border-color:var(--accent)}
+
+  /* estados de validação */
+  .campo.is-ok  input{border-color:#5fe0a4}
+  .campo.is-ok  .mdi{color:#5fe0a4}
+  .campo.is-err input{border-color:#ff7591}
+  .campo.is-err .mdi{color:#ff7591}
+
+  .campo .olho{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;
+    color:var(--muted);cursor:pointer;padding:.35rem;border-radius:6px;font-size:1.1rem;transition:color .15s,background .15s}
+  .campo .olho:hover{color:#fff;background:var(--line)}
+  .campo .olho[aria-pressed="true"]{color:#fff}
+  .campo .olho[aria-pressed="true"] .mdi{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+  /* indicador em tempo real */
+  .dica{display:flex;align-items:center;gap:.45rem;margin:-.4rem 0 .9rem;
+    font-size:.8rem;color:var(--muted);min-height:1.1em;transition:color .2s}
+  .dica .mdi{font-size:1rem}
+  .dica.is-ok{color:#5fe0a4}
+  .dica.is-err{color:#ff7591}
+
+  /* medidor de força (opcional, coeso com o resto) */
+  .forca{display:flex;gap:4px;margin:-.3rem 0 .9rem}
+  .forca span{flex:1;height:4px;border-radius:2px;background:#2f2c52;transition:background .2s}
+  .forca.n1 span:nth-child(-n+1){background:#ff7591}
+  .forca.n2 span:nth-child(-n+2){background:#f0b64a}
+  .forca.n3 span:nth-child(-n+3){background:#5fe0a4}
+  .forca.n4 span{background:#5fe0a4}
+
+  .btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;
+    background:var(--accent);color:#fff;font-weight:600;font-size:.95rem;
+    font-family:'Poppins',sans-serif;transition:background-image .25s ease,filter .2s ease;margin-top:.4rem}
+  .btn:hover{background-image:var(--grad)}
+  .btn:disabled{opacity:.6;cursor:default;background-image:none}
+
+  .msg{margin-top:1rem;font-size:.88rem;min-height:1.1em;line-height:1.4;text-align:center}
+  .msg.ok{color:#5fe0a4}
+  .msg.err{color:#ff7591}
+
+  .rodape-link{margin-top:1.4rem;font-size:.85rem;color:var(--muted)}
+  .rodape-link a{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;text-decoration:none;font-weight:500}
+
+  footer{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
+
+  @media(max-width:520px){
+    .topo{padding:.8rem 1rem}.topo .marca{font-size:1.1rem}
+    main{padding:1.4rem .9rem}.card{padding:1.8rem 1.2rem;border-radius:14px}
+    .card h1{font-size:1.3rem}}
+</style>
+</head>
+<body>
+  <header class="topo">
+    <img src="/images/icons/udx-icon.png" alt=""><span class="marca">Up Dance</span>
+    <a class="voltar" href="/entrar/">Voltar ao acesso</a>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Definir <span>nova senha</span></h1>
+      <p class="intro">Escolha uma nova senha para sua conta. Use pelo menos 8 caracteres, combinando letras e números.</p>
+
+      <div class="campo" id="campo1">
+        <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+        <input id="p1" type="password" placeholder="Nova senha" autocomplete="new-password" aria-describedby="forca">
+        <button class="olho" type="button" data-alvo="p1" aria-label="Mostrar senha" aria-pressed="false">
+          <span class="mdi mdi-eye-outline"></span>
+        </button>
+      </div>
+      <div class="forca" id="forca" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+      <div class="campo" id="campo2">
+        <span class="mdi mdi-lock-check-outline" aria-hidden="true"></span>
+        <input id="p2" type="password" placeholder="Repita a nova senha" autocomplete="new-password" aria-describedby="dica">
+        <button class="olho" type="button" data-alvo="p2" aria-label="Mostrar senha" aria-pressed="false">
+          <span class="mdi mdi-eye-outline"></span>
+        </button>
+      </div>
+      <p class="dica" id="dica" role="status" aria-live="polite"></p>
+
+      <button class="btn" id="ok" disabled>Salvar nova senha</button>
+      <p class="msg" id="msg" role="status"></p>
+
+      <p class="rodape-link">Lembrou sua senha? <a href="/entrar/">Fazer login</a></p>
+    </div>
+  </main>
+
+  <footer>© Up Dance — redefinição de senha</footer>
+<script>
+(function(){
+  var token = new URLSearchParams(location.search).get('token') || '';
+  var msg   = document.getElementById('msg');
+  var btn   = document.getElementById('ok');
+  var p1    = document.getElementById('p1');
+  var p2    = document.getElementById('p2');
+  var c1    = document.getElementById('campo1');
+  var c2    = document.getElementById('campo2');
+  var dica  = document.getElementById('dica');
+  var forca = document.getElementById('forca');
+
+  function setMsg(txt, tipo){
+    msg.textContent = txt;
+    msg.className = 'msg' + (tipo ? ' ' + tipo : '');
+  }
+  function setDica(txt, tipo, icone){
+    dica.className = 'dica' + (tipo ? ' ' + tipo : '');
+    dica.innerHTML = txt ? '<span class="mdi ' + (icone || 'mdi-information-outline') + '"></span>' + txt : '';
+  }
+  function setEstado(campo, estado){ // estado: 'ok' | 'err' | ''
+    campo.classList.remove('is-ok','is-err');
+    if (estado) campo.classList.add('is-' + estado);
+  }
+
+  //if (!token) { setMsg('Link inválido ou ausente. Solicite um novo pela tela de acesso.', 'err'); btn.disabled = true; return; }
+  // aviso persistente se faltar token, mas SEM abortar — os campos e a validação continuam ativos
+  if (!token) setMsg('Link inválido ou ausente. Solicite um novo pela tela de acesso.', 'err');
+
+  /* -------- mostrar/ocultar senha (com aria-pressed) -------- */
+  document.querySelectorAll('.olho').forEach(function(b){
+    b.addEventListener('click', function(){
+      var alvo = document.getElementById(b.dataset.alvo);
+      var icon = b.querySelector('.mdi');
+      var mostrando = alvo.type === 'text';
+      alvo.type = mostrando ? 'password' : 'text';
+      b.setAttribute('aria-pressed', String(!mostrando));
+      b.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+      icon.classList.toggle('mdi-eye-outline',     mostrando);
+      icon.classList.toggle('mdi-eye-off-outline', !mostrando);
+      alvo.focus({ preventScroll: true });
+    });
+  });
+
+  /* -------- força da senha -------- */
+  function pontuar(s){
+    var pts = 0;
+    if (s.length >= 8)  pts++;
+    if (s.length >= 12) pts++;
+    if (/[A-Z]/.test(s) && /[a-z]/.test(s)) pts++;
+    if (/\d/.test(s) && /[^A-Za-z0-9]/.test(s)) pts++;
+    return Math.min(pts, 4);
+  }
+
+  /* -------- verificação em tempo real -------- */
+  function verificar(){
+    var v1 = p1.value, v2 = p2.value;
+
+    // medidor de força
+    forca.className = 'forca' + (v1 ? ' n' + pontuar(v1) : '');
+
+    // estado do campo 1
+    if (!v1)                       setEstado(c1, '');
+    else if (v1.length < 8)        setEstado(c1, 'err');
+    else                           setEstado(c1, 'ok');
+
+    // estado do campo 2 + dica de similaridade
+    if (!v2) {
+      setEstado(c2, '');
+      setDica('', '');
+    } else if (v2.length > v1.length) {
+      // usuário digitou além do que existe em p1 → já não bate
+      setEstado(c2, 'err');
+      setDica('As senhas não conferem.', 'err', 'mdi-close-circle-outline');
+    } else if (v1.slice(0, v2.length) !== v2) {
+      // divergência entre os caracteres digitados até aqui
+      setEstado(c2, 'err');
+      setDica('As senhas não conferem.', 'err', 'mdi-close-circle-outline');
+    } else if (v2.length < v1.length) {
+      // até aqui idênticas, mas ainda faltando digitar
+      setEstado(c2, '');
+      setDica('Continue digitando para confirmar…', '', 'mdi-dots-horizontal');
+    } else {
+      // v1 === v2 e não vazio
+      setEstado(c2, 'ok');
+      setDica('As senhas conferem.', 'ok', 'mdi-check-circle-outline');
+    }
+
+    // libera o botão apenas quando tudo está ok
+    btn.disabled = !(v1.length >= 8 && v1 === v2);
+  }
+
+  p1.addEventListener('input', verificar);
+  p2.addEventListener('input', verificar);
+
+  /* -------- envio -------- */
+  btn.addEventListener('click', function () {
+    if (!token) { setMsg('Link inválido ou ausente. Solicite um novo pela tela de acesso.', 'err'); return; }
+    var v1 = p1.value, v2 = p2.value;
+    if (v1.length < 8) { setMsg('A nova senha precisa ter ao menos 8 caracteres.', 'err'); return; }
+    if (v1 !== v2)     { setMsg('As senhas não conferem.', 'err'); return; }
+
+    btn.disabled = true;
+    setMsg('Salvando…');
+
+    fetch('/api/member/reset', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token, password: v1 })
+    }).then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d.ok) {
+          setMsg('Senha atualizada! Redirecionando…', 'ok');
+          setTimeout(function(){ location.href = '/entrar/?status=redefinida'; }, 1400);
+        } else {
+          setMsg(d.erro || 'Não foi possível redefinir.', 'err');
+          verificar(); // reavalia estado do botão
+        }
+      })
+      .catch(function(){ setMsg('Falha de conexão.', 'err'); verificar(); });
+  });
+})();
+</script>
+</body>
+</html>
