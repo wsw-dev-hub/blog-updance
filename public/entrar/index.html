@@ -6,6 +6,8 @@
 <title>Entrar — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<!-- Material Design Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 <style>
   :root{--bg:#020118;--card:#0c0b22;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
     --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
@@ -24,14 +26,54 @@
   .panel{display:none;padding:1.5rem 1.3rem 1.7rem}.panel.on{display:block}
   .panel p{margin:0 0 1rem;color:var(--muted);font-size:.88rem;line-height:1.5}
   label{display:block;font-size:.78rem;color:var(--muted);margin:.2rem 0 .35rem}
-  .inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
-    color:#fff;font-size:.95rem;margin-bottom:.7rem;font-family:'Poppins',sans-serif}
-  .inp:focus{outline:none;border-color:var(--accent)}
-  .inp::placeholder{color:#6f6c94}
-  .opc{font-size:.7rem;color:#6f6c94;font-weight:400;text-transform:none}
-  .btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
-    color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;transition:background-image .25s}
-  .btn:hover{background-image:var(--grad)}.btn:disabled{opacity:.6;background-image:none}
+
+/* wrapper para campos com ícone e/ou botão de olho */
+.campo{position:relative;margin:0 0 .7rem;transition:margin .2s}
+.campo > .mdi{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:1.05rem;transition:color .2s;pointer-events:none}
+.campo .olho{position:absolute;right:.55rem;top:50%;transform:translateY(-50%);
+  background:none;border:0;color:var(--muted);cursor:pointer;padding:.3rem;
+  border-radius:6px;font-size:1.05rem;transition:color .15s,background .15s}
+.campo .olho:hover{color:#fff;background:var(--line)}
+.campo .olho[aria-pressed="true"]{color:#fff}
+.campo .olho[aria-pressed="true"] .mdi{background:var(--grad);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
+  color:#fff;font-size:.95rem;font-family:'Poppins',sans-serif;transition:border-color .2s}
+.inp:focus{outline:none;border-color:var(--accent)}
+.inp::placeholder{color:#6f6c94}
+/* padding extra quando há ícone à esquerda / olho à direita */
+.campo.tem-icone .inp{padding-left:2.4rem}
+.campo.tem-olho  .inp{padding-right:2.3rem}
+
+/* estados de validação */
+.campo.is-ok  .inp{border-color:#5fe0a4}
+.campo.is-ok  > .mdi{color:#5fe0a4}
+.campo.is-err .inp{border-color:#ff7591}
+.campo.is-err > .mdi{color:#ff7591}
+
+/* medidor de força */
+.forca{display:flex;gap:4px;margin:-.2rem 0 .7rem}
+.forca span{flex:1;height:4px;border-radius:2px;background:#2f2c52;transition:background .2s}
+.forca.n1 span:nth-child(-n+1){background:#ff7591}
+.forca.n2 span:nth-child(-n+2){background:#f0b64a}
+.forca.n3 span:nth-child(-n+3){background:#5fe0a4}
+.forca.n4 span{background:#5fe0a4}
+
+/* dica em tempo real */
+.dica{display:flex;align-items:center;gap:.4rem;margin:-.3rem 0 .7rem;
+  font-size:.78rem;color:var(--muted);min-height:1.05em;transition:color .2s}
+.dica .mdi{font-size:.95rem}
+.dica.is-ok{color:#5fe0a4}
+.dica.is-err{color:#ff7591}
+
+.opc{font-size:.7rem;color:#6f6c94;font-weight:400;text-transform:none}
+.btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
+  color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;
+  transition:background-image .25s,opacity .2s}
+.btn:hover:not(:disabled){background-image:var(--grad)}
+.btn:disabled{opacity:.5;cursor:not-allowed;background-image:none}
   .alt{margin-top:1.1rem;text-align:center;font-size:.82rem}
   .alt a{color:var(--accent2);cursor:pointer;text-decoration:none}.alt a:hover{text-decoration:underline}
   .msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em;line-height:1.4}
@@ -51,78 +93,239 @@
 
     <div class="panel on" data-p="login">
       <p>Acesse sua área de membros.</p>
-      <input class="inp" type="email" id="lemail" placeholder="seu@email.com" autocomplete="email">
-      <input class="inp" type="password" id="lpass" placeholder="Sua senha" autocomplete="current-password">
-      <button class="btn" id="lbtn">Entrar</button>
-      <div class="msg" id="lmsg" role="status"></div>
-      <!--<div class="alt">Prefere sem senha? <a id="magic">Receber link por e-mail</a></div>-->
+
+      <label for="lemail">E-mail</label>
+      <div class="campo tem-icone" id="lcampoEmail">
+        <span class="mdi mdi-email-outline" aria-hidden="true"></span>
+        <input class="inp" type="email" id="lemail" placeholder="seu@email.com" autocomplete="email">
+      </div>
+
+      <label for="lpass">Senha</label>
+      <div class="campo tem-icone tem-olho" id="lcampoPass">
+        <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+        <input class="inp" type="password" id="lpass" placeholder="Sua senha" autocomplete="current-password">
+        <button class="olho" type="button" data-alvo="lpass" aria-label="Mostrar senha" aria-pressed="false">
+          <span class="mdi mdi-eye-outline"></span>
+        </button>
+      </div>
+
+      <button class="btn" id="lbtn" disabled>Entrar</button>
+      <div class="msg" id="lmsg" role="status" aria-live="polite"></div>
+
+      <div class="alt" style="margin-top:.9rem">
+        <a id="esqueci">Esqueci minha senha</a>
+      </div>
+      <!-- <div class="alt">Prefere sem senha? <a id="magic">Receber link por e-mail</a></div> -->
     </div>
 
     <div class="panel" data-p="criar">
       <p>Crie sua conta de membro.</p>
-      <label>Nome <span class="opc">(opcional)</span></label>
-      <input class="inp" type="text" id="cnome" placeholder="Seu nome" autocomplete="name">
-      <label>E-mail</label>
-      <input class="inp" type="email" id="cemail" placeholder="seu@email.com" autocomplete="email">
-      <label>Telefone <span class="opc">(opcional)</span></label>
-      <input class="inp" type="tel" id="cfone" placeholder="(00) 00000-0000" autocomplete="tel">
-      <label>Senha <span class="opc">(mín. 8 caracteres)</span></label>
-      <input class="inp" type="password" id="cpass" placeholder="Crie uma senha" autocomplete="new-password">
-      <button class="btn" id="cbtn">Criar conta</button>
-      <div class="msg" id="cmsg" role="status"></div>
+
+      <label for="cnome">Nome <span class="opc">(opcional)</span></label>
+      <div class="campo tem-icone">
+        <span class="mdi mdi-account-outline" aria-hidden="true"></span>
+        <input class="inp" type="text" id="cnome" placeholder="Seu nome" autocomplete="name">
+      </div>
+
+      <label for="cemail">E-mail</label>
+      <div class="campo tem-icone" id="ccampoEmail">
+        <span class="mdi mdi-email-outline" aria-hidden="true"></span>
+        <input class="inp" type="email" id="cemail" placeholder="seu@email.com" autocomplete="email">
+      </div>
+
+      <label for="cfone">Telefone <span class="opc">(opcional)</span></label>
+      <div class="campo tem-icone">
+        <span class="mdi mdi-phone-outline" aria-hidden="true"></span>
+        <input class="inp" type="tel" id="cfone" placeholder="(00) 00000-0000" autocomplete="tel">
+      </div>
+
+      <label for="cpass">Senha <span class="opc">(mín. 8 caracteres)</span></label>
+      <div class="campo tem-icone tem-olho" id="ccampoPass">
+        <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+        <input class="inp" type="password" id="cpass" placeholder="Crie uma senha" autocomplete="new-password" aria-describedby="cforca">
+        <button class="olho" type="button" data-alvo="cpass" aria-label="Mostrar senha" aria-pressed="false">
+          <span class="mdi mdi-eye-outline"></span>
+        </button>
+      </div>
+      <div class="forca" id="cforca" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <p class="dica" id="cdica" role="status" aria-live="polite"></p>
+
+      <button class="btn" id="cbtn" disabled>Criar conta</button>
+      <div class="msg" id="cmsg" role="status" aria-live="polite"></div>
     </div>
 
     <a class="voltar" href="/">← Voltar ao blog</a>
   </div>
 
 <script>
-  function tab(name){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.t===name));
-    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.dataset.p===name));
-  }
-  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>tab(t.dataset.t)));
+  /* ---------- utilidades ---------- */
+function post(url,body){
+  return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
+}
+function setMsg(el,cls,txt){ el.className = 'msg' + (cls ? ' ' + cls : ''); el.textContent = txt; }
+function setDica(el, txt, tipo, icone){
+  el.className = 'dica' + (tipo ? ' ' + tipo : '');
+  el.innerHTML = txt ? '<span class="mdi ' + (icone || 'mdi-information-outline') + '"></span>' + txt : '';
+}
+function setEstado(campo, estado){
+  if (!campo) return;
+  campo.classList.remove('is-ok','is-err');
+  if (estado) campo.classList.add('is-' + estado);
+}
+function emailValido(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
 
-  function post(url,body){return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());}
-  function setMsg(el,cls,txt){el.className='msg '+cls;el.textContent=txt;}
+/* ---------- tabs ---------- */
+function tab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.t===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.dataset.p===name));
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>tab(t.dataset.t)));
 
-  // login com senha
-  var lbtn=document.getElementById('lbtn');
-  lbtn.addEventListener('click',function(){
-    var msg=document.getElementById('lmsg');setMsg(msg,'','');lbtn.disabled=true;
-    post('/api/member/login',{email:document.getElementById('lemail').value.trim(),password:document.getElementById('lpass').value})
-      .then(d=>{ if(d.ok){location.href='/membros/';} else {setMsg(msg,'err',d.erro||'Falha no login.');} })
-      .catch(()=>setMsg(msg,'err','Falha de conexão.')).finally(()=>lbtn.disabled=false);
+/* ---------- mostrar/ocultar senha (aria-pressed) ---------- */
+document.querySelectorAll('.olho').forEach(function(b){
+  b.addEventListener('click', function(){
+    var alvo = document.getElementById(b.dataset.alvo);
+    var icon = b.querySelector('.mdi');
+    var mostrando = alvo.type === 'text';
+    alvo.type = mostrando ? 'password' : 'text';
+    b.setAttribute('aria-pressed', String(!mostrando));
+    b.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+    icon.classList.toggle('mdi-eye-outline',     mostrando);
+    icon.classList.toggle('mdi-eye-off-outline', !mostrando);
+    alvo.focus({ preventScroll: true });
   });
+});
 
-  // criar conta
-  var cbtn=document.getElementById('cbtn');
-  cbtn.addEventListener('click',function(){
-    var msg=document.getElementById('cmsg');setMsg(msg,'','');cbtn.disabled=true;
-    post('/api/member/register',{
-      name:document.getElementById('cnome').value.trim(),
-      email:document.getElementById('cemail').value.trim(),
-      phone:document.getElementById('cfone').value.trim(),
-      password:document.getElementById('cpass').value
-    }).then(d=>{
-      if(d.ok){setMsg(msg,'ok','Conta criada! Enviamos um e-mail para você ativar a conta.');}
-      else{setMsg(msg,'err',d.erro||'Não foi possível criar a conta.');}
-    }).catch(()=>setMsg(msg,'err','Falha de conexão.')).finally(()=>cbtn.disabled=false);
+/* ---------- LOGIN: validação em tempo real ---------- */
+var lemail = document.getElementById('lemail');
+var lpass  = document.getElementById('lpass');
+var lbtn   = document.getElementById('lbtn');
+var lmsg   = document.getElementById('lmsg');
+var lcEmail = document.getElementById('lcampoEmail');
+var lcPass  = document.getElementById('lcampoPass');
+
+function verificarLogin(){
+  var e = lemail.value.trim();
+  var s = lpass.value;
+  setEstado(lcEmail, !e ? '' : (emailValido(e) ? 'ok' : 'err'));
+  setEstado(lcPass,  !s ? '' : (s.length >= 8 ? 'ok' : 'err'));
+  lbtn.disabled = !(emailValido(e) && s.length >= 8);
+}
+lemail.addEventListener('input', verificarLogin);
+lpass .addEventListener('input', verificarLogin);
+lpass .addEventListener('keydown', function(e){ if (e.key === 'Enter' && !lbtn.disabled) lbtn.click(); });
+
+lbtn.addEventListener('click', function(){
+  setMsg(lmsg,'','');
+  lbtn.disabled = true;
+  post('/api/member/login', { email: lemail.value.trim(), password: lpass.value })
+    .then(d => {
+      if (d.ok) { location.href = '/membros/'; }
+      else      { setMsg(lmsg,'err', d.erro || 'Falha no login.'); verificarLogin(); }
+    })
+    .catch(() => { setMsg(lmsg,'err','Falha de conexão.'); verificarLogin(); });
+});
+
+/* ---------- "Esqueci minha senha" (usa o mesmo campo de e-mail) ---------- */
+var esqueci = document.getElementById('esqueci');
+if (esqueci) {
+  esqueci.addEventListener('click', function(){
+    var em = lemail.value.trim();
+    if (!emailValido(em)) { setMsg(lmsg,'err','Digite seu e-mail acima primeiro.'); lemail.focus(); return; }
+    setMsg(lmsg,'','');
+    post('/api/member/forgot', { email: em })
+      .then(() => setMsg(lmsg,'ok','Se este e-mail estiver cadastrado, enviaremos um link para redefinir a senha.'))
+      .catch(() => setMsg(lmsg,'err','Falha de conexão.'));
   });
+}
 
-  // magic link (alternativa)
-  document.getElementById('magic').addEventListener('click',function(){
-    var msg=document.getElementById('lmsg');var em=document.getElementById('lemail').value.trim();
-    if(!em){setMsg(msg,'err','Digite seu e-mail acima primeiro.');return;}
-    setMsg(msg,'','');
-    post('/api/auth/request',{email:em}).then(()=>setMsg(msg,'ok','Se este e-mail tiver acesso, enviamos um link para entrar.'))
-      .catch(()=>setMsg(msg,'err','Falha de conexão.'));
+/* ---------- (mantido) magic link opcional, só se o elemento existir ---------- */
+var magic = document.getElementById('magic');
+if (magic) {
+  magic.addEventListener('click', function(){
+    var em = lemail.value.trim();
+    if (!emailValido(em)) { setMsg(lmsg,'err','Digite seu e-mail acima primeiro.'); return; }
+    setMsg(lmsg,'','');
+    post('/api/auth/request', { email: em })
+      .then(() => setMsg(lmsg,'ok','Se este e-mail tiver acesso, enviamos um link para entrar.'))
+      .catch(() => setMsg(lmsg,'err','Falha de conexão.'));
   });
+}
 
-  // mensagens de status (confirmação de conta / magic link)
-  var st=new URLSearchParams(location.search).get('status');
-  var avisos={confirmado:['ok','Conta ativada! Agora você já pode entrar.'],
-    invalido:['err','Link inválido ou já utilizado.'],expirado:['err','Seu link expirou. Tente novamente.']};
-  if(avisos[st]){var m=document.getElementById('lmsg');setMsg(m,avisos[st][0],avisos[st][1]);}
+/* ---------- CRIAR CONTA: validação em tempo real + força ---------- */
+var cnome  = document.getElementById('cnome');
+var cemail = document.getElementById('cemail');
+var cfone  = document.getElementById('cfone');
+var cpass  = document.getElementById('cpass');
+var cbtn   = document.getElementById('cbtn');
+var cmsg   = document.getElementById('cmsg');
+var cforca = document.getElementById('cforca');
+var cdica  = document.getElementById('cdica');
+var ccEmail = document.getElementById('ccampoEmail');
+var ccPass  = document.getElementById('ccampoPass');
+
+function pontuar(s){
+  var pts = 0;
+  if (s.length >= 8)  pts++;
+  if (s.length >= 12) pts++;
+  if (/[A-Z]/.test(s) && /[a-z]/.test(s)) pts++;
+  if (/\d/.test(s) && /[^A-Za-z0-9]/.test(s)) pts++;
+  return Math.min(pts, 4);
+}
+function verificarCriar(){
+  var e = cemail.value.trim();
+  var s = cpass.value;
+
+  // e-mail
+  setEstado(ccEmail, !e ? '' : (emailValido(e) ? 'ok' : 'err'));
+
+  // força + estado
+  cforca.className = 'forca' + (s ? ' n' + pontuar(s) : '');
+  if (!s)                setEstado(ccPass, '');
+  else if (s.length < 8) setEstado(ccPass, 'err');
+  else                   setEstado(ccPass, 'ok');
+
+  // dica
+  if (!s)                setDica(cdica, '', '');
+  else if (s.length < 8) setDica(cdica, 'A senha precisa ter ao menos 8 caracteres.', 'err', 'mdi-close-circle-outline');
+  else if (pontuar(s) <= 1) setDica(cdica, 'Senha fraca — combine letras, números e símbolos.', '', 'mdi-alert-outline');
+  else if (pontuar(s) === 2) setDica(cdica, 'Senha razoável.', '', 'mdi-shield-half-full');
+  else                   setDica(cdica, 'Senha forte.', 'ok', 'mdi-shield-check-outline');
+
+  cbtn.disabled = !(emailValido(e) && s.length >= 8);
+}
+cemail.addEventListener('input', verificarCriar);
+cpass .addEventListener('input', verificarCriar);
+cpass .addEventListener('keydown', function(e){ if (e.key === 'Enter' && !cbtn.disabled) cbtn.click(); });
+
+cbtn.addEventListener('click', function(){
+  setMsg(cmsg,'','');
+  cbtn.disabled = true;
+  post('/api/member/register', {
+    name:  cnome.value.trim(),
+    email: cemail.value.trim(),
+    phone: cfone.value.trim(),
+    password: cpass.value
+  }).then(d => {
+    if (d.ok) { setMsg(cmsg,'ok','Conta criada! Enviamos um e-mail para você ativar a conta.'); }
+    else      { setMsg(cmsg,'err', d.erro || 'Não foi possível criar a conta.'); }
+  }).catch(() => setMsg(cmsg,'err','Falha de conexão.'))
+    .finally(() => verificarCriar());
+});
+
+/* ---------- mensagens de status (URL ?status=...) ---------- */
+var st = new URLSearchParams(location.search).get('status');
+var avisos = {
+  confirmado: ['ok',  'Conta ativada! Agora você já pode entrar.'],
+  redefinida: ['ok',  'Senha redefinida! Faça login com a nova senha.'],
+  invalido:   ['err', 'Link inválido ou já utilizado.'],
+  expirado:   ['err', 'Seu link expirou. Tente novamente.']
+};
+if (avisos[st]) setMsg(lmsg, avisos[st][0], avisos[st][1]);
+
+/* estado inicial dos botões */
+verificarLogin();
+verificarCriar();
 </script>
 </body>
 </html>
