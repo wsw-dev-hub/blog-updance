@@ -403,7 +403,7 @@ async function adminLogin(request, env) {
 
 /* DEPOIS */
 const ADMIN_CACHE_KEY = 'admin:data';
-const ADMIN_CACHE_TTL = 45; // segundos
+const ADMIN_CACHE_TTL = 60; // segundos
 
 async function dadosAdmin(env) {
   // 1) tenta cache
