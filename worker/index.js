@@ -56,9 +56,14 @@ export default {
       if (pathname === '/api/admin/setup'  && request.method === 'POST') return adminSetup(request, env);
       if (pathname === '/api/admin/login'  && request.method === 'POST') return adminLogin(request, env);
       if (pathname === '/api/admin/logout' && request.method === 'POST') return logoutCookie('a_session', 'asess', request, env);
+      /* DEPOIS */
       if (pathname === '/api/admin/data') {
         const a = await getAdmin(request, env);
         return a ? dadosAdmin(env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/events') {                       // <-- nova rota
+        const a = await getAdmin(request, env);
+        return a ? dadosAdminEventos(env) : json({ erro: 'não autorizado' }, 403);
       }
 
       // ---- ADMIN: gestão de "type" do membro ----
@@ -109,10 +114,21 @@ function json(obj, status = 200, extraHeaders) {
 }
 function emailValido(e) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
 
+/* DEPOIS */
+const ERR_TYPES = new Set([
+  'member_confirma_erro', 'magic_erro', 'news_confirma_erro', 'reset_erro'
+]);
+
 async function logEvent(env, email, type, detail) {
   try {
-    await env.DB.prepare('INSERT INTO events (email, type, detail, created_at) VALUES (?, ?, ?, ?)')
-      .bind(email || null, type, detail || null, new Date().toISOString()).run();
+    const stmts = [
+      env.DB.prepare('INSERT INTO events (email, type, detail, created_at) VALUES (?, ?, ?, ?)')
+        .bind(email || null, type, detail || null, new Date().toISOString())
+    ];
+    if (ERR_TYPES.has(type)) {
+      stmts.push(env.DB.prepare("UPDATE counters SET value = value + 1 WHERE name = 'erros'"));
+    }
+    await env.DB.batch(stmts);   // 1 round-trip para as 1–2 escritas
   } catch (e) { console.error('logEvent:', e.message); }
 }
 
@@ -180,12 +196,15 @@ async function memberRegister(request, url, env) {
   const token = randomToken(24);
   const agora = new Date().toISOString();
 
+  /* DEPOIS */
   if (existe) {
     await env.DB.prepare('UPDATE members SET name=?, phone=?, pass_hash=?, pass_salt=?, type=?, confirm_token=?, created_at=? WHERE email=?')
       .bind(name, phone, hash, salt, type, token, agora, email).run();
   } else {
     await env.DB.prepare('INSERT INTO members (email, name, phone, pass_hash, pass_salt, status, type, confirm_token, created_at) VALUES (?,?,?,?,?,?,?,?,?)')
       .bind(email, name, phone, hash, salt, 'pending', type, token, agora).run();
+    await env.DB.prepare("UPDATE counters SET value = value + 1 WHERE name = 'membros'").run();
+    await env.KV.delete(ADMIN_CACHE_KEY);                                    // <-- adicionar
     await logEvent(env, email, 'member_cadastro', name || null);
   }
 
@@ -200,9 +219,12 @@ async function memberConfirm(request, url, env) {
   if (!token) return Response.redirect(url.origin + '/entrar/?status=invalido', 302);
   const m = await env.DB.prepare('SELECT email, status FROM members WHERE confirm_token = ?').bind(token).first();
   if (!m) return Response.redirect(url.origin + '/entrar/?status=invalido', 302);
+  /* DEPOIS */
   if (m.status !== 'active') {
     await env.DB.prepare('UPDATE members SET status=?, confirmed_at=?, confirm_token=NULL WHERE confirm_token=?')
       .bind('active', new Date().toISOString(), token).run();
+    await env.DB.prepare("UPDATE counters SET value = value + 1 WHERE name = 'membros_ativos'").run();
+    await env.KV.delete(ADMIN_CACHE_KEY);                                    // <-- adicionar
     await logEvent(env, m.email, 'member_confirmado', null);
   }
   return Response.redirect(url.origin + '/entrar/?status=confirmado', 302);
@@ -365,7 +387,7 @@ async function adminLogin(request, env) {
   return json({ ok: true }, 200, { 'Set-Cookie': cookie('a_session', sid, SESSION_TTL) });
 }
 
-async function dadosAdmin(env) {
+/*async function dadosAdmin(env) {
   const subs = await env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM subscribers ORDER BY id DESC LIMIT 100').all();
   const mem  = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 100').all();
   const evs  = await env.DB.prepare('SELECT email, type, detail, created_at FROM events ORDER BY id DESC LIMIT 100').all();
@@ -377,7 +399,66 @@ async function dadosAdmin(env) {
     " (SELECT COUNT(*) FROM events WHERE type LIKE '%_erro') AS erros"
   ).first();
   return json({ stats, members: mem.results || [], subscribers: subs.results || [], events: evs.results || [], memberTypes: MEMBER_TYPES, });
+}*/
+
+/* DEPOIS */
+const ADMIN_CACHE_KEY = 'admin:data';
+const ADMIN_CACHE_TTL = 45; // segundos
+
+async function dadosAdmin(env) {
+  // 1) tenta cache
+  const cached = await env.KV.get(ADMIN_CACHE_KEY);
+  if (cached) {
+    return new Response(cached, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', 'X-Cache': 'HIT' }
+    });
+  }
+
+  // 2) miss: dispara as 4 queries em batch (1 round-trip só)
+  /* DEPOIS */
+  const [subs, mem, stats] = await env.DB.batch([
+    env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM subscribers ORDER BY id DESC LIMIT 50'),
+    env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 50'),
+    env.DB.prepare(
+      "SELECT " +
+      "  MAX(CASE WHEN name='membros'          THEN value END) AS membros," +
+      "  MAX(CASE WHEN name='membros_ativos'   THEN value END) AS membros_ativos," +
+      "  MAX(CASE WHEN name='news_confirmados' THEN value END) AS news_confirmados," +
+      "  MAX(CASE WHEN name='erros'            THEN value END) AS erros " +
+      "FROM counters"
+    )
+  ]);
+
+  /* DEPOIS */
+  const payload = JSON.stringify({
+    stats: stats.results?.[0] || {},
+    members:     mem.results  || [],
+    subscribers: subs.results || [],
+    memberTypes: MEMBER_TYPES,
+  });
+
+  // 3) grava no cache (fire-and-forget não é necessário aqui; é rápido)
+  await env.KV.put(ADMIN_CACHE_KEY, payload, { expirationTtl: ADMIN_CACHE_TTL });
+
+  return new Response(payload, {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'X-Cache': 'MISS' }
+  });
 }
+
+async function dadosAdminEventos(env) {
+    const CACHE_KEY = 'admin:events';
+    const cached = await env.KV.get(CACHE_KEY);
+    if (cached) return new Response(cached, { status: 200, headers: { 'Content-Type': 'application/json' } });
+
+    const evs = await env.DB.prepare(
+      'SELECT email, type, detail, created_at FROM events ORDER BY id DESC LIMIT 50'
+    ).all();
+    const payload = JSON.stringify({ events: evs.results || [] });
+    await env.KV.put(CACHE_KEY, payload, { expirationTtl: ADMIN_CACHE_TTL });
+    return new Response(payload, { status: 200, headers: { 'Content-Type': 'application/json' } });
+  }
 
 /* ─────────────────── admin: gestão de "type" de um membro ─────────────────── */
 
@@ -411,6 +492,7 @@ async function adminMemberUpdateType(request, env, admin) {
   if (m.type === type) return json({ ok: true, alterado: false, type });
 
   await env.DB.prepare('UPDATE members SET type = ? WHERE email = ?').bind(type, email).run();
+  await env.KV.delete(ADMIN_CACHE_KEY);              // <-- adicionar
   await logEvent(env, email, 'admin_update_type', `${m.type || '-'} → ${type} por ${admin.email}`);
   return json({ ok: true, alterado: true, type, anterior: m.type || null });
 }
@@ -430,12 +512,14 @@ async function inscrever(request, url, env) {
   const existente = await env.DB.prepare('SELECT status FROM subscribers WHERE email = ?').bind(email).first();
   if (existente && existente.status === 'confirmed') return json({ ok: true, jaInscrito: true });
 
+  /* DEPOIS */
   if (existente) {
     await env.DB.prepare('UPDATE subscribers SET confirm_token=?, name=?, phone=?, created_at=? WHERE email=?')
       .bind(token, name, phone, agora, email).run();
   } else {
     await env.DB.prepare('INSERT INTO subscribers (email, name, phone, status, confirm_token, created_at) VALUES (?,?,?,?,?,?)')
       .bind(email, name, phone, 'pending', token, agora).run();
+    await env.KV.delete(ADMIN_CACHE_KEY);                                    // <-- adicionar
     await logEvent(env, email, 'news_pendente', null);
   }
   const res = await enviarEmail(env, email, 'Confirme sua inscrição — Up Dance Xperience',
@@ -449,9 +533,12 @@ async function confirmar(request, url, env) {
   if (!token) return Response.redirect(url.origin + '/cadastro/?status=invalido', 302);
   const row = await env.DB.prepare('SELECT email, status FROM subscribers WHERE confirm_token = ?').bind(token).first();
   if (!row) return Response.redirect(url.origin + '/cadastro/?status=invalido', 302);
+  /* DEPOIS */
   if (row.status !== 'confirmed') {
     await env.DB.prepare('UPDATE subscribers SET status=?, confirmed_at=?, confirm_token=NULL WHERE confirm_token=?')
       .bind('confirmed', new Date().toISOString(), token).run();
+    await env.DB.prepare("UPDATE counters SET value = value + 1 WHERE name = 'news_confirmados'").run();
+    await env.KV.delete(ADMIN_CACHE_KEY);                                    // <-- adicionar
     await logEvent(env, row.email, 'news_confirmado', null);
   }
   return Response.redirect(url.origin + '/cadastro/?status=confirmado', 302);

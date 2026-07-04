@@ -268,17 +268,33 @@
   }
 
   /* ── abas ── */
-  function setupTabs(){
-    var tabs=document.querySelectorAll(".tab");
-    tabs.forEach(function(t){
-      t.addEventListener("click",function(){
-        tabs.forEach(function(x){x.classList.remove("active");});
-        document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
-        t.classList.add("active");
-        el("panel-"+t.dataset.tab).classList.add("active");
-      });
+  /* DEPOIS */
+var eventsLoaded = false;
+function setupTabs(){
+  var tabs=document.querySelectorAll(".tab");
+  tabs.forEach(function(t){
+    t.addEventListener("click",function(){
+      tabs.forEach(function(x){x.classList.remove("active");});
+      document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+      t.classList.add("active");
+      el("panel-"+t.dataset.tab).classList.add("active");
+
+      // lazy-load da aba de eventos
+      if (t.dataset.tab === "events" && !eventsLoaded) {
+        eventsLoaded = true;
+        el("panel-events").innerHTML = '<div class="empty">Carregando…</div>';
+        fetch("/api/admin/events", { credentials:"same-origin" })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            var events = d.events || [];
+            el("c-events").textContent = "(" + events.length + ")";
+            el("panel-events").innerHTML = eventsTable(events);
+          })
+          .catch(function(){ eventsLoaded = false; el("panel-events").innerHTML = '<div class="empty">Falha ao carregar.</div>'; });
+      }
     });
-  }
+  });
+}
 
   /* ── carregamento dos dados ── */
   function load(){
@@ -293,18 +309,20 @@
         if(!r.ok) throw new Error("HTTP "+r.status);
         return r.json();
       })
+      /* DEPOIS */
       .then(function(d){
         if(!d) return;
         renderStats(d.stats);
 
-        var members=d.members||[], subs=d.subscribers||[], events=d.events||[];
+        var members=d.members||[], subs=d.subscribers||[];
         el("c-members").textContent="("+members.length+")";
         el("c-subscribers").textContent="("+subs.length+")";
-        el("c-events").textContent="("+events.length+")";
+        el("c-events").textContent="";                                         // vazio até o lazy-load
 
         el("panel-members").innerHTML=membersTable(members, d.memberTypes || []); bindTypeSelects(el("panel-members"));
         el("panel-subscribers").innerHTML=peopleTable(subs);
-        el("panel-events").innerHTML=eventsTable(events);
+        el("panel-events").innerHTML='<div class="empty">Clique na aba para carregar.</div>';
+        eventsLoaded = false;                                                  // permite recarregar no "Atualizar"
 
         el("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
         el("loading").hidden=true;
