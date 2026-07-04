@@ -61,6 +61,12 @@ export default {
         return a ? dadosAdmin(env) : json({ erro: 'não autorizado' }, 403);
       }
 
+      // ---- ADMIN: gestão de "type" do membro ----
+      if (pathname === '/api/admin/member/update-type' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? adminMemberUpdateType(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+
       // ---- NEWSLETTER ----
       if (pathname === '/api/newsletter/subscribe' && request.method === 'POST') return inscrever(request, url, env);
       if (pathname === '/api/newsletter/confirm')                                return confirmar(request, url, env);
@@ -363,14 +369,50 @@ async function dadosAdmin(env) {
   const subs = await env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM subscribers ORDER BY id DESC LIMIT 100').all();
   const mem  = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 100').all();
   const evs  = await env.DB.prepare('SELECT email, type, detail, created_at FROM events ORDER BY id DESC LIMIT 100').all();
-  const types = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 100').all();
+  //const types = await env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 100').all();
   const stats = await env.DB.prepare(
     "SELECT (SELECT COUNT(*) FROM members) AS membros," +
     " (SELECT COUNT(*) FROM members WHERE status='active') AS membros_ativos," +
     " (SELECT COUNT(*) FROM subscribers WHERE status='confirmed') AS news_confirmados," +
     " (SELECT COUNT(*) FROM events WHERE type LIKE '%_erro') AS erros"
   ).first();
-  return json({ stats, members: mem.results || [], types, members: types.results || [], subscribers: subs.results || [], events: evs.results || [] });
+  return json({ stats, members: mem.results || [], subscribers: subs.results || [], events: evs.results || [], memberTypes: MEMBER_TYPES, });
+}
+
+/* ─────────────────── admin: gestão de "type" de um membro ─────────────────── */
+
+async function adminMemberLookup(request, env) {
+  const url = new URL(request.url);
+  const email = (url.searchParams.get('email') || '').trim().toLowerCase();
+  if (!emailValido(email)) return json({ ok: false, erro: 'E-mail inválido.' }, 400);
+
+  const m = await env.DB.prepare(
+    'SELECT email, name, phone, status, type, created_at, confirmed_at FROM members WHERE email = ?'
+  ).bind(email).first();
+
+  if (!m) return json({ ok: false, erro: 'Membro não encontrado.' }, 404);
+  return json({ ok: true, member: m, types: MEMBER_TYPES });
+}
+
+/* ─────────── admin: atualizar "type" de um membro ─────────── */
+async function adminMemberUpdateType(request, env, admin) {
+  let email = '', type = '';
+  try {
+    const b = await request.json();
+    email = (b.email || '').trim().toLowerCase();
+    type  = (b.type  || '').trim();
+  } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  if (!emailValido(email))          return json({ ok: false, erro: 'E-mail inválido.' }, 400);
+  if (!MEMBER_TYPES.includes(type)) return json({ ok: false, erro: 'Tipo inválido.' }, 400);
+
+  const m = await env.DB.prepare('SELECT type FROM members WHERE email = ?').bind(email).first();
+  if (!m) return json({ ok: false, erro: 'Membro não encontrado.' }, 404);
+  if (m.type === type) return json({ ok: true, alterado: false, type });
+
+  await env.DB.prepare('UPDATE members SET type = ? WHERE email = ?').bind(type, email).run();
+  await logEvent(env, email, 'admin_update_type', `${m.type || '-'} → ${type} por ${admin.email}`);
+  return json({ ok: true, alterado: true, type, anterior: m.type || null });
 }
 
 /* ───────────────────────── newsletter (e-mail + telefone opcional) ───────────────────────── */

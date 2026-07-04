@@ -75,6 +75,15 @@
   .badge.err{color:var(--err);border-color:rgba(255,117,145,.35);background:rgba(255,117,145,.08)}
   .badge.neutral{color:var(--muted);border-color:var(--line)}
 
+  /* select de tipo do membro (edição inline) */
+  .type-sel{background:var(--bg);color:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:.3rem .5rem;font:inherit;font-size:.8rem;cursor:pointer;transition:border-color .2s}
+  .type-sel:hover{border-color:var(--muted)}
+  .type-sel:focus{outline:none;border-color:var(--accent)}
+  .type-sel.saving{opacity:.6;pointer-events:none}
+  .type-sel.ok{border-color:var(--ok)}
+  .type-sel.err{border-color:var(--err)}
+
   /* ── Estados ── */
   .state{padding:3rem 1.2rem;text-align:center;color:var(--muted);font-size:.9rem}
   .state.err{color:var(--err)}
@@ -166,6 +175,68 @@
       '<tbody>'+body+'</tbody></table></div>';
   }
 
+  /* ── tabela de membros (com coluna Tipo editável) ── */
+  function typeSelect(email, atual, types){
+    var opts=(types||[]).map(function(t){
+      var sel=(t===atual)?' selected':'';
+      return '<option value="'+esc(t)+'"'+sel+'>'+esc(t)+'</option>';
+    }).join("");
+    return '<select class="type-sel" data-email="'+esc(email)+'" data-atual="'+esc(atual||"")+'" title="Alterar tipo">'+opts+'</select>';
+  }
+
+  function membersTable(rows, types){
+    if(!rows||!rows.length) return '<div class="empty">Nenhum membro ainda.</div>';
+    var body=rows.map(function(r){
+      return '<tr>'+
+        '<td class="email">'+esc(r.email)+'</td>'+
+        '<td class="dim">'+(esc(r.name)||"—")+'</td>'+
+        '<td class="dim">'+(esc(r.phone)||"—")+'</td>'+
+        '<td>'+statusBadge(r.status)+'</td>'+
+        '<td>'+typeSelect(r.email, r.type, types)+'</td>'+
+        '<td class="mono">'+fmtDate(r.created_at)+'</td>'+
+        '<td class="mono">'+fmtDate(r.confirmed_at)+'</td>'+
+      '</tr>';
+    }).join("");
+    return '<div class="table-wrap"><table>'+
+      '<thead><tr><th>E-mail</th><th>Nome</th><th>Telefone</th><th>Status</th><th>Tipo</th><th>Criado em</th><th>Confirmado em</th></tr></thead>'+
+      '<tbody>'+body+'</tbody></table></div>';
+  }
+
+  function bindTypeSelects(container){
+    container.querySelectorAll(".type-sel").forEach(function(sel){
+      sel.addEventListener("change", function(){
+        var email=sel.dataset.email, novo=sel.value, anterior=sel.dataset.atual;
+        if(novo===anterior) return;
+        sel.classList.remove("ok","err");
+        sel.classList.add("saving");
+        fetch("/api/admin/member/update-type",{
+          method:"POST", credentials:"same-origin",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ email: email, type: novo })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          sel.classList.remove("saving");
+          if(d && d.ok){
+            sel.dataset.atual = d.type;
+            sel.classList.add("ok");
+            setTimeout(function(){ sel.classList.remove("ok"); }, 1400);
+          } else {
+            sel.value = anterior; // reverte
+            sel.classList.add("err");
+            alert((d && d.erro) || "Falha ao atualizar o tipo.");
+          }
+        })
+        .catch(function(){
+          sel.classList.remove("saving");
+          sel.value = anterior;
+          sel.classList.add("err");
+          alert("Falha de conexão.");
+        });
+      });
+    });
+  }
+
   /* ── tabela de eventos ── */
   function eventsTable(rows){
     if(!rows||!rows.length) return '<div class="empty">Nenhum evento registrado.</div>';
@@ -231,7 +302,7 @@
         el("c-subscribers").textContent="("+subs.length+")";
         el("c-events").textContent="("+events.length+")";
 
-        el("panel-members").innerHTML=peopleTable(members);
+        el("panel-members").innerHTML=membersTable(members, d.memberTypes || []); bindTypeSelects(el("panel-members"));
         el("panel-subscribers").innerHTML=peopleTable(subs);
         el("panel-events").innerHTML=eventsTable(events);
 
