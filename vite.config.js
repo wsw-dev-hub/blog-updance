@@ -95,6 +95,7 @@ export default defineConfig(({ command }) => ({
       input:{
         main: resolve(__dirname, 'index.html'),
         'posts/9-licoes': resolve(__dirname, 'src/posts/9-licoes.html'),
+        'posts/warm-up': resolve(__dirname, 'src/posts/warm-up.html'),
         'articles/artigos': resolve(__dirname, 'src/articles/artigos.html'),
         'tracks/trilhas': resolve(__dirname, 'src/tracks/trilhas.html'),
         'tracks/trilha-tecnica': resolve(__dirname, 'src/tracks/trilha-tecnica.html'),

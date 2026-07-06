@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Up Dance | Blog — Artigo</title>
+
+<!-- Favicon -->
+<link rel="icon"          type="image/png" href="/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/png" href="/images/icons/udx-icon.ico">
+
+<!-- Preconexão antecipada com CDNs (elimina RTT extra) -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+<!-- Bootstrap 5 — non-blocking via media trick -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</noscript>
+
+<!-- Material Design Icons — non-blocking -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+</noscript>
+
+<!-- Folhas de estilo do projeto (críticos — carregam normalmente) -->
+<link rel="stylesheet" href="/css/blog.css">       <!-- 1º: define :root (tokens) -->
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
+<link rel="stylesheet" href="/css/format.css">     <!-- 3º: complementa tipografia -->
+<link rel="stylesheet" href="/css/mediaQuery.css"> <!-- 4º: sobrescreve por largura -->
+<!--<script type="module" src="/public/main.js" defer></script>-->
+<!--<link rel="stylesheet" href="css/slider-carrossel.css">-->
+<!-- Scripts movidos para o final do <body> -->
+</head>
+<body>
+<script src="/js/loader.js"></script>
+<!-- ======================================================
+     HEADER
+====================================================== -->
+<div class="container-fluid p-0">
+    <header class="row g-0 blog-header">
+
+        <!-- Logo -->
+        <div class="col-4 col-md-3 col-lg-2 ">
+            <a href="/index.html" class="blog-logo-link">
+                <img src="/images/icons/udx-icon.png"
+                     alt="Up Dance — voltar para Destaques"
+                     class="blog-logo-img">
+            </a>
+        </div>
+
+        <!-- Nav / Hambúrguer -->
+        <div class="col-8 col-md-9 col-lg-10 d-flex justify-content-end align-items-center pe-0">
+
+            <!-- Menu desktop (≥ lg) -->
+            <ul class="menu-list d-none d-lg-inline-flex" role="menubar">
+                <li role="none">
+                    <a id="btnAcessar" class="fa-submit" href="/entrar/" role="menuitem">
+                        <span class="blog-menu-icon mdi mdi-account-outline" aria-hidden="true"></span>Acessar
+                    </a>
+                </li>
+                <li role="none">
+                    <a id="btnCadastrar" class="fa-submit" href="/cadastro/" role="menuitem">Newsletter</a>
+                </li>
+            </ul>
+
+            <!-- Botão hambúrguer (< lg) -->
+            <button class="btn-mobile-menu d-flex d-lg-none"
+                    id="btnMobileMenu"
+                    aria-label="Abrir menu"
+                    aria-expanded="false"
+                    aria-controls="mobileNav">
+                <span class="mdi mdi-menu" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <!-- Nav dropdown mobile -->
+        <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
+            <ul>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="/cadastro/">Receba Nossa Newsletter</a></li>
+            </ul>
+        </nav>
+
+    </header>
+</div>
+
+<a id="topo"></a>
+<!-- ======================================================
+     HERO / BREADCRUMB
+====================================================== -->
+<div id="hero-blog" class="container-fluid p-0">
+
+    <section class="page-title" aria-label="Título da página">
+        <div class="row auto-container">
+            <div class="col-12">
+                <div class="container content">
+                    <h1>Bem-vindo <span class="destaque">Wellington Santos</span></h1>
+                    <nav aria-label="Trilha de navegação">
+                        <ul class="page-perfil-scrum">
+                            <li><a href="/index.html">Destaques</a></li>
+                            <li><a href="/src/articles/artigos.html">Artigos</a></li>
+                            <li></li>
+                            <!--<li><span class="breadcrumb-current">Artigo</span></li>-->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--<div class="sidebar_cleanner"></div>-->
+    <!-- ======================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+    <section aria-label="Artigo completo">
+        <div id="main-content" class="main-blog-content">
+            <div class="row" id="blog-single-infos">
+
+                <!-- ── COLUNA DO ARTIGO ──────────────────────────── -->
+                <div class="content-side col-12 col-lg-8">
+                    <div class="container">
+                        <div class="blog-single">
+                            <div class="inner-box">
+
+                                <!-- Badge de categoria -->
+                                
+                                <div class="card-category">
+                                    <span class="mdi mdi-tag-outline card-categ" aria-hidden="true"></span>
+                                    Estratégia</div>
+
+                                <!-- Título do artigo -->
+                                <h4>Warm-up, Aquecer Antes de Dançar: Um Hábito Simples que Faz Toda Diferença.</h4>
+
+                                <!-- Imagem de destaque -->
+                                <div class="image">
+                                    <img src="/images/titulos/warm-up.png"
+                                         alt="Warm-up, Aquecer Antes de Dançar: Um Hábito Simples que Faz Toda Diferença."
+                                         loading="lazy">
+                                </div>
+
+                                <!-- Meta: categoria, autor, data -->
+                                <ul class="post-meta">
+                                    <!--<li class="style-two text-white">
+                                        <span class="mdi mdi-tag-outline" aria-hidden="true"></span> Estratégia
+                                    </li>-->
+                                    <li class="style-two text-white">
+                                        <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
+                                    </li>
+                                    <li class="style-two text-white">
+                                        <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 13 JUN 2023
+                                    </li>
+                                </ul>
+
+                                <!-- Compartilhamento social -->
+                                <ul class="social-media" aria-label="Compartilhar artigo">
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-instagram"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-facebook"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-twitter"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-whatsapp"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-link-variant"></span>
+                                        </li>
+                                    </a>
+                                </ul>
+
+                                <!-- ── CORPO DO ARTIGO ─────────────────── -->
+                                <div class="lower-content">
+                                    <div class="text">
+                                        <p>
+                                            É comum que, ao chegar para uma aula de dança, alguns alunos queiram ir direto para a parte mais empolgante: 
+                                            aprender a coreografia. Afinal, quem nunca pensou: "Se eu vim para dançar, por que perder tempo aquecendo?"
+                                        </p>
+                                        <p>
+                                            A resposta é simples: porque o corpo não funciona como um <a href="#">interruptor</a>. Ele se parece muito mais com um carro 
+                                            em uma manhã fria. Você até pode ligar o motor e sair acelerando, mas as chances de desgastar as peças aumentam 
+                                            bastante. Com o corpo acontece algo parecido. O aquecimento prepara músculos, articulações e o sistema cardiovascular 
+                                            para o esforço que está por vir.
+                                        </p>
+
+                                        <p>
+                                            Pense também em um celular. Mesmo com a bateria cheia, ele precisa de alguns segundos para iniciar todos os seus 
+                                            sistemas após ser ligado. O corpo humano segue uma lógica semelhante: ele precisa "acordar" antes de responder 
+                                            com agilidade, equilíbrio, força e coordenação.
+                                        </p>
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="column-blog col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-10.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                                <div class="column-blog col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-11.png"
+                                                             alt="Galeria — imagem 2"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h5>É nesse momento que o aquecimento entra em cena.</h5>
+                                        <p>
+                                            É nesse momento que o aquecimento entra em cena. Mais do que elevar a temperatura corporal, 
+                                            ele desperta a concentração, melhora o tempo de resposta e ajuda o aluno a se conectar com 
+                                            a aula. Aos poucos, a mente deixa as preocupações do dia do lado de fora da sala, enquanto 
+                                            o corpo passa a compreender que é hora de se movimentar.
+                                        </p>
+                                        <p>
+                                            Depois do aquecimento, entra outro grande aliado: o alongamento. Diferentemente do que muitos 
+                                            imaginam, alongar não significa apenas "encostar a mão no pé". O alongamento desenvolve mobilidade, 
+                                            melhora a amplitude dos movimentos e favorece uma execução mais confortável e consciente dos gestos 
+                                            técnicos.
+                                        </p>
+
+                                        <p>
+                                           Imagine tentar abrir um guarda-chuva enferrujado. Ele até abre, mas faz força, trava e pode até quebrar. 
+                                           Agora imagine um guarda-chuva bem cuidado: abre suavemente, sem resistência. Os músculos e articulações 
+                                           respondem de forma semelhante quando recebem estímulos adequados de mobilidade e flexibilidade.
+                                        </p>
+                                        <p>
+                                            Claro que ninguém precisa se transformar em um contorcionista da noite para o dia. A evolução acontece 
+                                            aos poucos, respeitando os limites individuais. Comparar o próprio corpo ao de outro aluno costuma gerar 
+                                            frustração. O objetivo não é descobrir quem alcança o chão primeiro, mas perceber que, com constância, 
+                                            o próprio corpo passa a realizar movimentos que antes pareciam impossíveis.
+                                        </p>
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-10.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <p>
+                                            Existe ainda um benefício pouco comentado: o aquecimento e o alongamento ajudam a desenvolver a percepção 
+                                            corporal. O aluno começa a identificar pequenas tensões, limitações e compensações que, durante a correria 
+                                            do dia a dia, passam despercebidas. É como ajustar os espelhos do carro antes de sair dirigindo. Eles não 
+                                            fazem o veículo andar, mas permitem enxergar melhor o caminho.
+                                        </p>
+                                        <p>
+                                            E há um detalhe curioso: quase todo mundo conhece alguém que diz "não preciso aquecer, meu corpo já é quente". 
+                                            Normalmente, essa mesma pessoa é a primeira a reclamar que "o joelho resolveu conversar durante a aula". O corpo 
+                                            sempre encontra uma forma de lembrar que preparação não é exagero; é prevenção.
+                                        </p>
+                                        <p>
+                                            Do ponto de vista pedagógico, o aquecimento também representa um momento importante para o professor observar 
+                                            seus alunos. Pequenos sinais de fadiga, desconforto ou dificuldade podem aparecer logo no início da aula, 
+                                            permitindo adaptações que tornam a prática mais segura e eficiente.
+                                        </p>
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-9.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h5>É nesse momento que o aquecimento entra em cena.</h5>
+
+                                        <p>
+                                            No fim das contas, aquecer e alongar não são etapas que atrasam a aula. Pelo contrário: são elas que permitem 
+                                            que o restante da aula aconteça com mais qualidade. Quando o corpo está preparado, o aluno aprende com mais 
+                                            facilidade, executa movimentos com maior precisão, reduz o risco de lesões e aproveita melhor cada exercício.
+                                        </p>
+
+                                        <p>
+                                            Na dança, assim como em tantas situações da vida, os melhores resultados raramente surgem da pressa. Eles 
+                                            costumam ser consequência de uma boa preparação. Afinal, construir uma casa sem fazer a fundação pode até 
+                                            parecer mais rápido... até o dia em que a primeira rachadura aparece.
+                                        </p>
+
+                                        <p>
+                                            Por isso, da próxima vez que o professor iniciar o aquecimento, lembre-se: você ainda não está "esperando a 
+                                            aula começar". Na verdade, a aula já começou — e talvez essa seja uma das partes mais importantes de todo o 
+                                            processo de aprendizagem.
+                                        </p>
+                                        <blockquote>
+                                            <div class="quote-icon flaticon-left-quote" aria-hidden="true">
+                                                <span id="quote-icon"></span>
+                                            </div>
+                                            <div class="quote-text">
+                                                What sort of men would think it is acceptable to subject a young girl
+                                                to this level of brutality and violence? An attack like this shocks
+                                                our communities and we must all work together.
+                                            </div>
+                                        </blockquote>
+                                    </div>
+                                </div>
+
+                                <!-- Tags do artigo -->
+                                <div class="post-share-options">
+                                    <div class="post-share-inner clearfix">
+                                        <div class="pull-left post-tags">
+                                            <span>Tags: </span>
+                                            <a href="#">Business</a>
+                                            <a href="#">Empreendedorismo</a>
+                                            <a href="#">Marketing Digital</a>
+                                            <a href="#">Hacks</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Comentários (Disqus) -->
+                                <section aria-label="Comentarios" class="disqus_comentarios">
+                                    <div id="disqus_thread" class="clearfix"></div>
+                                    <script>
+                                        /**
+                                        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                                        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                                        /**/
+                                        var disqus_config = function () {
+                                            this.page.url = PAGE_URL;  'https://blog.updance.workers.dev/posts/warm-up.html'  // Replace PAGE_URL with your page's canonical URL variable
+                                            this.page.identifier = 'post-01';                    // ← Identificador único (recomendado)
+                                            this.page.title = 'Warm-up, Aquecer Antes de Dançar: Um Hábito Simples que Faz Toda Diferença.'
+                                            this.page.category_id = 'estratégia';
+                                        };
+                                        
+                                    (function () {
+                                        var d = document, s = d.createElement('script');
+                                        s.src = 'https://blog-updance-workers-dev.disqus.com/embed.js';
+                                        s.setAttribute('data-timestamp', +new Date());
+                                        (d.head || d.body).appendChild(s);
+                                    }());
+                                    </script>
+                                    <noscript>
+                                        Habilite o JavaScript para ver os
+                                        <a href="https://disqus.com/?ref_noscript">comentários via Disqus.</a>
+                                    </noscript>
+                                </section>
+
+                            </div><!-- /.inner-box -->
+                        </div><!-- /.blog-single -->
+                    </div><!-- /.container -->
+                </div><!-- /.content-side -->
+
+                <!-- ── SIDEBAR ───────────────────────────────────── -->
+                <div class="sidebar-side col-12 col-lg-4">
+                    <aside class="sidebar" aria-label="Barra lateral">
+
+                        <!-- Widget: Busca -->
+                        <div class="row widget-box" id="widget-search">
+                            <div class="sidebar-widget search-box">
+                                <div class="form-group-blog">
+                                    <!--<span class="mdi mdi-magnify search-icon" aria-hidden="true"></span>-->
+                                    <input name="txtBusca" type="search" id="txtBusca"
+                                           placeholder="Pesquisar artigos..."
+                                           aria-label="Campo de busca">
+                                    <input type="submit" name="btnBuscar" value=""
+                                           id="btnBuscar" class="fa-scr" aria-label="Buscar">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar_cleanner"></div>
+
+                        <!-- Widget: Comece Por Aqui -->
+                        <div class="row widget-box" id="widget-comece">
+                            <div class="widget-header">
+                                <span class="icon mdi mdi-book-multiple-outline" aria-hidden="true"></span>
+                                <h5 class="text-white">Comece Por Aqui</h5>
+                            </div>
+                            <ul class="lista-titulos">
+                                <li class="desc">
+                                    <div class="row g-0">
+                                        <div class="col-11">
+                                            <span class="temas"><a href="#">Mentalize</a></span>
+                                            <a href="#"><h6>Tudo o que Não Te Contaram Sobre o Talento</h6></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="desc">
+                                    <div class="row g-0">
+                                        <div class="col-11">
+                                            <span class="temas"><a href="#">Inteligência Emocional</a></span>
+                                            <a href="#"><h6>9 Maneiras de Sair da Matrix</h6></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="desc">
+                                    <div class="row g-0">
+                                        <div class="col-11">
+                                            <span class="temas"><a href="#">Profissional</a></span>
+                                            <a href="#"><h6>Você é O que Você Faz Quando Ninguém Está Olhando</h6></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="desc">
+                                    <div class="row g-0">
+                                        <div class="col-11">
+                                            <span class="temas"><a href="#">Otimização de Treinos</a></span>
+                                            <a href="#"><h6>3 Coisas que Não Podem Faltar nos Seus Treinos</h6></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="desc">
+                                    <div class="row g-0">
+                                        <div class="col-11">
+                                            <span class="temas"><a href="#">Dicas &amp; Sacadas</a></span>
+                                            <a href="#"><h6>Os Segredos da Arte Performática</h6></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar_cleanner"></div>
+
+                        <!-- Widget: Novas Publicações -->
+                        <div class="row widget-box" id="widget-novas">
+                            <div class="widget-header">
+                                <span class="icon mdi mdi-newspaper-variant-multiple-outline" aria-hidden="true"></span>
+                                <h5 class="text-white">Novas Publicações</h5>
+                            </div>
+                            <ul class="lista-posts">
+                                <li class="desc">
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
+                                        </div>
+                                    </article>
+                                </li>
+                                <li class="desc">
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
+                                        </div>
+                                    </article>
+                                </li>
+                                <li class="desc">
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
+                                        </div>
+                                    </article>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar_cleanner"></div>
+
+                        <!-- Widget: Newsletter -->
+                        <div class="row widget-box" id="widget-email">
+                            <div class="sidebar-widget search-box">
+                                <div class="widget-header">
+                                    <h6 class="text-white newsletter-cta">
+                                        Cadastre-se e <span class="destaque">receba</span> nossas
+                                        newsletters com <span class="destaque">matérias exclusivas</span>
+                                        toda semana!
+                                    </h6>
+                                </div>
+                                <div class="form-group-blog">
+                                    <div class="email-input-wrap">
+                                        <span class="icon mdi mdi-email-fast-outline" aria-hidden="true"></span>
+                                        <input name="txtEmail" type="email" id="txtEmail"
+                                               placeholder="Digite seu e-mail"
+                                               aria-label="Endereço de e-mail">
+                                    </div>
+                                    <input type="submit" name="btnCadastroEmail" value="Cadastrar"
+                                           id="btnCadastroEmail" class="fa-submit">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar_cleanner"></div>
+
+                        <!-- Widget: Clube do Groove -->
+                        <div class="row widget-box blog-club-content" id="widget-clube">
+                            <div class="widget-header">
+                                <span class="icon mdi mdi-message-video" aria-hidden="true"></span>
+                                <h5 class="text-white">Clube do Groove</h5>
+                                <p><a href="#" aria-label="Ver todos os vídeos do Clube do Groove">ver todos →</a></p>
+                            </div>
+                            <div class="blog-club-mask">
+                                <div class="play-circle" role="button" aria-label="Reproduzir">
+                                    <span class="icon mdi mdi-play-circle-outline" aria-hidden="true"></span>
+                                </div>
+                                <div class="slider">
+                                    <div class="slider_box">
+                                        <article class="slider_item active"
+                                                 slider-bg="/images/titulos/expressao.png">
+                                            <div class="slider_content"></div>
+                                        </article>
+                                        <article class="slider_item"
+                                                 slider-bg="/images/titulos/dgroove.png">
+                                            <div class="slider_content"></div>
+                                        </article>
+                                        <article class="slider_item"
+                                                 slider-bg="/images/titulos/boost-a-move.png">
+                                            <div class="slider_content"></div>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-club-footer">
+                                <div class="prev" role="button" aria-label="Slide anterior">&#8249;</div>
+                                <div class="go"   role="button" aria-label="Próximo slide">&#8250;</div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar_cleanner"></div>
+
+                        <!-- Widget: Navegue por Assuntos -->
+                        <div class="row widget-box" id="widget-assuntos">
+                            <div class="widget-header">
+                                <span class="icon mdi mdi-layers-triple-outline" aria-hidden="true"></span>
+                                <h5 class="text-white">Navegue por Assuntos</h5>
+                            </div>
+                            <ul class="lista-tags">
+                                <li class="desc">
+                                    <div class="row g-0">
+                                        <div class="col-11">
+                                            <a href="#"><h6>Bem-Estar</h6></a>
+                                            <a href="#"><h6>Dicas &amp; Sacadas</h6></a>
+                                            <a href="#"><h6>Alta Performance</h6></a>
+                                            <a href="#"><h6>Produção Visual</h6></a>
+                                            <a href="#"><h6>Warm-Ups</h6></a>
+                                            <a href="#"><h6>Mentorias</h6></a>
+                                            <a href="#"><h6>Desafios</h6></a>
+                                            <a href="#"><h6>Concepção Coreográfica</h6></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </aside>
+                </div><!-- /.sidebar-side -->
+
+            </div><!-- /#blog-single-infos -->
+        </div><!-- /#main-content -->
+    </section>
+
+    <div class="clear"></div>
+<!--</div> /#hero-blog -->
+
+<!-- ======================================================
+     RODAPE  (usa as classes .blog-footer* ja estilizadas)
+====================================================== -->
+<footer class="blog-footer" aria-label="Rodape">
+    <div class="auto-container">
+        <div class="row blog-footer__cols">
+
+            <div class="col-12 col-md-6 col-lg-4 blog-footer__col">
+                <!--<a href="#topo" class="blog-logo-link" aria-label="Up Dance Xperience">
+                    <svg class="blog-logo-img" viewBox="0 0 188 46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="udxgf" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#FA33A1"/>
+                                <stop offset="0.55" stop-color="#8C0783"/>
+                                <stop offset="1" stop-color="#430ABF"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="3" width="40" height="40" rx="11" fill="url(#udxgf)"/>
+                        <path d="M11 14 v11 a9 9 0 0 0 18 0 v-11" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round"/>
+                        <text x="50" y="21" font-family="Poppins, sans-serif" font-size="15" font-weight="700" letter-spacing="0.5" fill="#DFE0F2">UP DANCE</text>
+                        <text x="50" y="37" font-family="Poppins, sans-serif" font-size="10.5" font-weight="600" letter-spacing="4.2" fill="#FA33A1">XPERIENCE</text>
+                    </svg>
+                </a>-->
+                <div class="col-4 col-md-3 col-lg-2">
+                    <a href="/index.html" class="blog-logo-link">
+                        <img src="/images/icons/udx-icon.png"
+                            alt="Up Dance — voltar para Destaques"
+                            class="blog-logo-img">
+                    </a>
+                </div>
+                <p style="color: var(--udx-text-muted); font-size: 13px; line-height: 1.7; margin: 14px 0 18px; max-width: 280px;">
+                    Conteudo e formacao para dancarinos, professores e criadores.
+                    A danca levada a serio &mdash; do aquecimento ao palco.
+                </p>
+                <h3 class="blog-footer__title">Siga a UDX</h3>
+                <!--<ul class="blog-footer__list">
+                    <li><span class="mdi mdi-instagram" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                    <li><span class="mdi mdi-youtube" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Up Dance no YouTube</a></li>
+                    <li><span class="mdi mdi-spotify" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">Playlists oficiais</a></li>
+                    <li><span class="mdi mdi-tiktok" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">@updancexperience</a></li>
+                </ul>-->
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-2 blog-footer__col">
+                <h3 class="blog-footer__title">Explorar</h3>
+                <ul class="blog-footer__list">
+                    <li><a href="#topo">Destaques</a></li>
+                    <li><a href="/src/articles/artigos.html">Artigos</a></li>
+                    <li><a href="#clube">Clube do Groove</a></li>
+                    <li><a href="#trilhas">Trilhas</a></li>
+                    <li><a href="#newsletter">Newsletter</a></li>
+                </ul>
+            </div>
+
+            <div class="col-5 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Contato</h3>
+                <ul class="blog-footer__list">
+                    <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
+                        <a href="mailto:updancexperience@gmail.com">updancexperience@gmail.com</a></li>
+                    <!--li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
+                        <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
+                    <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
+                    <li><span class="mdi mdi-clock-outline" aria-hidden="true"></span> Seg a Sex, 9h&ndash;18h</li>-->
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 blog-footer__col">
+                <h3 class="blog-footer__title">Da Galeria</h3>
+                <ul class="blog-footer__gallery" aria-hidden="true">
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                    <li><span></span></li><li><span></span></li><li><span></span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="blog-footer__bar">
+        <small>
+            &copy; <span id="udx-year">2026</span> <b>Up Dance Xperience</b> &middot;
+            Todos os direitos reservados &middot;
+            Feito com <i>groove</i> no Rio de Janeiro.
+        </small>
+    </div>
+</footer>
+
+<!-- ======================================================
+     MENU FLUTUANTE RADIAL (mobile/tablet)
+     Aparece após o usuário rolar e o header sair da viewport
+====================================================== -->
+<div class="udx-fab" id="udxFab" data-pane="trilhas" aria-hidden="true">
+
+    <!-- Sugestão contextual (equivalente ao "Depositar via PIX") -->
+    <!--<div class="udx-fab__hint" id="udxFabHint" role="status">
+        <span class="mdi mdi-email-fast-outline" aria-hidden="true"></span>
+        <span class="udx-fab__hint-text">Receba a Newsletter semanal</span>
+        <a href="#newsletter" class="udx-fab__hint-go" aria-label="Ir para newsletter">
+            <span class="mdi mdi-chevron-right" aria-hidden="true"></span>
+        </a>
+        <button class="udx-fab__hint-close" id="udxFabHintClose" aria-label="Fechar sugestão">
+            <span class="mdi mdi-close" aria-hidden="true"></span>
+        </button>
+    </div>-->
+
+    
+
+    <nav class="udx-fab__radial" id="udxFabRadial" aria-label="Atalhos do blog">
+        <!-- Itens injetados via JS conforme a pílula ativa -->
+        <button class="udx-fab__core" id="udxFabCore"
+                aria-label="Abrir menu de atalhos" aria-expanded="false" aria-controls="udxFabRadial">
+            <span class="mdi mdi-menu udx-fab__core-icon" aria-hidden="true"></span>
+        </button>
+    </nav>
+
+    <!-- Pílula de abas (equivalente ao Principal/Trading/IA) -->
+    <div class="udx-fab__tabs" role="tablist" aria-label="Sessões do blog">
+        <span class="udx-fab__tabs-thumb" aria-hidden="true"></span>
+        <button class="udx-fab__tab is-active" data-pane="trilhas"   role="tab" aria-selected="true">Trilhas</button>
+        <button class="udx-fab__tab"           data-pane="destaques" role="tab" aria-selected="false">Apps</button>
+        <button class="udx-fab__tab"           data-pane="clube"     role="tab" aria-selected="false">Clube</button>
+    </div>
+
+</div>
+
+<!-- Voltar ao topo -->
+<button class="to-top" id="toTop" aria-label="Voltar ao topo"><span class="mdi mdi-arrow-up" aria-hidden="true"></span></button>
+
+<!--</div>-->
+<!-- ======================================================
+     SCRIPTS — ao final do body (não bloqueiam o render)
+====================================================== -->
+<script id="dsq-count-scr" src="//blog-updance-workers-dev.disqus.com/count.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" defer></script>
+<!--<script src="/js/jquery-slider-carrossel.js" defer></script>
+<script src="/js/slider-carrossel.js" defer></script>-->
+
+<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
+<script>
+(function () {
+    'use strict';
+    // Delegação por "name" (não por id): funciona no widget original e nos
+    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[name="btnCadastroEmail"]');
+        if (!btn) return;
+        e.preventDefault();
+        var widget = btn.closest('.widget-box') || document;
+        var input  = widget.querySelector('[name="txtEmail"]');
+        var email  = input ? (input.value || '').trim() : '';
+        var destino = '/cadastro/';
+        if (email) destino += '?email=' + encodeURIComponent(email);
+        window.location.href = destino;
+    });
+}());
+</script>
+
+<script>
+/* Ano automatico */
+(function () {
+    var y = document.getElementById("udx-year");
+    if (y) y.textContent = new Date().getFullYear();
+}());
+
+/* Menu mobile */
+(function () {
+    "use strict";
+    var btn = document.getElementById("btnMobileMenu");
+    var nav = document.getElementById("mobileNav");
+    if (!btn || !nav) return;
+    btn.addEventListener("click", function () {
+        var isOpen = nav.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen);
+        var icon = btn.querySelector(".mdi");
+        icon.classList.toggle("mdi-menu", !isOpen);
+        icon.classList.toggle("mdi-close", isOpen);
+    });
+    /* fecha ao clicar em link */
+    nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+            nav.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            var ic = btn.querySelector(".mdi");
+            ic.classList.add("mdi-menu");
+            ic.classList.remove("mdi-close");
+        });
+    });
+}());
+
+/* Voltar ao topo */
+(function () {
+    "use strict";
+    var btn = document.getElementById("toTop");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.pageYOffset > 600);
+    }, { passive: true });
+    btn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}());
+
+/* ===========================================================
+   Menu flutuante radial (FAB) — pílulas trocam camadas
+   1. Trilhas / Destaques / Clube → 5 itens cada
+   2. Polegar deslizante atrás da pílula ativa
+   3. Substituição com implosão + pulso + ejeção
+=========================================================== */
+(function () {
+    "use strict";
+
+    var fab    = document.getElementById("udxFab");
+    var radial = document.getElementById("udxFabRadial");
+    var core   = document.getElementById("udxFabCore");
+    if (!fab || !radial || !core) return;
+
+    var tabsContainer = fab.querySelector(".udx-fab__tabs");
+    var thumb         = fab.querySelector(".udx-fab__tabs-thumb");
+    var tabs          = fab.querySelectorAll(".udx-fab__tab");
+
+    /* href de "Acessar" copiado do header (mesmo comportamento do original) */
+    var headerAcessar = document.getElementById("btnAcessar");
+    var acessarHref = (headerAcessar && headerAcessar.getAttribute("href")) || "/entrar/";
+
+    var PANES = {
+        trilhas: [
+            { pos:"tl",  icon:"mdi-compass-outline",                    label:"Trilhas",  href:"#trilhas"  },
+            { pos:"top", icon:"mdi-newspaper-variant-multiple-outline", label:"Recentes", href:"#recentes" },
+            { pos:"tr",  icon:"mdi-message-video",                      label:"Clube",    href:"#clube"    },
+            { pos:"bl",  icon:"mdi-account-outline",                    label:"Acessar",  href: acessarHref },
+            { pos:"br",  icon:"mdi-arrow-up",                           label:"Topo",     href:"#topo"     }
+        ],
+        destaques: [
+            { pos:"tl",  icon:"mdi-book-open-variant",                  label:"Ebooks",   href:"/destaques/ebooks"   },
+            { pos:"top", icon:"mdi-school-outline",                     label:"Tutorial", href:"/destaques/tutorial" },
+            { pos:"tr",  icon:"mdi-map-marker-path",                    label:"Guias",    href:"/destaques/guias"    },
+            { pos:"bl",  icon:"mdi-lightbulb-on-outline",               label:"Dicas",    href:"/destaques/dicas"    },
+            { pos:"br",  icon:"mdi-web",                                label:"Online",   href:"/destaques/online"   }
+        ],
+        clube: [
+            { pos:"tl",  icon:"mdi-music-circle-outline",               label:"UDX",      href:"/clube/udx"      },
+            { pos:"top", icon:"mdi-broadcast",                          label:"Lives",    href:"/clube/lives"    },
+            { pos:"tr",  icon:"mdi-account-circle-outline",             label:"Quem Sou", href:"/clube/sobre"    },
+            { pos:"bl",  icon:"mdi-play-circle-outline",                label:"Aulas",    href:"/clube/aulas"    },
+            { pos:"br",  icon:"mdi-storefront-outline",                 label:"Produtos", href:"/clube/produtos" }
+        ]
+    };
+
+    var swapLock = false;
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function renderPane(name){
+        var items = radial.querySelectorAll(".udx-fab__item");
+        for (var i = 0; i < items.length; i++) items[i].remove();
+
+        PANES[name].forEach(function(it){
+            var a = document.createElement("a");
+            a.className = "udx-fab__item udx-fab__item--" + it.pos;
+            a.href = it.href;
+            a.setAttribute("aria-label", it.label);
+            a.innerHTML = '<span class="mdi ' + it.icon + '" aria-hidden="true"></span><em>' + it.label + '</em>';
+            a.addEventListener("click", closeRadial);
+            radial.insertBefore(a, core);
+        });
+
+        fab.setAttribute("data-pane", name);
+    }
+
+    function moveThumbTo(tab){
+        var tabsRect = tabsContainer.getBoundingClientRect();
+        var tabRect  = tab.getBoundingClientRect();
+        var offsetX  = tabRect.left - tabsRect.left;
+        thumb.style.width = tabRect.width + "px";
+        thumb.style.transform = "translateX(" + offsetX + "px)";
+    }
+
+    /* Visibilidade controlada por scroll (mesma lógica do original) */
+    function updateVisibility(){
+        var threshold = Math.max(window.innerHeight * 0.6, 380);
+        var show = window.pageYOffset > threshold;
+        fab.classList.toggle("is-visible", show);
+        fab.setAttribute("aria-hidden", show ? "false" : "true");
+        if (!show) closeRadial();
+    }
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+
+    function openRadial(){
+        radial.classList.add("is-open");
+        fab.classList.add("is-open");
+        core.setAttribute("aria-expanded", "true");
+        core.querySelector(".udx-fab__core-icon").classList.replace("mdi-menu", "mdi-close");
+        requestAnimationFrame(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+    function closeRadial(){
+        radial.classList.remove("is-open", "is-collapsing");
+        fab.classList.remove("is-open");
+        core.setAttribute("aria-expanded", "false");
+        var ic = core.querySelector(".udx-fab__core-icon");
+        if (ic.classList.contains("mdi-close")) ic.classList.replace("mdi-close", "mdi-menu");
+    }
+
+    /* Coreografia da substituição: implosão → pulso → ejeção */
+    async function substitutePane(paneName){
+        if (swapLock) return;
+        swapLock = true;
+
+        radial.classList.add("is-collapsing");
+        fab.setAttribute("data-pane", paneName);
+
+        await wait(420);
+
+        renderPane(paneName);
+
+        core.classList.remove("is-pulsing");
+        void core.offsetWidth;
+        core.classList.add("is-pulsing");
+
+        void radial.offsetWidth;
+
+        await wait(80);
+        radial.classList.remove("is-collapsing");
+
+        await wait(640);
+        swapLock = false;
+    }
+
+    /* Handlers */
+    core.addEventListener("click", function(e){
+        e.stopPropagation();
+        if (radial.classList.contains("is-open")) closeRadial();
+        else openRadial();
+    });
+
+    tabs.forEach(function(tab){
+        tab.addEventListener("click", function(e){
+            e.stopPropagation();
+            if (tab.classList.contains("is-active") && radial.classList.contains("is-open")) return;
+
+            tabs.forEach(function(t){
+                t.classList.remove("is-active");
+                t.setAttribute("aria-selected", "false");
+            });
+            tab.classList.add("is-active");
+            tab.setAttribute("aria-selected", "true");
+
+            moveThumbTo(tab);
+
+            if (radial.classList.contains("is-open")) {
+                substitutePane(tab.dataset.pane);
+            } else {
+                renderPane(tab.dataset.pane);
+                openRadial();
+            }
+        });
+    });
+
+    document.addEventListener("click", function(e){
+        if (!fab.contains(e.target)) closeRadial();
+    });
+
+    window.addEventListener("resize", function(){
+        var active = fab.querySelector(".udx-fab__tab.is-active");
+        if (active) moveThumbTo(active);
+    });
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function(){
+            var active = fab.querySelector(".udx-fab__tab.is-active");
+            if (active) moveThumbTo(active);
+        });
+    }
+
+    /* Render inicial */
+    renderPane("trilhas");
+}());
+
+/* Newsletter banner */
+(function () {
+    "use strict";
+    var form = document.getElementById("newsForm");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var input = document.getElementById("newsEmail");
+        var email = (input.value || "").trim();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!ok) { input.focus(); input.style.borderBottom = "1px solid var(--udx-primary-hot)"; return; }
+        form.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--udx-text);font-size:14px;padding:10px 6px;"><span class="mdi mdi-check-circle" style="color:#FA33A1;font-size:24px;"></span>Pronto! Voce esta na lista. Confira sua caixa de entrada.</div>`;
+    });
+}());
+
+/* Clube — botao play (placeholder) */
+(function () {
+    "use strict";
+    var play = document.querySelector(".club-banner__play");
+    if (!play) return;
+    play.addEventListener("click", function () {
+        play.innerHTML = `<span class="mdi mdi-progress-clock" aria-hidden="true"></span>`;
+        setTimeout(function () {
+            play.innerHTML = `<span class="mdi mdi-play" aria-hidden="true"></span>`;
+        }, 1500);
+    });
+}());
+
+/* Reveal-on-scroll suave para as secoes */
+(function () {
+    "use strict";
+    if (!("IntersectionObserver" in window)) return;
+    var els = document.querySelectorAll(".section, .home-hero, .news-banner");
+    els.forEach(function (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(14px)";
+        el.style.transition = "opacity 600ms ease, transform 600ms ease";
+    });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
