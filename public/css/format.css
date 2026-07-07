@@ -5,7 +5,8 @@
 @property --fab-core-to     { syntax: '<color>'; inherits: true; initial-value: #FA33A1; }
 @property --fab-accent      { syntax: '<color>'; inherits: true; initial-value: #FA33A1; }
 @property --fab-accent-deep { syntax: '<color>'; inherits: true; initial-value: #BF0449; }
-
+@import url('https://fonts.cdnfonts.com/css/broadway');
+@import url('https://fonts.cdnfonts.com/css/ethnocentric');   
 
 /*RESET*/
 
@@ -270,6 +271,21 @@ img {
     font-size: 15px;
     margin-bottom: 25px;
 	text-align:justify;
+    
+}
+
+.blog-single .inner-box .lower-content .text p:first-letter {
+    margin-left:25px;
+
+}
+.blog-single .inner-box .lower-content .text p.first:first-letter {
+    font-size:26px;
+    font-weight: bold;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--udx-primary-hot);
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 .blog-single .inner-box .lower-content .text h5 {
