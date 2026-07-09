@@ -34,6 +34,40 @@ const COOLDOWN_TTL = 60;
 const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
 const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Aluno','Free'];
 
+// chave de cache KV para o mapa de regras de acesso
+const ACCESS_CACHE_KEY = 'access:rules';
+const ACCESS_CACHE_TTL = 300; // 5 min
+
+// Carrega o mapa { resource_key: Set<type> } com cache no KV
+async function carregarRegrasAcesso(env) {
+  const cached = await env.KV.get(ACCESS_CACHE_KEY, 'json');
+  if (cached) {
+    // reconstrói Sets a partir do JSON
+    const map = {};
+    for (const k of Object.keys(cached)) map[k] = new Set(cached[k]);
+    return map;
+  }
+  const rows = await env.DB.prepare(
+    'SELECT resource_key, member_type FROM access_rules'
+  ).all();
+  const map = {};
+  for (const r of (rows.results || [])) {
+    (map[r.resource_key] ||= new Set()).add(r.member_type);
+  }
+  // grava versão serializável
+  const serial = {};
+  for (const k of Object.keys(map)) serial[k] = [...map[k]];
+  await env.KV.put(ACCESS_CACHE_KEY, JSON.stringify(serial), { expirationTtl: ACCESS_CACHE_TTL });
+  return map;
+}
+
+// membro tem acesso a um recurso?
+async function podeAcessar(env, memberType, resourceKey) {
+  const map = await carregarRegrasAcesso(env);
+  const set = map[resourceKey];
+  return !!(set && set.has(memberType));
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -51,6 +85,7 @@ export default {
       if (pathname === '/api/auth/request'    && request.method === 'POST') return pedirLink(request, url, env);
       if (pathname === '/api/auth/verify')                                  return verificarLink(request, url, env);
       if (pathname === '/api/me')                                           return quemSouEu(request, env);
+      if (pathname === '/api/me/access')                                    return meusAcessos(request, env);
 
       // ---- ADMIN ----
       if (pathname === '/api/admin/setup'  && request.method === 'POST') return adminSetup(request, env);
@@ -72,6 +107,19 @@ export default {
         return a ? adminMemberUpdateType(request, env, a) : json({ erro: 'não autorizado' }, 403);
       }
 
+      if (pathname === '/api/admin/access/list') {
+        const a = await getAdmin(request, env);
+        return a ? adminAccessList(env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/access/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? adminAccessSave(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/resources/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? adminResourceSave(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+
       // ---- NEWSLETTER ----
       if (pathname === '/api/newsletter/subscribe' && request.method === 'POST') return inscrever(request, url, env);
       if (pathname === '/api/newsletter/confirm')                                return confirmar(request, url, env);
@@ -80,8 +128,22 @@ export default {
       if (pathname === '/admin' || pathname.startsWith('/admin/')) {
         if (!await getAdmin(request, env)) return Response.redirect(url.origin + '/admin-login/', 302);
       }
-      if (pathname === '/membros' || pathname.startsWith('/membros/')) {
+      /*if (pathname === '/membros' || pathname.startsWith('/membros/')) {
         if (!await getMember(request, env)) return Response.redirect(url.origin + '/entrar/', 302);
+      }*/
+     if (pathname === '/membros' || pathname.startsWith('/membros/')) {
+        const m = await getMember(request, env);
+        if (!m) return Response.redirect(url.origin + '/entrar/', 302);
+
+        // Se existir recurso com path_prefix casando com esta URL, checa autorização por tipo
+        const recurso = await env.DB.prepare(
+          'SELECT key FROM resources WHERE ? LIKE path_prefix || \'%\' ORDER BY length(path_prefix) DESC LIMIT 1'
+        ).bind(pathname).first();
+
+        if (recurso) {
+          const ok = await podeAcessar(env, m.type || 'Free', recurso.key);
+          if (!ok) return Response.redirect(url.origin + '/membros/?erro=sem_acesso', 302);
+        }
       }
     } catch (err) {
       return new Response('Erro interno: ' + err.message, { status: 500 });
@@ -171,6 +233,16 @@ async function logoutCookie(cookieName, prefixo, request, env) {
 async function quemSouEu(request, env) {
   const m = await getMember(request, env);
   return m ? json(m) : json(null, 401);
+}
+async function meusAcessos(request, env) {
+  const m = await getMember(request, env);
+  if (!m) return json(null, 401);
+  const rows = await env.DB.prepare(
+    'SELECT r.key, r.label, r.path_prefix ' +
+    'FROM access_rules a JOIN resources r ON r.key = a.resource_key ' +
+    'WHERE a.member_type = ?'
+  ).bind(m.type || 'Free').all();
+  return json({ type: m.type || 'Free', resources: rows.results || [] });
 }
 
 /* ───────────────────────── membros: senha ───────────────────────── */
@@ -495,6 +567,68 @@ async function adminMemberUpdateType(request, env, admin) {
   await env.KV.delete(ADMIN_CACHE_KEY);              // <-- adicionar
   await logEvent(env, email, 'admin_update_type', `${m.type || '-'} → ${type} por ${admin.email}`);
   return json({ ok: true, alterado: true, type, anterior: m.type || null });
+}
+
+async function adminAccessList(env) {
+  const [resources, rules] = await env.DB.batch([
+    env.DB.prepare('SELECT key, label, path_prefix FROM resources ORDER BY label'),
+    env.DB.prepare('SELECT resource_key, member_type FROM access_rules'),
+  ]);
+  const map = {};
+  for (const r of (rules.results || [])) (map[r.resource_key] ||= []).push(r.member_type);
+  return json({
+    ok: true,
+    memberTypes: MEMBER_TYPES,
+    resources: (resources.results || []).map(r => ({ ...r, allowed: map[r.key] || [] })),
+  });
+}
+
+async function adminResourceSave(request, env, admin) {
+  let key = '', label = '', path_prefix = '';
+  try { const b = await request.json();
+    key   = (b.key   || '').trim().toLowerCase();
+    label = (b.label || '').trim().slice(0, 120);
+    path_prefix = (b.path_prefix || '').trim();
+  } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  if (!/^[a-z0-9\-]{2,60}$/.test(key)) return json({ ok: false, erro: 'Chave inválida (use a-z, 0-9, hífen).' }, 400);
+  if (!label) return json({ ok: false, erro: 'Rótulo obrigatório.' }, 400);
+
+  await env.DB.prepare(
+    'INSERT INTO resources (key, label, path_prefix, created_at) VALUES (?,?,?,?) ' +
+    'ON CONFLICT(key) DO UPDATE SET label=excluded.label, path_prefix=excluded.path_prefix'
+  ).bind(key, label, path_prefix || null, new Date().toISOString()).run();
+
+  await env.KV.delete(ACCESS_CACHE_KEY);
+  await logEvent(env, admin.email, 'admin_resource_save', key);
+  return json({ ok: true });
+}
+
+async function adminAccessSave(request, env, admin) {
+  // body: { resource_key, types: ['Premium','Professor(a)', ...] }
+  let key = '', tipos = [];
+  try { const b = await request.json();
+    key = (b.resource_key || '').trim();
+    tipos = Array.isArray(b.types) ? b.types : [];
+  } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  const invalidos = tipos.filter(t => !MEMBER_TYPES.includes(t));
+  if (invalidos.length) return json({ ok: false, erro: 'Tipos inválidos: ' + invalidos.join(', ') }, 400);
+
+  const existe = await env.DB.prepare('SELECT key FROM resources WHERE key=?').bind(key).first();
+  if (!existe) return json({ ok: false, erro: 'Recurso não cadastrado.' }, 404);
+
+  const now = new Date().toISOString();
+  const stmts = [ env.DB.prepare('DELETE FROM access_rules WHERE resource_key=?').bind(key) ];
+  for (const t of tipos) {
+    stmts.push(env.DB.prepare(
+      'INSERT INTO access_rules (resource_key, member_type, created_at) VALUES (?,?,?)'
+    ).bind(key, t, now));
+  }
+  await env.DB.batch(stmts);
+  await env.KV.delete(ACCESS_CACHE_KEY);
+  await logEvent(env, admin.email, 'admin_access_save', key + ': ' + tipos.join(','));
+  return json({ ok: true });
 }
 
 /* ───────────────────────── newsletter (e-mail + telefone opcional) ───────────────────────── */

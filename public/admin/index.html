@@ -115,11 +115,13 @@
       <nav class="tabs" id="tabs">
         <button class="tab active" data-tab="members">Membros<span class="count" id="c-members"></span></button>
         <button class="tab" data-tab="subscribers">Inscritos<span class="count" id="c-subscribers"></span></button>
+        <button class="tab" data-tab="access">Acessos<span class="count" id="c-access"></span></button>
         <button class="tab" data-tab="events">Eventos<span class="count" id="c-events"></span></button>
       </nav>
 
       <section class="panel active" id="panel-members"></section>
       <section class="panel" id="panel-subscribers"></section>
+      <section class="panel" id="panel-access"></section>
       <section class="panel" id="panel-events"></section>
 
       <p class="updated" id="updated"></p>
@@ -238,6 +240,63 @@
   }
 
   /* ── tabela de eventos ── */
+  function accessTable(resources, types){
+  if(!resources||!resources.length) return '<div class="empty">Nenhum recurso cadastrado.</div>';
+  var head = '<th>Recurso</th><th>Prefixo</th>' + types.map(function(t){
+    return '<th style="text-align:center">'+esc(t)+'</th>';
+  }).join('');
+  var body = resources.map(function(r){
+    var allowed = new Set(r.allowed || []);
+    var cells = types.map(function(t){
+      var checked = allowed.has(t) ? ' checked' : '';
+      return '<td style="text-align:center">'+
+        '<input type="checkbox" class="acc-chk" data-key="'+esc(r.key)+'" data-type="'+esc(t)+'"'+checked+'></td>';
+    }).join('');
+    return '<tr>'+
+      '<td class="email">'+esc(r.label)+'<div class="dim" style="font-size:.72rem">'+esc(r.key)+'</div></td>'+
+      '<td class="dim mono">'+(esc(r.path_prefix)||'—')+'</td>'+
+      cells +
+    '</tr>';
+  }).join('');
+  return '<div class="table-wrap"><table>'+
+    '<thead><tr>'+head+'</tr></thead><tbody>'+body+'</tbody></table></div>'+
+    '<p class="updated">Marque os tipos que podem acessar cada recurso. As mudanças são salvas ao clicar em <b>Salvar acessos</b>.</p>'+
+    '<button class="ghost-btn" id="btnSaveAccess">Salvar acessos</button>';
+}
+
+  function loadAccess(){
+    el("panel-access").innerHTML = '<div class="empty">Carregando…</div>';
+    fetch("/api/admin/access/list",{credentials:"same-origin"})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok){ el("panel-access").innerHTML='<div class="empty">Falha ao carregar.</div>'; return; }
+        el("c-access").textContent = "("+(d.resources||[]).length+")";
+        el("panel-access").innerHTML = accessTable(d.resources, d.memberTypes);
+        var btn = document.getElementById("btnSaveAccess");
+        if (btn) btn.addEventListener("click", function(){ saveAccess(d.resources.map(function(r){return r.key;})); });
+      })
+      .catch(function(){ el("panel-access").innerHTML='<div class="empty">Falha de conexão.</div>'; });
+  }
+
+  function saveAccess(keys){
+    // agrupa checkboxes por recurso e envia um POST por recurso
+    var byKey = {};
+    document.querySelectorAll(".acc-chk").forEach(function(c){
+      if(c.checked) (byKey[c.dataset.key] = byKey[c.dataset.key] || []).push(c.dataset.type);
+    });
+    var tasks = keys.map(function(k){
+      return fetch("/api/admin/access/save",{
+        method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ resource_key:k, types: byKey[k] || [] })
+      }).then(function(r){ return r.json(); });
+    });
+    Promise.all(tasks).then(function(results){
+      var falhas = results.filter(function(x){ return !x || !x.ok; });
+      alert(falhas.length ? "Algumas alterações falharam." : "Acessos salvos.");
+    });
+  }
+
   function eventsTable(rows){
     if(!rows||!rows.length) return '<div class="empty">Nenhum evento registrado.</div>';
     var body=rows.map(function(r){
@@ -270,6 +329,7 @@
   /* ── abas ── */
   /* DEPOIS */
 var eventsLoaded = false;
+var accessLoaded = false;
 function setupTabs(){
   var tabs=document.querySelectorAll(".tab");
   tabs.forEach(function(t){
@@ -279,6 +339,11 @@ function setupTabs(){
       t.classList.add("active");
       el("panel-"+t.dataset.tab).classList.add("active");
 
+      // lazy-load da aba de acessos
+      if (t.dataset.tab === "access" && !accessLoaded) {
+        accessLoaded = true;
+        loadAccess();
+      }
       // lazy-load da aba de eventos
       if (t.dataset.tab === "events" && !eventsLoaded) {
         eventsLoaded = true;
@@ -322,7 +387,11 @@ function setupTabs(){
         el("panel-members").innerHTML=membersTable(members, d.memberTypes || []); bindTypeSelects(el("panel-members"));
         el("panel-subscribers").innerHTML=peopleTable(subs);
         el("panel-events").innerHTML='<div class="empty">Clique na aba para carregar.</div>';
-        eventsLoaded = false;                                                  // permite recarregar no "Atualizar"
+        eventsLoaded = false;        
+        accessLoaded = false;
+        
+        el("c-access").textContent = "";
+        el("panel-access").innerHTML = '<div class="empty">Clique na aba para carregar.</div>';                                          // permite recarregar no "Atualizar"
 
         el("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
         el("loading").hidden=true;
