@@ -254,27 +254,45 @@ async function meusAcessos(request, env) {
   const m = await getMember(request, env);
   if (!m) return json(null, 401);
 
-  // Sessões novas trazem m.types (array); sessões antigas só têm m.type (string).
-  // O fallback para [m.type] mantém o endpoint funcionando durante a transição.
   const types = Array.isArray(m.types) && m.types.length
     ? m.types
     : [m.type || 'Free'];
 
-  // WHERE member_type IN (?,?,?…) — placeholders dinâmicos
   const placeholders = types.map(() => '?').join(',');
-  const [recursos, rules] = await env.DB.batch([
+  const [recursos, rules, prods] = await env.DB.batch([
     env.DB.prepare(
       'SELECT key, label, path_prefix, icon, description FROM resources ORDER BY label'
     ),
     env.DB.prepare(
       'SELECT DISTINCT resource_key FROM access_rules WHERE member_type IN (' + placeholders + ')'
     ).bind(...types),
+    // Só produtos ativos, já ordenados por posição dentro do recurso
+    env.DB.prepare(
+      'SELECT rp.resource_key, p.id, p.slug, p.label, p.description, p.url, p.icon, p.external ' +
+      'FROM resource_products rp ' +
+      'JOIN products p ON p.id = rp.product_id ' +
+      'WHERE p.active = 1 ' +
+      'ORDER BY rp.resource_key, rp.position, p.label'
+    ),
   ]);
 
   const liberados = new Set((rules.results || []).map(r => r.resource_key));
+
+  // agrupa produtos por resource_key
+  const produtosPorRecurso = {};
+  for (const p of (prods.results || [])) {
+    (produtosPorRecurso[p.resource_key] ||= []).push({
+      id: p.id, slug: p.slug, label: p.label, description: p.description,
+      url: p.url, icon: p.icon, external: !!p.external,
+    });
+  }
+
   const resources = (recursos.results || []).map(r => ({
     ...r,
-    allowed: liberados.has(r.key),
+    allowed:  liberados.has(r.key),
+    // Regra de herança: só entrega a lista de produtos se o membro tem acesso ao card.
+    // Isso evita expor a lista de conteúdos de um card bloqueado.
+    products: liberados.has(r.key) ? (produtosPorRecurso[r.key] || []) : [],
   }));
 
   return json({ types, type: types[0], resources });
@@ -679,13 +697,18 @@ async function adminResourceSave(request, env, admin) {
     path_prefix = (b.path_prefix || '').trim();
     icon        = (b.icon        || '').trim().slice(0, 60);   // ex.: 'star-four-points-outline'
     description = (b.description || '').trim().slice(0, 240);
+    external_url = (b.external_url || '').trim().slice(0, 500);
   } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
 
   if (!/^[a-z0-9\-]{2,60}$/.test(key)) return json({ ok: false, erro: 'Chave inválida (use a-z, 0-9, hífen).' }, 400);
   if (!label) return json({ ok: false, erro: 'Rótulo obrigatório.' }, 400);
   // sanidade: nome de ícone MDI segue o padrão "coisa-coisa-coisa"
   if (icon && !/^[a-z0-9\-]{2,60}$/.test(icon)) return json({ ok: false, erro: 'Ícone inválido (use nome MDI sem prefixo "mdi-").' }, 400);
-
+    
+  if (external_url && !/^https?:\/\//.test(external_url)) {
+    return json({ ok: false, erro: 'URL externa deve começar com http:// ou https://' }, 400);
+  }
+  
   await env.DB.prepare(
     'INSERT INTO resources (key, label, path_prefix, icon, description, created_at) ' +
     'VALUES (?,?,?,?,?,?) ' +

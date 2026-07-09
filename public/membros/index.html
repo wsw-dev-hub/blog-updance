@@ -6,26 +6,14 @@
 <title>Área de Membros — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 
-<!-- Fontes do projeto -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
-
-<!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
-<!-- Design tokens e componentes do projeto -->
-<link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/blog.css">
-<link rel="stylesheet" href="/css/trailsFormat.css">
-<link rel="stylesheet" href="/css/mediaQuery.css">
 <link rel="stylesheet" href="/css/format.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
 
 <style>
-  /* ===============================================================
-     ESCOPO DA PÁGINA DE MEMBROS
-     Registra o tema "membros" no mesmo padrão .page-trails/.page-apps
-     usado em trailsFormat.css, reaproveitando todos os componentes
-     (.trails-hero, .trails-stats, .trails-list, .trail-x, .trails-cta).
-  ================================================================+ */
   .page-membros{
     --m-grad:        linear-gradient(135deg, #F434A1 0%, #ff8442 100%);
     --m-grad-soft:   linear-gradient(135deg, rgba(244,52,161,.18) 0%, rgba(255,132,66,.22) 100%);
@@ -34,7 +22,6 @@
     --m-orange:      #ff8442;
     --m-glow:        rgba(244, 52, 161, 0.32);
 
-    /* aliases que os componentes de trailsFormat.css já consomem */
     --seg-grad:      var(--m-grad);
     --seg-grad-soft: var(--m-grad-soft);
     --seg-grad-text: var(--m-grad-text);
@@ -51,8 +38,6 @@
     --seg-step-bg:     rgba(17, 2, 115, 0.18);
   }
 
-  /* Header compacto exclusivo desta página (não usa o header do blog inteiro,
-     já que a área de membros é privada e não precisa do menu público). */
   .members-topbar{
     position: sticky; top: 0; z-index: 300;
     display: flex; align-items: center; gap: .8rem;
@@ -75,10 +60,14 @@
   .members-topbar .type-badge{
     display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 12px; border-radius: 50px;
-    font-size: 11.5px; font-weight: 700;
+    font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase;
     background: var(--seg-grad); color: #fff;
     box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw;
+    white-space: normal;
+    line-height: 1.15;
+    font-size: 10.5px;
   }
   .members-topbar .type-badge .mdi{ font-size: 14px; }
   .members-topbar .spacer{ flex: 1; }
@@ -97,8 +86,6 @@
     color: #fff;
   }
 
-  /* Ajustes finos apenas para o conteúdo desta página. Nada aqui redefine
-     tokens globais — só afina o encaixe entre os componentes reaproveitados. */
   .members-main{ padding-bottom: 40px; }
 
   .members-hero .type-chip{
@@ -112,8 +99,6 @@
   .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
   .members-hero .type-chip b{ font-weight: 700; }
 
-  /* Grid dos cards da área — 1 col mobile, 2 col desktop.
-     Mantém o mesmo estilo dos .trail-x. */
   .members-list{
     display: grid;
     grid-template-columns: 1fr;
@@ -123,11 +108,10 @@
     .members-list{ grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* Card bloqueado (visível para o membro, mas sem acesso ao recurso). */
+  /* Card bloqueado */
   .trail-x.is-locked{
     opacity: .55;
     filter: grayscale(.25);
-    pointer-events: none;
   }
   .trail-x.is-locked .trail-x__cta{
     background: rgba(2, 2, 26, 0.65);
@@ -143,8 +127,45 @@
   }
   .trail-x .lock-note .mdi{ font-size: 14px; }
 
-  /* Lista de ebooks — reaproveita o visual de .trail-x__modules
-     e adiciona a seta e a cor de link consistentes com o tema. */
+  /* Lista de produtos dentro do card (turno 13) */
+  .products-list{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .products-list li{ margin: 0; padding: 0; }
+  .products-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .products-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(244, 52, 161, 0.06);
+    transform: translateX(3px);
+  }
+  .products-list a > .mdi:first-child{
+    font-size: 18px; color: var(--seg-accent); flex-shrink: 0;
+  }
+  .products-list__label{
+    display: flex; flex-direction: column;
+    flex: 1; min-width: 0;
+  }
+  .products-list__desc{
+    font-size: 11.5px; color: var(--udx-text-muted); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .products-list__ext{
+    font-size: 14px; color: var(--udx-text-muted); flex-shrink: 0;
+  }
+
+  /* Ebooks fixos (bloco "Sempre disponível") */
   .ebooks-list{
     margin: 6px 0 0;
     padding: 14px 0 0;
@@ -171,22 +192,18 @@
     font-size: 16px; color: var(--seg-accent); flex-shrink: 0;
   }
 
-  /* Estado inicial de "carregando…" e mensagem de sem acesso. */
   .members-state{
     text-align: center; padding: 40px 20px;
     color: var(--udx-text-muted); font-size: .95rem;
   }
-
-  /* Footer local (mais leve que .blog-footer). */
   .members-footer{
     padding: 20px 22px; text-align: center;
     color: var(--udx-text-muted); font-size: .8rem;
     border-top: 1px solid var(--udx-border);
   }
 
-  /* respeita reduced-motion */
   @media (prefers-reduced-motion: reduce){
-    .trail-x, .ebooks-list a, .members-topbar .btn-sair{ transition: none; }
+    .trail-x, .ebooks-list a, .products-list a, .members-topbar .btn-sair{ transition: none; }
   }
 </style>
 </head>
@@ -206,8 +223,6 @@
 
   <main class="members-main">
 
-    <!-- HERO — usa exatamente a classe .trails-hero,
-         estilizada pelos tokens --seg-* da .page-membros -->
     <section class="trails-hero">
       <div class="auto-container">
         <div class="trails-hero__inner members-hero">
@@ -227,7 +242,6 @@
             <span>Conectado como <b id="userEmail">—</b></span>
           </div>
 
-          <!-- Stats do próprio membro (preenchidas via JS) -->
           <div class="trails-stats" id="memberStats" style="margin-top:26px">
             <div class="trails-stats__item">
               <b id="statResources">0</b>
@@ -242,80 +256,55 @@
       </div>
     </section>
 
-    <!-- SEÇÃO PRINCIPAL — cartões dos recursos, no padrão .trail-x -->
+    <!-- SEÇÃO DINÂMICA — populada por JS a partir de /api/me/access -->
     <section class="trails-section">
       <div class="auto-container">
         <div class="trails-section__head">
           <div class="eyebrow">
             <span class="mdi mdi-star-four-points-outline" aria-hidden="true"></span>
-            <span>Seu conteúdo</span>
+            <span>Seu conteúdo por plano</span>
           </div>
           <h2>O que está <em>disponível para você</em></h2>
           <p class="lead">
-            Cada bloco corresponde a um recurso da Up Dance. Os que aparecem
-            em destaque estão liberados no seu plano; os demais aparecem
-            esmaecidos, e podem ser desbloqueados com um plano superior.
+            Os recursos abaixo refletem seu plano atual. Itens em destaque
+            estão liberados; os esmaecidos podem ser desbloqueados com um
+            plano superior.
           </p>
         </div>
 
         <div class="members-state" id="membersLoading">Carregando seus acessos…</div>
+        <div class="members-state" id="membersEmpty" hidden>
+          Nenhum recurso cadastrado ainda. Volte em breve.
+        </div>
+        <div class="trails-list members-list" id="membersList" hidden></div>
+      </div>
+    </section>
 
-        <div class="trails-list members-list" id="membersList" hidden>
+    <!-- SEÇÃO FIXA — recursos sempre disponíveis -->
+    <section class="trails-section" style="padding-top:0">
+      <div class="auto-container">
+        <div class="trails-section__head">
+          <div class="eyebrow">
+            <span class="mdi mdi-book-open-variant" aria-hidden="true"></span>
+            <span>Sempre disponível</span>
+          </div>
+          <h2>Ebooks e <em>Mini-ebooks</em></h2>
+          <p class="lead">
+            Materiais em PDF prontos para download — disponíveis para todos os membros.
+          </p>
+        </div>
 
-          <!-- 1) Aulas -->
-          <article class="trail-x" data-resource="aulas">
-            <div class="trail-x__top">
-              <span class="trail-x__icon"><span class="mdi mdi-play-box-multiple-outline"></span></span>
-              <div>
-                <span class="trail-x__num">Recurso 01</span>
-                <h3>Suas aulas</h3>
-              </div>
-            </div>
-            <p class="trail-x__desc">
-              Vídeos e materiais das suas turmas, organizados por trilha e nível.
-            </p>
-            <ul class="trail-x__meta">
-              <li><span class="mdi mdi-clock-outline"></span>Em breve</li>
-              <li><span class="mdi mdi-account-group-outline"></span>Por turma</li>
-            </ul>
-            <a class="trail-x__cta" href="#" data-cta="aulas">
-              Acessar <span class="mdi mdi-arrow-right"></span>
-            </a>
-          </article>
-
-          <!-- 2) Conteúdo exclusivo -->
-          <article class="trail-x" data-resource="conteudo-exclusivo">
-            <div class="trail-x__top">
-              <span class="trail-x__icon"><span class="mdi mdi-card-account-details-star-outline"></span></span>
-              <div>
-                <span class="trail-x__num">Recurso 02</span>
-                <h3>Conteúdo exclusivo</h3>
-              </div>
-            </div>
-            <p class="trail-x__desc">
-              Matérias, bastidores e entrevistas só para membros da Up Dance.
-            </p>
-            <ul class="trail-x__meta">
-              <li><span class="mdi mdi-newspaper-variant-outline"></span>Artigos</li>
-              <li><span class="mdi mdi-video-outline"></span>Bastidores</li>
-            </ul>
-            <a class="trail-x__cta" href="#" data-cta="conteudo-exclusivo">
-              Explorar <span class="mdi mdi-arrow-right"></span>
-            </a>
-          </article>
-
-          <!-- 3) Ebooks & Mini-ebooks -->
-          <article class="trail-x" data-resource="ebooks">
+        <div class="trails-list members-list">
+          <article class="trail-x">
             <div class="trail-x__top">
               <span class="trail-x__icon"><span class="mdi mdi-book-open-variant"></span></span>
               <div>
-                <span class="trail-x__num">Recurso 03</span>
-                <h3>Ebooks & Mini-ebooks</h3>
+                <span class="trail-x__num">Biblioteca</span>
+                <h3>Guias práticos</h3>
               </div>
             </div>
             <p class="trail-x__desc">
-              Materiais em PDF prontos para download, com técnicas, roteiros e
-              guias que você usa no dia a dia.
+              Selecionamos os materiais mais requisitados pelos alunos.
             </p>
             <ul class="ebooks-list">
               <li>
@@ -341,34 +330,10 @@
               </li>
             </ul>
           </article>
-
-          <!-- 4) Apps exclusivos -->
-          <article class="trail-x" data-resource="apps">
-            <div class="trail-x__top">
-              <span class="trail-x__icon"><span class="mdi mdi-apps"></span></span>
-              <div>
-                <span class="trail-x__num">Recurso 04</span>
-                <h3>Apps exclusivos</h3>
-              </div>
-            </div>
-            <p class="trail-x__desc">
-              Aplicativos que vão mudar sua forma de enxergar a dança —
-              disponíveis conforme seu plano.
-            </p>
-            <ul class="trail-x__meta">
-              <li><span class="mdi mdi-flask-outline"></span>Beta</li>
-              <li><span class="mdi mdi-lock-open-variant-outline"></span>Premium</li>
-            </ul>
-            <a class="trail-x__cta" href="#" data-cta="apps">
-              Ver apps <span class="mdi mdi-arrow-right"></span>
-            </a>
-          </article>
-
         </div>
       </div>
     </section>
 
-    <!-- CTA FINAL — no padrão .trails-cta -->
     <section class="trails-cta">
       <div class="auto-container">
         <div class="trails-cta__box">
@@ -398,6 +363,18 @@
   (function(){
     'use strict';
 
+    function esc(s){
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    }
+
+    // Sanitiza nome de ícone MDI (a-z, 0-9, hífen). Dupla defesa com o backend.
+    function safeIcon(name){
+      if (!name) return 'star-four-points-outline';
+      return /^[a-z0-9\-]{2,60}$/.test(name) ? name : 'star-four-points-outline';
+    }
+
     var typeBadge      = document.getElementById('typeBadge');
     var typeBadgeLabel = document.getElementById('typeBadgeLabel');
     var userChip       = document.getElementById('userChip');
@@ -405,10 +382,9 @@
     var statType       = document.getElementById('statType');
     var statResources  = document.getElementById('statResources');
     var loading        = document.getElementById('membersLoading');
+    var emptyState     = document.getElementById('membersEmpty');
     var list           = document.getElementById('membersList');
-    var cards          = list.querySelectorAll('.trail-x[data-resource]');
 
-    // 1) Identifica o membro logado.
     fetch('/api/me', { credentials: 'same-origin' })
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(u){
@@ -416,70 +392,104 @@
         userEmail.textContent = u.email;
         userChip.hidden = false;
 
+        // multi-tipo (turno 8) — badge e stat com todos os planos
         var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
         typeBadgeLabel.textContent = types.join(' · ');
         typeBadge.hidden = false;
         statType.textContent = types.length > 1 ? (types.length + ' planos') : types[0];
 
-        // 2) Descobre quais recursos o tipo pode acessar (proposto no turno 1).
-        //    Se o endpoint /api/me/access não existir ainda, cai em modo
-        //    compatível: mantém todos os cards visíveis e liberados.
         return fetch('/api/me/access', { credentials: 'same-origin' })
-          .then(function(r){ return r.ok ? r.json() : null; })
-          .catch(function(){ return null; });
+          .then(function(r){ return r.ok ? r.json() : null; });
       })
       .then(function(access){
-        // Modo compatível: sem /api/me/access, libera todos.
-        if(!access || !Array.isArray(access.resources)){
-          statResources.textContent = cards.length;
-          revelarLista();
-          return;
-        }
+        loading.hidden = true;
+        if(!access){ emptyState.hidden = false; return; }
 
-        // Constrói o conjunto de chaves liberadas.
-        var liberados = {};
-        access.resources.forEach(function(r){ liberados[r.key] = r; });
+        var recursos = Array.isArray(access.resources) ? access.resources : [];
+        if(!recursos.length){ emptyState.hidden = false; statResources.textContent = 0; return; }
 
-        var totalLiberados = 0;
-        cards.forEach(function(card){
-          var key = card.dataset.resource;
-          var cta = card.querySelector('.trail-x__cta');
+        var liberados = 0;
+        recursos.forEach(function(r){ if(r.allowed) liberados++; });
+        statResources.textContent = liberados;
 
-          if(liberados[key]){
-            totalLiberados++;
-            // Se o backend enviou path_prefix, roteia o CTA para ele.
-            if(cta && liberados[key].path_prefix){
-              cta.setAttribute('href', liberados[key].path_prefix);
-            }
+        list.innerHTML = recursos.map(function(r, i){
+          var num  = 'Recurso ' + String(i + 1).padStart(2, '0');
+          var icon = safeIcon(r.icon);
+          var desc = r.description || 'Recurso da área de membros.';
+          var href, ctaText, ctaIcon, lockNote, lockedCls;
+
+          if (r.allowed && r.path_prefix){
+            href = r.path_prefix;
+            ctaText = 'Acessar';
+            ctaIcon = 'arrow-right';
+            lockNote = '';
+            lockedCls = '';
+          } else if (r.allowed && !r.path_prefix){
+            href = '#';
+            ctaText = 'Em breve';
+            ctaIcon = 'clock-outline';
+            lockNote = '';
+            lockedCls = '';
           } else {
-            card.classList.add('is-locked');
-            if(cta){
-              cta.setAttribute('href', '/planos/');
-              cta.innerHTML = 'Requer upgrade <span class="mdi mdi-lock-outline"></span>';
-            }
-            // Nota discreta abaixo do CTA.
-            var note = document.createElement('span');
-            note.className = 'lock-note';
-            note.innerHTML = '<span class="mdi mdi-lock-outline"></span> Não disponível no seu plano';
-            card.appendChild(note);
+            href = '/planos/';
+            ctaText = 'Requer upgrade';
+            ctaIcon = 'lock-outline';
+            lockNote = '<span class="lock-note"><span class="mdi mdi-lock-outline"></span> Não disponível no seu plano</span>';
+            lockedCls = ' is-locked';
           }
-        });
 
-        statResources.textContent = totalLiberados;
-        revelarLista();
+          // Lista de produtos (turno 13). O backend só entrega produtos para
+          // recursos liberados — cards is-locked sempre chegam com products: [].
+          var produtosHtml = '';
+          if (Array.isArray(r.products) && r.products.length){
+            produtosHtml = '<ul class="products-list">' + r.products.map(function(p){
+              var pIcon = safeIcon(p.icon || 'chevron-right');
+              var target = p.external ? ' target="_blank" rel="noopener"' : '';
+              var extIcon = p.external ? '<span class="mdi mdi-open-in-new products-list__ext"></span>' : '';
+              return '<li>'+
+                '<a href="'+esc(p.url)+'"'+target+'>'+
+                  '<span class="mdi mdi-'+esc(pIcon)+'"></span>'+
+                  '<span class="products-list__label">'+esc(p.label)+
+                    (p.description ? '<span class="products-list__desc">'+esc(p.description)+'</span>' : '')+
+                  '</span>'+
+                  extIcon +
+                '</a>'+
+              '</li>';
+            }).join('') + '</ul>';
+          }
+
+          // Se o card tem produtos listados, o CTA principal deixa de fazer sentido
+          // (os itens são os próprios acessos). Se não tem, mantém o CTA único.
+          var ctaHtml = produtosHtml
+            ? ''
+            : '<a class="trail-x__cta" href="'+esc(href)+'">'+
+                esc(ctaText)+' <span class="mdi mdi-'+esc(ctaIcon)+'"></span>'+
+              '</a>';
+
+          return ''+
+          '<article class="trail-x'+lockedCls+'" data-resource="'+esc(r.key)+'">'+
+            '<div class="trail-x__top">'+
+              '<span class="trail-x__icon"><span class="mdi mdi-'+esc(icon)+'"></span></span>'+
+              '<div>'+
+                '<span class="trail-x__num">'+esc(num)+'</span>'+
+                '<h3>'+esc(r.label || r.key)+'</h3>'+
+              '</div>'+
+            '</div>'+
+            '<p class="trail-x__desc">'+esc(desc)+'</p>'+
+            produtosHtml +
+            ctaHtml +
+            lockNote +
+          '</article>';
+        }).join('');
+
+        list.hidden = false;
       })
       .catch(function(){
-        // Falha total → mantém a lista visível em modo compatível.
-        statResources.textContent = cards.length;
-        revelarLista();
+        loading.hidden = true;
+        emptyState.textContent = 'Não foi possível carregar seus acessos. Tente atualizar a página.';
+        emptyState.hidden = false;
       });
 
-    function revelarLista(){
-      loading.hidden = true;
-      list.hidden = false;
-    }
-
-    // Logout.
     document.getElementById('sair').addEventListener('click', function(){
       fetch('/api/member/logout', { method:'POST', credentials:'same-origin' })
         .catch(function(){})
