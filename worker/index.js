@@ -535,11 +535,15 @@ async function dadosAdmin(env) {
     });
   }
 
-  // 2) miss: dispara as 4 queries em batch (1 round-trip só)
-  /* DEPOIS */
-  const [subs, mem, stats] = await env.DB.batch([
+  // 2) miss: dispara as queries em batch (1 round-trip só)
+  const [subs, mem, memTypes, stats] = await env.DB.batch([
     env.DB.prepare('SELECT email, name, phone, status, created_at, confirmed_at FROM subscribers ORDER BY id DESC LIMIT 50'),
     env.DB.prepare('SELECT email, name, phone, status, type, created_at, confirmed_at FROM members ORDER BY id DESC LIMIT 50'),
+    env.DB.prepare(
+      'SELECT mt.email, mt.type FROM member_types mt ' +
+      'JOIN (SELECT email FROM members ORDER BY id DESC LIMIT 50) top50 ' +
+      'ON top50.email = mt.email'
+    ),
     env.DB.prepare(
       "SELECT " +
       "  MAX(CASE WHEN name='membros'          THEN value END) AS membros," +
@@ -550,10 +554,19 @@ async function dadosAdmin(env) {
     )
   ]);
 
-  /* DEPOIS */
+  // agrupa tipos por email
+  const typesByEmail = {};
+  for (const r of (memTypes.results || [])) {
+    (typesByEmail[r.email] ||= []).push(r.type);
+  }
+  const membersEnriched = (mem.results || []).map(m => ({
+    ...m,
+    types: typesByEmail[m.email] || (m.type ? [m.type] : []),
+  }));
+
   const payload = JSON.stringify({
     stats: stats.results?.[0] || {},
-    members:     mem.results  || [],
+    members:     membersEnriched,
     subscribers: subs.results || [],
     memberTypes: MEMBER_TYPES,
   });
