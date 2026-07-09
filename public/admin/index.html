@@ -241,10 +241,12 @@
 
   /* ── tabela de eventos ── */
   function accessTable(resources, types){
-  if(!resources||!resources.length) return '<div class="empty">Nenhum recurso cadastrado.</div>';
+  if(!resources||!resources.length){
+    return '<div class="empty">Nenhum recurso cadastrado. Use o formulário abaixo para criar o primeiro.</div>' + resourceFormHtml();
+  }
   var head = '<th>Recurso</th><th>Prefixo</th>' + types.map(function(t){
     return '<th style="text-align:center">'+esc(t)+'</th>';
-  }).join('');
+  }).join('') + '<th style="text-align:center">Editar</th>';
   var body = resources.map(function(r){
     var allowed = new Set(r.allowed || []);
     var cells = types.map(function(t){
@@ -252,31 +254,127 @@
       return '<td style="text-align:center">'+
         '<input type="checkbox" class="acc-chk" data-key="'+esc(r.key)+'" data-type="'+esc(t)+'"'+checked+'></td>';
     }).join('');
+    // guarda os campos editáveis em data-attrs — o botão Editar preenche o form
+    var editBtn = '<button class="ghost-btn acc-edit" '+
+      'data-key="'+esc(r.key)+'" '+
+      'data-label="'+esc(r.label||'')+'" '+
+      'data-prefix="'+esc(r.path_prefix||'')+'" '+
+      'data-icon="'+esc(r.icon||'')+'" '+
+      'data-description="'+esc(r.description||'')+'" '+
+      'title="Editar recurso">✎</button>';
+    var iconoTag = r.icon ? '<span class="mdi mdi-'+esc(r.icon)+'" style="margin-right:6px;color:var(--accent)"></span>' : '';
     return '<tr>'+
-      '<td class="email">'+esc(r.label)+'<div class="dim" style="font-size:.72rem">'+esc(r.key)+'</div></td>'+
+      '<td class="email">'+iconoTag+esc(r.label)+
+        '<div class="dim" style="font-size:.72rem">'+esc(r.key)+'</div>'+
+        (r.description ? '<div class="dim" style="font-size:.72rem;margin-top:2px">'+esc(r.description)+'</div>' : '')+
+      '</td>'+
       '<td class="dim mono">'+(esc(r.path_prefix)||'—')+'</td>'+
       cells +
+      '<td style="text-align:center">'+editBtn+'</td>'+
     '</tr>';
   }).join('');
   return '<div class="table-wrap"><table>'+
     '<thead><tr>'+head+'</tr></thead><tbody>'+body+'</tbody></table></div>'+
     '<p class="updated">Marque os tipos que podem acessar cada recurso. As mudanças são salvas ao clicar em <b>Salvar acessos</b>.</p>'+
-    '<button class="ghost-btn" id="btnSaveAccess">Salvar acessos</button>';
+    '<button class="ghost-btn" id="btnSaveAccess">Salvar acessos</button>'+
+    resourceFormHtml();
+}
+
+function resourceFormHtml(){
+  return ''+
+  '<section style="margin-top:2rem;padding:1.2rem;border:1px solid var(--line);border-radius:12px;background:var(--card)">'+
+    '<h3 style="margin:0 0 .8rem;color:#fff;font-size:1rem">Novo / editar recurso</h3>'+
+    '<div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">'+
+      '<label style="display:block"><span class="dim" style="font-size:.72rem">Chave (a-z 0-9 hífen)</span>'+
+        '<input id="resKey" class="type-sel" style="width:100%" placeholder="ex.: area-premium" autocomplete="off"></label>'+
+      '<label style="display:block"><span class="dim" style="font-size:.72rem">Rótulo</span>'+
+        '<input id="resLabel" class="type-sel" style="width:100%" placeholder="ex.: Área Premium"></label>'+
+      '<label style="display:block"><span class="dim" style="font-size:.72rem">Prefixo (opcional)</span>'+
+        '<input id="resPrefix" class="type-sel" style="width:100%" placeholder="/membros/premium/"></label>'+
+      '<label style="display:block"><span class="dim" style="font-size:.72rem">Ícone MDI (sem prefixo)</span>'+
+        '<input id="resIcon" class="type-sel" style="width:100%" placeholder="ex.: shield-star" autocomplete="off"></label>'+
+    '</div>'+
+    '<label style="display:block;margin-top:.6rem"><span class="dim" style="font-size:.72rem">Descrição</span>'+
+      '<textarea id="resDesc" class="type-sel" style="width:100%;min-height:60px" '+
+      'placeholder="Descrição curta que aparece no card do membro."></textarea></label>'+
+    '<div style="margin-top:.8rem;display:flex;gap:.6rem;flex-wrap:wrap">'+
+      '<button class="ghost-btn" id="btnSaveResource">Salvar recurso</button>'+
+      '<button class="ghost-btn" id="btnClearResource">Limpar</button>'+
+      '<span id="resMsg" class="dim" style="font-size:.8rem;align-self:center"></span>'+
+    '</div>'+
+    '<p class="dim" style="font-size:.72rem;margin-top:.6rem">'+
+      'Salvar cria um recurso novo ou atualiza um existente com a mesma chave. '+
+      'Ícones: consulte <a href="https://pictogrammers.com/library/mdi/" target="_blank" style="color:var(--accent)">pictogrammers.com/library/mdi</a> — use apenas o nome (ex.: <code>star-four-points-outline</code>).'+
+    '</p>'+
+  '</section>';
 }
 
   function loadAccess(){
-    el("panel-access").innerHTML = '<div class="empty">Carregando…</div>';
-    fetch("/api/admin/access/list",{credentials:"same-origin"})
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if(!d || !d.ok){ el("panel-access").innerHTML='<div class="empty">Falha ao carregar.</div>'; return; }
-        el("c-access").textContent = "("+(d.resources||[]).length+")";
-        el("panel-access").innerHTML = accessTable(d.resources, d.memberTypes);
-        var btn = document.getElementById("btnSaveAccess");
-        if (btn) btn.addEventListener("click", function(){ saveAccess(d.resources.map(function(r){return r.key;})); });
-      })
-      .catch(function(){ el("panel-access").innerHTML='<div class="empty">Falha de conexão.</div>'; });
-  }
+  el("panel-access").innerHTML = '<div class="empty">Carregando…</div>';
+  fetch("/api/admin/access/list",{credentials:"same-origin"})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d || !d.ok){ el("panel-access").innerHTML='<div class="empty">Falha ao carregar.</div>'; return; }
+      el("c-access").textContent = "("+(d.resources||[]).length+")";
+      el("panel-access").innerHTML = accessTable(d.resources, d.memberTypes);
+
+      var btn = document.getElementById("btnSaveAccess");
+      if (btn) btn.addEventListener("click", function(){ saveAccess(d.resources.map(function(r){return r.key;})); });
+
+      // Editar: pré-preenche o form a partir dos data-attrs
+      document.querySelectorAll(".acc-edit").forEach(function(b){
+        b.addEventListener("click", function(){
+          document.getElementById("resKey").value    = b.dataset.key         || "";
+          document.getElementById("resLabel").value  = b.dataset.label       || "";
+          document.getElementById("resPrefix").value = b.dataset.prefix      || "";
+          document.getElementById("resIcon").value   = b.dataset.icon        || "";
+          document.getElementById("resDesc").value   = b.dataset.description || "";
+          document.getElementById("resKey").focus();
+        });
+      });
+
+      // Salvar recurso (novo ou existente)
+      var btnSave = document.getElementById("btnSaveResource");
+      if (btnSave) btnSave.addEventListener("click", function(){ saveResource(); });
+
+      var btnClear = document.getElementById("btnClearResource");
+      if (btnClear) btnClear.addEventListener("click", function(){
+        ["resKey","resLabel","resPrefix","resIcon","resDesc"].forEach(function(id){
+          document.getElementById(id).value = "";
+        });
+        document.getElementById("resMsg").textContent = "";
+      });
+    })
+    .catch(function(){ el("panel-access").innerHTML='<div class="empty">Falha de conexão.</div>'; });
+}
+
+function saveResource(){
+  var body = {
+    key:         document.getElementById("resKey").value,
+    label:       document.getElementById("resLabel").value,
+    path_prefix: document.getElementById("resPrefix").value,
+    icon:        document.getElementById("resIcon").value,
+    description: document.getElementById("resDesc").value,
+  };
+  var msg = document.getElementById("resMsg");
+  msg.textContent = "Salvando…";
+  fetch("/api/admin/resources/save",{
+    method:"POST", credentials:"same-origin",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(body)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if(d && d.ok){
+      msg.textContent = "Salvo. Recarregando…";
+      accessLoaded = false;
+      loadAccess();
+    } else {
+      msg.textContent = (d && d.erro) || "Falha ao salvar.";
+    }
+  })
+  .catch(function(){ msg.textContent = "Falha de conexão."; });
+}
 
   function saveAccess(keys){
     // agrupa checkboxes por recurso e envia um POST por recurso
@@ -389,7 +487,7 @@ function setupTabs(){
         el("panel-events").innerHTML='<div class="empty">Clique na aba para carregar.</div>';
         eventsLoaded = false;        
         accessLoaded = false;
-        
+
         el("c-access").textContent = "";
         el("panel-access").innerHTML = '<div class="empty">Clique na aba para carregar.</div>';                                          // permite recarregar no "Atualizar"
 

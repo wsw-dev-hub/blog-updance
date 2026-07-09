@@ -240,12 +240,26 @@ async function quemSouEu(request, env) {
 async function meusAcessos(request, env) {
   const m = await getMember(request, env);
   if (!m) return json(null, 401);
-  const rows = await env.DB.prepare(
-    'SELECT r.key, r.label, r.path_prefix ' +
-    'FROM access_rules a JOIN resources r ON r.key = a.resource_key ' +
-    'WHERE a.member_type = ?'
-  ).bind(m.type || 'Free').all();
-  return json({ type: m.type || 'Free', resources: rows.results || [] });
+  const type = m.type || 'Free';
+
+  // 1 round-trip: todos os recursos + regras do tipo do membro
+  const [recursos, rules] = await env.DB.batch([
+    env.DB.prepare(
+      'SELECT key, label, path_prefix, icon, description ' +
+      'FROM resources ORDER BY label'
+    ),
+    env.DB.prepare(
+      'SELECT resource_key FROM access_rules WHERE member_type = ?'
+    ).bind(type),
+  ]);
+
+  const liberados = new Set((rules.results || []).map(r => r.resource_key));
+  const resources = (recursos.results || []).map(r => ({
+    ...r,
+    allowed: liberados.has(r.key),
+  }));
+
+  return json({ type, resources });
 }
 
 /* ───────────────────────── membros: senha ───────────────────────── */
@@ -574,7 +588,7 @@ async function adminMemberUpdateType(request, env, admin) {
 
 async function adminAccessList(env) {
   const [resources, rules] = await env.DB.batch([
-    env.DB.prepare('SELECT key, label, path_prefix FROM resources ORDER BY label'),
+    env.DB.prepare('SELECT key, label, path_prefix, icon, description FROM resources ORDER BY label'),
     env.DB.prepare('SELECT resource_key, member_type FROM access_rules'),
   ]);
   const map = {};
@@ -587,20 +601,29 @@ async function adminAccessList(env) {
 }
 
 async function adminResourceSave(request, env, admin) {
-  let key = '', label = '', path_prefix = '';
+  let key = '', label = '', path_prefix = '', icon = '', description = '';
   try { const b = await request.json();
-    key   = (b.key   || '').trim().toLowerCase();
-    label = (b.label || '').trim().slice(0, 120);
+    key         = (b.key         || '').trim().toLowerCase();
+    label       = (b.label       || '').trim().slice(0, 120);
     path_prefix = (b.path_prefix || '').trim();
+    icon        = (b.icon        || '').trim().slice(0, 60);   // ex.: 'star-four-points-outline'
+    description = (b.description || '').trim().slice(0, 240);
   } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
 
   if (!/^[a-z0-9\-]{2,60}$/.test(key)) return json({ ok: false, erro: 'Chave inválida (use a-z, 0-9, hífen).' }, 400);
   if (!label) return json({ ok: false, erro: 'Rótulo obrigatório.' }, 400);
+  // sanidade: nome de ícone MDI segue o padrão "coisa-coisa-coisa"
+  if (icon && !/^[a-z0-9\-]{2,60}$/.test(icon)) return json({ ok: false, erro: 'Ícone inválido (use nome MDI sem prefixo "mdi-").' }, 400);
 
   await env.DB.prepare(
-    'INSERT INTO resources (key, label, path_prefix, created_at) VALUES (?,?,?,?) ' +
-    'ON CONFLICT(key) DO UPDATE SET label=excluded.label, path_prefix=excluded.path_prefix'
-  ).bind(key, label, path_prefix || null, new Date().toISOString()).run();
+    'INSERT INTO resources (key, label, path_prefix, icon, description, created_at) ' +
+    'VALUES (?,?,?,?,?,?) ' +
+    'ON CONFLICT(key) DO UPDATE SET ' +
+    '  label       = excluded.label, ' +
+    '  path_prefix = excluded.path_prefix, ' +
+    '  icon        = excluded.icon, ' +
+    '  description = excluded.description'
+  ).bind(key, label, path_prefix || null, icon || null, description || null, new Date().toISOString()).run();
 
   await env.KV.delete(ACCESS_CACHE_KEY);
   await logEvent(env, admin.email, 'admin_resource_save', key);
