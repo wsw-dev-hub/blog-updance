@@ -65,10 +65,22 @@ async function carregarRegrasAcesso(env) {
 }
 
 // membro tem acesso a um recurso?
-async function podeAcessar(env, memberType, resourceKey) {
+// carrega TODOS os tipos de um membro (retorna array; sempre inclui algo)
+async function tiposDoMembro(env, email) {
+  const rows = await env.DB.prepare(
+    'SELECT type FROM member_types WHERE email = ?'
+  ).bind(email).all();
+  const tipos = (rows.results || []).map(r => r.type);
+  return tipos.length ? tipos : ['Free'];  // fallback defensivo
+}
+
+// membro tem acesso a um recurso? aceita UM tipo OU um array de tipos.
+async function podeAcessar(env, memberTypes, resourceKey) {
   const map = await carregarRegrasAcesso(env);
   const set = map[resourceKey];
-  return !!(set && set.has(memberType));
+  if (!set) return false;
+  const arr = Array.isArray(memberTypes) ? memberTypes : [memberTypes];
+  return arr.some(t => set.has(t));  // acesso cumulativo: basta 1 tipo autorizar
 }
 
 export default {
@@ -131,20 +143,21 @@ export default {
       if (pathname === '/admin' || pathname.startsWith('/admin/')) {
         if (!await getAdmin(request, env)) return Response.redirect(url.origin + '/admin-login/', 302);
       }
-      /*if (pathname === '/membros' || pathname.startsWith('/membros/')) {
-        if (!await getMember(request, env)) return Response.redirect(url.origin + '/entrar/', 302);
-      }*/
-     if (pathname === '/membros' || pathname.startsWith('/membros/')) {
+
+      if (pathname === '/membros' || pathname.startsWith('/membros/')) {
         const m = await getMember(request, env);
         if (!m) return Response.redirect(url.origin + '/entrar/', 302);
 
-        // Se existir recurso com path_prefix casando com esta URL, checa autorização por tipo
         const recurso = await env.DB.prepare(
           'SELECT key FROM resources WHERE ? LIKE path_prefix || \'%\' ORDER BY length(path_prefix) DESC LIMIT 1'
         ).bind(pathname).first();
 
         if (recurso) {
-          const ok = await podeAcessar(env, m.type || 'Free', recurso.key);
+          // usa o array completo de tipos da sessão (fallback para sessões antigas)
+          const types = Array.isArray(m.types) && m.types.length
+            ? m.types
+            : [m.type || 'Free'];
+          const ok = await podeAcessar(env, types, recurso.key);
           if (!ok) return Response.redirect(url.origin + '/membros/?erro=sem_acesso', 302);
         }
       }
@@ -240,17 +253,21 @@ async function quemSouEu(request, env) {
 async function meusAcessos(request, env) {
   const m = await getMember(request, env);
   if (!m) return json(null, 401);
-  const type = m.type || 'Free';
 
-  // 1 round-trip: todos os recursos + regras do tipo do membro
+  // aceita tanto sessões novas (m.types: array) quanto antigas (m.type: string)
+  const types = Array.isArray(m.types) && m.types.length
+    ? m.types
+    : [m.type || 'Free'];
+
+  // WHERE member_type IN (?,?,?…) — placeholders dinâmicos
+  const placeholders = types.map(() => '?').join(',');
   const [recursos, rules] = await env.DB.batch([
     env.DB.prepare(
-      'SELECT key, label, path_prefix, icon, description ' +
-      'FROM resources ORDER BY label'
+      'SELECT key, label, path_prefix, icon, description FROM resources ORDER BY label'
     ),
     env.DB.prepare(
-      'SELECT resource_key FROM access_rules WHERE member_type = ?'
-    ).bind(type),
+      'SELECT DISTINCT resource_key FROM access_rules WHERE member_type IN (' + placeholders + ')'
+    ).bind(...types),
   ]);
 
   const liberados = new Set((rules.results || []).map(r => r.resource_key));
@@ -259,7 +276,7 @@ async function meusAcessos(request, env) {
     allowed: liberados.has(r.key),
   }));
 
-  return json({ type, resources });
+  return json({ types, type: types[0], resources });
 }
 
 /* ───────────────────────── membros: senha ───────────────────────── */
@@ -290,10 +307,14 @@ async function memberRegister(request, url, env) {
     await env.DB.prepare('UPDATE members SET name=?, phone=?, pass_hash=?, pass_salt=?, type=?, confirm_token=?, created_at=? WHERE email=?')
       .bind(name, phone, hash, salt, type, token, agora, email).run();
   } else {
-    await env.DB.prepare('INSERT INTO members (email, name, phone, pass_hash, pass_salt, status, type, confirm_token, created_at) VALUES (?,?,?,?,?,?,?,?,?)')
-      .bind(email, name, phone, hash, salt, 'pending', type, token, agora).run();
-    await env.DB.prepare("UPDATE counters SET value = value + 1 WHERE name = 'membros'").run();
-    await env.KV.delete(ADMIN_CACHE_KEY);                                    // <-- adicionar
+    await env.DB.batch([
+      env.DB.prepare('INSERT INTO members (email, name, phone, pass_hash, pass_salt, status, type, confirm_token, created_at) VALUES (?,?,?,?,?,?,?,?,?)')
+        .bind(email, name, phone, hash, salt, 'pending', type, token, agora),
+      env.DB.prepare('INSERT OR IGNORE INTO member_types (email, type, created_at) VALUES (?,?,?)')
+        .bind(email, type, agora),
+      env.DB.prepare("UPDATE counters SET value = value + 1 WHERE name = 'membros'"),
+    ]);
+    await env.KV.delete(ADMIN_CACHE_KEY);
     await logEvent(env, email, 'member_cadastro', name || null);
   }
 
@@ -330,8 +351,13 @@ async function memberLogin(request, env) {
   if (m.status !== 'active') return json({ ok: false, erro: 'Confirme seu e-mail antes de entrar.' }, 403);
   if (!await conferirSenha(password, m.pass_salt, m.pass_hash)) return invalido;
 
-  const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Free' }); //<-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
-  //const sid = await criarSessao(env, 'msess', { email: m.email, role: 'member', type: m.type || 'Aluno(a)' });
+  const types = await tiposDoMembro(env, m.email);
+  const sid = await criarSessao(env, 'msess', {
+    email: m.email,
+    role: 'member',
+    types,                    // ← array, novo campo
+    type: types[0] || 'Free', // ← mantido por compatibilidade (badge principal)
+  });
   await logEvent(env, m.email, 'member_login', null);
   return json({ ok: true }, 200, { 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) });
 }
@@ -437,8 +463,13 @@ async function verificarLink(request, url, env) {
   if (!email) return Response.redirect(url.origin + '/entrar/?status=expirado', 302);
   await env.KV.delete('magic:' + token);
   //const sid = await criarSessao(env, 'msess', { email, role: 'member' });
-  const t = await env.DB.prepare('SELECT type FROM members WHERE email=?').bind(email).first(); 
-  const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Free' }); //<-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
+  const types = await tiposDoMembro(env, email);
+  const sid = await criarSessao(env, 'msess', {
+    email,
+    role: 'member',
+    types,
+    type: types[0] || 'Free',
+  }); //<-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
   //const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Aluno(a)' });
   await logEvent(env, email, 'magic_login_ok', null);
   return new Response(null, { status: 302, headers: { 'Location': url.origin + '/membros/', 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) } });
@@ -566,24 +597,46 @@ async function adminMemberLookup(request, env) {
 
 /* ─────────── admin: atualizar "type" de um membro ─────────── */
 async function adminMemberUpdateType(request, env, admin) {
-  let email = '', type = '';
+  let email = '', types = [];
   try {
     const b = await request.json();
     email = (b.email || '').trim().toLowerCase();
-    type  = (b.type  || '').trim();
+    // Aceita { types: [...] } (novo) ou { type: '...' } (compat retro)
+    if (Array.isArray(b.types)) types = b.types.map(t => String(t || '').trim());
+    else if (b.type)            types = [String(b.type).trim()];
   } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
 
-  if (!emailValido(email))          return json({ ok: false, erro: 'E-mail inválido.' }, 400);
-  if (!MEMBER_TYPES.includes(type)) return json({ ok: false, erro: 'Tipo inválido.' }, 400);
+  if (!emailValido(email)) return json({ ok: false, erro: 'E-mail inválido.' }, 400);
+  if (!types.length)       return json({ ok: false, erro: 'Informe ao menos 1 tipo.' }, 400);
 
-  const m = await env.DB.prepare('SELECT type FROM members WHERE email = ?').bind(email).first();
+  const invalidos = types.filter(t => !MEMBER_TYPES.includes(t));
+  if (invalidos.length) return json({ ok: false, erro: 'Tipos inválidos: ' + invalidos.join(', ') }, 400);
+
+  const m = await env.DB.prepare('SELECT email FROM members WHERE email = ?').bind(email).first();
   if (!m) return json({ ok: false, erro: 'Membro não encontrado.' }, 404);
-  if (m.type === type) return json({ ok: true, alterado: false, type });
 
-  await env.DB.prepare('UPDATE members SET type = ? WHERE email = ?').bind(type, email).run();
-  await env.KV.delete(ADMIN_CACHE_KEY);              // <-- adicionar
-  await logEvent(env, email, 'admin_update_type', `${m.type || '-'} → ${type} por ${admin.email}`);
-  return json({ ok: true, alterado: true, type, anterior: m.type || null });
+  const anteriores = await tiposDoMembro(env, email);
+  const agora = new Date().toISOString();
+
+  // Reescreve o conjunto em 1 batch: apaga todos os pares antigos, insere os novos,
+  // e atualiza members.type para refletir o "tipo principal" (o primeiro do array).
+  const stmts = [
+    env.DB.prepare('DELETE FROM member_types WHERE email = ?').bind(email),
+  ];
+  for (const t of types) {
+    stmts.push(env.DB.prepare(
+      'INSERT INTO member_types (email, type, created_at) VALUES (?,?,?)'
+    ).bind(email, t, agora));
+  }
+  stmts.push(env.DB.prepare('UPDATE members SET type = ? WHERE email = ?').bind(types[0], email));
+  await env.DB.batch(stmts);
+
+  await env.KV.delete(ADMIN_CACHE_KEY);
+  await logEvent(
+    env, email, 'admin_update_types',
+    `[${anteriores.join(',')}] → [${types.join(',')}] por ${admin.email}`
+  );
+  return json({ ok: true, alterado: true, types, anteriores });
 }
 
 async function adminAccessList(env) {

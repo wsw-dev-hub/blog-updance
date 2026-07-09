@@ -84,6 +84,25 @@
   .type-sel.ok{border-color:var(--ok)}
   .type-sel.err{border-color:var(--err)}
 
+  /* grade de checkboxes de tipos do membro (edição inline, múltiplos) */
+  .type-chk-grid{
+    display:flex; flex-wrap:wrap; gap:4px 8px;
+    padding:4px; border-radius:8px;
+    border:1px solid var(--line); background:var(--bg);
+    transition:border-color .2s;
+    min-width: 220px;
+  }
+  .type-chk-grid.saving{opacity:.6; pointer-events:none}
+  .type-chk-grid.ok{border-color:var(--ok)}
+  .type-chk-grid.err{border-color:var(--err)}
+  .type-chk-item{
+    display:inline-flex; align-items:center; gap:4px;
+    padding:2px 6px; border-radius:6px; cursor:pointer;
+    font-size:.75rem; color:var(--txt);
+  }
+  .type-chk-item:hover{background:var(--card-2)}
+  .type-chk-item input{margin:0; cursor:pointer}
+
   /* ── Estados ── */
   .state{padding:3rem 1.2rem;text-align:center;color:var(--muted);font-size:.9rem}
   .state.err{color:var(--err)}
@@ -177,65 +196,91 @@
       '<tbody>'+body+'</tbody></table></div>';
   }
 
-  /* ── tabela de membros (com coluna Tipo editável) ── */
-  function typeSelect(email, atual, types){
-    var opts=(types||[]).map(function(t){
-      var sel=(t===atual)?' selected':'';
-      return '<option value="'+esc(t)+'"'+sel+'>'+esc(t)+'</option>';
+  /* ── tabela de membros (com coluna Tipos editável — múltiplos) ── */
+  // atualSet: Set<string> com os tipos atuais do membro; types: catálogo MEMBER_TYPES
+  function typeChecklist(email, atualSet, types){
+    var atualCsv = [...(atualSet||[])].join(",");
+    var items = (types||[]).map(function(t){
+      var checked = atualSet.has(t) ? ' checked' : '';
+      return '<label class="type-chk-item" title="'+esc(t)+'">'+
+        '<input type="checkbox" class="type-chk" data-email="'+esc(email)+'" value="'+esc(t)+'"'+checked+'>'+
+        '<span>'+esc(t)+'</span>'+
+      '</label>';
     }).join("");
-    return '<select class="type-sel" data-email="'+esc(email)+'" data-atual="'+esc(atual||"")+'" title="Alterar tipo">'+opts+'</select>';
+    return '<div class="type-chk-grid" data-email="'+esc(email)+'" data-atual="'+esc(atualCsv)+'">'+items+'</div>';
   }
 
   function membersTable(rows, types){
     if(!rows||!rows.length) return '<div class="empty">Nenhum membro ainda.</div>';
     var body=rows.map(function(r){
+      // r.types (array) vem do backend; se ainda não veio, cai para [r.type] (compat)
+      var atuais = Array.isArray(r.types) ? r.types : (r.type ? [r.type] : []);
       return '<tr>'+
         '<td class="email">'+esc(r.email)+'</td>'+
         '<td class="dim">'+(esc(r.name)||"—")+'</td>'+
         '<td class="dim">'+(esc(r.phone)||"—")+'</td>'+
         '<td>'+statusBadge(r.status)+'</td>'+
-        '<td>'+typeSelect(r.email, r.type, types)+'</td>'+
+        '<td>'+typeChecklist(r.email, new Set(atuais), types)+'</td>'+
         '<td class="mono">'+fmtDate(r.created_at)+'</td>'+
         '<td class="mono">'+fmtDate(r.confirmed_at)+'</td>'+
       '</tr>';
     }).join("");
     return '<div class="table-wrap"><table>'+
-      '<thead><tr><th>E-mail</th><th>Nome</th><th>Telefone</th><th>Status</th><th>Tipo</th><th>Criado em</th><th>Confirmado em</th></tr></thead>'+
+      '<thead><tr><th>E-mail</th><th>Nome</th><th>Telefone</th><th>Status</th><th>Tipos</th><th>Criado em</th><th>Confirmado em</th></tr></thead>'+
       '<tbody>'+body+'</tbody></table></div>';
   }
 
-  function bindTypeSelects(container){
-    container.querySelectorAll(".type-sel").forEach(function(sel){
-      sel.addEventListener("change", function(){
-        var email=sel.dataset.email, novo=sel.value, anterior=sel.dataset.atual;
-        if(novo===anterior) return;
-        sel.classList.remove("ok","err");
-        sel.classList.add("saving");
+  function bindTypeChecklists(container){
+    container.querySelectorAll(".type-chk-grid").forEach(function(grid){
+      var email = grid.dataset.email;
+
+      // um único listener por grid captura todos os cliques nos checkboxes filhos
+      grid.addEventListener("change", function(){
+        var novos = [...grid.querySelectorAll(".type-chk:checked")].map(function(c){ return c.value; });
+        if(!novos.length){
+          alert("Selecione ao menos 1 tipo.");
+          // reverte visualmente: remarca o último estado válido
+          restaurarChecks(grid, grid.dataset.atual);
+          return;
+        }
+        var novoCsv = novos.join(",");
+        if(novoCsv === grid.dataset.atual) return;
+
+        grid.classList.remove("ok","err");
+        grid.classList.add("saving");
         fetch("/api/admin/member/update-type",{
           method:"POST", credentials:"same-origin",
           headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ email: email, type: novo })
+          body: JSON.stringify({ email: email, types: novos })
         })
         .then(function(r){ return r.json(); })
         .then(function(d){
-          sel.classList.remove("saving");
+          grid.classList.remove("saving");
           if(d && d.ok){
-            sel.dataset.atual = d.type;
-            sel.classList.add("ok");
-            setTimeout(function(){ sel.classList.remove("ok"); }, 1400);
+            grid.dataset.atual = novoCsv;
+            grid.classList.add("ok");
+            setTimeout(function(){ grid.classList.remove("ok"); }, 1400);
           } else {
-            sel.value = anterior; // reverte
-            sel.classList.add("err");
-            alert((d && d.erro) || "Falha ao atualizar o tipo.");
+            restaurarChecks(grid, grid.dataset.atual);
+            grid.classList.add("err");
+            alert((d && d.erro) || "Falha ao atualizar os tipos.");
           }
         })
         .catch(function(){
-          sel.classList.remove("saving");
-          sel.value = anterior;
-          sel.classList.add("err");
+          grid.classList.remove("saving");
+          restaurarChecks(grid, grid.dataset.atual);
+          grid.classList.add("err");
           alert("Falha de conexão.");
         });
       });
+    });
+  }
+
+  // helper: remarca os checkboxes do grid conforme o CSV informado
+  function restaurarChecks(grid, csv){
+    var conjunto = new Set((csv||"").split(",").filter(Boolean));
+    grid.querySelectorAll(".type-chk").forEach(function(c){
+      c.checked = conjunto.has(c.value);
     });
   }
 
@@ -482,7 +527,7 @@ function setupTabs(){
         el("c-subscribers").textContent="("+subs.length+")";
         el("c-events").textContent="";                                         // vazio até o lazy-load
 
-        el("panel-members").innerHTML=membersTable(members, d.memberTypes || []); bindTypeSelects(el("panel-members"));
+        el("panel-members").innerHTML=membersTable(members, d.memberTypes || []); bindTypeChecklists(el("panel-members"));
         el("panel-subscribers").innerHTML=peopleTable(subs);
         el("panel-events").innerHTML='<div class="empty">Clique na aba para carregar.</div>';
         eventsLoaded = false;        
