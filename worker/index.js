@@ -74,15 +74,6 @@ async function tiposDoMembro(env, email) {
   return tipos.length ? tipos : ['Free'];  // fallback defensivo
 }
 
-// carrega TODOS os tipos de um membro (retorna array; sempre inclui algo)
-async function tiposDoMembro(env, email) {
-  const rows = await env.DB.prepare(
-    'SELECT type FROM member_types WHERE email = ?'
-  ).bind(email).all();
-  const tipos = (rows.results || []).map(r => r.type);
-  return tipos.length ? tipos : ['Free'];  // fallback defensivo
-}
-
 // membro tem acesso a um recurso? aceita UM tipo OU um array de tipos.
 async function podeAcessar(env, memberTypes, resourceKey) {
   const map = await carregarRegrasAcesso(env);
