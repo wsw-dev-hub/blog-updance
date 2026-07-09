@@ -74,13 +74,22 @@ async function tiposDoMembro(env, email) {
   return tipos.length ? tipos : ['Free'];  // fallback defensivo
 }
 
+// carrega TODOS os tipos de um membro (retorna array; sempre inclui algo)
+async function tiposDoMembro(env, email) {
+  const rows = await env.DB.prepare(
+    'SELECT type FROM member_types WHERE email = ?'
+  ).bind(email).all();
+  const tipos = (rows.results || []).map(r => r.type);
+  return tipos.length ? tipos : ['Free'];  // fallback defensivo
+}
+
 // membro tem acesso a um recurso? aceita UM tipo OU um array de tipos.
 async function podeAcessar(env, memberTypes, resourceKey) {
   const map = await carregarRegrasAcesso(env);
   const set = map[resourceKey];
   if (!set) return false;
   const arr = Array.isArray(memberTypes) ? memberTypes : [memberTypes];
-  return arr.some(t => set.has(t));  // acesso cumulativo: basta 1 tipo autorizar
+  return arr.some(t => set.has(t));  // cumulativo: basta 1 tipo autorizar
 }
 
 export default {
@@ -254,7 +263,8 @@ async function meusAcessos(request, env) {
   const m = await getMember(request, env);
   if (!m) return json(null, 401);
 
-  // aceita tanto sessões novas (m.types: array) quanto antigas (m.type: string)
+  // Sessões novas trazem m.types (array); sessões antigas só têm m.type (string).
+  // O fallback para [m.type] mantém o endpoint funcionando durante a transição.
   const types = Array.isArray(m.types) && m.types.length
     ? m.types
     : [m.type || 'Free'];
@@ -304,8 +314,13 @@ async function memberRegister(request, url, env) {
 
   /* DEPOIS */
   if (existe) {
-    await env.DB.prepare('UPDATE members SET name=?, phone=?, pass_hash=?, pass_salt=?, type=?, confirm_token=?, created_at=? WHERE email=?')
-      .bind(name, phone, hash, salt, type, token, agora, email).run();
+    await env.DB.batch([
+      env.DB.prepare('UPDATE members SET name=?, phone=?, pass_hash=?, pass_salt=?, type=?, confirm_token=?, created_at=? WHERE email=?')
+        .bind(name, phone, hash, salt, type, token, agora, email),
+      // garante que member_types tenha ao menos o tipo inicial
+      env.DB.prepare('INSERT OR IGNORE INTO member_types (email, type, created_at) VALUES (?,?,?)')
+        .bind(email, type, agora),
+    ]);
   } else {
     await env.DB.batch([
       env.DB.prepare('INSERT INTO members (email, name, phone, pass_hash, pass_salt, status, type, confirm_token, created_at) VALUES (?,?,?,?,?,?,?,?,?)')
@@ -355,8 +370,8 @@ async function memberLogin(request, env) {
   const sid = await criarSessao(env, 'msess', {
     email: m.email,
     role: 'member',
-    types,                    // ← array, novo campo
-    type: types[0] || 'Free', // ← mantido por compatibilidade (badge principal)
+    types,                    // array — usado por meusAcessos e guarda de rota
+    type: types[0] || 'Free', // string — retrocompatibilidade com código legado
   });
   await logEvent(env, m.email, 'member_login', null);
   return json({ ok: true }, 200, { 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) });
@@ -462,15 +477,14 @@ async function verificarLink(request, url, env) {
   const email = await env.KV.get('magic:' + token);
   if (!email) return Response.redirect(url.origin + '/entrar/?status=expirado', 302);
   await env.KV.delete('magic:' + token);
-  //const sid = await criarSessao(env, 'msess', { email, role: 'member' });
+
   const types = await tiposDoMembro(env, email);
   const sid = await criarSessao(env, 'msess', {
     email,
     role: 'member',
     types,
     type: types[0] || 'Free',
-  }); //<-- ALTERAR APÓS TODOS OS ALUNOS SE CADASTRAREM -->
-  //const sid = await criarSessao(env, 'msess', { email, role: 'member', type: (t && t.type) || 'Aluno(a)' });
+  });
   await logEvent(env, email, 'magic_login_ok', null);
   return new Response(null, { status: 302, headers: { 'Location': url.origin + '/membros/', 'Set-Cookie': cookie('m_session', sid, SESSION_TTL) } });
 }

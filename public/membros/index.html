@@ -416,10 +416,10 @@
         userEmail.textContent = u.email;
         userChip.hidden = false;
 
-        var type = u.type || 'Free';
-        typeBadgeLabel.textContent = type;
+        var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
+        typeBadgeLabel.textContent = types.join(' · ');
         typeBadge.hidden = false;
-        statType.textContent = type;
+        statType.textContent = types.length > 1 ? (types.length + ' planos') : types[0];
 
         // 2) Descobre quais recursos o tipo pode acessar (proposto no turno 1).
         //    Se o endpoint /api/me/access não existir ainda, cai em modo
