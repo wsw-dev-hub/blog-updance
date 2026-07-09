@@ -34,6 +34,9 @@ const COOLDOWN_TTL = 60;
 const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
 const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Aluno','Free'];
 
+// ============================ [ Para Implementar - Cursos & Treinamentos ] ===================================== //
+// [ 'Cursos & Treinamentos', 'Aprimoramento Técnico', 'Os Sgredos da Arte Performática' ]
+
 // chave de cache KV para o mapa de regras de acesso
 const ACCESS_CACHE_KEY = 'access:rules';
 const ACCESS_CACHE_TTL = 300; // 5 min

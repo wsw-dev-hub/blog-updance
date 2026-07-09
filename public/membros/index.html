@@ -5,95 +5,488 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Área de Membros — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<!-- Fontes do projeto -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
 
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
+<!-- Design tokens e componentes do projeto -->
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/mediaQuery.css">
+<link rel="stylesheet" href="/css/format.css">
+
 <style>
-  :root{--bg:#020118;--card:#0c0b22;--panel:#0a0820;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
-    --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
-  *{box-sizing:border-box}
-  .item span{ display: block; width:25px; height:25px; color:white; background:var(--grad); -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  ul {
-    text-decoration:none;
-    position: relative;
-    margin-left: 2px;
+  /* ================================================================
+     ESCOPO DA PÁGINA DE MEMBROS
+     Registra o tema "membros" no mesmo padrão .page-trails/.page-apps
+     usado em trailsFormat.css, reaproveitando todos os componentes
+     (.trails-hero, .trails-stats, .trails-list, .trail-x, .trails-cta).
+  ================================================================ */
+  .page-membros{
+    --m-grad:        linear-gradient(135deg, #F434A1 0%, #ff8442 100%);
+    --m-grad-soft:   linear-gradient(135deg, rgba(244,52,161,.18) 0%, rgba(255,132,66,.22) 100%);
+    --m-grad-text:   linear-gradient(135deg, #ff8442 0%, #F434A1 100%);
+    --m-pink:        #F434A1;
+    --m-orange:      #ff8442;
+    --m-glow:        rgba(244, 52, 161, 0.32);
+
+    /* aliases que os componentes de trailsFormat.css já consomem */
+    --seg-grad:      var(--m-grad);
+    --seg-grad-soft: var(--m-grad-soft);
+    --seg-grad-text: var(--m-grad-text);
+    --seg-accent:    var(--m-pink);
+    --seg-accent-2:  var(--m-orange);
+    --seg-glow:      var(--m-glow);
+
+    --seg-hero-rgba-a: rgba(244, 52, 161, 0.22);
+    --seg-hero-rgba-b: rgba(255, 132, 66, 0.28);
+    --seg-cta-rgba-a:  rgba(244, 52, 161, 0.18);
+    --seg-cta-rgba-b:  rgba(255, 132, 66, 0.22);
+    --seg-how-rgba-a:  rgba(244, 52, 161, 0.06);
+    --seg-how-rgba-b:  rgba(255, 132, 66, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
   }
-  a, li { 
-    text-decoration:none;
-    position: relative;
-    padding-bottom: 5px;
-    margin-left: 2px;
-    display: block; 
-    background: var(--grad);
-    -webkit-background-clip: text;
+
+  /* Header compacto exclusivo desta página (não usa o header do blog inteiro,
+     já que a área de membros é privada e não precisa do menu público). */
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+    flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-style: italic;
   }
-  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;display:flex;flex-direction:column}
-  .topo{display:flex;align-items:center;gap:.7rem;padding:1rem 1.4rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .topo img{width:34px;height:34px}
-  .topo .marca{font-family:'Playfair Display',serif;font-style:italic;font-size:1.25rem;
-    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .sair{margin-left:auto;background:none;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.9rem;
-    border:1px solid var(--line);padding:.45rem .95rem;border-radius:9px;cursor:pointer}
-  .sair:hover{color:#fff;border-color:var(--accent2)}
-  main{flex:1;display:flex;align-items:center;justify-content:center;padding:2.4rem 1.2rem}
-  .card{width:min(94vw,580px);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:2.6rem 2rem;text-align:center}
-  .card h1{margin:0 0 .5rem;font-size:1.6rem;font-weight:700;color:#fff}
-  .card h1 span{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
-    background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .intro{color:var(--muted);line-height:1.6;margin:.2rem 0 0}
-  .chip{display:inline-block;margin-top:1.3rem;background:var(--panel);border:1px solid var(--line);
-    color:var(--txt);padding:.5rem 1.1rem;border-radius:999px;font-size:.9rem}
-  .grade{display:grid;gap:1rem;margin-top:2.2rem;text-align:left}
-  .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.15rem 1.25rem;border-left:4px solid var(--accent); display:ruby}
-  .item h3{margin:0 0 .35rem;font-size:1rem;color:#fff}.item p{font-size:.86rem;color:var(--muted);margin:0;line-height:1.5}
-  footer{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
-  @media(max-width:520px){
-    .topo{padding:.8rem 1rem}.topo .marca{font-size:1.1rem}
-    main{padding:1.4rem .9rem}.card{padding:1.8rem 1.2rem;border-radius:14px}
-    .card h1{font-size:1.3rem}.grade{margin-top:1.6rem}}
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 50px;
+    font-size: 11.5px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-sair{
+    background: transparent;
+    color: var(--udx-text);
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm);
+    font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
+    cursor: pointer;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-primary-hot);
+    color: #fff;
+  }
+
+  /* Ajustes finos apenas para o conteúdo desta página. Nada aqui redefine
+     tokens globais — só afina o encaixe entre os componentes reaproveitados. */
+  .members-main{ padding-bottom: 40px; }
+
+  .members-hero .type-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding: 6px 14px; border-radius: 50px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-size: 12px; font-weight: 600;
+  }
+  .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
+  .members-hero .type-chip b{ font-weight: 700; }
+
+  /* Grid dos cards da área — 1 col mobile, 2 col desktop.
+     Mantém o mesmo estilo dos .trail-x. */
+  .members-list{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 780px){
+    .members-list{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Card bloqueado (visível para o membro, mas sem acesso ao recurso). */
+  .trail-x.is-locked{
+    opacity: .55;
+    filter: grayscale(.25);
+    pointer-events: none;
+  }
+  .trail-x.is-locked .trail-x__cta{
+    background: rgba(2, 2, 26, 0.65);
+    color: var(--udx-text-muted);
+    box-shadow: none;
+    border: 1px solid var(--udx-border);
+  }
+  .trail-x .lock-note{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--udx-text-muted);
+    margin-top: 4px;
+  }
+  .trail-x .lock-note .mdi{ font-size: 14px; }
+
+  /* Lista de ebooks — reaproveita o visual de .trail-x__modules
+     e adiciona a seta e a cor de link consistentes com o tema. */
+  .ebooks-list{
+    margin: 6px 0 0;
+    padding: 14px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .ebooks-list li{ margin: 0; padding: 0; }
+  .ebooks-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .ebooks-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(244, 52, 161, 0.06);
+    transform: translateX(3px);
+  }
+  .ebooks-list a .mdi{
+    font-size: 16px; color: var(--seg-accent); flex-shrink: 0;
+  }
+
+  /* Estado inicial de "carregando…" e mensagem de sem acesso. */
+  .members-state{
+    text-align: center; padding: 40px 20px;
+    color: var(--udx-text-muted); font-size: .95rem;
+  }
+
+  /* Footer local (mais leve que .blog-footer). */
+  .members-footer{
+    padding: 20px 22px; text-align: center;
+    color: var(--udx-text-muted); font-size: .8rem;
+    border-top: 1px solid var(--udx-border);
+  }
+
+  /* respeita reduced-motion */
+  @media (prefers-reduced-motion: reduce){
+    .trail-x, .ebooks-list a, .members-topbar .btn-sair{ transition: none; }
+  }
 </style>
 </head>
-<body>
-  <header class="topo">
-    <img src="/images/icons/udx-icon.png" alt=""><span class="marca">Up Dance</span>
-    <button class="sair" id="sair">Sair</button>
+
+<body class="page-membros">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge" id="typeBadge" hidden>
+      <span class="mdi mdi-shield-star" aria-hidden="true"></span>
+      <span id="typeBadgeLabel">—</span>
+    </span>
+    <span class="spacer"></span>
+    <button class="btn-sair" id="sair">Sair</button>
   </header>
-  <main>
-    <div class="card">
-      <h1>Bem-vindo(a) à <span>área de membros</span></h1>
-      <p class="intro">Conteúdo exclusivo para alunos e clientes da Up Dance.</p>
-      <div class="chip" id="usuario">carregando…</div>
-      <div class="grade">
-        <div class="item"><span class="mdi mdi-lan-connect" aria-hidden="true"></span><h3>Suas aulas</h3><p>Em breve: vídeos e materiais das suas turmas.</p></div>
-        <div class="item"><span class="mdi mdi-card-account-details-star-outline" aria-hidden="true"></span><h3>Conteúdo exclusivo</h3><p>Em breve: matérias e bastidores só para membros.</p></div>
-        <div class="item"><span class="mdi mdi-book-open-variant" aria-hidden="true"></span><h3>Ebooks & Mini-ebooks</h3>
-          <p></p>
-          <p>disponíveis: 
-            <ul class="lista-ebooks">
-              <a target="_blank" href="https://mega.nz/file/l4NlxbxY#umdY3etFboaeEvu3K0JhciICjWu8-R1Vzbowf4W73Bs"><li>» Guia Prático de Produção de Relatórios de Danças Urbanas.</li></a>
-              <a target="_blank" href="https://mega.nz/file/w8siFRDb#lrIpHecF5pqbSDDjPFwmS-X49-qF7ilOrRF0dykg41g"><li>» Como Planejar uma Aula de Dança Memorável.</li></a>
-              <a target="_blank" href="https://mega.nz/file/t5swkKYK#bDLiqvpgNscAvVWqF6dikWo58YjJ5bAKzFdcE1Q6VtY"><li>» Como Destravar Seu Improviso.</li></a>
-            </ul>
+
+  <main class="members-main">
+
+    <!-- HERO — usa exatamente a classe .trails-hero,
+         estilizada pelos tokens --seg-* da .page-membros -->
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <div class="eyebrow">
+            <b>01</b>
+            <span>Área de Membros</span>
+          </div>
+          <h1>Bem-vindo(a) à sua <em>área exclusiva</em></h1>
+          <p class="lead">
+            Conteúdo, ferramentas e materiais liberados conforme o seu plano.
+            Aproveite tudo o que está disponível para você — e fique de olho,
+            porque a lista cresce toda semana.
+          </p>
+
+          <div class="type-chip" id="userChip" hidden>
+            <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
+            <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+
+          <!-- Stats do próprio membro (preenchidas via JS) -->
+          <div class="trails-stats" id="memberStats" style="margin-top:26px">
+            <div class="trails-stats__item">
+              <b id="statResources">0</b>
+              <span>Recursos liberados</span>
+            </div>
+            <div class="trails-stats__item">
+              <b id="statType">—</b>
+              <span>Seu plano atual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO PRINCIPAL — cartões dos recursos, no padrão .trail-x -->
+    <section class="trails-section">
+      <div class="auto-container">
+        <div class="trails-section__head">
+          <div class="eyebrow">
+            <span class="mdi mdi-star-four-points-outline" aria-hidden="true"></span>
+            <span>Seu conteúdo</span>
+          </div>
+          <h2>O que está <em>disponível para você</em></h2>
+          <p class="lead">
+            Cada bloco corresponde a um recurso da Up Dance. Os que aparecem
+            em destaque estão liberados no seu plano; os demais aparecem
+            esmaecidos, e podem ser desbloqueados com um plano superior.
           </p>
         </div>
-        <div class="item"><span class="mdi mdi-apps" aria-hidden="true"></span><h3>Apps exclusivos</h3><p>Em breve: apps que vão mudar sua forma de enxergar a dança.</p></div>
+
+        <div class="members-state" id="membersLoading">Carregando seus acessos…</div>
+
+        <div class="trails-list members-list" id="membersList" hidden>
+
+          <!-- 1) Aulas -->
+          <article class="trail-x" data-resource="aulas">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-play-box-multiple-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 01</span>
+                <h3>Suas aulas</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Vídeos e materiais das suas turmas, organizados por trilha e nível.
+            </p>
+            <ul class="trail-x__meta">
+              <li><span class="mdi mdi-clock-outline"></span>Em breve</li>
+              <li><span class="mdi mdi-account-group-outline"></span>Por turma</li>
+            </ul>
+            <a class="trail-x__cta" href="#" data-cta="aulas">
+              Acessar <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- 2) Conteúdo exclusivo -->
+          <article class="trail-x" data-resource="conteudo-exclusivo">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-card-account-details-star-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 02</span>
+                <h3>Conteúdo exclusivo</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Matérias, bastidores e entrevistas só para membros da Up Dance.
+            </p>
+            <ul class="trail-x__meta">
+              <li><span class="mdi mdi-newspaper-variant-outline"></span>Artigos</li>
+              <li><span class="mdi mdi-video-outline"></span>Bastidores</li>
+            </ul>
+            <a class="trail-x__cta" href="#" data-cta="conteudo-exclusivo">
+              Explorar <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- 3) Ebooks & Mini-ebooks -->
+          <article class="trail-x" data-resource="ebooks">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-book-open-variant"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 03</span>
+                <h3>Ebooks & Mini-ebooks</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Materiais em PDF prontos para download, com técnicas, roteiros e
+              guias que você usa no dia a dia.
+            </p>
+            <ul class="ebooks-list">
+              <li>
+                <a target="_blank" rel="noopener"
+                   href="https://mega.nz/file/l4NlxbxY#umdY3etFboaeEvu3K0JhciICjWu8-R1Vzbowf4W73Bs">
+                  <span class="mdi mdi-file-document-outline"></span>
+                  Guia Prático de Produção de Relatórios de Danças Urbanas
+                </a>
+              </li>
+              <li>
+                <a target="_blank" rel="noopener"
+                   href="https://mega.nz/file/w8siFRDb#lrIpHecF5pqbSDDjPFwmS-X49-qF7ilOrRF0dykg41g">
+                  <span class="mdi mdi-file-document-outline"></span>
+                  Como Planejar uma Aula de Dança Memorável
+                </a>
+              </li>
+              <li>
+                <a target="_blank" rel="noopener"
+                   href="https://mega.nz/file/t5swkKYK#bDLiqvpgNscAvVWqF6dikWo58YjJ5bAKzFdcE1Q6VtY">
+                  <span class="mdi mdi-file-document-outline"></span>
+                  Como Destravar Seu Improviso
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <!-- 4) Apps exclusivos -->
+          <article class="trail-x" data-resource="apps">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-apps"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 04</span>
+                <h3>Apps exclusivos</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Aplicativos que vão mudar sua forma de enxergar a dança —
+              disponíveis conforme seu plano.
+            </p>
+            <ul class="trail-x__meta">
+              <li><span class="mdi mdi-flask-outline"></span>Beta</li>
+              <li><span class="mdi mdi-lock-open-variant-outline"></span>Premium</li>
+            </ul>
+            <a class="trail-x__cta" href="#" data-cta="apps">
+              Ver apps <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- CTA FINAL — no padrão .trails-cta -->
+    <section class="trails-cta">
+      <div class="auto-container">
+        <div class="trails-cta__box">
+          <h2>Quer acessar <em>mais recursos?</em></h2>
+          <p>Fale com a gente para conhecer os planos superiores e liberar apps, aulas avançadas e trilhas completas.</p>
+          <div class="trails-cta__ctas">
+            <a class="home-cta home-cta--solid" href="/contato/">
+              <span class="mdi mdi-message-text-outline"></span>
+              Falar com a Up Dance
+            </a>
+            <a class="home-cta home-cta--ghost" href="/planos/">
+              <span class="mdi mdi-tag-multiple-outline"></span>
+              Ver planos
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
-  <footer>© Up Dance — acesso restrito</footer>
+
+  <footer class="members-footer">
+    © Up Dance — acesso restrito. Este conteúdo é pessoal e intransferível.
+  </footer>
+
 <script>
-  fetch('/api/me').then(r=>r.ok?r.json():null).then(u=>{
-    var el=document.getElementById('usuario');
-    if(u&&u.email){el.textContent='Conectado como '+u.email;}
-    else{location.href='/entrar/';}
-  }).catch(()=>{document.getElementById('usuario').textContent='Sessão ativa';});
-  document.getElementById('sair').addEventListener('click',function(){
-    fetch('/api/member/logout',{method:'POST'}).then(()=>location.href='/').catch(()=>location.href='/');
-  });
+  (function(){
+    'use strict';
+
+    var typeBadge      = document.getElementById('typeBadge');
+    var typeBadgeLabel = document.getElementById('typeBadgeLabel');
+    var userChip       = document.getElementById('userChip');
+    var userEmail      = document.getElementById('userEmail');
+    var statType       = document.getElementById('statType');
+    var statResources  = document.getElementById('statResources');
+    var loading        = document.getElementById('membersLoading');
+    var list           = document.getElementById('membersList');
+    var cards          = list.querySelectorAll('.trail-x[data-resource]');
+
+    // 1) Identifica o membro logado.
+    fetch('/api/me', { credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(u){
+        if(!u || !u.email){ location.href = '/entrar/'; return null; }
+        userEmail.textContent = u.email;
+        userChip.hidden = false;
+
+        var type = u.type || 'Free';
+        typeBadgeLabel.textContent = type;
+        typeBadge.hidden = false;
+        statType.textContent = type;
+
+        // 2) Descobre quais recursos o tipo pode acessar (proposto no turno 1).
+        //    Se o endpoint /api/me/access não existir ainda, cai em modo
+        //    compatível: mantém todos os cards visíveis e liberados.
+        return fetch('/api/me/access', { credentials: 'same-origin' })
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .catch(function(){ return null; });
+      })
+      .then(function(access){
+        // Modo compatível: sem /api/me/access, libera todos.
+        if(!access || !Array.isArray(access.resources)){
+          statResources.textContent = cards.length;
+          revelarLista();
+          return;
+        }
+
+        // Constrói o conjunto de chaves liberadas.
+        var liberados = {};
+        access.resources.forEach(function(r){ liberados[r.key] = r; });
+
+        var totalLiberados = 0;
+        cards.forEach(function(card){
+          var key = card.dataset.resource;
+          var cta = card.querySelector('.trail-x__cta');
+
+          if(liberados[key]){
+            totalLiberados++;
+            // Se o backend enviou path_prefix, roteia o CTA para ele.
+            if(cta && liberados[key].path_prefix){
+              cta.setAttribute('href', liberados[key].path_prefix);
+            }
+          } else {
+            card.classList.add('is-locked');
+            if(cta){
+              cta.setAttribute('href', '/planos/');
+              cta.innerHTML = 'Requer upgrade <span class="mdi mdi-lock-outline"></span>';
+            }
+            // Nota discreta abaixo do CTA.
+            var note = document.createElement('span');
+            note.className = 'lock-note';
+            note.innerHTML = '<span class="mdi mdi-lock-outline"></span> Não disponível no seu plano';
+            card.appendChild(note);
+          }
+        });
+
+        statResources.textContent = totalLiberados;
+        revelarLista();
+      })
+      .catch(function(){
+        // Falha total → mantém a lista visível em modo compatível.
+        statResources.textContent = cards.length;
+        revelarLista();
+      });
+
+    function revelarLista(){
+      loading.hidden = true;
+      list.hidden = false;
+    }
+
+    // Logout.
+    document.getElementById('sair').addEventListener('click', function(){
+      fetch('/api/member/logout', { method:'POST', credentials:'same-origin' })
+        .catch(function(){})
+        .finally(function(){ location.href = '/'; });
+    });
+  })();
 </script>
+
 </body>
 </html>
