@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/style.css">
 <link rel="stylesheet" href="/css/blog.css">
 <link rel="stylesheet" href="/css/trailsFormat.css">
-<link rel="stylesheet" href="/css/mediaQuery.css">
+<!--<link rel="stylesheet" href="/css/mediaQuery.css">-->
 <link rel="stylesheet" href="/css/format.css">
 
 <style>
@@ -49,6 +49,48 @@
     --seg-how-rgba-a:  rgba(244, 52, 161, 0.06);
     --seg-how-rgba-b:  rgba(255, 132, 66, 0.08);
     --seg-step-bg:     rgba(17, 2, 115, 0.18);
+
+    /* Paleta (baseada no guia de cores oficial do projeto) */
+    --udx-bg:            #02021a;          /* fundo base */
+    --udx-bg-mid:        #110273;          /* azul marinho */
+    --udx-primary:       #BF0449;          /* rosa/opaco — CTA principal */
+    --udx-primary-heat:  #F20505;          /* vermelhor/fogo */
+    --udx-blood-red:     #d60126;          /* vermelho/sangue - destaques */
+    --udx-primary-orange:#F27405;          /* laranja */
+    --udx-primary-hot:   #FA33A1;          /* rosa/choque — hover, destaques */
+    --udx-spark-blue:    #6f42c1;          /* roxo/stars - transições suaves */
+    --udx-accent:        #5708A6;          /* roxo médio */
+    --udx-accent-blue:   #430ABF;          /* azul médio — meta pills */
+    --udx-text:          #DFE0F2;          /* azul/gelo — texto principal */
+    --udx-text-muted:    #b0b3cc;          /* texto secundário */
+    --udx-border:        rgba(223, 224, 242, 0.12); /* borda sutil */
+    --udx-border-hover:  rgba(191, 4, 73, 0.32);    /* borda hover nos cards */
+
+
+    --udx-purple-back:#5708A6; /* --udx-accent */
+    --udx-wine-mid:   #BF0449; /* --udx-primary */
+    --udx-red-front:  #F20505; /* --udx-primary-heat */
+
+    /* Tipografia */
+    --udx-font:          'Poppins', sans-serif;
+
+    /* Sombras */
+    --udx-shadow-card:   0 4px 28px rgba(0, 0, 0, 0.42);
+    --udx-shadow-hover:  0 8px 36px rgba(191, 4, 73, 0.18);
+    --udx-shadow-btn:    0 4px 16px rgba(191, 4, 73, 0.38);
+
+    /* Bordas arredondadas */
+    --udx-radius-xs:     4px;
+    --udx-radius-sm:     6px;
+    --udx-radius-md:     10px;
+    --udx-radius-lg:     16px;
+
+    /* Modo cromático do FAB — sobrescrito por [data-pane="…"] */
+    --fab-accent:        #FA33A1;
+    --fab-accent-deep:   #d60126;
+    --fab-core-from:     #FA33A1;
+    --fab-core-to:       #d60126;
+    --fab-glow:          rgba(214, 1, 38, 0.42);
   }
 
   /* Header compacto exclusivo desta página (não usa o header do blog inteiro,
