@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área Premium — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<!-- Design tokens e componentes do projeto -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<!--<link rel="stylesheet" href="/css/mediaQuery.css">-->
+<link rel="stylesheet" href="/css/format.css">
+
+<style>
+  /* -------------------------------------------------------------
+     Escopo Premium — herda os mesmos tokens da .page-membros
+     (rosa #F434A1 → laranja #ff8442), já que Premium é o plano
+     representado por esse gradiente na topbar/badge.
+  ------------------------------------------------------------- */
+  .page-membros.page-premium{
+    --m-grad:        linear-gradient(135deg, #F434A1 0%, #ff8442 100%);
+    --m-grad-soft:   linear-gradient(135deg, rgba(244,52,161,.18) 0%, rgba(255,132,66,.22) 100%);
+    --m-grad-text:   linear-gradient(135deg, #ff8442 0%, #F434A1 100%);
+    --m-pink:        #F434A1;
+    --m-orange:      #ff8442;
+    --m-glow:        rgba(244, 52, 161, 0.32);
+
+    --seg-grad:      var(--m-grad);
+    --seg-grad-soft: var(--m-grad-soft);
+    --seg-grad-text: var(--m-grad-text);
+    --seg-accent:    var(--m-pink);
+    --seg-accent-2:  var(--m-orange);
+    --seg-glow:      var(--m-glow);
+
+    --seg-hero-rgba-a: rgba(244, 52, 161, 0.22);
+    --seg-hero-rgba-b: rgba(255, 132, 66, 0.28);
+    --seg-cta-rgba-a:  rgba(244, 52, 161, 0.18);
+    --seg-cta-rgba-b:  rgba(255, 132, 66, 0.22);
+    --seg-how-rgba-a:  rgba(244, 52, 161, 0.06);
+    --seg-how-rgba-b:  rgba(255, 132, 66, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+  }
+
+  /* Topbar — mesma estrutura da Área de Membros */
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+    flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw;
+    white-space: normal;
+    line-height: 1.15;
+    font-size: 10.5px;
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-voltar,
+  .members-topbar .btn-sair{
+    background: transparent;
+    color: var(--udx-text);
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm);
+    font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-voltar:hover,
+  .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-primary-hot);
+    color: #fff;
+  }
+  .members-topbar .btn-voltar .mdi{ font-size: 16px; }
+
+  .members-main{ padding-bottom: 40px; }
+
+  /* Hero — chip do usuário e "coroa" Premium */
+  .members-hero .type-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding: 6px 14px; border-radius: 50px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-size: 12px; font-weight: 600;
+  }
+  .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
+  .members-hero .type-chip b{ font-weight: 700; }
+
+  .premium-crown{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+    padding: 6px 14px; border-radius: 50px;
+    background: var(--seg-grad-soft);
+    border: 1px solid var(--seg-accent);
+    color: #fff;
+    font-size: 11.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .premium-crown .mdi{ font-size: 14px; color: var(--seg-accent-2); }
+
+  /* Grid de cards — igual à Área de Membros */
+  .members-list{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 780px){
+    .members-list{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Selo "Exclusivo Premium" sobre o card */
+  .trail-x .premium-flag{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #fff;
+    padding: 3px 10px; border-radius: 50px;
+    background: var(--seg-grad);
+    box-shadow: 0 4px 14px var(--seg-glow);
+    margin-bottom: 8px;
+  }
+  .trail-x .premium-flag .mdi{ font-size: 13px; }
+
+  /* Lista de produtos dentro do card (mesmo padrão do index) */
+  .products-list{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .products-list li{ margin: 0; padding: 0; }
+  .products-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .products-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(244, 52, 161, 0.06);
+    transform: translateX(3px);
+  }
+  .products-list a > .mdi:first-child{
+    font-size: 18px; color: var(--seg-accent); flex-shrink: 0;
+  }
+  .products-list__label{
+    display: flex; flex-direction: column;
+    flex: 1; min-width: 0;
+  }
+  .products-list__desc{
+    font-size: 11.5px; color: var(--udx-text-muted); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .products-list__ext{
+    font-size: 14px; color: var(--udx-text-muted); flex-shrink: 0;
+  }
+
+  /* Ebooks Premium */
+  .ebooks-list{
+    margin: 6px 0 0;
+    padding: 14px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .ebooks-list li{ margin: 0; padding: 0; }
+  .ebooks-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .ebooks-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(244, 52, 161, 0.06);
+    transform: translateX(3px);
+  }
+  .ebooks-list a .mdi{
+    font-size: 16px; color: var(--seg-accent); flex-shrink: 0;
+  }
+
+  .members-footer{
+    padding: 20px 22px; text-align: center;
+    color: var(--udx-text-muted); font-size: .8rem;
+    border-top: 1px solid var(--udx-border);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .trail-x, .ebooks-list a, .products-list a,
+    .members-topbar .btn-sair, .members-topbar .btn-voltar{ transition: none; }
+  }
+</style>
+</head>
+
+<body class="page-membros page-premium">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge">
+      <span class="mdi mdi-crown" aria-hidden="true"></span>
+      <span>Premium</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/membros/" aria-label="Voltar para a Área de Membros">
+      <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+      Área de Membros
+    </a>
+    <button class="btn-sair" id="sair">Sair</button>
+  </header>
+
+  <main class="members-main">
+
+    <!-- HERO -->
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <span class="premium-crown">
+            <span class="mdi mdi-crown" aria-hidden="true"></span>
+            Plano Premium
+          </span>
+
+          <div class="eyebrow">
+            <b>02</b>
+            <span>Área Premium</span>
+          </div>
+          <h1>Sua experiência <em>Premium</em>, sem limites</h1>
+          <p class="lead">
+            Acesso liberado a tudo o que a Up Dance oferece: trilhas completas,
+            aulas ao vivo, apps profissionais, mentorias e uma biblioteca de
+            materiais em constante expansão. Você já tem tudo isso — aproveite.
+          </p>
+
+          <div class="type-chip" id="userChip" hidden>
+            <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
+            <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+
+          <div class="trails-stats" style="margin-top:26px">
+            <div class="trails-stats__item">
+              <b>100%</b>
+              <span>Do catálogo liberado</span>
+            </div>
+            <div class="trails-stats__item">
+              <b>Premium</b>
+              <span>Seu plano atual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO — Benefícios exclusivos Premium -->
+    <section class="trails-section">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-star-four-points" aria-hidden="true"></span>
+            <span>Benefícios exclusivos</span>
+          </div>
+          <h2>O que você tem <em>como Premium</em></h2>
+          <p class="lead">
+            Todos os recursos abaixo já estão desbloqueados na sua conta.
+            Clique em qualquer card para acessar.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+
+          <!-- Card 1 — Trilhas -->
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-map-marker-path"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 01</span>
+                <h3>Trilhas completas</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Acesso integral a todas as trilhas de aprendizado — do fundamento
+              técnico à performance de palco. Progresso salvo, playbacks e
+              materiais anexos incluídos.
+            </p>
+            <a class="trail-x__cta" href="/trilhas/">
+              Acessar <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 2 — Apps -->
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-apps"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 02</span>
+                <h3>Apps profissionais</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Ferramentas de bastidor pensadas para o dia a dia de quem dança
+              ou ensina — sincronizadas com sua conta Premium.
+            </p>
+            <ul class="products-list">
+              <li>
+                <a href="/apps/metronome/">
+                  <span class="mdi mdi-metronome"></span>
+                  <span class="products-list__label">
+                    Metrônomo Pro
+                    <span class="products-list__desc">Marcação com subdivisões e presets</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/apps/counter/">
+                  <span class="mdi mdi-timer-outline"></span>
+                  <span class="products-list__label">
+                    Contador de tempos
+                    <span class="products-list__desc">Frases de 4, 6 e 8 tempos com voz</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/apps/playlist/">
+                  <span class="mdi mdi-playlist-music"></span>
+                  <span class="products-list__label">
+                    Playlist de aula
+                    <span class="products-list__desc">Organize sua sequência musical</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 3 — Aulas ao vivo -->
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-video-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 03</span>
+                <h3>Aulas ao vivo</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Encontros semanais com professores convidados, com espaço para
+              perguntas ao vivo. Todas as gravações ficam disponíveis para
+              rever no seu tempo.
+            </p>
+            <a class="trail-x__cta" href="/premium/ao-vivo/">
+              Ver agenda <span class="mdi mdi-calendar-outline"></span>
+            </a>
+          </article>
+
+          <!-- Card 4 — Mentoria -->
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-star-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 04</span>
+                <h3>Mentoria individual</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Uma sessão mensal de 45 min com um mentor da Up Dance para
+              destravar pontos técnicos, artísticos ou de carreira.
+            </p>
+            <a class="trail-x__cta" href="/premium/mentoria/">
+              Agendar sessão <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 5 — Comunidade VIP -->
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-group-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 05</span>
+                <h3>Comunidade VIP</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Grupo fechado com outros membros Premium — troca de
+              coreografias, feedback entre pares e eventos presenciais.
+            </p>
+            <a class="trail-x__cta" href="/premium/comunidade/">
+              Entrar na comunidade <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 6 — Descontos parceiros -->
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-tag-heart-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 06</span>
+                <h3>Clube de parceiros</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Descontos exclusivos em roupas de dança, estúdios, workshops e
+              eventos — atualizados todo mês na sua área.
+            </p>
+            <a class="trail-x__cta" href="/premium/clube/">
+              Ver ofertas <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO — Biblioteca Premium -->
+    <section class="trails-section" style="padding-top:0">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-bookshelf" aria-hidden="true"></span>
+            <span>Biblioteca Premium</span>
+          </div>
+          <h2>Ebooks e <em>materiais avançados</em></h2>
+          <p class="lead">
+            Materiais em PDF disponíveis apenas para membros Premium.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-book-open-page-variant"></span></span>
+              <div>
+                <span class="trail-x__num">Coleção</span>
+                <h3>Guias técnicos avançados</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Materiais aprofundados sobre técnica, expressão e preparação
+              corporal — organizados por trilha.
+            </p>
+            <ul class="ebooks-list">
+              <li>
+                <a href="/premium/ebooks/tecnica-avancada.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Fundamentos de técnica avançada
+                </a>
+              </li>
+              <li>
+                <a href="/premium/ebooks/expressao-corporal.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Expressão corporal para o palco
+                </a>
+              </li>
+              <li>
+                <a href="/premium/ebooks/preparacao-fisica.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Preparação física para dançarinos
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <article class="trail-x">
+            <span class="premium-flag">
+              <span class="mdi mdi-crown"></span> Premium
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-notebook-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Coleção</span>
+                <h3>Cadernos de estudo</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Cadernos imprimíveis para acompanhar sua rotina de treino,
+              anotações de aula e planejamento coreográfico.
+            </p>
+            <ul class="ebooks-list">
+              <li>
+                <a href="/premium/ebooks/diario-de-treino.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Diário de treino (30 dias)
+                </a>
+              </li>
+              <li>
+                <a href="/premium/ebooks/roteiro-coreografico.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Roteiro coreográfico
+                </a>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — indicação / suporte (upgrade não faz sentido a quem já é Premium) -->
+    <section class="trails-cta">
+      <div class="auto-container">
+        <div class="trails-cta__box">
+          <h2>Compartilhe o <em>seu Premium</em></h2>
+          <p>Indique um(a) amigo(a) e ganhe um mês grátis quando ele(a) se tornar Premium. Precisa de suporte? A gente responde rápido.</p>
+          <div class="trails-cta__ctas">
+            <a class="home-cta home-cta--solid" href="/premium/indique/">
+              <span class="mdi mdi-gift-outline"></span>
+              Indicar um amigo
+            </a>
+            <a class="home-cta home-cta--ghost" href="/contato/">
+              <span class="mdi mdi-lifebuoy"></span>
+              Falar com o suporte
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="members-footer">
+    © Up Dance — Área Premium. Este conteúdo é pessoal e intransferível.
+  </footer>
+
+<script>
+  (function(){
+    'use strict';
+
+    var userChip  = document.getElementById('userChip');
+    var userEmail = document.getElementById('userEmail');
+
+    // Só preenche identidade e mantém o botão Sair funcional.
+    // O acesso à página em si já é protegido pelo Worker (path /membros/*).
+    fetch('/api/me', { credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(u){
+        if(!u || !u.email){ location.href = '/entrar/'; return; }
+        userEmail.textContent = u.email;
+        userChip.hidden = false;
+
+        // Guarda extra no cliente: se o membro não tem Premium entre seus
+        // tipos, devolve-o à Área de Membros geral.
+        var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
+        if (types.indexOf('Premium') === -1) {
+          location.href = '/membros/?erro=sem_acesso';
+        }
+      })
+      .catch(function(){ /* silencia — deixa a página utilizável mesmo offline */ });
+
+    document.getElementById('sair').addEventListener('click', function(){
+      fetch('/api/member/logout', { method:'POST', credentials:'same-origin' })
+        .catch(function(){})
+        .finally(function(){ location.href = '/'; });
+    });
+  })();
+</script>
+
+</body>
+</html>
