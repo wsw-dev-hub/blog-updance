@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área do(a) Aluno(a) — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<!-- Design tokens e componentes do projeto -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<!--<link rel="stylesheet" href="/css/mediaQuery.css">-->
+<link rel="stylesheet" href="/css/format.css">
+
+<style>
+  /* -------------------------------------------------------------
+     Escopo Aluno(a) — paleta âmbar → coral. Quente e acolhedora,
+     comunicando energia de aula sem competir com o rosa→laranja
+     do Premium nem com o ciano→roxo do Estagiário.
+  ------------------------------------------------------------- */
+  .page-membros.page-aluno{
+    --al-grad:        linear-gradient(135deg, #fbbf24 0%, #fb7185 100%);
+    --al-grad-soft:   linear-gradient(135deg, rgba(251,191,36,.18) 0%, rgba(251,113,133,.22) 100%);
+    --al-grad-text:   linear-gradient(135deg, #fb7185 0%, #fbbf24 100%);
+    --al-amber:       #fbbf24;
+    --al-coral:       #fb7185;
+    --al-glow:        rgba(251, 113, 133, 0.32);
+
+    --seg-grad:      var(--al-grad);
+    --seg-grad-soft: var(--al-grad-soft);
+    --seg-grad-text: var(--al-grad-text);
+    --seg-accent:    var(--al-coral);
+    --seg-accent-2:  var(--al-amber);
+    --seg-glow:      var(--al-glow);
+
+    --seg-hero-rgba-a: rgba(251, 191, 36, 0.20);
+    --seg-hero-rgba-b: rgba(251, 113, 133, 0.28);
+    --seg-cta-rgba-a:  rgba(251, 191, 36, 0.16);
+    --seg-cta-rgba-b:  rgba(251, 113, 133, 0.22);
+    --seg-how-rgba-a:  rgba(251, 191, 36, 0.06);
+    --seg-how-rgba-b:  rgba(251, 113, 133, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+  }
+
+  /* Topbar */
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+    flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw;
+    white-space: normal;
+    line-height: 1.15;
+    font-size: 10.5px;
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-voltar,
+  .members-topbar .btn-sair{
+    background: transparent;
+    color: var(--udx-text);
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm);
+    font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-voltar{
+    margin-bottom: 12px;
+  }
+  .members-topbar .btn-voltar:hover,
+  .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-primary-hot);
+    color: #fff;
+  }
+  .members-topbar .btn-voltar .mdi{ font-size: 16px; }
+
+  .members-main{ padding-bottom: 40px; }
+
+  /* Hero */
+  .members-hero .type-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding: 6px 14px; border-radius: 50px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-size: 12px; font-weight: 600;
+  }
+  .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
+  .members-hero .type-chip b{ font-weight: 700; }
+
+  .aluno-tag{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+    padding: 6px 14px; border-radius: 50px;
+    background: var(--seg-grad-soft);
+    border: 1px solid var(--seg-accent);
+    color: #fff;
+    font-size: 11.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .aluno-tag .mdi{ font-size: 14px; color: var(--seg-accent-2); }
+
+  /* Card destaque — próxima aula */
+  .next-class{
+    margin-top: 26px;
+    padding: 18px 20px;
+    border-radius: var(--udx-radius);
+    background:
+      linear-gradient(135deg, rgba(2,2,26,0.65), rgba(2,2,26,0.35)),
+      var(--seg-grad);
+    border: 1px solid var(--seg-accent);
+    box-shadow: 0 10px 32px var(--seg-glow);
+    display: grid; gap: 12px;
+  }
+  .next-class__head{
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #fff;
+  }
+  .next-class__head .mdi{ font-size: 16px; color: var(--seg-accent-2); }
+  .next-class__body{
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: 12px;
+  }
+  .next-class__title{
+    margin: 0; font-size: 1.15rem; color: #fff;
+    font-weight: 700; line-height: 1.3;
+  }
+  .next-class__title em{
+    font-style: normal;
+    background: var(--seg-grad-text);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .next-class__meta{
+    display: flex; flex-wrap: wrap; gap: 12px 16px;
+    font-size: 12.5px; color: var(--udx-text);
+  }
+  .next-class__meta span{
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .next-class__meta .mdi{ font-size: 14px; color: var(--seg-accent-2); }
+  .next-class__cta{
+    display: inline-flex; align-items: center; gap: 8px;
+    align-self: flex-start;
+    padding: 10px 18px; border-radius: var(--udx-radius-sm);
+    background: rgba(2, 2, 26, 0.55);
+    color: #fff; text-decoration: none;
+    font-weight: 600; font-size: 13.5px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: background-color 220ms ease, border-color 220ms ease;
+  }
+  .next-class__cta:hover{
+    background: rgba(2, 2, 26, 0.75);
+    border-color: #fff;
+  }
+  .next-class__cta .mdi{ font-size: 16px; }
+
+  /* Grid */
+  .members-list{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 780px){
+    .members-list{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Selo do card */
+  .trail-x .aluno-flag{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #020118;
+    padding: 3px 10px; border-radius: 50px;
+    background: var(--seg-grad);
+    box-shadow: 0 4px 14px var(--seg-glow);
+    margin-bottom: 8px;
+  }
+  .trail-x .aluno-flag .mdi{ font-size: 13px; }
+
+  /* Card em breve */
+  .trail-x.is-soon{
+    opacity: .70;
+  }
+  .trail-x.is-soon .trail-x__cta{
+    background: rgba(2, 2, 26, 0.65);
+    color: var(--udx-text-muted);
+    box-shadow: none;
+    border: 1px solid var(--udx-border);
+  }
+  .trail-x .soon-note{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--udx-text-muted);
+    margin-top: 4px;
+  }
+  .trail-x .soon-note .mdi{ font-size: 14px; color: var(--seg-accent); }
+
+  /* Frequência (bolinhas dos últimos dias) */
+  .attendance{
+    margin-top: 16px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-sm);
+    padding: 14px 16px;
+  }
+  .attendance__head{
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px;
+    font-size: 12.5px; color: var(--udx-text-muted);
+    margin-bottom: 10px;
+  }
+  .attendance__head b{
+    color: var(--udx-text); font-weight: 700;
+  }
+  .attendance__dots{
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .attendance__dot{
+    width: 22px; height: 22px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(223, 224, 242, 0.10);
+    border: 1px solid var(--udx-border);
+    font-size: 12px; color: transparent;
+  }
+  .attendance__dot.present{
+    background: var(--seg-grad);
+    border-color: transparent;
+    color: #020118;
+  }
+  .attendance__dot.present::before{
+    content: "✓";
+    font-weight: 700;
+    color: #020118;
+  }
+  .attendance__dot.absent{
+    background: rgba(223, 224, 242, 0.05);
+  }
+
+  /* Listas dentro dos cards */
+  .products-list, .ebooks-list{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .products-list li, .ebooks-list li{ margin: 0; padding: 0; }
+  .products-list a, .ebooks-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .products-list a:hover, .ebooks-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(251, 113, 133, 0.06);
+    transform: translateX(3px);
+  }
+  .products-list a > .mdi:first-child,
+  .ebooks-list a .mdi{
+    font-size: 18px; color: var(--seg-accent); flex-shrink: 0;
+  }
+  .products-list__label{
+    display: flex; flex-direction: column;
+    flex: 1; min-width: 0;
+  }
+  .products-list__desc{
+    font-size: 11.5px; color: var(--udx-text-muted); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .products-list__ext{
+    font-size: 14px; color: var(--udx-text-muted); flex-shrink: 0;
+  }
+
+  .members-footer{
+    padding: 20px 22px; text-align: center;
+    color: var(--udx-text-muted); font-size: .8rem;
+    border-top: 1px solid var(--udx-border);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .trail-x, .ebooks-list a, .products-list a,
+    .members-topbar .btn-sair, .members-topbar .btn-voltar{ transition: none; }
+  }
+</style>
+</head>
+
+<body class="page-membros page-aluno">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge">
+      <span class="mdi mdi-human-female-dance" aria-hidden="true"></span>
+      <span>Aluno(a)</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/membros/" aria-label="Voltar para a Área de Membros">
+      <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+      Área de Membros
+    </a>
+    <button class="btn-sair" id="sair">Sair</button>
+  </header>
+
+  <main class="members-main">
+
+    <!-- HERO -->
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <span class="aluno-tag">
+            <span class="mdi mdi-human-female-dance" aria-hidden="true"></span>
+            Matrícula ativa
+          </span>
+
+          <div class="eyebrow">
+            <b>04</b>
+            <span>Área do(a) Aluno(a)</span>
+          </div>
+          <h1>Bora <em>dançar?</em></h1>
+          <p class="lead">
+            Aqui está tudo o que você precisa para o dia a dia das suas aulas:
+            próximos horários, materiais das turmas, coreografias em vídeo e
+            um espaço para acompanhar sua evolução.
+          </p>
+
+          <div class="type-chip" id="userChip" hidden>
+            <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
+            <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+
+          <!-- Destaque: próxima aula -->
+          <div class="next-class" role="region" aria-label="Sua próxima aula">
+            <div class="next-class__head">
+              <span class="mdi mdi-calendar-star" aria-hidden="true"></span>
+              Sua próxima aula
+            </div>
+            <div class="next-class__body">
+              <div>
+                <h2 class="next-class__title">Turma de <em>Contemporâneo</em> — Nível 2</h2>
+                <div class="next-class__meta">
+                  <span><span class="mdi mdi-calendar"></span> Terça, 15 de julho</span>
+                  <span><span class="mdi mdi-clock-outline"></span> 19h30 – 20h30</span>
+                  <span><span class="mdi mdi-account-tie"></span> Prof. Marina</span>
+                  <span><span class="mdi mdi-map-marker-outline"></span> Sala 2</span>
+                </div>
+              </div>
+              <a class="next-class__cta" href="/aluno/turmas/">
+                Ver turmas
+                <span class="mdi mdi-arrow-right"></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="trails-stats" style="margin-top:26px">
+            <div class="trails-stats__item">
+              <b id="statLevel">Nível 2</b>
+              <span>Seu nível atual</span>
+            </div>
+            <div class="trails-stats__item">
+              <b id="statAttendance">85%</b>
+              <span>Frequência do mês</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO — Recursos do aluno -->
+    <section class="trails-section">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-star-four-points-outline" aria-hidden="true"></span>
+            <span>Seu conteúdo por plano</span>
+          </div>
+          <h2>O que está <em>disponível para você</em></h2>
+          <p class="lead">
+            Recursos liberados com a sua matrícula ativa. Novidades são
+            adicionadas conforme a temporada avança.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+
+          <!-- Card 1 — Minhas turmas -->
+          <article class="trail-x">
+            <span class="aluno-flag">
+              <span class="mdi mdi-human-female-dance"></span> Aluno(a)
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-calendar-multiple"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 01</span>
+                <h3>Minhas turmas</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Sua grade da semana com professor, sala e horário. Cancele ou
+              reponha uma aula em poucos toques.
+            </p>
+            <ul class="products-list">
+              <li>
+                <a href="/aluno/turmas/">
+                  <span class="mdi mdi-calendar-week"></span>
+                  <span class="products-list__label">
+                    Grade semanal
+                    <span class="products-list__desc">3 turmas ativas nesta semana</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/aluno/reposicao/">
+                  <span class="mdi mdi-calendar-refresh"></span>
+                  <span class="products-list__label">
+                    Solicitar reposição
+                    <span class="products-list__desc">Até 2 reposições por mês</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 2 — Frequência -->
+          <article class="trail-x">
+            <span class="aluno-flag">
+              <span class="mdi mdi-human-female-dance"></span> Aluno(a)
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-chart-line"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 02</span>
+                <h3>Minha frequência</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Últimas 10 aulas registradas. Manter 80%+ de presença garante
+              seu lugar na turma na próxima temporada.
+            </p>
+            <div class="attendance">
+              <div class="attendance__head">
+                <span>Últimas 10 aulas</span>
+                <b>8 presentes</b>
+              </div>
+              <div class="attendance__dots">
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot absent" aria-label="Ausente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot absent" aria-label="Ausente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+                <span class="attendance__dot present" aria-label="Presente"></span>
+              </div>
+            </div>
+            <a class="trail-x__cta" href="/aluno/frequencia/">
+              Ver histórico completo <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 3 — Coreografias em vídeo -->
+          <article class="trail-x">
+            <span class="aluno-flag">
+              <span class="mdi mdi-human-female-dance"></span> Aluno(a)
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-play-circle-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 03</span>
+                <h3>Coreografias em vídeo</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Grave as sequências das suas turmas para revisar em casa. As
+              professoras liberam a coreografia semana a semana.
+            </p>
+            <ul class="products-list">
+              <li>
+                <a href="/aluno/videos/contemporaneo-n2/">
+                  <span class="mdi mdi-video-outline"></span>
+                  <span class="products-list__label">
+                    Contemporâneo N2 — Sequência 4
+                    <span class="products-list__desc">Postada ontem por Prof. Marina</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/aluno/videos/jazz-n1/">
+                  <span class="mdi mdi-video-outline"></span>
+                  <span class="products-list__label">
+                    Jazz N1 — Coreografia da apresentação
+                    <span class="products-list__desc">Trecho A (1º refrão)</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/aluno/videos/">
+                  <span class="mdi mdi-folder-multiple-outline"></span>
+                  <span class="products-list__label">
+                    Todas as coreografias
+                    <span class="products-list__desc">Filtre por turma ou professor</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 4 — Playlists das aulas -->
+          <article class="trail-x">
+            <span class="aluno-flag">
+              <span class="mdi mdi-human-female-dance"></span> Aluno(a)
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-playlist-music"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 04</span>
+                <h3>Playlists das aulas</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              As músicas usadas nas suas turmas, organizadas por professor.
+              Treine em casa com o mesmo repertório.
+            </p>
+            <a class="trail-x__cta" href="/aluno/playlists/">
+              Abrir playlists <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 5 — Financeiro / Cartão do aluno -->
+          <article class="trail-x">
+            <span class="aluno-flag">
+              <span class="mdi mdi-human-female-dance"></span> Aluno(a)
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-credit-card-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 05</span>
+                <h3>Cartão do(a) aluno(a)</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Sua matrícula, mensalidade e histórico de pagamentos.
+              Baixe o comprovante da sua última mensalidade.
+            </p>
+            <ul class="products-list">
+              <li>
+                <a href="/aluno/financeiro/">
+                  <span class="mdi mdi-receipt-text-outline"></span>
+                  <span class="products-list__label">
+                    Mensalidade e boletos
+                    <span class="products-list__desc">Próximo vencimento: dia 10</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/aluno/matricula/">
+                  <span class="mdi mdi-card-account-details-outline"></span>
+                  <span class="products-list__label">
+                    Dados da matrícula
+                    <span class="products-list__desc">Atualize contatos e responsável</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 6 — Comunidade / Apresentações -->
+          <article class="trail-x">
+            <span class="aluno-flag">
+              <span class="mdi mdi-human-female-dance"></span> Aluno(a)
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-group-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 06</span>
+                <h3>Turma & apresentações</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Recados da sua turma, próximas apresentações e ensaios extras
+              — tudo em um só lugar.
+            </p>
+            <a class="trail-x__cta" href="/aluno/turma/">
+              Ver recados <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO FIXA — biblioteca aberta -->
+    <section class="trails-section" style="padding-top:0">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-book-open-variant" aria-hidden="true"></span>
+            <span>Sempre disponível</span>
+          </div>
+          <h2>Ebooks e <em>mini-ebooks</em></h2>
+          <p class="lead">
+            Materiais em PDF prontos para download — disponíveis para todos
+            os alunos e alunas da Up Dance.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+          <article class="trail-x">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-book-open-variant"></span></span>
+              <div>
+                <span class="trail-x__num">Biblioteca</span>
+                <h3>Guias práticos</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Materiais leves para complementar suas aulas.
+            </p>
+            <ul class="ebooks-list">
+              <li>
+                <a href="/aluno/ebooks/alongamento-em-casa.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Alongamento em casa (15 min)
+                </a>
+              </li>
+              <li>
+                <a href="/aluno/ebooks/cuidados-com-o-corpo.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Cuidados básicos com o corpo
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <article class="trail-x is-soon">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-star-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Em breve</span>
+                <h3>Trilhas de aprendizado</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Trilhas guiadas para você estudar entre uma aula e outra —
+              disponível para alunos a partir do segundo semestre da temporada.
+            </p>
+            <p class="soon-note">
+              <span class="mdi mdi-clock-outline"></span>
+              Chegando nesta temporada
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — indicação / upgrade -->
+    <section class="trails-cta">
+      <div class="auto-container">
+        <div class="trails-cta__box">
+          <h2>Quer <em>ir além?</em></h2>
+          <p>Indique um(a) amigo(a) e ganhe uma aula extra na sua próxima mensalidade — ou desbloqueie trilhas completas, aulas ao vivo e mentoria com o plano Premium.</p>
+          <div class="trails-cta__ctas">
+            <a class="home-cta home-cta--solid" href="/aluno/indique/">
+              <span class="mdi mdi-gift-outline"></span>
+              Indicar um amigo
+            </a>
+            <a class="home-cta home-cta--ghost" href="/planos/">
+              <span class="mdi mdi-crown-outline"></span>
+              Conhecer o Premium
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="members-footer">
+    © Up Dance — Área do(a) Aluno(a). Este conteúdo é pessoal e intransferível.
+  </footer>
+
+<script>
+  (function(){
+    'use strict';
+
+    var userChip  = document.getElementById('userChip');
+    var userEmail = document.getElementById('userEmail');
+
+    // Só preenche identidade e mantém o botão Sair funcional.
+    // A rota /membros/* já é protegida pelo Worker.
+    fetch('/api/me', { credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(u){
+        if(!u || !u.email){ location.href = '/entrar/'; return; }
+        userEmail.textContent = u.email;
+        userChip.hidden = false;
+
+        // Defesa em profundidade: sem o tipo Aluno, volta ao hub.
+        var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
+        if (types.indexOf('Aluno') === -1) {
+          location.href = '/membros/?erro=sem_acesso';
+        }
+      })
+      .catch(function(){ /* silencia — página segue utilizável */ });
+
+    document.getElementById('sair').addEventListener('click', function(){
+      fetch('/api/member/logout', { method:'POST', credentials:'same-origin' })
+        .catch(function(){})
+        .finally(function(){ location.href = '/'; });
+    });
+  })();
+</script>
+
+</body>
+</html>
