@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área do(a) Estagiário(a) — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<!-- Design tokens e componentes do projeto -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<!--<link rel="stylesheet" href="/css/mediaQuery.css">-->
+<link rel="stylesheet" href="/css/format.css">
+
+<style>
+  /* -------------------------------------------------------------
+     Escopo Estagiário — paleta ciano → roxo, que sugere jornada
+     de aprendizado (começo → maestria). Mantém a mesma estrutura
+     de tokens usada em .page-membros / .page-premium.
+  ------------------------------------------------------------- */
+  .page-membros.page-estagiario{
+    --e-grad:        linear-gradient(135deg, #00b4d8 0%, #5708A6 100%);
+    --e-grad-soft:   linear-gradient(135deg, rgba(0,180,216,.18) 0%, rgba(87,8,166,.22) 100%);
+    --e-grad-text:   linear-gradient(135deg, #5708A6 0%, #00b4d8 100%);
+    --e-cyan:        #00b4d8;
+    --e-purple:      #5708A6;
+    --e-glow:        rgba(0, 180, 216, 0.32);
+
+    --seg-grad:      var(--e-grad);
+    --seg-grad-soft: var(--e-grad-soft);
+    --seg-grad-text: var(--e-grad-text);
+    --seg-accent:    var(--e-cyan);
+    --seg-accent-2:  var(--e-purple);
+    --seg-glow:      var(--e-glow);
+
+    --seg-hero-rgba-a: rgba(0, 180, 216, 0.20);
+    --seg-hero-rgba-b: rgba(87,  8, 166, 0.28);
+    --seg-cta-rgba-a:  rgba(0, 180, 216, 0.16);
+    --seg-cta-rgba-b:  rgba(87,  8, 166, 0.22);
+    --seg-how-rgba-a:  rgba(0, 180, 216, 0.06);
+    --seg-how-rgba-b:  rgba(87,  8, 166, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+  }
+
+  /* Topbar */
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+    flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw;
+    white-space: normal;
+    line-height: 1.15;
+    font-size: 10.5px;
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-voltar,
+  .members-topbar .btn-sair{
+    background: transparent;
+    color: var(--udx-text);
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm);
+    font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-voltar{
+    margin-bottom: 12px;
+  }
+  .members-topbar .btn-voltar:hover,
+  .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-primary-hot);
+    color: #fff;
+  }
+  .members-topbar .btn-voltar .mdi{ font-size: 16px; }
+
+  .members-main{ padding-bottom: 40px; }
+
+  /* Hero */
+  .members-hero .type-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding: 6px 14px; border-radius: 50px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-size: 12px; font-weight: 600;
+  }
+  .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
+  .members-hero .type-chip b{ font-weight: 700; }
+
+  .estagio-tag{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+    padding: 6px 14px; border-radius: 50px;
+    background: var(--seg-grad-soft);
+    border: 1px solid var(--seg-accent);
+    color: #fff;
+    font-size: 11.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .estagio-tag .mdi{ font-size: 14px; color: var(--seg-accent); }
+
+  /* Grid */
+  .members-list{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 780px){
+    .members-list{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Selo do card */
+  .trail-x .estagio-flag{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #fff;
+    padding: 3px 10px; border-radius: 50px;
+    background: var(--seg-grad);
+    box-shadow: 0 4px 14px var(--seg-glow);
+    margin-bottom: 8px;
+  }
+  .trail-x .estagio-flag .mdi{ font-size: 13px; }
+
+  /* Card em progresso (item que ainda não está liberado nesta fase) */
+  .trail-x.is-progress{
+    opacity: .70;
+  }
+  .trail-x.is-progress .trail-x__cta{
+    background: rgba(2, 2, 26, 0.65);
+    color: var(--udx-text-muted);
+    box-shadow: none;
+    border: 1px solid var(--udx-border);
+  }
+  .trail-x .progress-note{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--udx-text-muted);
+    margin-top: 4px;
+  }
+  .trail-x .progress-note .mdi{ font-size: 14px; color: var(--seg-accent); }
+
+  /* Barra de progresso do estágio */
+  .stage-progress{
+    margin-top: 16px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-sm);
+    padding: 14px 16px;
+  }
+  .stage-progress__head{
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px;
+    font-size: 12.5px; color: var(--udx-text-muted);
+    margin-bottom: 8px;
+  }
+  .stage-progress__head b{
+    color: var(--udx-text); font-weight: 700;
+  }
+  .stage-progress__bar{
+    height: 8px; border-radius: 50px;
+    background: rgba(223, 224, 242, 0.10);
+    overflow: hidden;
+  }
+  .stage-progress__fill{
+    height: 100%;
+    background: var(--seg-grad);
+    border-radius: 50px;
+    box-shadow: 0 0 12px var(--seg-glow);
+  }
+
+  /* Listas dentro dos cards */
+  .products-list, .ebooks-list{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .products-list li, .ebooks-list li{ margin: 0; padding: 0; }
+  .products-list a, .ebooks-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .products-list a:hover, .ebooks-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(0, 180, 216, 0.06);
+    transform: translateX(3px);
+  }
+  .products-list a > .mdi:first-child,
+  .ebooks-list a .mdi{
+    font-size: 18px; color: var(--seg-accent); flex-shrink: 0;
+  }
+  .products-list__label{
+    display: flex; flex-direction: column;
+    flex: 1; min-width: 0;
+  }
+  .products-list__desc{
+    font-size: 11.5px; color: var(--udx-text-muted); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* Checklist da rotina do estágio */
+  .checklist{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .checklist li{
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--udx-text); line-height: 1.5;
+  }
+  .checklist li .mdi{
+    font-size: 18px; flex-shrink: 0; margin-top: 1px;
+    color: var(--seg-accent);
+  }
+  .checklist li.done{ color: var(--udx-text-muted); }
+  .checklist li.done .mdi{ color: var(--seg-accent-2); }
+  .checklist li.todo .mdi{ color: rgba(223, 224, 242, 0.35); }
+
+  .members-footer{
+    padding: 20px 22px; text-align: center;
+    color: var(--udx-text-muted); font-size: .8rem;
+    border-top: 1px solid var(--udx-border);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .trail-x, .ebooks-list a, .products-list a,
+    .members-topbar .btn-sair, .members-topbar .btn-voltar{ transition: none; }
+  }
+</style>
+</head>
+
+<body class="page-membros page-estagiario">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge">
+      <span class="mdi mdi-school-outline" aria-hidden="true"></span>
+      <span>Estagiário(a)</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/membros/" aria-label="Voltar para a Área de Membros">
+      <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+      Área de Membros
+    </a>
+    <button class="btn-sair" id="sair">Sair</button>
+  </header>
+
+  <main class="members-main">
+
+    <!-- HERO -->
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <span class="estagio-tag">
+            <span class="mdi mdi-school-outline" aria-hidden="true"></span>
+            Programa de Estágio
+          </span>
+
+          <div class="eyebrow">
+            <b>03</b>
+            <span>Área do(a) Estagiário(a)</span>
+          </div>
+          <h1>Sua jornada <em>de formação</em> começa aqui</h1>
+          <p class="lead">
+            Um espaço dedicado a quem está aprendendo o ofício por dentro:
+            fundamentos, acompanhamento com mentores, checkpoints e uma
+            rotina clara para avançar para Monitor(a) — no seu tempo, com
+            apoio da equipe da Up Dance.
+          </p>
+
+          <div class="type-chip" id="userChip" hidden>
+            <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
+            <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+
+          <div class="trails-stats" style="margin-top:26px">
+            <div class="trails-stats__item">
+              <b id="statProgress">40%</b>
+              <span>Progresso do estágio</span>
+            </div>
+            <div class="trails-stats__item">
+              <b>Estagiário(a)</b>
+              <span>Seu plano atual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO — Recursos liberados -->
+    <section class="trails-section">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-star-four-points-outline" aria-hidden="true"></span>
+            <span>Seu conteúdo por plano</span>
+          </div>
+          <h2>O que está <em>disponível para você</em></h2>
+          <p class="lead">
+            Recursos liberados na fase atual do estágio. Alguns cards abrem
+            conforme você avança nos checkpoints.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+
+          <!-- Card 1 — Fundamentos -->
+          <article class="trail-x">
+            <span class="estagio-flag">
+              <span class="mdi mdi-school-outline"></span> Estágio
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-book-education-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 01</span>
+                <h3>Fundamentos da Up Dance</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Módulos iniciais que todo(a) estagiário(a) precisa dominar:
+              vocabulário técnico, postura, contagem musical e didática básica
+              da casa.
+            </p>
+            <div class="stage-progress">
+              <div class="stage-progress__head">
+                <span>Módulos concluídos</span>
+                <b>4 de 10</b>
+              </div>
+              <div class="stage-progress__bar">
+                <div class="stage-progress__fill" style="width:40%"></div>
+              </div>
+            </div>
+            <a class="trail-x__cta" href="/estagio/fundamentos/">
+              Continuar de onde parei <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 2 — Biblioteca de estudo -->
+          <article class="trail-x">
+            <span class="estagio-flag">
+              <span class="mdi mdi-school-outline"></span> Estágio
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-bookshelf"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 02</span>
+                <h3>Biblioteca de estudo</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Materiais em PDF selecionados para dar base à sua formação —
+              atualizados sempre que um novo módulo é liberado.
+            </p>
+            <ul class="ebooks-list">
+              <li>
+                <a href="/estagio/ebooks/guia-do-estagiario.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Guia do(a) Estagiário(a) Up Dance
+                </a>
+              </li>
+              <li>
+                <a href="/estagio/ebooks/vocabulario-tecnico.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Vocabulário técnico essencial
+                </a>
+              </li>
+              <li>
+                <a href="/estagio/ebooks/didatica-basica.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Didática básica em sala
+                </a>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 3 — Acompanhamento com mentor -->
+          <article class="trail-x">
+            <span class="estagio-flag">
+              <span class="mdi mdi-school-outline"></span> Estágio
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-tie-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 03</span>
+                <h3>Acompanhamento com mentor(a)</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Uma sessão quinzenal de 30 min com seu(sua) mentor(a) para
+              revisar progresso, tirar dúvidas e planejar o próximo ciclo.
+            </p>
+            <a class="trail-x__cta" href="/estagio/mentoria/">
+              Agendar próxima sessão <span class="mdi mdi-calendar-outline"></span>
+            </a>
+          </article>
+
+          <!-- Card 4 — Rotina do estágio (checklist) -->
+          <article class="trail-x">
+            <span class="estagio-flag">
+              <span class="mdi mdi-school-outline"></span> Estágio
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-clipboard-list-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 04</span>
+                <h3>Rotina do mês</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Sua checklist semanal para manter o ritmo do estágio no eixo.
+            </p>
+            <ul class="checklist">
+              <li class="done">
+                <span class="mdi mdi-check-circle"></span>
+                Assistir 2 aulas como observador(a)
+              </li>
+              <li class="done">
+                <span class="mdi mdi-check-circle"></span>
+                Ler o material do módulo atual
+              </li>
+              <li>
+                <span class="mdi mdi-circle-outline"></span>
+                Preparar uma sequência curta (8 tempos) para feedback
+              </li>
+              <li class="todo">
+                <span class="mdi mdi-circle-outline"></span>
+                Reunião quinzenal com o(a) mentor(a)
+              </li>
+              <li class="todo">
+                <span class="mdi mdi-circle-outline"></span>
+                Entregar diário de treino do mês
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 5 — Comunidade de estagiários -->
+          <article class="trail-x">
+            <span class="estagio-flag">
+              <span class="mdi mdi-school-outline"></span> Estágio
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-group-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 05</span>
+                <h3>Comunidade de estagiários</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Grupo fechado com outros estagiários da Up Dance — troca de
+              experiências, materiais e apoio entre pares.
+            </p>
+            <a class="trail-x__cta" href="/estagio/comunidade/">
+              Entrar na comunidade <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 6 — Checkpoint (avaliação) — em progresso -->
+          <article class="trail-x is-progress">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-flag-checkered"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 06</span>
+                <h3>Checkpoint de avanço</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Sua avaliação prática ao final desta fase. Libera automaticamente
+              quando você concluir 100% dos Fundamentos e a Rotina do mês.
+            </p>
+            <a class="trail-x__cta" href="#" aria-disabled="true">
+              Disponível ao concluir a fase <span class="mdi mdi-lock-clock"></span>
+            </a>
+            <p class="progress-note">
+              <span class="mdi mdi-information-outline"></span>
+              Faltam 6 módulos para desbloquear
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO FIXA — próximos passos na trilha de carreira -->
+    <section class="trails-section" style="padding-top:0">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-stairs-up" aria-hidden="true"></span>
+            <span>Próximos passos</span>
+          </div>
+          <h2>Depois do estágio, <em>o que vem?</em></h2>
+          <p class="lead">
+            A jornada Up Dance é progressiva. Veja o que se abre quando você
+            concluir esta fase.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+          <article class="trail-x is-progress">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-shield-star-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Próximo nível</span>
+                <h3>Monitor(a)</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Assumir turmas ao lado dos professores, com responsabilidades
+              didáticas e acesso a materiais avançados.
+            </p>
+            <p class="progress-note">
+              <span class="mdi mdi-lock-clock"></span>
+              Requer conclusão do Checkpoint de avanço
+            </p>
+          </article>
+
+          <article class="trail-x is-progress">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-cog-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Trilha alternativa</span>
+                <h3>Assistente</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Suporte técnico e administrativo às aulas e eventos — trilha
+              indicada para quem quer atuar nos bastidores da operação.
+            </p>
+            <p class="progress-note">
+              <span class="mdi mdi-lock-clock"></span>
+              Requer conversa com a coordenação
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — falar com coordenação -->
+    <section class="trails-cta">
+      <div class="auto-container">
+        <div class="trails-cta__box">
+          <h2>Precisa <em>de apoio?</em></h2>
+          <p>Fale com a coordenação do programa para tirar dúvidas sobre o seu estágio, remarcar um checkpoint ou pedir orientação de carreira.</p>
+          <div class="trails-cta__ctas">
+            <a class="home-cta home-cta--solid" href="/contato/?assunto=estagio">
+              <span class="mdi mdi-message-text-outline"></span>
+              Falar com a coordenação
+            </a>
+            <a class="home-cta home-cta--ghost" href="/estagio/faq/">
+              <span class="mdi mdi-help-circle-outline"></span>
+              Perguntas frequentes
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="members-footer">
+    © Up Dance — Área do(a) Estagiário(a). Este conteúdo é pessoal e intransferível.
+  </footer>
+
+<script>
+  (function(){
+    'use strict';
+
+    var userChip  = document.getElementById('userChip');
+    var userEmail = document.getElementById('userEmail');
+
+    // Só preenche identidade e mantém o botão Sair funcional.
+    // A rota /membros/* já é protegida pelo Worker.
+    fetch('/api/me', { credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(u){
+        if(!u || !u.email){ location.href = '/entrar/'; return; }
+        userEmail.textContent = u.email;
+        userChip.hidden = false;
+
+        // Defesa em profundidade: sem o tipo Estagiário(a), volta ao hub.
+        var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
+        if (types.indexOf('Estagiário(a)') === -1) {
+          location.href = '/membros/?erro=sem_acesso';
+        }
+      })
+      .catch(function(){ /* silencia — página segue utilizável */ });
+
+    document.getElementById('sair').addEventListener('click', function(){
+      fetch('/api/member/logout', { method:'POST', credentials:'same-origin' })
+        .catch(function(){})
+        .finally(function(){ location.href = '/'; });
+    });
+  })();
+</script>
+
+</body>
+</html>
