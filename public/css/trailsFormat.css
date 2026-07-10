@@ -438,6 +438,8 @@
     flex-wrap: wrap;
     margin-bottom: 38px;
 }
+.ts__h{ display: block; }
+
 .trails-section__head .eyebrow,
 .apps-section__head .eyebrow,
 .clube-section__head .eyebrow{
