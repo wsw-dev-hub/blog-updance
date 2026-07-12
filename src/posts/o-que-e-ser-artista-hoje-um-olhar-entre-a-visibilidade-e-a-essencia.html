@@ -3,29 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Up Dance | Blog</title>
+<title>Up Dance | Blog — Artigo</title>
 
 <!-- Favicon -->
-<link rel="icon"       type="image/png" href="/public/images/icons/udx-icon.ico">
-<link rel="shortcut icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+<link rel="icon"          type="image/png" href="/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/png" href="/images/icons/udx-icon.ico">
 
-<!-- Bootstrap 5 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-<!-- Material Design Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<!-- Preconexão antecipada com CDNs (elimina RTT extra) -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<!-- Folhas de estilo do projeto -->
+<!-- Bootstrap 5 — non-blocking via media trick -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</noscript>
+
+<!-- Material Design Icons — non-blocking -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+</noscript>
+
+<!-- Folhas de estilo do projeto (críticos — carregam normalmente) -->
 <link rel="stylesheet" href="/css/blog.css">       <!-- 1º: define :root (tokens) -->
-<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
 <link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
 <link rel="stylesheet" href="/css/format.css">     <!-- 3º: complementa tipografia -->
 <link rel="stylesheet" href="/css/mediaQuery.css"> <!-- 4º: sobrescreve por largura -->
 <!--<script type="module" src="/public/main.js" defer></script>-->
 <!--<link rel="stylesheet" href="css/slider-carrossel.css">-->
-
-<!-- jQuery (versão única, sem duplicata) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts movidos para o final do <body> -->
 </head>
 <body>
 <script src="/js/loader.js"></script>
@@ -36,7 +48,7 @@
     <header class="row g-0 blog-header">
 
         <!-- Logo -->
-        <div class="col-4 col-md-3 col-lg-2">
+        <div class="col-4 col-md-3 col-lg-2 ">
             <a href="/index.html" class="blog-logo-link">
                 <img src="/images/icons/udx-icon.png"
                      alt="Up Dance — voltar para Destaques"
@@ -44,7 +56,7 @@
             </a>
         </div>
 
-        <!-- Nav / Hamburger -->
+        <!-- Nav / Hambúrguer -->
         <div class="col-8 col-md-9 col-lg-10 d-flex justify-content-end align-items-center pe-0">
 
             <!-- Menu desktop (≥ lg) -->
@@ -72,7 +84,7 @@
         <!-- Nav dropdown mobile -->
         <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
             <ul>
-                <li id="btnMobilAcess"><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
                 <li><a href="/cadastro/">Receba Nossa Newsletter</a></li>
             </ul>
         </nav>
@@ -81,9 +93,8 @@
 </div>
 
 <a id="topo"></a>
-
 <!-- ======================================================
-     HERO / PAGE TITLE
+     HERO / BREADCRUMB
 ====================================================== -->
 <div id="hero-blog" class="container-fluid p-0">
 
@@ -95,7 +106,9 @@
                     <nav aria-label="Trilha de navegação">
                         <ul class="page-perfil-scrum">
                             <li><a href="/index.html">Destaques</a></li>
-                            <li>Artigos</li>
+                            <li><a href="/src/articles/artigos.html">Artigos</a></li>
+                            <li></li>
+                            <!--<li><span class="breadcrumb-current">Artigo</span></li>-->
                         </ul>
                     </nav>
                 </div>
@@ -106,185 +119,294 @@
     <!-- ======================================================
          CONTEÚDO PRINCIPAL
     ====================================================== -->
-    <section aria-label="Lista de artigos">
+    <section aria-label="Artigo completo">
         <div id="main-content" class="main-blog-content">
-            <div class="row" id="blog-list-infos">
+            <div class="row" id="blog-single-infos">
 
-                <!-- ── COLUNA PRINCIPAL ─────────────────────────────── -->
+                <!-- ── COLUNA DO ARTIGO ──────────────────────────── -->
                 <div class="content-side col-12 col-lg-8">
                     <div class="container">
-                        <div class="blog-list">
+                        <div class="blog-single">
+                            <div class="inner-box">
 
-                            <!-- Card 1 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-brain card-categ" aria-hidden="true"></span>
-                                        Reflexão
-                                    </div>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">O que é Arte?</h4>
-                                        <div class="text">Como a perseverança e a escolha consciente entre conforto e verdade moldam a trajetória de qualquer profissional de alta performance.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.png" alt="A Pílula Vermelha ou a Pílula Azul" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl1$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_1"
-                                               class="theme-btn btn-style-one">
+                                <!-- Badge de categoria -->
+                                
+                                <div class="card-category">
+                                    <span class="mdi mdi-brain card-categ" aria-hidden="true"></span>
+                                    Reflexão</div>
+
+                                <!-- Título do artigo -->
+                                <h4>O Que É Ser Artista Hoje? Um Olhar Entre a Visibilidade e a Essência.</h4>
+
+                                <!-- Imagem de destaque -->
+                                <div class="image">
+                                    <img src="/images/titulos/artista.png"
+                                         alt="O Que É Ser Artista Hoje? Um Olhar Entre a Visibilidade e a Essência."
+                                         loading="lazy">
+                                </div>
+
+                                <!-- Meta: categoria, autor, data -->
+                                <ul class="post-meta">
+                                    <!--<li class="style-two text-white">
+                                        <span class="mdi mdi-tag-outline" aria-hidden="true"></span> Estratégia
+                                    </li>-->
+                                    <li class="style-two text-white">
+                                        <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
+                                    </li>
+                                    <li class="style-two text-white">
+                                        <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 10 JUL 2026
+                                    </li>
+                                </ul>
+
+                                <!-- Compartilhamento social -->
+                                <ul class="social-media" aria-label="Compartilhar artigo">
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-instagram"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-facebook"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-twitter"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-whatsapp"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-link-variant"></span>
+                                        </li>
+                                    </a>
+                                </ul>
+
+                                <!-- ── CORPO DO ARTIGO ─────────────────── -->
+                                <div class="lower-content">
+                                    <div class="text">
+                                        <p class="first">
+                                            Ao entrar em uma aula de dança, é comum que os olhares se voltem para quem demonstra mais confiança. Geralmente, 
+                                            é aquele aluno que chega conversando, ocupa os espaços naturalmente, faz perguntas durante a aula e se 
+                                            arrisca logo na primeira tentativa.
+                                        </p>
+                                        <p>
+                                            Enquanto isso, quase despercebido, existe outro perfil.
+                                        </p>
+                                        <p>
+                                            É o aluno que observa antes de experimentar. Que presta atenção na explicação completa antes de iniciar o 
+                                            movimento. Que prefere assistir mais uma vez antes de levantar a mão ou ocupar o centro da roda.
+                                        </p>
+
+                                        <p>
+                                            À primeira vista, muitos podem interpretar esse comportamento como falta de interesse, insegurança ou até 
+                                            desmotivação. Na maioria das vezes, não é nada disso.
+                                        </p>
+                                        <p>
+                                            Se você se identificou com essa situação, tenho uma ótima notícia para você. Não há nada de errado, você 
+                                            apenas aprende de uma forma diferente. E essa diferença pode se transformar em uma das sua maiores vantagens.
+                                        </p>
+
+                                        <p>
+                                            Quer entender melhor? Então, vem comigo!
+                                        </p>
+                                        
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/titulos/timidez_2.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h5>Dançar também é aprender a observar.</h5>
+                                        <p class="first">
+                                            Antes de executar qualquer movimento, nosso cérebro precisa compreender o que está 
+                                            acontecendo.
+                                        </p>
+
+                                        <p>
+                                            Observar direções, velocidade, níveis, mudanças de peso, intenções, musicalidade e pequenos detalhes que 
+                                            muitas vezes passam despercebidos por quem está preocupado apenas em "acertar a sequência".
+                                        </p>
+
+                                        <p>
+                                            Num primeiro momento, pode parecer muita informação para processar. Mas a medida de você começar a percebr 
+                                            o caminho de cada movimento - de onde vem e para onde vai, cada passo começa a fazer sentido, a velicidade 
+                                            deixa de incomodar tanto e o que antes parecia ser muito complexo, passa a ser alcançável.
+                                        </p>
+
+                                        <p>
+                                            É como montar um quebra-cabeça. Há quem se arrisque tentando encaixar as peças, enquanto outros procuram a 
+                                            imagem completa na caixa. As duas formas funcionam, mas entender o desenho antes costuma tornar o processo 
+                                            mais eficiente.
+                                        </p>
+                                        
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="column-blog col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-10.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                                <div class="column-blog col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-11.png"
+                                                             alt="Galeria — imagem 2"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h5>Então, por onde começar?</h5>
+
+                                        <p class="first">
+                                            Na dança, costumamos falar sobre escutar a música. Mas existe outra habilidade igualmente importante: a "escuta 
+                                            visual". É aquela capacidade de perceber detalhes que não foram necessariamente explicados.
+                                        </p>
+
+                                        <p>
+                                           É a capacidade de observar:
+                                           <p></p>
+                                            <p>- A inclinação do tronco.</p>
+
+                                            <p>- O momento da respiração.</p>
+
+                                            <p>- O olhar utilizado durante um movimento.</p>
+
+                                            <p>- A transferência de peso.</p>
+
+                                            <p>- A intenção por trás de um gesto.</p>
+                                        </p>
+
+                                        <p>
+                                            Quanto maior esse repertório de observação, maiores são os recursos que você poderá utilizar 
+                                            como ponto de partida.
+                                        </p>
+
+                                        <p>
+                                           Desenvolver esse tipo de observação vai muito além de executar passos.
+                                        </p>
+
+                                        <p>
+                                           Você aprende a qualidade que cada moviemnto tem.
+                                        </p>
+
+                                        <p>
+                                            É importante entender que timidez e introspecção não são defeitos. São características da sua
+                                            personalidade. O verdadeiro obstáculo costuma aparecer quando elas se encontram com crenças 
+                                            limitantes.
+                                        </p>
+
+                                        <p>
+                                            Ao falar sobre crenças limitantes, não estamos nos referindo à fé, à espiritualidade ou à religiosidade.
+                                            Esses são assuntos completamente diferentes. Religiosidade está relacionada às convicções espirituais e 
+                                            aos valores pessoais. Já crenças limitantes são interpretações que construímos sobre nós mesmos ao longo da vida.
+                                        </p>
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/showcase.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h5>Somos um reflexo das coisas que acreditamos.</h5>
+
+                                        <p class="first">
+                                            Pensamentos como:
+
+                                            <i><p>"Não levo jeito para dançar."</p></i>
+
+                                            <i><p>"Todo mundo aprende mais rápido do que eu."</p></i>
+
+                                            <i><p>"Se eu errar na frente da turma, nunca mais vou conseguir me vão rir de mim."</p></i>
+
+                                            <i><p>"Só posso entrar na roda quando estiver perfeito."</p></i>
+                                        </p>
+
+                                        <p>
+                                            Perceba que nenhuma dessas frases descreve um fato. São interpretações. E interpretações podem ser 
+                                            transformadas.
+                                        </p>
+                                        <blockquote>
+                                            <div class="quote-icon flaticon-left-quote" aria-hidden="true">
+                                                <span id="quote-icon"></span>
+                                            </div>
+                                            <div class="quote-text">
+                                                Não se pode melhorar aquilo que não se conhece a matéria-prima.
+                                            </div>
+                                        </blockquote>
                                     </div>
                                 </div>
-                            </div>
-                            
 
-                            <!-- Card 2 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-tag-outline card-categ" aria-hidden="true"></span>
-                                        Estratégia
-                                    </div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/warm-up.html">
-                                            <h4 class="text-white">Warm-up, Aquecer Antes de Dançar: Um Hábito Simples que Faz Toda Diferença.</h4>
-                                        </a>
-                                        <div class="text">É comum que, ao chegar para uma aula de dança, alguns alunos queiram ir direto para a parte mais empolgante: aprender a coreografia.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2026
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/warm-up.html">
-                                            <img src="/images/blog/warm-up.jpg" alt="9 Lições Estratégicas Escondidas no Filme Matrix" loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/warm-up.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
+                                <!-- Tags do artigo -->
+                                <div class="post-share-options">
+                                    <div class="post-share-inner clearfix">
+                                        <div class="pull-left post-tags">
+                                            <span>Tags: </span>
+                                            <a href="#">Business</a>
+                                            <a href="#">Empreendedorismo</a>
+                                            <a href="#">Marketing Digital</a>
+                                            <a href="#">Hacks</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Card 3 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-tag-outline card-categ" aria-hidden="true"></span>
-                                        Estratégia</div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/9-licoes.html">
-                                            <h4 class="text-white">9 Lições Estratégicas Escondidas no Filme Matrix</h4>
-                                        </a>
-                                        <div class="text">Estratégias de visão sistêmica, liderança e tomada de decisão sob pressão extraídas do universo Matrix — aplicadas ao mundo real.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/9-licoes.html">
-                                            <img src="/images/blog/1.jpg" alt="9 Lições Estratégicas Escondidas no Filme Matrix" loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/9-licoes.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Card 3 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Alta Performance</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">Dentro da Matrix: Foco, Valor e Inovação na Dança</h4>
-                                        <div class="text">Uma jornada pela mente que é também uma aula sobre foco, proposta de valor e inovação disruptiva aplicada à vida real.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="Dentro da Matrix: Foco, Valor e Inovação na Dança" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl2$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_2"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
+                                <!-- Comentários (Disqus) -->
+                                <section aria-label="Comentarios" class="disqus_comentarios">
+                                    <div id="disqus_thread" class="clearfix"></div>
+                                    <script>
+                                        /**
+                                        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                                        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                                        /**/
+                                        var disqus_config = function () {
+                                            this.page.url = PAGE_URL;  'https://blog.updance.workers.dev/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html'  // Replace PAGE_URL with your page's canonical URL variable
+                                            this.page.identifier = 'post-03';                    // ← Identificador único (recomendado)
+                                            this.page.title = 'O Que É Ser Artista Hoje? Um Olhar Entre a Visibilidade e a Essência.'
+                                            this.page.category_id = 'reflexao';
+                                        };
+                                        
+                                    (function () {
+                                        var d = document, s = d.createElement('script');
+                                        s.src = 'https://blog-updance-workers-dev.disqus.com/embed.js';
+                                        s.setAttribute('data-timestamp', +new Date());
+                                        (d.head || d.body).appendChild(s);
+                                    }());
+                                    </script>
+                                    <noscript>
+                                        Habilite o JavaScript para ver os
+                                        <a href="https://disqus.com/?ref_noscript">comentários via Disqus.</a>
+                                    </noscript>
+                                </section>
 
-                            <!-- Card 4 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Profissional</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">Você é o que Faz Quando Ninguém Está Olhando</h4>
-                                        <div class="text">Pequenas decisões diárias de disciplina e integridade que formam o caráter de quem se destaca em qualquer área.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="Você é o que Faz Quando Ninguém Está Olhando" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl3$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_3"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div><!-- /.blog-list -->
-
-                        <!-- Sentinela + indicador de scroll infinito -->
-                        <div id="scroll-sentinel"></div>
-                        <div id="loading-indicator" class="loading-indicator" aria-live="polite">
-                            <span class="mdi mdi-loading mdi-spin" aria-hidden="true"></span>
-                            <span>Carregando mais artigos...</span>
-                        </div>
+                            </div><!-- /.inner-box -->
+                        </div><!-- /.blog-single -->
                     </div><!-- /.container -->
                 </div><!-- /.content-side -->
 
-                <!-- ── SIDEBAR ──────────────────────────────────────── -->
+                <!-- ── SIDEBAR ───────────────────────────────────── -->
                 <div class="sidebar-side col-12 col-lg-4">
                     <aside class="sidebar" aria-label="Barra lateral">
 
@@ -296,7 +418,8 @@
                                     <input name="txtBusca" type="search" id="txtBusca"
                                            placeholder="Pesquisar artigos..."
                                            aria-label="Campo de busca">
-                                    <input type="submit" name="btnBuscar" value="" id="btnBuscar" class="fa-scr" aria-label="Buscar">
+                                    <input type="submit" name="btnBuscar" value=""
+                                           id="btnBuscar" class="fa-scr" aria-label="Buscar">
                                 </div>
                             </div>
                         </div>
@@ -363,52 +486,55 @@
                             </div>
                             <ul class="lista-posts">
                                 <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                                 <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                                 <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                             </ul>
                         </div>
@@ -421,7 +547,8 @@
                                 <div class="widget-header">
                                     <h6 class="text-white newsletter-cta">
                                         Cadastre-se e <span class="destaque">receba</span> nossas
-                                        newsletters com <span class="destaque">matérias exclusivas</span> toda semana!
+                                        newsletters com <span class="destaque">matérias exclusivas</span>
+                                        toda semana!
                                     </h6>
                                 </div>
                                 <div class="form-group-blog">
@@ -452,13 +579,16 @@
                                 </div>
                                 <div class="slider">
                                     <div class="slider_box">
-                                        <article class="slider_item active" slider-bg="/images/titulos/expressao.png">
+                                        <article class="slider_item active"
+                                                 slider-bg="/images/titulos/expressao.png">
                                             <div class="slider_content"></div>
                                         </article>
-                                        <article class="slider_item" slider-bg="/images/titulos/dgroove.png">
+                                        <article class="slider_item"
+                                                 slider-bg="/images/titulos/dgroove.png">
                                             <div class="slider_content"></div>
                                         </article>
-                                        <article class="slider_item" slider-bg="/images/titulos/boost-a-move.png">
+                                        <article class="slider_item"
+                                                 slider-bg="/images/titulos/boost-a-move.png">
                                             <div class="slider_content"></div>
                                         </article>
                                     </div>
@@ -499,15 +629,15 @@
                     </aside>
                 </div><!-- /.sidebar-side -->
 
-            </div><!-- /#blog-list-infos -->
+            </div><!-- /#blog-single-infos -->
         </div><!-- /#main-content -->
     </section>
 
-    <div class="clear-footer"></div>
+    <div class="clear"></div>
 <!--</div> /#hero-blog -->
 
 <!-- ======================================================
-     RODAPÉ — usa classes .blog-footer* já estilizadas em /css/blog.css
+     RODAPE  (usa as classes .blog-footer* ja estilizadas)
 ====================================================== -->
 <footer class="blog-footer" aria-label="Rodape">
     <div class="auto-container">
@@ -568,7 +698,7 @@
                 <h3 class="blog-footer__title">Contato</h3>
                 <ul class="blog-footer__list">
                     <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
-                        <a href="mailto:updancexperience@gmail.com.com">updancexperience@gmail.com</a></li>
+                        <a href="mailto:updancexperience@gmail.com">updancexperience@gmail.com</a></li>
                     <!--li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
                         <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
                     <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
@@ -640,13 +770,31 @@
 <!-- ======================================================
      SCRIPTS — ao final do body (não bloqueiam o render)
 ====================================================== -->
-<script id="dsq-count-scr" src="//https-updancexperience-com.disqus.com/count.js" async></script>
+<script id="dsq-count-scr" src="//blog-updance-workers-dev.disqus.com/count.js" async></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" defer></script>
 <!--<script src="/js/jquery-slider-carrossel.js" defer></script>
 <script src="/js/slider-carrossel.js" defer></script>-->
 
+<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
+<script>
+(function () {
+    'use strict';
+    // Delegação por "name" (não por id): funciona no widget original e nos
+    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[name="btnCadastroEmail"]');
+        if (!btn) return;
+        e.preventDefault();
+        var widget = btn.closest('.widget-box') || document;
+        var input  = widget.querySelector('[name="txtEmail"]');
+        var email  = input ? (input.value || '').trim() : '';
+        var destino = '/cadastro/';
+        if (email) destino += '?email=' + encodeURIComponent(email);
+        window.location.href = destino;
+    });
+}());
+</script>
 
-<!-- Atualiza o ano automaticamente -->
 <script>
 /* Ano automatico */
 (function () {
@@ -919,177 +1067,6 @@
         });
     }, { threshold: 0.08 });
     els.forEach(function (el) { io.observe(el); });
-}());
-</script>
-
-<!-- ======================================================
-     SCRIPTS
-====================================================== -->
-<script id="dsq-count-scr" src="//https-updancexperience-com.disqus.com/count.js" async></script>
-<script src="js/jquery-slider-carrossel.js"></script>
-<script src="js/slider-carrossel.js"></script>
-
-<!-- Scroll infinito com injeção de widgets no mobile -->
-<script>
-(function () {
-    'use strict';
-
-    var PAGE_SIZE = 4;
-    var page      = 2;
-    var loading   = false;
-    var ended     = false;
-    var MAX_PAGES = 12;
-
-    var blogList  = document.querySelector('.blog-list');
-    var sentinel  = document.getElementById('scroll-sentinel');
-    var indicator = document.getElementById('loading-indicator');
-
-    /* Sequência de widgets injetados no mobile entre lotes de posts */
-    var WIDGET_STEPS = [
-        ['widget-comece'],
-        ['widget-search'],
-        ['widget-clube'],
-        ['widget-email'],
-        ['widget-novas'],
-        ['widget-assuntos']
-    ];
-
-    /* Pool de posts de amostra
-       Em produção, substitua por: fetch('/api/posts?page=' + page + '&size=' + PAGE_SIZE) */
-    var SAMPLE = [
-        { date: '10/09/2021', author: 'Wellington Santos', category: 'Alta Performance',
-          title: 'Como Manter o Foco em Períodos de Alta Pressão',
-          text: 'Estratégias mentais utilizadas por dançarinos profissionais para sustentar alto nível de atenção mesmo sob pressão extrema durante temporadas.' },
-        { date: '20/10/2021', author: 'Wellington Santos', category: 'Bem-Estar',
-          title: 'Técnicas de Recuperação Muscular para Bailarinos',
-          text: 'Um guia completo sobre as melhores práticas de recuperação para otimizar sua performance e evitar lesões crônicas ao longo da temporada.' },
-        { date: '05/11/2021', author: 'Wellington Santos', category: 'Expressão',
-          title: 'A Arte da Expressão Corporal Consciente',
-          text: 'Como desenvolver sua linguagem corporal e transformar movimentos técnicos em experiências emocionais autênticas que conectam com o público.' },
-        { date: '18/11/2021', author: 'Wellington Santos', category: 'Nutrição',
-          title: 'Nutrição Estratégica para Dançarinos de Alta Performance',
-          text: 'Descubra como a alimentação inteligente potencializa treinos e melhora a resistência cênica e a recuperação entre ensaios.' },
-        { date: '02/12/2021', author: 'Wellington Santos', category: 'Mentalidade',
-          title: 'Mentalidade de Crescimento no Universo da Dança',
-          text: 'Por que alguns dançarinos evoluem mais rápido e como você pode desenvolver o mindset que transforma limitações em oportunidades.' },
-        { date: '15/12/2021', author: 'Wellington Santos', category: 'Neurociência',
-          title: 'Coreografia e Neurociência: O Cérebro que Dança',
-          text: 'Estudos recentes revelam como a prática regular da dança reconfigura o cérebro e aprimora funções cognitivas essenciais para a vida.' }
-    ];
-    var poolIdx = 0;
-
-    function isMobile() { return window.innerWidth < 992; }
-    function nextPost()  { return SAMPLE[poolIdx++ % SAMPLE.length]; }
-
-    function buildCard(p) {
-        var wrap = document.createElement('div');
-        wrap.className = 'news-block-two grid-box';
-        wrap.innerHTML =
-            '<div class="inner-box">' +
-            '  <span class="card-category">' + (p.category || 'Artigo') + '</span>' +
-            '  <div class="upper-content">' +
-            '    <h4 class="text-white">' + p.title + '</h4>' +
-            '    <div class="text">' + p.text + '</div>' +
-            '    <ul class="post-meta">' +
-            '      <li class="style-two text-white">' +
-            '        <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> ' + p.date +
-            '      </li>' +
-            '      <li class="style-two text-white">' +
-            '        <span class="mdi mdi-account-outline" aria-hidden="true"></span> ' + p.author +
-            '      </li>' +
-            '    </ul>' +
-            '  </div>' +
-            '  <div class="images">' +
-            '    <img src="/images/blog/1.jpg" alt="' + p.title + '" loading="lazy">' +
-            '  </div>' +
-            '  <div class="lower-content">' +
-            '    <input type="submit" value="Saiba mais" class="theme-btn btn-style-one">' +
-            '  </div>' +
-            '</div>';
-        return wrap;
-    }
-
-    function cloneWidget(id) {
-        var original = document.getElementById(id);
-        if (!original) return null;
-        var clone = original.cloneNode(true);
-        clone.removeAttribute('id');
-        clone.querySelectorAll('[id]').forEach(function (el) {
-            el.id = el.id + '-mob';
-        });
-        clone.classList.add('mobile-widget-inline');
-        return clone;
-    }
-
-    function injectWidgets(step) {
-        var ids = WIDGET_STEPS[step];
-        if (!ids) return;
-        ids.forEach(function (id) {
-            var clone = cloneWidget(id);
-            if (clone) blogList.appendChild(clone);
-        });
-    }
-
-    function loadMore() {
-        if (loading || ended) return;
-        loading = true;
-        indicator.style.display = 'flex';
-
-        setTimeout(function () {
-            var widgetStep = page - 2;
-            if (isMobile() && widgetStep < WIDGET_STEPS.length) {
-                injectWidgets(widgetStep);
-            }
-            if (page > MAX_PAGES) {
-                ended = true;
-                indicator.innerHTML = '<span class="scroll-end-msg">&#10003; Você viu todos os artigos disponíveis.</span>';
-                indicator.style.display = 'flex';
-                return;
-            }
-            for (var i = 0; i < PAGE_SIZE; i++) {
-                blogList.appendChild(buildCard(nextPost()));
-            }
-            page++;
-            loading = false;
-            indicator.style.display = 'none';
-        }, 900);
-    }
-
-    if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries) {
-            if (entries[0].isIntersecting) loadMore();
-        }, { rootMargin: '350px' }).observe(sentinel);
-    } else {
-        window.addEventListener('scroll', function () {
-            if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 450) {
-                loadMore();
-            }
-        });
-    }
-
-}());
-</script>
-
-
-<script src="/js/auth-modal.js" defer></script>
-
-<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
-<script>
-(function () {
-    'use strict';
-    // Delegação por "name" (não por id): funciona no widget original e nos
-    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('[name="btnCadastroEmail"]');
-        if (!btn) return;
-        e.preventDefault();
-        var widget = btn.closest('.widget-box') || document;
-        var input  = widget.querySelector('[name="txtEmail"]');
-        var email  = input ? (input.value || '').trim() : '';
-        var destino = '/cadastro/';
-        if (email) destino += '?email=' + encodeURIComponent(email);
-        window.location.href = destino;
-    });
 }());
 </script>
 </body>

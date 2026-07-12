@@ -97,6 +97,7 @@ export default defineConfig(({ command }) => ({
         'posts/9-licoes': resolve(__dirname, 'src/posts/9-licoes.html'),
         'posts/warm-up': resolve(__dirname, 'src/posts/warm-up.html'),
         'posts/timidez-na-danca': resolve(__dirname, 'src/posts/timidez-nao-e-um-problema-como-usa-la-em-seu-favor-na-danca.html'),
+        'posts/ser-artista':resolve(__dirname,'src/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html'),
 
         'articles/artigos': resolve(__dirname, 'src/articles/artigos.html'),
 
