@@ -30,8 +30,39 @@
 
 
 /*ESPAÇAMENTOS*/
+/* ======================================================
+   TOKENS DE MARCA (derivados de format.css / clube.html)
+====================================================== */
+:root{
+    --udx-primary:      #BF0449;   /* wine magenta */
+    --udx-primary-hot:  #FA33A1;   /* hot pink */
+    --udx-blood-red:    #F20505;
+    --udx-purple:       #5708A6;
+    --udx-deep:         #110273;   /* indigo profundo */
+    --udx-spark-blue:   #FA33A1;
+    --udx-bg-mid:       #110273;
 
+    --udx-ink:          #1a1633;   /* texto principal (impressão) */
+    --udx-ink-soft:     #4a4560;
+    --udx-muted:        #7a7590;
+    --udx-line:         #e6e2ee;
 
+    --udx-pink-tint:    #fdeef5;
+    --udx-lavender:     #f4eefc;
+    --udx-cream:        #fffaf5;
+
+    --udx-radius-md:    14px;
+    --udx-radius-lg:    22px;
+    --udx-shadow-card:  0 10px 30px rgba(17, 2, 115, 0.08);
+
+    --udx-font:         'Poppins', sans-serif;
+    --udx-display:      'Playfair Display', serif;
+
+    /* Gradientes assinatura (espelham .udx-fab[data-pane="clube"]) */
+    --udx-grad-clube:   linear-gradient(135deg, #FA33A1 0%, #110273 100%);
+    --udx-grad-hot:     linear-gradient(135deg, #BF0449 0%, #FA33A1 100%);
+    --udx-grad-cool:    linear-gradient(135deg, #5708A6 0%, #110273 100%);
+}
 
 
 img {
@@ -272,6 +303,35 @@ img {
     margin-bottom: 25px;
 	text-align:justify;
     
+}
+
+/* Lead — parágrafo de destaque */
+.blog-single .inner-box .lower-content .text p.lead {
+    line-height: 1.55;
+    font-weight: 600;
+    /* color: var(--udx-ink-soft); */
+    background: linear-gradient(to top, #fb8460 0%, #f13aa1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* margin-bottom: 5mm; */
+    margin-left: 15px;
+    margin-right: 15px;
+    /* padding: 4mm 6mm; */
+    /* background: var(--udx-cream); 
+    border-radius: var(--udx-radius-md);
+    /* border-left: 4px solid var(--udx-primary-hot);*/
+}
+.blog-single .inner-box .lower-content .text p b { 
+    /*color: var(--udx-primary); */
+    font-weight: 600;
+    /* color: var(--udx-ink-soft); */
+    background: linear-gradient(to top, #fb8460 0%, #f13aa1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; 
 }
 
 .blog-single .inner-box .lower-content .text p:first-letter {
