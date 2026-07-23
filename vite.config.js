@@ -95,7 +95,7 @@ export default defineConfig(({ command }) => ({
       input:{
         main: resolve(__dirname, 'index.html'),
         'posts/9-licoes': resolve(__dirname, 'src/posts/9-licoes.html'),
-        'posts/warm-up': resolve(__dirname, 'src/posts/warm-up-aquecer-antes-de-dancar-um-habito-simples-que-faz-toda-diferença.html'),
+        'posts/warm-up': resolve(__dirname, 'src/posts/warm-up-aquecer-antes-de-dancar-um-habito-simples-que-faz-toda-diferenca.html'),
         'posts/timidez-na-danca': resolve(__dirname, 'src/posts/timidez-nao-e-um-problema-como-usa-la-em-seu-favor-na-danca.html'),
         'posts/ser-artista':resolve(__dirname,'src/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html'),
         'posts/repeticao-automatica':resolve(__dirname,'src/posts/quando-a-repeticao-deixa-de-ser-uma-aliada-para-o-desempenho.html'),
