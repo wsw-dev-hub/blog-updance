@@ -111,6 +111,7 @@ export default defineConfig(({ command }) => ({
         'apps/apps': resolve(__dirname, 'src/apps/apps.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
         'estagio/talentos': resolve(__dirname, 'public/membros/estagio/arvore-de-talentos/index.html'),
+        'membros/capacitacao': resolve(__dirname, 'public/membros/capacitacao/estagiario.html'),
         
       },
       external: ['ton-connect', 'ton-core'],
