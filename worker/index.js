@@ -180,12 +180,6 @@ export default {
             : [m.type || 'Free'];
           const ok = await podeAcessar(env, types, recurso.key);
           if (!ok) return Response.redirect(url.origin + '/membros/?erro=sem_acesso', 302);
-        } else {
-          // Deny-by-default: o hub /membros/ segue aberto a qualquer membro logado,
-          // mas páginas mais profundas SEM cadastro em `resources` são negadas —
-          // impede que uma página nova publicada sem regra vaze para o Free.
-          const ehHub = pathname === '/membros' || pathname === '/membros/';
-          if (!ehHub) return Response.redirect(url.origin + '/membros/?erro=sem_acesso', 302);
         }
       }
     } catch (err) {
