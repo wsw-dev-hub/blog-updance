@@ -9,7 +9,7 @@
  *  mantendo exatamente este formato de objeto.
  *
  *  CONVENÇÕES
- *  ----------
+ *  --------------
  *  perfil.id .............. slug estável (usado em CSS e no banco)
  *  perfil.tiers[].requisito pontos investidos NO PERFIL para liberar a faixa
  *  habilidade.col ......... coluna 1..3 dentro da faixa (grid da árvore)
@@ -20,7 +20,7 @@
  *  desafio.xp ............. experiência ESPECÍFICA do perfil
  *
  *  ECONOMIA
- *  --------
+ *  ------------
  *  xpPorPonto = 100  →  a cada 100 XP do perfil, 1 Ponto de Talento.
  *  Os pontos são do MEMBRO, não da página: as "Páginas de Plano"
  *  são distribuições alternativas do mesmo saldo (igual ao print).

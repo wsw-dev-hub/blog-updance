@@ -18,7 +18,7 @@
  *   6. Títulos      — desbloqueio permanente por conquista
  *
  *  IMPORTANTE
- *  ----------
+ *  ----------------
  *  O saldo de XP é sempre AUTORIDADE DO SERVIDOR. O cliente apenas
  *  reflete o que o Worker devolve. A alocação de pontos (as páginas
  *  de plano) é livre e reversível — por isso vive no cliente até o
