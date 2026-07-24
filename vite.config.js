@@ -106,7 +106,7 @@ export default defineConfig(({ command }) => ({
         'tracks/trilhas': resolve(__dirname, 'src/tracks/trilhas.html'),
         'tracks/trilha-tecnica': resolve(__dirname, 'src/tracks/trilha-tecnica.html'),
 
-        'clube/clube': resolve(__dirname, '/src/clube/clube.html'),
+        'clube/clube': resolve(__dirname, 'src/clube/clube.html'),
 
         'apps/apps': resolve(__dirname, 'src/apps/apps.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
