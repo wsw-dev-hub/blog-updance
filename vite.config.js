@@ -112,6 +112,7 @@ export default defineConfig(({ command }) => ({
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
         'estagio/talentos': resolve(__dirname, 'public/membros/estagio/arvore-de-talentos/index.html'),
         'membros/capacitacao': resolve(__dirname, 'public/membros/capacitacao/estagiario.html'),
+        'membros/fudamentos': resolve(__dirname, 'public/membros/fundamentos/temporada-free.html'),
         
       },
       external: ['ton-connect', 'ton-core'],

@@ -32,8 +32,9 @@ const SESSION_TTL  = 60 * 60 * 24 * 7;
 const MAGIC_TTL    = 60 * 15;
 const COOLDOWN_TTL = 60;
 const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
-const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Aluno','Free'];
+const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Intermediário','Iniciante','Aluno','Free'];
 
+// [ Premium, Professor, Assistnte, Monitor, Estagiário, Intermediário, Básico, Iniciante, Free ]
 // ============================ [ Para Implementar - Cursos & Treinamentos ] ===================================== //
 // [ 'Cursos & Treinamentos', 'Aprimoramento Técnico', 'Os Sgredos da Arte Performática' ]
 
@@ -107,6 +108,10 @@ export default {
       if (pathname === '/api/talentos/plano'   && request.method === 'POST')  return talentosSalvarPlano(request, env);
       if (pathname === '/api/talentos/desafio' && request.method === 'POST')  return talentosEnviarDesafio(request, env);
  
+      // ---- TEMPORADA FREE · Fundamentos (membro) ----   ◀── INSERIR
+      if (pathname === '/api/temporada/estado')                                return temporadaEstado(request, env);
+      if (pathname === '/api/temporada/desafio' && request.method === 'POST')  return temporadaEnviarDesafio(request, env);
+      
       // ---- ÁRVORE DE TALENTOS (admin) ----
       if (pathname === '/api/admin/talentos/fila') {
         const a = await getAdmin(request, env);
