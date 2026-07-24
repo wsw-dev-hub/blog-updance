@@ -301,7 +301,7 @@
     background: #0c0b22;
     border: 1px solid var(--udx-border);
     border-radius: var(--udx-radius-lg);
-    padding: 22px 18px 18px;
+    padding: 22px 18px 40px;
     overflow: hidden;
     transition: border-color 320ms ease, box-shadow 320ms ease;
 }
@@ -830,6 +830,7 @@
     .tt-challenge{ flex-wrap: wrap; }
     .tt-challenge__cta{ width: 100%; justify-content: center; margin-top: 4px; }
     .tt-tip{ width: calc(100vw - 24px); }
+    .tt-tree{ padding: 18px 12px 30px; }
 }
 
 /* --- MOBILE MÉDIO — 481px a 575px --- */
