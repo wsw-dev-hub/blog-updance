@@ -3,29 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Up Dance | Blog</title>
+<title>Up Dance | Blog — Artigo</title>
 
 <!-- Favicon -->
-<link rel="icon"       type="image/png" href="/public/images/icons/udx-icon.ico">
-<link rel="shortcut icon" type="image/png" href="/public/images/icons/udx-icon.ico">
+<link rel="icon"          type="image/png" href="/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/png" href="/images/icons/udx-icon.ico">
 
-<!-- Bootstrap 5 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-<!-- Material Design Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+<!-- Preconexão antecipada com CDNs (elimina RTT extra) -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<!-- Folhas de estilo do projeto -->
+<!-- Bootstrap 5 — non-blocking via media trick -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</noscript>
+
+<!-- Material Design Icons — non-blocking -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+</noscript>
+
+<!-- Folhas de estilo do projeto (críticos — carregam normalmente) -->
 <link rel="stylesheet" href="/css/blog.css">       <!-- 1º: define :root (tokens) -->
-<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
 <link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/style.css">          <!-- 2º: usa tokens no body -->
 <link rel="stylesheet" href="/css/format.css">     <!-- 3º: complementa tipografia -->
 <link rel="stylesheet" href="/css/mediaQuery.css"> <!-- 4º: sobrescreve por largura -->
 <!--<script type="module" src="/public/main.js" defer></script>-->
 <!--<link rel="stylesheet" href="css/slider-carrossel.css">-->
-
-<!-- jQuery (versão única, sem duplicata) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts movidos para o final do <body> -->
 </head>
 <body>
 <script src="/js/loader.js"></script>
@@ -36,7 +48,7 @@
     <header class="row g-0 blog-header">
 
         <!-- Logo -->
-        <div class="col-4 col-md-3 col-lg-2">
+        <div class="col-4 col-md-3 col-lg-2 ">
             <a href="/index.html" class="blog-logo-link">
                 <img src="/images/icons/udx-icon.png"
                      alt="Up Dance — voltar para Destaques"
@@ -44,7 +56,7 @@
             </a>
         </div>
 
-        <!-- Nav / Hamburger -->
+        <!-- Nav / Hambúrguer -->
         <div class="col-8 col-md-9 col-lg-10 d-flex justify-content-end align-items-center pe-0">
 
             <!-- Menu desktop (≥ lg) -->
@@ -72,7 +84,7 @@
         <!-- Nav dropdown mobile -->
         <nav class="mobile-nav col-12 d-lg-none" id="mobileNav" aria-label="Menu principal">
             <ul>
-                <li id="btnMobilAcess"><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
+                <li><a href="/entrar/"><span class="mdi mdi-account-outline" aria-hidden="true"></span> Acessar</a></li>
                 <li><a href="/cadastro/">Receba Nossa Newsletter</a></li>
             </ul>
         </nav>
@@ -81,9 +93,8 @@
 </div>
 
 <a id="topo"></a>
-
 <!-- ======================================================
-     HERO / PAGE TITLE
+     HERO / BREADCRUMB
 ====================================================== -->
 <div id="hero-blog" class="container-fluid p-0">
 
@@ -95,7 +106,9 @@
                     <nav aria-label="Trilha de navegação">
                         <ul class="page-perfil-scrum">
                             <li><a href="/index.html">Destaques</a></li>
-                            <li>Artigos</li>
+                            <li><a href="/src/articles/artigos.html">Artigos</a></li>
+                            <li></li>
+                            <!--<li><span class="breadcrumb-current">Artigo</span></li>-->
                         </ul>
                     </nav>
                 </div>
@@ -106,267 +119,323 @@
     <!-- ======================================================
          CONTEÚDO PRINCIPAL
     ====================================================== -->
-    <section aria-label="Lista de artigos">
+    <section aria-label="Artigo completo">
         <div id="main-content" class="main-blog-content">
-            <div class="row" id="blog-list-infos">
+            <div class="row" id="blog-single-infos">
 
-                <!-- ── COLUNA PRINCIPAL ─────────────────────────────── -->
+                <!-- ── COLUNA DO ARTIGO ──────────────────────────── -->
                 <div class="content-side col-12 col-lg-8">
                     <div class="container">
-                        <div class="blog-list">
+                        <div class="blog-single">
+                            <div class="inner-box">
 
-                            <!-- Card 1 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-brain card-categ" aria-hidden="true"></span>
-                                        Reflexão
-                                    </div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html">
-                                            <h4 class="text-white">O Que É Ser Artista Hoje? Um Olhar Entre a Visibilidade e a Essência.</h4>
-                                        </a>
-                                        <div class="text">Vivemos em uma época em que a palavra "artista" parece estar em toda parte. Basta publicar vídeos, acumular seguidores, conquistar visualizações ou</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html">
-                                            <img src="/images/titulos/art.png" alt="O Que É Ser Artista Hoje? Um Olhar Entre a Visibilidade e a Essência." loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                         <a href="/src/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
+                                <!-- Badge de categoria -->
+                                
+                                <div class="card-category">
+                                    <span class="mdi mdi-gift-outline card-categ" aria-hidden="true"></span>
+                                    Dicas & Sacadas</div>
+
+                                <!-- Título do artigo -->
+                                <h4>Os 6 Fundamentos que Não Podem Faltar nos Seus Treinos.</h4>
+
+                                <!-- Imagem de destaque -->
+                                <div class="image">
+                                    <img src="/images/titulos/treinos.png"
+                                         alt="Os 6 Fundamentos que Não Podem Faltar nos Treinos"
+                                         loading="lazy">
+                                </div>
+
+                                <!-- Meta: categoria, autor, data -->
+                                <ul class="post-meta">
+                                    <!--<li class="style-two text-white">
+                                        <span class="mdi mdi-tag-outline" aria-hidden="true"></span> Estratégia
+                                    </li>-->
+                                    <li class="style-two text-white">
+                                        <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
+                                    </li>
+                                    <li class="style-two text-white">
+                                        <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 10 JUL 2026
+                                    </li>
+                                </ul>
+
+                                <!-- Compartilhamento social -->
+                                <ul class="social-media" aria-label="Compartilhar artigo">
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-instagram"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-facebook"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-twitter"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-whatsapp"></span>
+                                        </li>
+                                    </a>
+                                    <a href="#">
+                                        <li>
+                                            <span class="mdi mdi-link-variant"></span>
+                                        </li>
+                                    </a>
+                                </ul>
+
+                                <!-- ── CORPO DO ARTIGO ─────────────────── -->
+                                <div class="lower-content">
+                                    <div class="text">
+                                        <p class="first">
+                                            É comum associar evolução técnica à execução de movimentos cada vez mais complexos e cheios de efeitos visuais. Entretanto, 
+                                            quase todo dançarino experiente sabe que o verdadeiro desenvolvimento acontece em um lugar muito menos chamativo: 
+                                            <b>nos fundamentos</b>.
+                                        </p>
+                                        
+                                        <p>
+                                            São eles que permitem ao corpo responder de forma mais, adaptar-se a diferentes músicas, estilos e desafios coreográficos.
+                                        </p>
+                                        <p>
+                                            Da mesma forma que um músico pratica escalas diariamente ou um atleta retorna constantemente aos exercícios básicos, o 
+                                            dançarino constrói sua técnica por meio da repetição consciente dos movimentos fundamentais.
+                                        </p>
+
+                                        <p>
+                                            Entre eles, seis merecem presença constante em qualquer rotina de treinamento.  
+                                        </p>    
+                                        <p>
+                                            Sejam em video clipes, nos shows dos artistas que você admira ou no groove suave e envolvente em um filme de dança, estes 
+                                            fundamentos estão sempr presentes, entre mais sutís e os movimentos de maior impacto visual.
+                                        </p>
+
+                                        <p>
+                                            E em algum momento você já deve ter se perguntado como tudo aquilo parece ser tão simples, enquanto para você, parece que 
+                                            nada faz sentido no seu corpo. Certo?
+                                        </p>
+
+                                        <p>
+                                            Entao vamos começar!
+                                        </p>
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/titulos/outras-dancas.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h5>1. Pulso: o diálogo entre o corpo e a música</h5>
+                                        <p class="first">
+                                            O pulso é o ponto de encontro entre movimento e ritmo. Muito além de "marcar o tempo", ele representa a capacidade 
+                                            de sentir a pulsação musical e permitir que todo o corpo responda a ela.
+                                        </p>
+
+                                        <p>
+                                            Sem pulso, os movimentos podem até ser executados corretamente, mas parecem desconectados da música e quando bem aproveitado, 
+                                            o pulso faz com que até movimentos simples transmitam intenção e musicalidade.
+                                        </p>
+
+                                        <p>
+                                            <h6>Como treinar</h6>
+                                            <p>- Trabalhe diferentes velocidades musicais.</p>
+                                            <p>- Identifique o elemento musical mais forte.</p>
+                                            <p>- Utilize flexão de joelhos leve para acompanhar, depois com quadris, peito e corpo inteiro.</p>
+                                            <p>- Alterne entre pulsos pequenos e amplos.</p>
+                                            <p>- Pratique momentos de silêncio corporal antes de retornar ao pulso.</p>
+                                        </p>
+
+                                        <p>
+                                            <h6>Dica de progressão</h6>
+                                            <p class="lead">Evite depender apenas da contagem. Procure sentir a pulsação antes mesmo de iniciar qualquer movimento.</p>
+                                        </p>
+                                        
+
+                                        <h5>2. Balanços: o domínio da transferência de peso</h5>
+
+                                        <p class="first">
+                                            Todo deslocamento começa antes dos pés. Ele começa quando o peso do corpo muda de lugar. Os balanços ensinam exatamente 
+                                            isso: compreender como o centro de massa se desloca de maneira eficiente.
+                                        </p>
+                                        
+                                        <p>
+                                            Quando essa habilidade é negligenciada, surgem movimentos rígidos, perdas de equilíbrio e dificuldade para improvisar.
+                                        </p>
+
+                                        <p>
+                                            <h6>Como treinar</h6>
+                                            <p>- Balance lateralmente.</p>
+                                            <p>- Balance para frente e para trás.</p>
+                                            <p>- Explore diagonais.</p>
+                                            <p>- Varie amplitudes e velocidades.</p>
+                                            <p>- Observe sempre qual parte do pé mais pressiona o chão [ o calcanhar, a ponta ou a sola inteira ].</p>
+                                        </p>
+
+                                        <p>
+                                            <h6>Dica de progressão</h6>
+                                            <p class="lead">Treine balanços com diferentes intenções: suaves, explosivos, contínuos e interrompidos. 
+                                                Isso amplia o repertório motor e melhora a capacidade de adaptação e equilíbrio.</p>
+                                        </p>
+
+                                        <p>
+                                            Sempre que repetimos um movimento, fortalecemos as conexões neurais responsáveis por aquela ação. O problema é
+                                            que o cérebro não distingue automaticamente um padrão eficiente de um padrão ineficiente. E se um erro é repetido 
+                                            centenas de vezes, esse erro também se torna familiar e corrigir um hábito consolidado exige muito mais esforço 
+                                            do que aprender corretamente desde o início.
+                                        </p>
+
+                                        <!-- Galeria de imagens do artigo -->
+                                        <div class="news-gallery">
+                                            <div class="row">
+                                                <div class="column-blog col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-17.png"
+                                                             alt="Galeria — imagem 1"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                                <div class="column-blog col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="image">
+                                                        <img src="/images/resource/news-18.png"
+                                                             alt="Galeria — imagem 2"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h5>A dança como laboratório do autoconhecimento.</h5>
+
+                                        <p class="first">
+                                            Poucos ambientes revelam tanto sobre uma pessoa quanto uma sala de dança. Ali aparecem a ansiedade de querer 
+                                            acertar rapidamente. A impaciência diante do erro. O medo de parecer iniciante. A comparação constante com os 
+                                            colegas. Tudo isso interfere diretamente na aprendizagem. 
+                                        </p>
+                                        <p>
+                                            Quem olha apenas para resultados costuma se frustrar com mais frequência durante os processos.
+                                        </p>
+
+                                        <p>
+                                            Uma melhora no equilíbrio, a respiração mais tranquila, transições mais fluidas, um olhar mais confiante.
+                                            Esses detalhes parecem pequenos, mas representam grandes avanços.
+                                        </p>
+
+                                        <p>
+                                            Essa diferença entre repetição pura e simples e repetição consciente aparece em praticamente todas as áreas da vida. 
+                                            Uma pessoa pode dirigir durante vinte anos e continuar cometendo os mesmos erros. Outra pode cozinhar diariamente 
+                                            sem aprender novas técnicas. 
+                                        </p>
+                                        <p>    
+                                            Alguém pode trabalhar décadas repetindo exatamente os mesmos procedimentos, porém, tempo de experiência não significa, 
+                                            necessariamente, qualidade de experiência. 
+                                        </p>    
+                                        <p>
+                                            <b>Experiência verdadeira surge quando refletimos sobre aquilo que fazemos.</b>
+                                        </p>
+
+                                        <p>
+                                            Toda aprendizagem modifica a maneira como percebemos o mundo. Não se trata apenas de acumular informações ou 
+                                            memorizar sequências. Aprender é reorganizar nosso modo de pensar, sentir e agir. Por isso, a repetição consciente 
+                                            não busca apenas fortalecer músculos ou memorizar sequências e coreografias.
+                                        </p>
+
+                                        <p>
+                                            Ela desenvolve percepção, sensibilidade, capacidade de análise, resiliência, senso crítico e autonomia.
+                                        </p>
+
+                                        <p>
+                                            Essas competências permanecem mesmo quando um movimento muda.
+                                        </p>
+
+                                        <p>
+                                            Repetir continua sendo indispensável. Nenhuma habilidade complexa é construída sem prática. Mas existe uma enorme 
+                                            diferença entre repetir para preencher tempo e repetir para construir conhecimento.
+                                        </p>
+                                        <p>
+                                            A repetição automática fortalece <b>hábitos</b>. Já a repetição consciente fortalece <b>compreensão</b>.
+                                        </p>
+
+                                        <p>
+                                            Enquanto uma apenas multiplica movimentos, a outra multiplica possibilidades.
+                                        </p>
+
+                                        <p>
+                                           Na dança — assim como na vida — evoluímos menos pela quantidade de vezes que fazemos algo e muito mais pela qualidade 
+                                           da atenção que dedicamos a cada tentativa.
+                                        </p>
+
+                                        <p>
+                                           Então, para que seus treinos sejam mais eficazes, busque repetir não paenas para acertar, mas para compreender o que 
+                                           estão sendo feito.
+                                        </p>
+
+                                        <blockquote>
+                                            <div class="quote-icon flaticon-left-quote" aria-hidden="true">
+                                                <span id="quote-icon"></span>
+                                            </div>
+                                            <div class="quote-text">
+                                                Repetições criam padrões. Padrões criam hábitos. Hábitos é tudo aquilo que você faz sem prestar atenção. 
+                                            </div>
+                                        </blockquote>
                                     </div>
                                 </div>
-                            </div>
-                            
 
-                            <!-- Card 2 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-state-machine card-categ" aria-hidden="true"></span>
-                                        Performance
-                                    </div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/warm-up-aquecer-antes-de-dancar-um-habito-simples-que-faz-toda-diferenca.html">
-                                            <h4 class="text-white">Warm-up, Aquecer Antes de Dançar: Um Hábito Simples que Faz Toda Diferença.</h4>
-                                        </a>
-                                        <div class="text">É comum que, ao chegar para uma aula de dança, alguns alunos queiram ir direto para a parte mais empolgante: aprender a coreografia.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2026
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/warm-up-aquecer-antes-de-dancar-um-habito-simples-que-faz-toda-diferenca.html">
-                                            <img src="/images/blog/warm-up.jpg" alt="9 Lições Estratégicas Escondidas no Filme Matrix" loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/warm-up-aquecer-antes-de-dancar-um-habito-simples-que-faz-toda-diferenca.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
+                                <!-- Tags do artigo -->
+                                <div class="post-share-options">
+                                    <div class="post-share-inner clearfix">
+                                        <div class="pull-left post-tags">
+                                            <span>Tags: </span>
+                                            <a href="#">Business</a>
+                                            <a href="#">Empreendedorismo</a>
+                                            <a href="#">Marketing Digital</a>
+                                            <a href="#">Hacks</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Card 3 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-meditation card-categ" aria-hidden="true"></span>
-                                        Percepção</div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/timidez-nao-e-um-problema-como-usa-la-em-seu-favor-na-danca.html">
-                                            <h4 class="text-white">Timidez Não É Um Problema: Como Usá-la Em Seu Favor Na Danca?</h4>
-                                        </a>
-                                        <div class="text">Ao entrar em uma aula de dança, é comum que os olhares se voltem para quem demonstra mais confiança. Geralmente, 
-                                            é aquele aluno que chega conversando</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/timidez-nao-e-um-problema-como-usa-la-em-seu-favor-na-danca.html">
-                                            <img src="/images/titulos/timidez.jpg" alt="Timidez Não É Um Problema: Como Usá-la Em Seu Favor Na Danca?" loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/timidez-nao-e-um-problema-como-usa-la-em-seu-favor-na-danca.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Card 4 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-state-machine card-categ" aria-hidden="true"></span>
-                                        Performance</div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/quando-a-repeticao-deixa-de-ser-uma-aliada-para-o-desempenho.html">
-                                            <h4 class="text-white">Quando a Repetição Deixa de Ser uma Aliada Para o Desempenho?</h4>
-                                        </a>
-                                        <div class="text">Existe uma frase bastante conhecida no universo da dança, dos esportes e da música que diz:
-                                                            "A prática leva à perfeição."</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/quando-a-repeticao-deixa-de-ser-uma-aliada-para-o-desempenho.html">
-                                            <img src="/images/titulos/repeticao.png" alt="Quando a Repetição Deixa de Ser uma Aliada Para o Desempenho?" loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/quando-a-repeticao-deixa-de-ser-uma-aliada-para-o-desempenho.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
-                                    </div>
-                                </div>
-                            </div>
+                                <!-- Comentários (Disqus) -->
+                                <section aria-label="Comentarios" class="disqus_comentarios">
+                                    <div id="disqus_thread" class="clearfix"></div>
+                                    <script>
+                                        /**
+                                        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                                        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                                        /**/
+                                        var disqus_config = function () {
+                                            this.page.url = PAGE_URL;  'https://blog.updance.workers.dev/posts/os-6-fundamentos-que-nao-podem-faltar-nos-seus-treinos.html'  // Replace PAGE_URL with your page's canonical URL variable
+                                            this.page.identifier = 'post-05';                    // ← Identificador único (recomendado)
+                                            this.page.title = 'Os 6 Fundamentos que Não Podem Faltar nos Seus Treinos'
+                                            this.page.category_id = 'dicas-sacadas';
+                                        };
+                                        
+                                    (function () {
+                                        var d = document, s = d.createElement('script');
+                                        s.src = 'https://blog-updance-workers-dev.disqus.com/embed.js';
+                                        s.setAttribute('data-timestamp', +new Date());
+                                        (d.head || d.body).appendChild(s);
+                                    }());
+                                    </script>
+                                    <noscript>
+                                        Habilite o JavaScript para ver os
+                                        <a href="https://disqus.com/?ref_noscript">comentários via Disqus.</a>
+                                    </noscript>
+                                </section>
 
-                            <!-- Card 5 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <div class="card-category">
-                                        <span class="mdi mdi-gift-outline card-categ" aria-hidden="true"></span>
-                                        Dicas & Sacadas</div>
-                                    <div class="upper-content">
-                                        <a href="/src/posts/os-6-fundamentos-que-nao-podem-faltar-nos-seus-treinos.html">
-                                            <h4 class="text-white">Os 6 Fundamentos que Não Podem Faltar nos Seus Treinos.</h4>
-                                        </a>
-                                        <div class="text">É comum associar evolução técnica à execução de movimentos cada vez mais complexos e cheios de efeitos visuais. Entretanto, 
-                                            quase todo dançarino experiente sabe que o verdadeiro</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <a href="/src/posts/os-6-fundamentos-que-nao-podem-faltar-nos-seus-treinos.html">
-                                            <img src="/images/titulos/treinos.png" alt="Os 6 Fundamentos que Não Podem Faltar nos Treinos." loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="lower-content">
-                                        <a href="/src/posts/os-6-fundamentos-que-nao-podem-faltar-nos-seus-treinos.html">
-                                            <div class="theme-btn btn-style-one">Saiba Mais</div>
-                                        </a>
-                                        <!--<input type="submit" name="lvBlogPosts$ctrl0$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_0"
-                                               class="theme-btn btn-style-one">-->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 3 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Alta Performance</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">Dentro da Matrix: Foco, Valor e Inovação na Dança</h4>
-                                        <div class="text">Uma jornada pela mente que é também uma aula sobre foco, proposta de valor e inovação disruptiva aplicada à vida real.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="Dentro da Matrix: Foco, Valor e Inovação na Dança" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl2$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_2"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 4 -->
-                            <div class="news-block-two grid-box">
-                                <div class="inner-box">
-                                    <span class="card-category">Profissional</span>
-                                    <div class="upper-content">
-                                        <h4 class="text-white">Você é o que Faz Quando Ninguém Está Olhando</h4>
-                                        <div class="text">Pequenas decisões diárias de disciplina e integridade que formam o caráter de quem se destaca em qualquer área.</div>
-                                        <ul class="post-meta">
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> 05/07/2020
-                                            </li>
-                                            <li class="style-two text-white">
-                                                <span class="mdi mdi-account-outline" aria-hidden="true"></span> Wellington Santos
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="images">
-                                        <img src="/images/blog/1.jpg" alt="Você é o que Faz Quando Ninguém Está Olhando" loading="lazy">
-                                    </div>
-                                    <div class="lower-content">
-                                        <input type="submit" name="lvBlogPosts$ctrl3$btnArtigo"
-                                               value="Saiba mais" id="lvBlogPosts_btnArtigo_3"
-                                               class="theme-btn btn-style-one">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div><!-- /.blog-list -->
-
-                        <!-- Sentinela + indicador de scroll infinito -->
-                        <div id="scroll-sentinel"></div>
-                        <div id="loading-indicator" class="loading-indicator" aria-live="polite">
-                            <span class="mdi mdi-loading mdi-spin" aria-hidden="true"></span>
-                            <span>Carregando mais artigos...</span>
-                        </div>
+                            </div><!-- /.inner-box -->
+                        </div><!-- /.blog-single -->
                     </div><!-- /.container -->
                 </div><!-- /.content-side -->
 
-                <!-- ── SIDEBAR ──────────────────────────────────────── -->
+                <!-- ── SIDEBAR ───────────────────────────────────── -->
                 <div class="sidebar-side col-12 col-lg-4">
                     <aside class="sidebar" aria-label="Barra lateral">
 
@@ -378,7 +447,8 @@
                                     <input name="txtBusca" type="search" id="txtBusca"
                                            placeholder="Pesquisar artigos..."
                                            aria-label="Campo de busca">
-                                    <input type="submit" name="btnBuscar" value="" id="btnBuscar" class="fa-scr" aria-label="Buscar">
+                                    <input type="submit" name="btnBuscar" value=""
+                                           id="btnBuscar" class="fa-scr" aria-label="Buscar">
                                 </div>
                             </div>
                         </div>
@@ -445,52 +515,55 @@
                             </div>
                             <ul class="lista-posts">
                                 <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                                 <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                                 <li class="desc">
-                                    <div class="row g-0">
-                                        <div class="col-11">
-                                            <article class="post">
-                                                <figure class="post-thumb">
-                                                    <img src="/images/resource/post-thumb-3.jpg" alt="Artigo recente" loading="lazy">
-                                                    <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
-                                                        <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
-                                                    </a>
-                                                </figure>
-                                                <div class="text"><a href="blog-single.html">Business structured nontp frank team</a></div>
-                                                <div class="post-info">July 25, 2019</div>
-                                            </article>
+                                    <article class="post">
+                                        <figure class="post-thumb">
+                                            <img src="/images/resource/post-thumb-3.jpg"
+                                                 alt="Artigo recente" loading="lazy">
+                                            <a href="blog-single.html" class="overlay-box" aria-label="Ver artigo">
+                                                <span class="icon mdi mdi-link-variant" aria-hidden="true"></span>
+                                            </a>
+                                        </figure>
+                                        <div class="post-content">
+                                            <div class="text">
+                                                <a href="blog-single.html">Business structured nontp frank team</a>
+                                            </div>
+                                            <div class="post-info">July 25, 2019</div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                             </ul>
                         </div>
@@ -503,7 +576,8 @@
                                 <div class="widget-header">
                                     <h6 class="text-white newsletter-cta">
                                         Cadastre-se e <span class="destaque">receba</span> nossas
-                                        newsletters com <span class="destaque">matérias exclusivas</span> toda semana!
+                                        newsletters com <span class="destaque">matérias exclusivas</span>
+                                        toda semana!
                                     </h6>
                                 </div>
                                 <div class="form-group-blog">
@@ -534,13 +608,16 @@
                                 </div>
                                 <div class="slider">
                                     <div class="slider_box">
-                                        <article class="slider_item active" slider-bg="/images/titulos/expressao.png">
+                                        <article class="slider_item active"
+                                                 slider-bg="/images/titulos/expressao.png">
                                             <div class="slider_content"></div>
                                         </article>
-                                        <article class="slider_item" slider-bg="/images/titulos/dgroove.png">
+                                        <article class="slider_item"
+                                                 slider-bg="/images/titulos/dgroove.png">
                                             <div class="slider_content"></div>
                                         </article>
-                                        <article class="slider_item" slider-bg="/images/titulos/boost-a-move.png">
+                                        <article class="slider_item"
+                                                 slider-bg="/images/titulos/boost-a-move.png">
                                             <div class="slider_content"></div>
                                         </article>
                                     </div>
@@ -581,15 +658,15 @@
                     </aside>
                 </div><!-- /.sidebar-side -->
 
-            </div><!-- /#blog-list-infos -->
+            </div><!-- /#blog-single-infos -->
         </div><!-- /#main-content -->
     </section>
 
-    <div class="clear-footer"></div>
+    <div class="clear"></div>
 <!--</div> /#hero-blog -->
 
 <!-- ======================================================
-     RODAPÉ — usa classes .blog-footer* já estilizadas em /css/blog.css
+     RODAPE  (usa as classes .blog-footer* ja estilizadas)
 ====================================================== -->
 <footer class="blog-footer" aria-label="Rodape">
     <div class="auto-container">
@@ -650,7 +727,7 @@
                 <h3 class="blog-footer__title">Contato</h3>
                 <ul class="blog-footer__list">
                     <li><span class="mdi mdi-email-outline" aria-hidden="true"></span>
-                        <a href="mailto:updancexperience@gmail.com.com">updancexperience@gmail.com</a></li>
+                        <a href="mailto:updancexperience@gmail.com">updancexperience@gmail.com</a></li>
                     <!--li><span class="mdi mdi-whatsapp" aria-hidden="true"></span>
                         <a href="#" target="_blank" rel="noopener">WhatsApp da equipe</a></li>
                     <li><span class="mdi mdi-map-marker-outline" aria-hidden="true"></span> Rio de Janeiro, RJ</li>
@@ -722,13 +799,31 @@
 <!-- ======================================================
      SCRIPTS — ao final do body (não bloqueiam o render)
 ====================================================== -->
-<script id="dsq-count-scr" src="//https-updancexperience-com.disqus.com/count.js" async></script>
+<script id="dsq-count-scr" src="//blog-updance-workers-dev.disqus.com/count.js" async></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" defer></script>
 <!--<script src="/js/jquery-slider-carrossel.js" defer></script>
 <script src="/js/slider-carrossel.js" defer></script>-->
 
+<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
+<script>
+(function () {
+    'use strict';
+    // Delegação por "name" (não por id): funciona no widget original e nos
+    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[name="btnCadastroEmail"]');
+        if (!btn) return;
+        e.preventDefault();
+        var widget = btn.closest('.widget-box') || document;
+        var input  = widget.querySelector('[name="txtEmail"]');
+        var email  = input ? (input.value || '').trim() : '';
+        var destino = '/cadastro/';
+        if (email) destino += '?email=' + encodeURIComponent(email);
+        window.location.href = destino;
+    });
+}());
+</script>
 
-<!-- Atualiza o ano automaticamente -->
 <script>
 /* Ano automatico */
 (function () {
@@ -1001,177 +1096,6 @@
         });
     }, { threshold: 0.08 });
     els.forEach(function (el) { io.observe(el); });
-}());
-</script>
-
-<!-- ======================================================
-     SCRIPTS
-====================================================== -->
-<script id="dsq-count-scr" src="//https-updancexperience-com.disqus.com/count.js" async></script>
-<script src="js/jquery-slider-carrossel.js"></script>
-<script src="js/slider-carrossel.js"></script>
-
-<!-- Scroll infinito com injeção de widgets no mobile -->
-<script>
-(function () {
-    'use strict';
-
-    var PAGE_SIZE = 4;
-    var page      = 2;
-    var loading   = false;
-    var ended     = false;
-    var MAX_PAGES = 12;
-
-    var blogList  = document.querySelector('.blog-list');
-    var sentinel  = document.getElementById('scroll-sentinel');
-    var indicator = document.getElementById('loading-indicator');
-
-    /* Sequência de widgets injetados no mobile entre lotes de posts */
-    var WIDGET_STEPS = [
-        ['widget-comece'],
-        ['widget-search'],
-        ['widget-clube'],
-        ['widget-email'],
-        ['widget-novas'],
-        ['widget-assuntos']
-    ];
-
-    /* Pool de posts de amostra
-       Em produção, substitua por: fetch('/api/posts?page=' + page + '&size=' + PAGE_SIZE) */
-    var SAMPLE = [
-        { date: '10/09/2021', author: 'Wellington Santos', category: 'Alta Performance',
-          title: 'Como Manter o Foco em Períodos de Alta Pressão',
-          text: 'Estratégias mentais utilizadas por dançarinos profissionais para sustentar alto nível de atenção mesmo sob pressão extrema durante temporadas.' },
-        { date: '20/10/2021', author: 'Wellington Santos', category: 'Bem-Estar',
-          title: 'Técnicas de Recuperação Muscular para Bailarinos',
-          text: 'Um guia completo sobre as melhores práticas de recuperação para otimizar sua performance e evitar lesões crônicas ao longo da temporada.' },
-        { date: '05/11/2021', author: 'Wellington Santos', category: 'Expressão',
-          title: 'A Arte da Expressão Corporal Consciente',
-          text: 'Como desenvolver sua linguagem corporal e transformar movimentos técnicos em experiências emocionais autênticas que conectam com o público.' },
-        { date: '18/11/2021', author: 'Wellington Santos', category: 'Nutrição',
-          title: 'Nutrição Estratégica para Dançarinos de Alta Performance',
-          text: 'Descubra como a alimentação inteligente potencializa treinos e melhora a resistência cênica e a recuperação entre ensaios.' },
-        { date: '02/12/2021', author: 'Wellington Santos', category: 'Mentalidade',
-          title: 'Mentalidade de Crescimento no Universo da Dança',
-          text: 'Por que alguns dançarinos evoluem mais rápido e como você pode desenvolver o mindset que transforma limitações em oportunidades.' },
-        { date: '15/12/2021', author: 'Wellington Santos', category: 'Neurociência',
-          title: 'Coreografia e Neurociência: O Cérebro que Dança',
-          text: 'Estudos recentes revelam como a prática regular da dança reconfigura o cérebro e aprimora funções cognitivas essenciais para a vida.' }
-    ];
-    var poolIdx = 0;
-
-    function isMobile() { return window.innerWidth < 992; }
-    function nextPost()  { return SAMPLE[poolIdx++ % SAMPLE.length]; }
-
-    function buildCard(p) {
-        var wrap = document.createElement('div');
-        wrap.className = 'news-block-two grid-box';
-        wrap.innerHTML =
-            '<div class="inner-box">' +
-            '  <span class="card-category">' + (p.category || 'Artigo') + '</span>' +
-            '  <div class="upper-content">' +
-            '    <h4 class="text-white">' + p.title + '</h4>' +
-            '    <div class="text">' + p.text + '</div>' +
-            '    <ul class="post-meta">' +
-            '      <li class="style-two text-white">' +
-            '        <span class="mdi mdi-calendar-outline" aria-hidden="true"></span> ' + p.date +
-            '      </li>' +
-            '      <li class="style-two text-white">' +
-            '        <span class="mdi mdi-account-outline" aria-hidden="true"></span> ' + p.author +
-            '      </li>' +
-            '    </ul>' +
-            '  </div>' +
-            '  <div class="images">' +
-            '    <img src="/images/blog/1.jpg" alt="' + p.title + '" loading="lazy">' +
-            '  </div>' +
-            '  <div class="lower-content">' +
-            '    <input type="submit" value="Saiba mais" class="theme-btn btn-style-one">' +
-            '  </div>' +
-            '</div>';
-        return wrap;
-    }
-
-    function cloneWidget(id) {
-        var original = document.getElementById(id);
-        if (!original) return null;
-        var clone = original.cloneNode(true);
-        clone.removeAttribute('id');
-        clone.querySelectorAll('[id]').forEach(function (el) {
-            el.id = el.id + '-mob';
-        });
-        clone.classList.add('mobile-widget-inline');
-        return clone;
-    }
-
-    function injectWidgets(step) {
-        var ids = WIDGET_STEPS[step];
-        if (!ids) return;
-        ids.forEach(function (id) {
-            var clone = cloneWidget(id);
-            if (clone) blogList.appendChild(clone);
-        });
-    }
-
-    function loadMore() {
-        if (loading || ended) return;
-        loading = true;
-        indicator.style.display = 'flex';
-
-        setTimeout(function () {
-            var widgetStep = page - 2;
-            if (isMobile() && widgetStep < WIDGET_STEPS.length) {
-                injectWidgets(widgetStep);
-            }
-            if (page > MAX_PAGES) {
-                ended = true;
-                indicator.innerHTML = '<span class="scroll-end-msg">&#10003; Você viu todos os artigos disponíveis.</span>';
-                indicator.style.display = 'flex';
-                return;
-            }
-            for (var i = 0; i < PAGE_SIZE; i++) {
-                blogList.appendChild(buildCard(nextPost()));
-            }
-            page++;
-            loading = false;
-            indicator.style.display = 'none';
-        }, 900);
-    }
-
-    if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries) {
-            if (entries[0].isIntersecting) loadMore();
-        }, { rootMargin: '350px' }).observe(sentinel);
-    } else {
-        window.addEventListener('scroll', function () {
-            if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 450) {
-                loadMore();
-            }
-        });
-    }
-
-}());
-</script>
-
-
-<script src="/js/auth-modal.js" defer></script>
-
-<!-- Newsletter: botão "Cadastrar" leva à página de cadastro carregando o e-mail digitado -->
-<script>
-(function () {
-    'use strict';
-    // Delegação por "name" (não por id): funciona no widget original e nos
-    // clones do mobile, onde os ids ganham sufixo mas os names são preservados.
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('[name="btnCadastroEmail"]');
-        if (!btn) return;
-        e.preventDefault();
-        var widget = btn.closest('.widget-box') || document;
-        var input  = widget.querySelector('[name="txtEmail"]');
-        var email  = input ? (input.value || '').trim() : '';
-        var destino = '/cadastro/';
-        if (email) destino += '?email=' + encodeURIComponent(email);
-        window.location.href = destino;
-    });
 }());
 </script>
 </body>

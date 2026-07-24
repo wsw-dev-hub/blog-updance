@@ -102,6 +102,21 @@ export default {
       if (pathname === '/api/me')                                           return quemSouEu(request, env);
       if (pathname === '/api/me/access')                                    return meusAcessos(request, env);
 
+      // ---- ÁRVORE DE TALENTOS (membro) ----
+      if (pathname === '/api/talentos/estado')                                return talentosEstado(request, env);
+      if (pathname === '/api/talentos/plano'   && request.method === 'POST')  return talentosSalvarPlano(request, env);
+      if (pathname === '/api/talentos/desafio' && request.method === 'POST')  return talentosEnviarDesafio(request, env);
+ 
+      // ---- ÁRVORE DE TALENTOS (admin) ----
+      if (pathname === '/api/admin/talentos/fila') {
+        const a = await getAdmin(request, env);
+        return a ? talentosFila(env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/talentos/avaliar' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? talentosAvaliar(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+
       // ---- ADMIN ----
       if (pathname === '/api/admin/setup'  && request.method === 'POST') return adminSetup(request, env);
       if (pathname === '/api/admin/login'  && request.method === 'POST') return adminLogin(request, env);
@@ -194,7 +209,8 @@ function emailValido(e) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
 
 /* DEPOIS */
 const ERR_TYPES = new Set([
-  'member_confirma_erro', 'magic_erro', 'news_confirma_erro', 'reset_erro'
+  'member_confirma_erro', 'magic_erro', 'news_confirma_erro', 'reset_erro',
+  'talento_plano_erro', 'talento_desafio_erro', 'talento_avaliar_erro'
 ]);
 
 async function logEvent(env, email, type, detail) {
@@ -297,6 +313,428 @@ async function meusAcessos(request, env) {
 
   return json({ types, type: types[0], resources });
 }
+
+/* ================================================================
+   CONSTANTES
+================================================================ */
+const TALENTOS_RESOURCE = 'arvore_talentos';
+const TALENTOS_XP_POR_PONTO = 100;
+const TALENTOS_MAX_PAGINAS  = 5;
+ 
+/* Contadores materializados — mesmo padrão de 'membros' e 'erros'.
+   Mantidos por incremento aqui; ressincronizados pelo bloco 4 de
+   sql/talentos.otimizacao.sql. */
+const CNT_PENDENTES = 'talentos_pendentes';
+const CNT_APROVADOS = 'talentos_aprovados';
+const CNT_TITULOS   = 'talentos_titulos';
+ 
+/* Ajusta um contador em ±n. Devolve o statement para entrar num batch,
+   evitando round-trip extra. */
+function contador(env, nome, delta) {
+  return env.DB
+    .prepare('UPDATE counters SET value = value + ? WHERE name = ?')
+    .bind(delta, nome);
+}
+ 
+ 
+/* ================================================================
+   PORTARIA — o membro pode usar a árvore?
+   Reusa access_rules, então basta a coordenação marcar o tipo no
+   painel admin para liberar/bloquear sem tocar em código.
+================================================================ */
+async function talentosGuard(request, env) {
+  const m = await getMember(request, env);
+  if (!m) return { erro: json(null, 401) };
+ 
+  const types = Array.isArray(m.types) && m.types.length ? m.types : [m.type || 'Free'];
+  const ok = await podeAcessar(env, types, TALENTOS_RESOURCE);
+  if (!ok) return { erro: json({ erro: 'sem acesso' }, 403) };
+ 
+  return { email: m.email, types };
+}
+ 
+ 
+/* ================================================================
+   GET /api/talentos/estado
+   Devolve o retrato completo do membro: XP por perfil, desafios já
+   aprovados, títulos e as páginas de plano.
+================================================================ */
+async function talentosEstado(request, env) {
+  const g = await talentosGuard(request, env);
+  if (g.erro) return g.erro;
+ 
+  const [xpRows, desafios, titulos, paginas] = await env.DB.batch([
+    env.DB.prepare('SELECT perfil_id, xp FROM talent_xp WHERE email = ?').bind(g.email),
+    env.DB.prepare(
+      "SELECT desafio_id FROM talent_progresso WHERE email = ? AND status = 'aprovado'"
+    ).bind(g.email),
+    env.DB.prepare('SELECT titulo_id FROM talent_titulos WHERE email = ?').bind(g.email),
+    env.DB.prepare(
+      'SELECT page_id, nome, alocacao, atual FROM talent_paginas WHERE email = ? ORDER BY page_id'
+    ).bind(g.email),
+  ]);
+ 
+  const xp = { bailarino: 0, professor: 0, performer: 0 };
+  for (const r of (xpRows.results || [])) xp[r.perfil_id] = r.xp;
+ 
+  let listaPaginas = (paginas.results || []).map(p => ({
+    id:   p.page_id,
+    nome: p.nome,
+    alocacao: parseJSON(p.alocacao, {}),
+  }));
+  if (!listaPaginas.length) {
+    listaPaginas = [{ id: 1, nome: 'Plano 01', alocacao: {} }];
+  }
+ 
+  const atual = (paginas.results || []).find(p => p.atual === 1);
+ 
+  return json({
+    versao:      '1.0.0',
+    xp,
+    desafios:    (desafios.results || []).map(r => r.desafio_id),
+    titulos:     (titulos.results  || []).map(r => r.titulo_id),
+    paginaAtual: atual ? atual.page_id : listaPaginas[0].id,
+    paginas:     listaPaginas,
+  });
+}
+ 
+ 
+/* ================================================================
+   POST /api/talentos/plano
+   Body: { paginaAtual, paginas: [{ id, nome, alocacao }] }
+ 
+   O servidor NÃO confia na alocação recebida: revalida contra o
+   catálogo (ranks_max, tier.requisito, pré-requisitos) e contra o
+   saldo real de XP. Alocação inválida é rejeitada por inteiro.
+================================================================ */
+async function talentosSalvarPlano(request, env) {
+  const g = await talentosGuard(request, env);
+  if (g.erro) return g.erro;
+ 
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+ 
+  const paginas = Array.isArray(body.paginas) ? body.paginas.slice(0, TALENTOS_MAX_PAGINAS) : [];
+  if (!paginas.length) return json({ ok: false, erro: 'Nenhuma página enviada.' }, 400);
+ 
+  const catalogo = await carregarCatalogo(env);
+  const saldo    = await carregarSaldoPontos(env, g.email);
+ 
+  const limpas = [];
+  for (const pg of paginas) {
+    const pageId = Math.max(1, Math.min(TALENTOS_MAX_PAGINAS, Math.floor(pg.id || 1)));
+    const aloc   = sanitizarAlocacao(pg.alocacao, catalogo);
+    const v      = validarAlocacao(aloc, catalogo, saldo);
+ 
+    if (!v.ok) {
+      await logEvent(env, g.email, 'talento_plano_erro', `p${pageId}: ${v.motivo}`);
+      return json({ ok: false, erro: `Plano ${pageId}: ${v.motivo}` }, 422);
+    }
+    limpas.push({
+      id:   pageId,
+      nome: String(pg.nome || `Plano 0${pageId}`).slice(0, 40),
+      alocacao: aloc,
+    });
+  }
+ 
+  const atual = limpas.some(p => p.id === body.paginaAtual) ? body.paginaAtual : limpas[0].id;
+ 
+  const stmts = [
+    env.DB.prepare('UPDATE talent_paginas SET atual = 0 WHERE email = ?').bind(g.email),
+  ];
+  for (const p of limpas) {
+    stmts.push(
+      env.DB.prepare(
+        'INSERT INTO talent_paginas (email, page_id, nome, alocacao, atual, updated_at) ' +
+        "VALUES (?, ?, ?, ?, ?, datetime('now')) " +
+        'ON CONFLICT(email, page_id) DO UPDATE SET ' +
+        "nome = excluded.nome, alocacao = excluded.alocacao, " +
+        "atual = excluded.atual, updated_at = datetime('now')"
+      ).bind(g.email, p.id, p.nome, JSON.stringify(p.alocacao), p.id === atual ? 1 : 0)
+    );
+  }
+  await env.DB.batch(stmts);
+ 
+  // Títulos são permanentes: concede os que a página ativa já satisfaz.
+  const ativa = limpas.find(p => p.id === atual);
+  const novos = await concederTitulos(env, g.email, ativa.alocacao, catalogo);
+ 
+  await logEvent(env, g.email, 'talento_plano_salvo',
+    `pagina ${atual}` + (novos.length ? ` · titulos: ${novos.join(',')}` : ''));
+ 
+  return json({ ok: true, paginaAtual: atual, titulosNovos: novos });
+}
+ 
+ 
+/* ================================================================
+   POST /api/talentos/desafio
+   Body: { desafio, habilidade, comprovacao? }
+ 
+   O cliente informa QUAL desafio concluiu — nunca quanto vale.
+   Desafios com auto_aprovar = 1 creditam na hora; o resto entra na
+   fila da coordenação (status 'pendente').
+================================================================ */
+async function talentosEnviarDesafio(request, env) {
+  const g = await talentosGuard(request, env);
+  if (g.erro) return g.erro;
+ 
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+ 
+  const desafioId = String(body.desafio || '').slice(0, 60);
+  if (!desafioId) return json({ ok: false, erro: 'Desafio não informado.' }, 400);
+ 
+  const d = await env.DB.prepare(
+    'SELECT id, perfil_id, xp, auto_aprovar FROM talent_desafios WHERE id = ? AND ativo = 1'
+  ).bind(desafioId).first();
+  if (!d) {
+    await logEvent(env, g.email, 'talento_desafio_erro', `inexistente: ${desafioId}`);
+    return json({ ok: false, erro: 'Desafio inexistente ou desativado.' }, 404);
+  }
+ 
+  const jaTem = await env.DB.prepare(
+    'SELECT status FROM talent_progresso WHERE email = ? AND desafio_id = ?'
+  ).bind(g.email, desafioId).first();
+  if (jaTem) {
+    return json({ ok: true, status: jaTem.status, duplicado: true });
+  }
+ 
+  const comprovacao = String(body.comprovacao || '').slice(0, 500);
+  const status = d.auto_aprovar === 1 ? 'aprovado' : 'pendente';
+ 
+  // Grava o progresso e ajusta o contador no mesmo round-trip.
+  await env.DB.batch([
+    env.DB.prepare(
+      'INSERT INTO talent_progresso (email, desafio_id, perfil_id, xp, status, comprovacao, reviewed_at) ' +
+      "VALUES (?, ?, ?, ?, ?, ?, CASE WHEN ? = 'aprovado' THEN datetime('now') ELSE NULL END)"
+    ).bind(g.email, desafioId, d.perfil_id, d.xp, status, comprovacao, status),
+    contador(env, status === 'aprovado' ? CNT_APROVADOS : CNT_PENDENTES, 1),
+  ]);
+ 
+  await logEvent(env, g.email, 'talento_desafio_' + status, desafioId);
+ 
+  if (status !== 'aprovado') {
+    return json({ ok: true, status: 'pendente' });
+  }
+ 
+  const xp = await recalcularXP(env, g.email, d.perfil_id);
+  return json({ ok: true, status: 'aprovado', xp });
+}
+ 
+ 
+/* ================================================================
+   ADMIN — fila de validação
+================================================================ */
+async function talentosFila(env) {
+  const rows = await env.DB.prepare('SELECT * FROM v_talent_fila LIMIT 200').all();
+  return json({ fila: rows.results || [] });
+}
+ 
+/* Body: { id, decisao: 'aprovado'|'recusado', parecer? } */
+async function talentosAvaliar(request, env, admin) {
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+ 
+  const id      = Math.floor(body.id || 0);
+  const decisao = body.decisao === 'aprovado' ? 'aprovado' : 'recusado';
+  const parecer = String(body.parecer || '').slice(0, 500);
+  if (!id) return json({ ok: false, erro: 'Registro não informado.' }, 400);
+ 
+  const reg = await env.DB.prepare(
+    'SELECT email, perfil_id, status, desafio_id FROM talent_progresso WHERE id = ?'
+  ).bind(id).first();
+  if (!reg) return json({ ok: false, erro: 'Registro inexistente.' }, 404);
+  if (reg.status !== 'pendente') {
+    await logEvent(env, admin.email, 'talento_avaliar_erro', `id ${id} já avaliado`);
+    return json({ ok: false, erro: 'Já avaliado.' }, 409);
+  }
+ 
+  // Sai da fila; entra em aprovados só se aprovado.
+  const escritas = [
+    env.DB.prepare(
+      "UPDATE talent_progresso SET status = ?, avaliador = ?, parecer = ?, " +
+      "reviewed_at = datetime('now') WHERE id = ?"
+    ).bind(decisao, admin.email || 'admin', parecer, id),
+    contador(env, CNT_PENDENTES, -1),
+  ];
+  if (decisao === 'aprovado') escritas.push(contador(env, CNT_APROVADOS, 1));
+  await env.DB.batch(escritas);
+ 
+  await logEvent(env, reg.email, 'talento_desafio_' + decisao,
+    `${reg.desafio_id} por ${admin.email || 'admin'}`);
+ 
+  const xp = decisao === 'aprovado'
+    ? await recalcularXP(env, reg.email, reg.perfil_id)
+    : null;
+ 
+  return json({ ok: true, decisao, xp });
+}
+ 
+ 
+/* ================================================================
+   AUXILIARES
+================================================================ */
+ 
+function parseJSON(txt, fallback) {
+  try { return JSON.parse(txt); } catch { return fallback; }
+}
+ 
+/* Recalcula o saldo materializado a partir dos aprovados.
+   Fonte única de verdade: talent_progresso. */
+async function recalcularXP(env, email, perfilId) {
+  await env.DB.prepare(
+    'INSERT INTO talent_xp (email, perfil_id, xp, updated_at) ' +
+    "SELECT ?, ?, COALESCE(SUM(xp), 0), datetime('now') FROM talent_progresso " +
+    "WHERE email = ? AND perfil_id = ? AND status = 'aprovado' " +
+    'ON CONFLICT(email, perfil_id) DO UPDATE SET ' +
+    "xp = excluded.xp, updated_at = datetime('now')"
+  ).bind(email, perfilId, email, perfilId).run();
+ 
+  const rows = await env.DB.prepare(
+    'SELECT perfil_id, xp FROM talent_xp WHERE email = ?'
+  ).bind(email).all();
+ 
+  const xp = { bailarino: 0, professor: 0, performer: 0 };
+  for (const r of (rows.results || [])) xp[r.perfil_id] = r.xp;
+  return xp;
+}
+ 
+/* Catálogo em memória (cacheável no KV se o volume crescer). */
+async function carregarCatalogo(env) {
+  const [habs, reqs, tiers] = await env.DB.batch([
+    env.DB.prepare(
+      'SELECT id, perfil_id, tier, ranks_max, tipo FROM talent_habilidades WHERE ativo = 1'
+    ),
+    env.DB.prepare('SELECT habilidade_id, requer_id FROM talent_requisitos'),
+    env.DB.prepare('SELECT perfil_id, n, requisito FROM talent_tiers'),
+  ]);
+ 
+  const habilidades = {};
+  for (const h of (habs.results || [])) {
+    habilidades[h.id] = {
+      id: h.id, perfilId: h.perfil_id, tier: h.tier,
+      ranksMax: h.ranks_max, tipo: h.tipo, requer: [],
+    };
+  }
+  for (const r of (reqs.results || [])) {
+    if (habilidades[r.habilidade_id]) habilidades[r.habilidade_id].requer.push(r.requer_id);
+  }
+ 
+  const tierReq = {};
+  for (const t of (tiers.results || [])) tierReq[`${t.perfil_id}:${t.n}`] = t.requisito;
+ 
+  return { habilidades, tierReq };
+}
+ 
+/* Pontos totais por perfil = floor(xp / 100) */
+async function carregarSaldoPontos(env, email) {
+  const rows = await env.DB.prepare(
+    'SELECT perfil_id, xp FROM talent_xp WHERE email = ?'
+  ).bind(email).all();
+ 
+  const saldo = { bailarino: 0, professor: 0, performer: 0 };
+  for (const r of (rows.results || [])) {
+    saldo[r.perfil_id] = Math.floor(r.xp / TALENTOS_XP_POR_PONTO);
+  }
+  return saldo;
+}
+ 
+/* Descarta ids desconhecidos e ranks fora do intervalo. */
+function sanitizarAlocacao(bruto, catalogo) {
+  const limpo = {};
+  if (!bruto || typeof bruto !== 'object') return limpo;
+ 
+  for (const id of Object.keys(bruto)) {
+    const h = catalogo.habilidades[id];
+    if (!h || h.tipo === 'titulo') continue;
+    const v = Math.floor(bruto[id]);
+    if (v > 0) limpo[id] = Math.min(v, h.ranksMax);
+  }
+  return limpo;
+}
+ 
+/* Validação completa: orçamento, faixa e pré-requisitos. */
+function validarAlocacao(aloc, catalogo, saldo) {
+  const gastos = { bailarino: 0, professor: 0, performer: 0 };
+  for (const id of Object.keys(aloc)) {
+    const h = catalogo.habilidades[id];
+    gastos[h.perfilId] += aloc[id];
+  }
+ 
+  for (const p of Object.keys(gastos)) {
+    if (gastos[p] > (saldo[p] || 0)) {
+      return { ok: false, motivo: `pontos investidos em ${p} excedem o saldo de XP.` };
+    }
+  }
+ 
+  for (const id of Object.keys(aloc)) {
+    const h   = catalogo.habilidades[id];
+    const req = catalogo.tierReq[`${h.perfilId}:${h.tier}`] || 0;
+ 
+    if (gastos[h.perfilId] < req) {
+      return { ok: false, motivo: `${id} exige ${req} ponto(s) na faixa e há ${gastos[h.perfilId]}.` };
+    }
+    for (const pid of h.requer) {
+      const pr = catalogo.habilidades[pid];
+      if (!pr) continue;
+      if ((aloc[pid] || 0) < pr.ranksMax) {
+        return { ok: false, motivo: `${id} exige ${pid} no nível máximo.` };
+      }
+    }
+  }
+ 
+  return { ok: true };
+}
+ 
+/* Concede títulos cujos pré-requisitos estão satisfeitos na alocação ativa. */
+async function concederTitulos(env, email, aloc, catalogo) {
+  const gastos = { bailarino: 0, professor: 0, performer: 0 };
+  for (const id of Object.keys(aloc)) {
+    gastos[catalogo.habilidades[id].perfilId] += aloc[id];
+  }
+ 
+  const novos = [];
+  for (const id of Object.keys(catalogo.habilidades)) {
+    const h = catalogo.habilidades[id];
+    if (h.tipo !== 'titulo') continue;
+ 
+    const req = catalogo.tierReq[`${h.perfilId}:${h.tier}`] || 0;
+    if (gastos[h.perfilId] < req) continue;
+ 
+    const completo = h.requer.every(pid => {
+      const pr = catalogo.habilidades[pid];
+      return pr && (aloc[pid] || 0) >= pr.ranksMax;
+    });
+    if (completo) novos.push(h);
+  }
+ 
+  if (!novos.length) return [];
+ 
+  // INSERT OR IGNORE pode não inserir nada (título já concedido),
+  // então o contador é acertado pelo delta real.
+  const antes = await env.DB.prepare(
+    'SELECT COUNT(*) AS n FROM talent_titulos WHERE email = ?'
+  ).bind(email).first();
+ 
+  await env.DB.batch(novos.map(h =>
+    env.DB.prepare(
+      'INSERT OR IGNORE INTO talent_titulos (email, titulo_id, perfil_id) VALUES (?, ?, ?)'
+    ).bind(email, h.id, h.perfilId)
+  ));
+ 
+  const depois = await env.DB.prepare(
+    'SELECT COUNT(*) AS n FROM talent_titulos WHERE email = ?'
+  ).bind(email).first();
+ 
+  const delta = (depois?.n || 0) - (antes?.n || 0);
+  if (delta > 0) await contador(env, CNT_TITULOS, delta).run();
+ 
+  return novos.map(h => h.id);
+}
+
 
 /* ───────────────────────── membros: senha ───────────────────────── */
 

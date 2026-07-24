@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Árvore de Talentos — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<!-- Design tokens e componentes do projeto -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/format.css">
+
+<!-- Componentes desta página -->
+<link rel="stylesheet" href="/css/talentTree.css">
+
+<style>
+  /* -------------------------------------------------------------
+     Escopo local — apenas o que é exclusivo desta página.
+     Tudo o que é reutilizável está em /css/talentTree.css.
+  ------------------------------------------------------------- */
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+    flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw; white-space: normal;
+    line-height: 1.15; font-size: 10.5px;
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-voltar,
+  .members-topbar .btn-sair{
+    background: transparent;
+    color: var(--udx-text);
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm);
+    font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-voltar{ margin-bottom: 12px; }
+  .members-topbar .btn-voltar:hover,
+  .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-primary-hot);
+    color: #fff;
+  }
+  .members-topbar .btn-voltar .mdi{ font-size: 16px; }
+
+  .members-main{ padding-bottom: 40px; }
+
+  .members-hero .type-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding: 6px 14px; border-radius: 50px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-size: 12px; font-weight: 600;
+  }
+  .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
+
+  .estagio-tag{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 6px; padding: 6px 14px; border-radius: 50px;
+    background: var(--seg-grad-soft);
+    border: 1px solid var(--seg-accent);
+    color: #fff;
+    font-size: 11.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .estagio-tag .mdi{ font-size: 14px; color: var(--seg-accent); }
+
+  .members-footer{
+    padding: 20px 22px; text-align: center;
+    color: var(--udx-text-muted); font-size: .8rem;
+    border-top: 1px solid var(--udx-border);
+  }
+</style>
+</head>
+
+<body class="page-membros page-talentos">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge">
+      <span class="mdi mdi-family-tree" aria-hidden="true"></span>
+      <span>Árvore de Talentos</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/membros/estagio/" aria-label="Voltar para a Área do Estagiário">
+      <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+      Área do(a) Estagiário(a)
+    </a>
+    <button class="btn-sair" id="sair">Sair</button>
+  </header>
+
+  <main class="members-main">
+
+    <!-- ==========================================================
+         HERO
+    =========================================================== -->
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <span class="estagio-tag">
+            <span class="mdi mdi-school-outline" aria-hidden="true"></span>
+            Exclusivo Estagiário(a)
+          </span>
+
+          <div class="eyebrow">
+            <b>04</b>
+            <span>Plano de Carreira</span>
+          </div>
+          <h1>Escolha <em>o seu caminho</em> na dança</h1>
+          <p class="lead">
+            Três perfis profissionais, três árvores. Cada habilidade se abre com
+            pontos de experiência conquistados em tarefas, atividades e eventos
+            da plataforma — e cada habilidade dominada libera a seguinte, até o
+            título que fecha a trilha.
+          </p>
+
+          <div class="type-chip" id="userChip" hidden>
+            <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
+            <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         BLOQUEIO — pré-estagiário
+    =========================================================== -->
+    <section class="trails-section" id="ttGate" hidden>
+      <div class="auto-container">
+        <div class="tt-gate">
+          <div class="tt-gate__icon"><span class="mdi mdi-lock-outline"></span></div>
+          <h2>A Árvore de Talentos abre no Estágio</h2>
+          <p>
+            Este é o mapa de carreira da Up Dance — e ele só faz sentido quando
+            você já está aprendendo o ofício por dentro. O acesso é liberado
+            automaticamente assim que a coordenação confirma a sua entrada no
+            Programa de Estágio.
+          </p>
+          <a class="home-cta home-cta--solid" href="/membros/">
+            <span class="mdi mdi-arrow-left"></span>
+            Voltar à Área de Membros
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         APLICAÇÃO
+    =========================================================== -->
+    <div id="ttApp" hidden>
+
+      <!-- ---------- Saldo de pontos ---------- -->
+      <section class="trails-section" style="padding-bottom:0">
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow">
+              <span class="mdi mdi-lightning-bolt" aria-hidden="true"></span>
+              <span>Seus pontos</span>
+            </div>
+            <h2>Experiência <em>por perfil</em></h2>
+            <p class="lead">
+              Cada desafio concluído gera experiência específica do perfil.
+              A cada 100 XP você ganha 1 Ponto de Talento para investir naquela árvore.
+            </p>
+          </div>
+
+          <div class="tt-wallet" id="ttWallet"></div>
+        </div>
+      </section>
+
+      <!-- ---------- Árvores ---------- -->
+      <section class="trails-section" style="padding-top:0">
+        <div class="auto-container">
+
+          <!-- Barra de controle: páginas de plano + ações -->
+          <div class="tt-toolbar">
+            <span class="tt-toolbar__label">Páginas de Plano</span>
+            <div class="tt-pages" id="ttPages" role="tablist"
+                 aria-label="Páginas de plano de carreira"></div>
+            <span class="tt-toolbar__spacer"></span>
+            <div class="tt-actions">
+              <button type="button" class="tt-btn tt-btn--primary" id="ttSave" disabled>
+                <span class="mdi mdi-content-save-outline"></span> Salvar plano
+              </button>
+              <button type="button" class="tt-btn" id="ttUndo" disabled>
+                <span class="mdi mdi-undo-variant"></span> Reverter
+              </button>
+              <button type="button" class="tt-btn tt-btn--danger" id="ttWipe">
+                <span class="mdi mdi-backup-restore"></span> Resumir pontos
+              </button>
+            </div>
+          </div>
+          <p id="ttStatus" style="font-size:11.5px;margin:-14px 0 18px;color:var(--udx-text-muted)"></p>
+
+          <!-- Abas de perfil (abaixo de 1024px) -->
+          <div class="tt-profile-tabs" id="ttProfileTabs" role="tablist"
+               aria-label="Perfil profissional"></div>
+
+          <!-- As três árvores -->
+          <div class="tt-board" id="ttBoard"></div>
+
+          <!-- Legenda -->
+          <div class="tt-legend">
+            <span class="tt-legend__item">
+              <span class="tt-legend__dot"></span> Bloqueada
+            </span>
+            <span class="tt-legend__item">
+              <span class="tt-legend__dot tt-legend__dot--available"></span> Disponível
+            </span>
+            <span class="tt-legend__item">
+              <span class="tt-legend__dot tt-legend__dot--ranked"></span> Em desenvolvimento
+            </span>
+            <span class="tt-legend__item">
+              <span class="tt-legend__dot tt-legend__dot--maxed"></span> Dominada
+            </span>
+            <span class="tt-legend__item">
+              <span class="tt-legend__dot tt-legend__dot--titulo"></span> Título
+            </span>
+            <span class="tt-legend__item">
+              <span class="mdi mdi-gesture-tap" style="font-size:14px"></span>
+              Clique investe &middot; Alt+clique (ou clique direito) devolve
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- Desafios da habilidade selecionada ---------- -->
+      <section class="trails-section" style="padding-top:0">
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow">
+              <span class="mdi mdi-flag-checkered" aria-hidden="true"></span>
+              <span>Desafios</span>
+            </div>
+            <h2>Como <em>ganhar experiência</em></h2>
+            <p class="lead">
+              Tarefas, atividades e eventos propostos pela plataforma. A comprovação
+              é enviada por aqui e validada pela coordenação — o XP entra na conta
+              assim que aprovado.
+            </p>
+          </div>
+
+          <div class="tt-panel" id="ttPanel"></div>
+        </div>
+      </section>
+
+      <!-- ---------- Títulos ---------- -->
+      <section class="trails-section" style="padding-top:0">
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow">
+              <span class="mdi mdi-trophy-variant-outline" aria-hidden="true"></span>
+              <span>Conquistas</span>
+            </div>
+            <h2>Títulos <em>de carreira</em></h2>
+            <p class="lead">
+              O título fecha a trilha e abre a porta seguinte: audição de elenco,
+              banca de certificação ou casting de shows.
+            </p>
+          </div>
+
+          <ul class="tt-titles" id="ttTitles"></ul>
+        </div>
+      </section>
+
+    </div><!-- /#ttApp -->
+
+    <!-- ==========================================================
+         CTA
+    =========================================================== -->
+    <section class="trails-cta">
+      <div class="auto-container">
+        <div class="trails-cta__box">
+          <h2>Dúvida sobre <em>qual caminho seguir?</em></h2>
+          <p>
+            Você pode investir nas três árvores ao mesmo tempo — mas os pontos são
+            finitos. Se quiser conversar sobre foco e ordem, a coordenação ajuda a
+            montar o plano com você.
+          </p>
+          <div class="trails-cta__ctas">
+            <a class="home-cta home-cta--solid" href="/contato/?assunto=plano-de-carreira">
+              <span class="mdi mdi-message-text-outline"></span>
+              Falar com a coordenação
+            </a>
+            <a class="home-cta home-cta--ghost" href="/estagio/faq/">
+              <span class="mdi mdi-help-circle-outline"></span>
+              Como funcionam os pontos
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="members-footer">
+    © Up Dance — Árvore de Talentos. Este conteúdo é pessoal e intransferível.
+  </footer>
+
+  <!-- Camadas flutuantes -->
+  <div class="tt-tip"   id="ttTip"   role="tooltip" aria-hidden="true"></div>
+  <div class="tt-toast" id="ttToast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts: dados primeiro, motor depois -->
+  <script src="/js/talentTree.data.js"></script>
+  <script src="/js/talentTree.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var sair = document.getElementById('sair');
+      if (!sair) { return; }
+      sair.addEventListener('click', function () {
+        fetch('/api/member/logout', { method: 'POST', credentials: 'same-origin' })
+          .catch(function () {})
+          .finally(function () { location.href = '/'; });
+      });
+    }());
+  </script>
+
+</body>
+</html>

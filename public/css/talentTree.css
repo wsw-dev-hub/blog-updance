@@ -1,0 +1,897 @@
+@charset "utf-8";
+/* ================================================================
+   ÁRVORE DE TALENTOS — Up Dance Experience
+   /css/talentTree.css
+   ----------------------------------------------------------------
+   Depende de: blog.css (tokens --udx-*) e trailsFormat.css
+   (estrutura .trails-hero / .trails-section / .auto-container).
+
+   Paleta de cores oficial usada aqui:
+   #F27405  Laranja         #F20505  Vermelho
+   #BF0449  Rosa/Opaco      #FA33A1  Rosa/Choque
+   #8C0783  Roxo            #5708A6  Roxo/Médio
+   #430ABF  Azul/Médio      #110273  Azul Marinho
+   #030BA6  Azul            #DFE0F2  Azul/Gelo
+
+   Breakpoints seguem mediaQuery.css:
+   360 · 480 · 481–575 · 576 · 768 · 842 · 992 · 1024 · 1200 · 1440
+================================================================ */
+
+
+/* ================================================================
+   1) TOKENS DA PÁGINA + TOKENS POR PERFIL
+   Segue o padrão --seg-* já usado em .page-trails/.page-apps/.page-clube
+================================================================ */
+.page-membros.page-talentos{
+    --tt-grad:        linear-gradient(135deg, #430ABF 0%, #8C0783 100%);
+    --tt-grad-soft:   linear-gradient(135deg, rgba(67,10,191,.18) 0%, rgba(140,7,131,.22) 100%);
+    --tt-glow:        rgba(67, 10, 191, 0.32);
+
+    --seg-grad:       var(--tt-grad);
+    --seg-grad-soft:  var(--tt-grad-soft);
+    --seg-grad-text:  linear-gradient(135deg, #8C0783 0%, #430ABF 100%);
+    --seg-accent:     #430ABF;
+    --seg-accent-2:   #8C0783;
+    --seg-glow:       var(--tt-glow);
+
+    --seg-hero-rgba-a: rgba(67, 10, 191, 0.20);
+    --seg-hero-rgba-b: rgba(140, 7, 131, 0.28);
+    --seg-cta-rgba-a:  rgba(67, 10, 191, 0.16);
+    --seg-cta-rgba-b:  rgba(140, 7, 131, 0.22);
+    --seg-how-rgba-a:  rgba(67, 10, 191, 0.06);
+    --seg-how-rgba-b:  rgba(140, 7, 131, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+
+    /* Métricas da grade de talentos — recalculadas nos breakpoints */
+    --tt-node:        58px;
+    --tt-gap-col:     14px;
+    --tt-gap-row:     34px;
+    --tt-cols:        3;
+}
+
+/* --- Perfil 01 · Bailarino: fogo → roxo ------------------------ */
+.tt-tree[data-perfil="bailarino"]{
+    --p-grad:      linear-gradient(135deg, #F20505 0%, #8C0783 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(242,5,5,.16) 0%, rgba(140,7,131,.20) 100%);
+    --p-accent:    #F20505;
+    --p-accent-2:  #8C0783;
+    --p-glow:      rgba(242, 5, 5, 0.34);
+    --p-rgba:      242, 5, 5;
+}
+/* --- Perfil 02 · Professor: roxo médio → azul médio ------------ */
+.tt-tree[data-perfil="professor"]{
+    --p-grad:      linear-gradient(135deg, #5708A6 0%, #430ABF 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(87,8,166,.16) 0%, rgba(67,10,191,.22) 100%);
+    --p-accent:    #430ABF;
+    --p-accent-2:  #5708A6;
+    --p-glow:      rgba(67, 10, 191, 0.38);
+    --p-rgba:      67, 10, 191;
+}
+/* --- Perfil 03 · Performer: rosa/choque → laranja -------------- */
+.tt-tree[data-perfil="performer"]{
+    --p-grad:      linear-gradient(135deg, #FA33A1 0%, #F27405 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(250,51,161,.16) 0%, rgba(242,116,5,.20) 100%);
+    --p-accent:    #FA33A1;
+    --p-accent-2:  #F27405;
+    --p-glow:      rgba(250, 51, 161, 0.34);
+    --p-rgba:      250, 51, 161;
+}
+
+
+/* ================================================================
+   2) BLOQUEIO DE ACESSO (pré-estagiário)
+================================================================ */
+.tt-gate{
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-lg);
+    padding: 40px 26px;
+}
+.tt-gate__icon{
+    width: 68px; height: 68px;
+    margin: 0 auto 18px;
+    border-radius: 20px;
+    display: grid; place-items: center;
+    background: var(--seg-grad);
+    box-shadow: 0 10px 30px var(--seg-glow);
+}
+.tt-gate__icon .mdi{ font-size: 34px; color: #fff; }
+.tt-gate h2{ font-size: 1.4rem; font-weight: 700; margin: 0 0 10px; color: var(--udx-text); }
+.tt-gate p{ color: var(--udx-text-muted); font-size: 14px; line-height: 1.7; margin: 0 0 22px; }
+
+
+/* ================================================================
+   3) BARRA DE CONTROLE — "Páginas de Plano"
+   (equivalente às Páginas de Talentos do modelo de referência)
+================================================================ */
+.tt-toolbar{
+    position: sticky;
+    top: 62px;
+    z-index: 90;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    margin-bottom: 22px;
+    background: rgba(2, 2, 26, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-md);
+    box-shadow: var(--udx-shadow-card);
+}
+.tt-toolbar__label{
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--udx-text-muted);
+    width: 100%;
+}
+.tt-pages{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.tt-page-btn{
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    border-radius: var(--udx-radius-sm);
+    background: rgba(17, 2, 115, 0.34);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-family: var(--udx-font);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    transition: background-color 240ms ease, border-color 240ms ease, transform 240ms ease;
+}
+.tt-page-btn:hover{ border-color: var(--seg-accent); transform: translateY(-1px); }
+.tt-page-btn[aria-selected="true"]{
+    background: var(--seg-grad);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+}
+.tt-page-btn--add{ font-size: 18px; color: var(--udx-text-muted); }
+
+.tt-toolbar__spacer{ flex: 1 1 auto; }
+
+.tt-actions{ display: flex; flex-wrap: wrap; gap: 8px; }
+.tt-btn{
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 15px;
+    border-radius: 50px;
+    border: 1px solid rgba(223, 224, 242, 0.28);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--udx-text);
+    font-family: var(--udx-font);
+    font-size: 12.5px; font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 260ms ease;
+}
+.tt-btn .mdi{ font-size: 15px; }
+.tt-btn:hover{ border-color: var(--udx-primary-hot); color: #fff; }
+.tt-btn:disabled{ opacity: .42; cursor: not-allowed; }
+.tt-btn:disabled:hover{ border-color: rgba(223, 224, 242, 0.28); color: var(--udx-text); }
+.tt-btn--primary{
+    background: var(--udx-primary);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: var(--udx-shadow-btn);
+}
+.tt-btn--primary:hover{ background: var(--udx-primary-hot); }
+.tt-btn--danger:hover{ border-color: var(--udx-blood-red); color: #fff; }
+
+
+/* ================================================================
+   4) SALDO DE PONTOS POR PERFIL
+================================================================ */
+.tt-wallet{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+.tt-wallet__item{
+    position: relative;
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 16px;
+    border-radius: var(--udx-radius-md);
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    overflow: hidden;
+}
+.tt-wallet__item::before{
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; background: var(--w-grad, var(--seg-grad));
+}
+.tt-wallet__icon{
+    width: 38px; height: 38px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 11px;
+    background: var(--w-grad, var(--seg-grad));
+    color: #fff;
+}
+.tt-wallet__icon .mdi{ font-size: 20px; }
+.tt-wallet__info{ flex: 1; min-width: 0; }
+.tt-wallet__name{
+    display: block;
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--udx-text-muted);
+    margin-bottom: 3px;
+}
+.tt-wallet__value{
+    font-size: 13.5px; font-weight: 600; color: var(--udx-text);
+}
+.tt-wallet__value b{ font-size: 1.15rem; font-weight: 700; }
+.tt-wallet__xp{
+    display: block;
+    font-size: 11px; color: var(--udx-text-muted); margin-top: 3px;
+}
+.tt-wallet__bar{
+    height: 5px; border-radius: 50px; margin-top: 6px;
+    background: rgba(223, 224, 242, 0.10);
+    overflow: hidden;
+}
+.tt-wallet__fill{
+    height: 100%; border-radius: 50px;
+    background: var(--w-grad, var(--seg-grad));
+    transition: width 420ms ease;
+}
+
+
+/* ================================================================
+   5) SELETOR DE PERFIL (abas — abaixo de 1024px)
+================================================================ */
+.tt-profile-tabs{
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+}
+.tt-profile-tabs::-webkit-scrollbar{ height: 4px; }
+.tt-profile-tabs::-webkit-scrollbar-thumb{
+    background: rgba(223, 224, 242, 0.18); border-radius: 50px;
+}
+.tt-profile-tab{
+    display: inline-flex; align-items: center; gap: 8px;
+    flex: 1 0 auto;
+    justify-content: center;
+    padding: 11px 16px;
+    border-radius: 50px;
+    border: 1px solid var(--udx-border);
+    background: rgba(2, 2, 26, 0.55);
+    color: var(--udx-text-muted);
+    font-family: var(--udx-font);
+    font-size: 12.5px; font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 260ms ease;
+}
+.tt-profile-tab .mdi{ font-size: 16px; }
+.tt-profile-tab[aria-selected="true"]{
+    color: #fff;
+    border-color: transparent;
+    background: var(--tab-grad, var(--seg-grad));
+    box-shadow: 0 8px 22px var(--tab-glow, var(--seg-glow));
+}
+
+
+/* ================================================================
+   6) GRADE DAS TRÊS ÁRVORES
+================================================================ */
+.tt-board{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.tt-tree{
+    position: relative;
+    background: #0c0b22;
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-lg);
+    padding: 22px 18px 18px;
+    overflow: hidden;
+    transition: border-color 320ms ease, box-shadow 320ms ease;
+}
+.tt-tree::before{
+    content: ""; position: absolute; left: 0; top: 0; right: 0;
+    height: 4px; background: var(--p-grad);
+}
+.tt-tree::after{
+    content: ""; position: absolute; right: -34%; top: -26%;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: var(--p-grad-soft);
+    opacity: .38; filter: blur(46px);
+    pointer-events: none; z-index: 0;
+}
+.tt-tree > *{ position: relative; z-index: 1; }
+.tt-tree:hover{ box-shadow: 0 20px 46px rgba(0,0,0,.48); }
+.tt-tree.is-hidden{ display: none; }
+
+/* --- cabeçalho da árvore --- */
+.tt-tree__head{
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed var(--udx-border);
+}
+.tt-tree__icon{
+    width: 46px; height: 46px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 13px;
+    background: var(--p-grad);
+    color: #fff;
+    box-shadow: 0 8px 22px var(--p-glow);
+}
+.tt-tree__icon .mdi{ font-size: 24px; }
+.tt-tree__title{ flex: 1; min-width: 0; }
+.tt-tree__title span{
+    display: block;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--udx-text-muted);
+    margin-bottom: 2px;
+}
+.tt-tree__title h3{
+    margin: 0; font-size: 1.06rem; font-weight: 700;
+    color: var(--udx-text); line-height: 1.2;
+}
+.tt-tree__count{
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 50px;
+    background: rgba(2, 2, 26, 0.7);
+    border: 1px solid var(--udx-border);
+    font-size: 12px; font-weight: 700;
+    color: var(--udx-text);
+}
+.tt-tree__count b{ color: var(--p-accent); }
+
+/* --- área da árvore (nós + conectores) --- */
+.tt-tree__canvas{ position: relative; }
+.tt-links{
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+}
+.tt-link{
+    fill: none;
+    stroke: rgba(223, 224, 242, 0.14);
+    stroke-width: 2;
+    transition: stroke 320ms ease, stroke-width 320ms ease;
+}
+.tt-link.is-active{
+    stroke: var(--p-accent);
+    stroke-width: 2.5;
+    filter: drop-shadow(0 0 5px var(--p-glow));
+}
+
+/* --- faixa (tier) --- */
+.tt-tier{ position: relative; z-index: 1; margin-bottom: var(--tt-gap-row); }
+.tt-tier:last-child{ margin-bottom: 0; }
+.tt-tier__head{
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 12px;
+}
+.tt-tier__n{
+    width: 20px; height: 20px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: rgba(223, 224, 242, 0.10);
+    font-size: 10px; font-weight: 700;
+    color: var(--udx-text-muted);
+}
+.tt-tier.is-open .tt-tier__n{ background: var(--p-grad); color: #fff; }
+.tt-tier__name{
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--udx-text-muted);
+}
+.tt-tier.is-open .tt-tier__name{ color: var(--udx-text); }
+.tt-tier__req{
+    margin-left: auto;
+    font-size: 10.5px; font-weight: 600;
+    color: var(--udx-text-muted);
+    display: inline-flex; align-items: center; gap: 4px;
+}
+.tt-tier__req .mdi{ font-size: 13px; }
+.tt-tier.is-open .tt-tier__req{ display: none; }
+
+.tt-tier__row{
+    display: grid;
+    grid-template-columns: repeat(var(--tt-cols), var(--tt-node));
+    gap: var(--tt-gap-col);
+    justify-content: center;
+}
+
+/* --- nó de habilidade --- */
+.tt-node{
+    position: relative;
+    width: var(--tt-node);
+    height: var(--tt-node);
+    padding: 0;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    background: rgba(17, 2, 115, 0.30);
+    border: 1.5px solid rgba(223, 224, 242, 0.14);
+    color: var(--udx-text-muted);
+    cursor: pointer;
+    transition: transform 240ms ease, border-color 240ms ease,
+                box-shadow 240ms ease, background-color 240ms ease;
+}
+.tt-node .mdi{ font-size: calc(var(--tt-node) * 0.46); transition: color 240ms ease; }
+.tt-node:hover{ transform: translateY(-3px); border-color: var(--p-accent); }
+.tt-node:focus-visible{
+    outline: 2px solid var(--udx-primary-hot);
+    outline-offset: 3px;
+}
+
+/* estado: disponível para investir */
+.tt-node.is-available{
+    border-color: rgba(var(--p-rgba), 0.55);
+    background: rgba(var(--p-rgba), 0.08);
+    color: var(--udx-text);
+}
+/* estado: com pontos investidos */
+.tt-node.is-ranked{
+    background: var(--p-grad);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 22px var(--p-glow);
+}
+.tt-node.is-ranked .mdi{ color: #fff; }
+/* estado: rank máximo */
+.tt-node.is-maxed{
+    box-shadow: 0 0 0 2px var(--p-accent), 0 10px 26px var(--p-glow);
+}
+/* estado: bloqueado */
+.tt-node.is-locked{
+    opacity: .42;
+    cursor: not-allowed;
+    background: rgba(2, 2, 26, 0.6);
+}
+.tt-node.is-locked:hover{ transform: none; border-color: rgba(223, 224, 242, 0.14); }
+
+/* nó de título — losango */
+.tt-node--titulo{
+    border-radius: 18px;
+    width: calc(var(--tt-node) * 1.1);
+    height: calc(var(--tt-node) * 1.1);
+}
+.tt-node--titulo.is-maxed{
+    background: linear-gradient(135deg, #F27405 0%, #FA33A1 55%, #8C0783 100%);
+    box-shadow: 0 0 0 2px #F27405, 0 12px 32px rgba(242, 116, 5, .40);
+}
+
+/* contador de rank */
+.tt-node__rank{
+    position: absolute;
+    right: -5px; bottom: -5px;
+    min-width: 27px;
+    padding: 1px 5px;
+    border-radius: 50px;
+    background: #02021a;
+    border: 1.5px solid rgba(223, 224, 242, 0.22);
+    font-size: 9.5px; font-weight: 700;
+    line-height: 1.5;
+    color: var(--udx-text-muted);
+    text-align: center;
+    pointer-events: none;
+}
+.tt-node.is-ranked .tt-node__rank{ border-color: var(--p-accent); color: var(--udx-text); }
+.tt-node.is-maxed  .tt-node__rank{ background: var(--p-accent); border-color: transparent; color: #fff; }
+
+/* rótulo curto sob o nó */
+.tt-node__label{
+    position: absolute;
+    top: calc(100% + 5px); left: 50%;
+    transform: translateX(-50%);
+    width: calc(var(--tt-node) + var(--tt-gap-col));
+    font-size: 8.5px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--udx-text-muted);
+    pointer-events: none;
+}
+.tt-node.is-ranked + .tt-node__label{ color: var(--udx-text); }
+
+
+/* ================================================================
+   7) TOOLTIP / PAINEL DE DETALHE
+================================================================ */
+.tt-tip{
+    position: fixed;
+    z-index: 400;
+    width: min(330px, calc(100vw - 28px));
+    padding: 16px 17px;
+    border-radius: var(--udx-radius-md);
+    background: rgba(2, 2, 26, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--tip-accent, var(--seg-accent));
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.68);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+.tt-tip.is-open{ opacity: 1; transform: translateY(0); }
+.tt-tip__head{
+    display: flex; align-items: flex-start; gap: 10px;
+    padding-bottom: 10px; margin-bottom: 10px;
+    border-bottom: 1px dashed var(--udx-border);
+}
+.tt-tip__icon{
+    width: 34px; height: 34px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    background: var(--tip-grad, var(--seg-grad));
+    color: #fff;
+}
+.tt-tip__icon .mdi{ font-size: 18px; }
+.tt-tip__name{
+    margin: 0; font-size: .98rem; font-weight: 700;
+    color: var(--udx-text); line-height: 1.25;
+}
+.tt-tip__tier{
+    display: block; margin-top: 2px;
+    font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--udx-text-muted);
+}
+.tt-tip__rank{
+    margin-left: auto; flex-shrink: 0;
+    font-size: 11px; font-weight: 700;
+    color: var(--tip-accent, var(--seg-accent));
+}
+.tt-tip__resumo{
+    margin: 0 0 10px;
+    font-size: 12.5px; line-height: 1.6;
+    color: var(--udx-text-muted);
+}
+.tt-tip__nivel{
+    margin: 0 0 8px;
+    padding: 9px 11px;
+    border-radius: var(--udx-radius-sm);
+    background: rgba(17, 2, 115, 0.28);
+    border-left: 2px solid var(--tip-accent, var(--seg-accent));
+    font-size: 12px; line-height: 1.55;
+    color: var(--udx-text);
+}
+.tt-tip__nivel b{
+    display: block;
+    font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--udx-text-muted);
+    margin-bottom: 3px;
+}
+.tt-tip__nivel--next{
+    background: rgba(2, 2, 26, 0.5);
+    border-left-color: rgba(223, 224, 242, 0.22);
+    color: var(--udx-text-muted);
+}
+.tt-tip__req{
+    display: flex; align-items: flex-start; gap: 6px;
+    margin: 10px 0 0;
+    font-size: 11.5px; line-height: 1.5;
+    color: var(--udx-blood-red);
+}
+.tt-tip__req .mdi{ font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.tt-tip__hint{
+    margin: 10px 0 0; padding-top: 9px;
+    border-top: 1px dashed var(--udx-border);
+    font-size: 10.5px; color: var(--udx-text-muted); line-height: 1.5;
+}
+
+
+/* ================================================================
+   8) PAINEL DE DESAFIOS
+================================================================ */
+.tt-panel{
+    margin-top: 26px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-lg);
+    padding: 22px 20px;
+}
+.tt-panel__head{
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+    padding-bottom: 14px; margin-bottom: 16px;
+    border-bottom: 1px dashed var(--udx-border);
+}
+.tt-panel__icon{
+    width: 44px; height: 44px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 13px;
+    background: var(--panel-grad, var(--seg-grad));
+    color: #fff;
+    box-shadow: 0 8px 22px var(--panel-glow, var(--seg-glow));
+}
+.tt-panel__icon .mdi{ font-size: 22px; }
+.tt-panel__title{ flex: 1; min-width: 180px; }
+.tt-panel__title span{
+    display: block; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--udx-text-muted); margin-bottom: 3px;
+}
+.tt-panel__title h3{
+    margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--udx-text);
+}
+.tt-panel__empty{
+    text-align: center; padding: 26px 10px;
+    color: var(--udx-text-muted); font-size: 13.5px; line-height: 1.7;
+}
+.tt-panel__empty .mdi{
+    display: block; font-size: 38px; margin-bottom: 10px;
+    color: rgba(223, 224, 242, 0.22);
+}
+
+.tt-challenges{
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 10px;
+}
+.tt-challenge{
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 14px;
+    border-radius: var(--udx-radius-md);
+    background: rgba(17, 2, 115, 0.20);
+    border: 1px solid var(--udx-border);
+    transition: border-color 260ms ease, background-color 260ms ease;
+}
+.tt-challenge:hover{ border-color: var(--panel-accent, var(--seg-accent)); }
+.tt-challenge.is-done{ opacity: .62; }
+.tt-challenge__mark{
+    width: 30px; height: 30px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 9px;
+    background: rgba(2, 2, 26, 0.65);
+    border: 1px solid var(--udx-border);
+    color: var(--panel-accent, var(--seg-accent));
+}
+.tt-challenge__mark .mdi{ font-size: 16px; }
+.tt-challenge.is-done .tt-challenge__mark{
+    background: var(--panel-grad, var(--seg-grad));
+    border-color: transparent; color: #fff;
+}
+.tt-challenge__body{ flex: 1; min-width: 0; }
+.tt-challenge__name{
+    display: block; font-size: 13.5px; font-weight: 700;
+    color: var(--udx-text); line-height: 1.35; margin-bottom: 3px;
+}
+.tt-challenge.is-done .tt-challenge__name{ text-decoration: line-through; }
+.tt-challenge__desc{
+    margin: 0 0 8px; font-size: 12px; line-height: 1.55;
+    color: var(--udx-text-muted);
+}
+.tt-challenge__meta{
+    display: flex; flex-wrap: wrap; align-items: center; gap: 7px;
+}
+.tt-chip{
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.04em;
+    background: rgba(2, 2, 26, 0.7);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+}
+.tt-chip .mdi{ font-size: 13px; color: var(--panel-accent, var(--seg-accent)); }
+.tt-chip--xp{
+    background: var(--panel-grad, var(--seg-grad));
+    border-color: transparent; color: #fff;
+}
+.tt-chip--xp .mdi{ color: #fff; }
+.tt-challenge__cta{
+    flex-shrink: 0;
+    align-self: center;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 50px;
+    border: 1px solid rgba(223, 224, 242, 0.28);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--udx-text);
+    font-family: var(--udx-font); font-size: 11.5px; font-weight: 700;
+    cursor: pointer; white-space: nowrap;
+    transition: all 260ms ease;
+}
+.tt-challenge__cta:hover{ border-color: var(--udx-primary-hot); color: #fff; }
+.tt-challenge__cta:disabled{ opacity: .4; cursor: not-allowed; }
+
+
+/* ================================================================
+   9) TÍTULOS CONQUISTADOS
+================================================================ */
+.tt-titles{
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+}
+.tt-title-card{
+    position: relative;
+    display: flex; align-items: center; gap: 13px;
+    padding: 15px 16px;
+    border-radius: var(--udx-radius-md);
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    overflow: hidden;
+}
+.tt-title-card.is-locked{ opacity: .55; }
+.tt-title-card__icon{
+    width: 42px; height: 42px; flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 12px;
+    background: rgba(17, 2, 115, 0.4);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text-muted);
+}
+.tt-title-card:not(.is-locked) .tt-title-card__icon{
+    background: linear-gradient(135deg, #F27405 0%, #FA33A1 55%, #8C0783 100%);
+    border-color: transparent; color: #fff;
+    box-shadow: 0 8px 22px rgba(242, 116, 5, .32);
+}
+.tt-title-card__icon .mdi{ font-size: 21px; }
+.tt-title-card__body{ flex: 1; min-width: 0; }
+.tt-title-card__body b{
+    display: block; font-size: 13.5px; font-weight: 700;
+    color: var(--udx-text); line-height: 1.3; margin-bottom: 2px;
+}
+.tt-title-card__body span{
+    font-size: 11.5px; color: var(--udx-text-muted); line-height: 1.45;
+}
+
+
+/* ================================================================
+   10) LEGENDA
+================================================================ */
+.tt-legend{
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--udx-border);
+}
+.tt-legend__item{
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11.5px; color: var(--udx-text-muted);
+}
+.tt-legend__dot{
+    width: 13px; height: 13px; border-radius: 4px; flex-shrink: 0;
+    border: 1.5px solid rgba(223, 224, 242, 0.20);
+    background: rgba(17, 2, 115, 0.30);
+}
+.tt-legend__dot--available{ border-color: var(--seg-accent); background: rgba(67,10,191,.14); }
+.tt-legend__dot--ranked{ background: var(--seg-grad); border-color: transparent; }
+.tt-legend__dot--maxed{ background: var(--seg-grad); border-color: var(--seg-accent); box-shadow: 0 0 0 1.5px var(--seg-accent); }
+.tt-legend__dot--titulo{ background: linear-gradient(135deg,#F27405,#FA33A1 55%,#8C0783); border-color: transparent; border-radius: 50%; }
+
+
+/* ================================================================
+   11) TOAST
+================================================================ */
+.tt-toast{
+    position: fixed;
+    left: 50%; bottom: 22px;
+    transform: translate(-50%, 16px);
+    z-index: 500;
+    display: flex; align-items: center; gap: 10px;
+    max-width: min(440px, calc(100vw - 28px));
+    padding: 13px 18px;
+    border-radius: 50px;
+    background: rgba(2, 2, 26, 0.97);
+    border: 1px solid var(--seg-accent);
+    box-shadow: 0 18px 44px rgba(0,0,0,.62);
+    color: var(--udx-text);
+    font-size: 13px; font-weight: 600;
+    opacity: 0; pointer-events: none;
+    transition: opacity 260ms ease, transform 260ms ease;
+}
+.tt-toast.is-open{ opacity: 1; transform: translate(-50%, 0); }
+.tt-toast .mdi{ font-size: 18px; color: var(--seg-accent); flex-shrink: 0; }
+.tt-toast.is-error{ border-color: var(--udx-blood-red); }
+.tt-toast.is-error .mdi{ color: var(--udx-blood-red); }
+
+
+/* ================================================================
+   12) BREAKPOINTS — seguem mediaQuery.css
+================================================================ */
+
+/* --- MOBILE PEQUENO — até 360px --- */
+@media screen and (max-width: 360px){
+    .page-membros.page-talentos{
+        --tt-node: 46px;
+        --tt-gap-col: 9px;
+        --tt-gap-row: 28px;
+    }
+    .tt-tree{ padding: 18px 12px 14px; }
+    .tt-toolbar{ top: 58px; padding: 10px; gap: 9px; }
+    .tt-btn{ padding: 8px 12px; font-size: 11.5px; }
+    .tt-node__label{ font-size: 7.5px; }
+    .tt-challenge{ flex-wrap: wrap; }
+    .tt-challenge__cta{ width: 100%; justify-content: center; }
+}
+
+/* --- MOBILE — até 480px --- */
+@media screen and (max-width: 480px){
+    .page-membros.page-talentos{ --tt-node: 50px; --tt-gap-col: 11px; }
+    .tt-actions{ width: 100%; }
+    .tt-actions .tt-btn{ flex: 1 1 auto; justify-content: center; }
+    .tt-panel{ padding: 18px 14px; }
+    .tt-challenge{ flex-wrap: wrap; }
+    .tt-challenge__cta{ width: 100%; justify-content: center; margin-top: 4px; }
+    .tt-tip{ width: calc(100vw - 24px); }
+}
+
+/* --- MOBILE MÉDIO — 481px a 575px --- */
+@media (min-width: 481px) and (max-width: 575px){
+    .page-membros.page-talentos{ --tt-node: 54px; }
+}
+
+/* --- ≥ 576px --- */
+@media screen and (min-width: 576px){
+    .page-membros.page-talentos{ --tt-node: 58px; --tt-gap-col: 14px; }
+    .tt-wallet{ grid-template-columns: repeat(2, 1fr); }
+    .tt-titles{ grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- ≥ 768px --- */
+@media screen and (min-width: 768px){
+    .page-membros.page-talentos{ --tt-node: 62px; --tt-gap-col: 18px; --tt-gap-row: 40px; }
+    .tt-wallet{ grid-template-columns: repeat(3, 1fr); }
+    .tt-tree{ padding: 26px 24px 22px; }
+    .tt-panel{ padding: 26px 24px; }
+    .tt-node__label{ font-size: 9.5px; }
+}
+
+/* --- ≥ 842px --- */
+@media screen and (min-width: 842px){
+    .tt-toolbar{ flex-wrap: nowrap; }
+    .tt-toolbar__label{ width: auto; }
+    .tt-titles{ grid-template-columns: repeat(3, 1fr); }
+}
+
+/* --- ≥ 992px --- */
+@media screen and (min-width: 992px){
+    .tt-board{ grid-template-columns: repeat(2, 1fr); }
+    .tt-tree.is-hidden{ display: block; }
+}
+
+/* --- ≥ 1024px — as três árvores lado a lado (layout do modelo) --- */
+@media screen and (min-width: 1024px){
+    .page-membros.page-talentos{ --tt-node: 56px; --tt-gap-col: 14px; --tt-gap-row: 38px; }
+    .tt-board{ grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .tt-profile-tabs{ display: none; }
+    .tt-tree{ padding: 22px 16px 20px; }
+}
+
+/* --- ≥ 1200px --- */
+@media screen and (min-width: 1200px){
+    .page-membros.page-talentos{ --tt-node: 62px; --tt-gap-col: 18px; --tt-gap-row: 42px; }
+    .tt-board{ gap: 20px; }
+    .tt-tree{ padding: 26px 22px 22px; }
+}
+
+/* --- ≥ 1440px --- */
+@media screen and (min-width: 1440px){
+    .page-membros.page-talentos{ --tt-node: 68px; --tt-gap-col: 22px; --tt-gap-row: 46px; }
+    .tt-board{ gap: 24px; }
+}
+
+/* --- Acessibilidade: movimento reduzido --- */
+@media (prefers-reduced-motion: reduce){
+    .tt-node, .tt-btn, .tt-tip, .tt-toast, .tt-challenge,
+    .tt-page-btn, .tt-profile-tab, .tt-wallet__fill, .tt-link{
+        transition: none !important;
+    }
+    .tt-node:hover{ transform: none; }
+}

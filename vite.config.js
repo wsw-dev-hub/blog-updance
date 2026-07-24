@@ -99,6 +99,7 @@ export default defineConfig(({ command }) => ({
         'posts/timidez-na-danca': resolve(__dirname, 'src/posts/timidez-nao-e-um-problema-como-usa-la-em-seu-favor-na-danca.html'),
         'posts/ser-artista':resolve(__dirname,'src/posts/o-que-e-ser-artista-hoje-um-olhar-entre-a-visibilidade-e-a-essencia.html'),
         'posts/repeticao-automatica':resolve(__dirname,'src/posts/quando-a-repeticao-deixa-de-ser-uma-aliada-para-o-desempenho.html'),
+        'posts/6-fundamentos-para-os-treinos':resolve(__dirname,'src/posts/os-6-fundamentos-que-nao-podem-faltar-nos-seus-treinos.html'),
 
         'articles/artigos': resolve(__dirname, 'src/articles/artigos.html'),
 
@@ -109,6 +110,8 @@ export default defineConfig(({ command }) => ({
 
         'apps/apps': resolve(__dirname, 'src/apps/apps.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
+        'estagio/talentos': resolve(__dirname, 'src/public/membros/estagio/arvore-de-talentos/index.html'),
+
       },
       external: ['ton-connect', 'ton-core'],
       output: {
