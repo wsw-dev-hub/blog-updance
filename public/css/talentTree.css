@@ -878,7 +878,7 @@
 @media screen and (min-width: 1200px){
     .page-membros.page-talentos{ --tt-node: 62px; --tt-gap-col: 18px; --tt-gap-row: 42px; }
     .tt-board{ gap: 20px; }
-    .tt-tree{ padding: 26px 22px 22px; }
+    .tt-tree{ padding: 26px 22px 30px; }
 }
 
 /* --- ≥ 1440px --- */
