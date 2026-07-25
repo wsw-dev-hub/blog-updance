@@ -50,7 +50,7 @@
     },
 
     /* Free é o piso — os níveis acima herdam o acesso à temporada. */
-    tiposComAcesso: ['Free', 'Aluno', 'Iniciante', 'Intermediário',
+    tiposComAcesso: ['Free', 'Iniciante', 'Básico', 'Intermediário',
                      'Estagiário(a)', 'Monitor(a)', 'Assistente', 'Professor(a)', 'Premium'],
 
     tiposDesafio: {
