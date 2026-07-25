@@ -110,8 +110,12 @@ export default {
       if (pathname === '/api/talentos/desafio' && request.method === 'POST')  return talentosEnviarDesafio(request, env);
  
       // ---- TEMPORADA FREE · Fundamentos (membro) ----   ◀── INSERIR
-      if (pathname === '/api/temporada/estado')                                return temporadaEstado(request, env);
-      if (pathname === '/api/temporada/desafio' && request.method === 'POST')  return temporadaEnviarDesafio(request, env);
+      /*if (pathname === '/api/temporada/estado')                                return temporadaEstado(request, env);
+      if (pathname === '/api/temporada/desafio' && request.method === 'POST')  return temporadaEnviarDesafio(request, env);*/
+
+      // ---- TRILHAS DE NÍVEL (Free / Iniciante / Intermediário) ----
+      if (pathname === '/api/trilha/estado')                                 return trilhaEstado(request, env, url);
+      if (pathname === '/api/trilha/desafio' && request.method === 'POST')   return trilhaEnviarDesafio(request, env);
 
       // ---- ÁRVORE DE TALENTOS (admin) ----
       if (pathname === '/api/admin/talentos/fila') {
@@ -569,6 +573,8 @@ async function talentosAvaliar(request, env, admin) {
   if (decisao === 'aprovado') escritas.push(contador(env, CNT_APROVADOS, 1));
   await env.DB.batch(escritas);
  
+  if (decisao === 'aprovado') { await trilhaAoAprovar(env, reg.email, reg.perfil_id); }   // ◀── INSERIR
+  
   await logEvent(env, reg.email, 'talento_desafio_' + decisao,
     `${reg.desafio_id} por ${admin.email || 'admin'}`);
  

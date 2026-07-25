@@ -40,6 +40,15 @@
       limiarXPE: 342
     },
 
+    /* Consumido pelo motor genérico (trilha.js). */
+    runtime: {
+      perfilId: 'fundamentos',
+      resource: 'temporada-free',
+      chaveLocal: 'udx:temporada:v1',
+      insigniaId: 'fund-insignia',
+      api: { me: '/api/me', estado: '/api/trilha/estado?perfil=fundamentos', desafio: '/api/trilha/desafio' }
+    },
+
     /* Free é o piso — os níveis acima herdam o acesso à temporada. */
     tiposComAcesso: ['Free', 'Aluno', 'Iniciante', 'Intermediário',
                      'Estagiário(a)', 'Monitor(a)', 'Assistente', 'Professor(a)', 'Premium'],
@@ -288,6 +297,7 @@
     return mapa;
   }());
 
+  global.UDX_TRILHA = F;
   global.UDX_FUNDAMENTOS = F;
 
 }(typeof window !== 'undefined' ? window : this));

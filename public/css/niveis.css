@@ -1,0 +1,97 @@
+@charset "utf-8";
+/* ================================================================
+   NÍVEIS INICIANTE / INTERMEDIÁRIO — Up Dance Experience
+   /css/niveis.css
+   ----------------------------------------------------------------
+   Companheiro de talentTree.css (carregar DEPOIS). NÃO redefine .tt-*.
+   Cria os escopos .page-iniciante e .page-intermediario com a paleta
+   dos perfis 05 e 06, e espelha os breakpoints de grade de .page-talentos.
+
+   Paleta oficial: #110273 Azul Marinho · #430ABF Azul Médio ·
+                   #8C0783 Roxo · #FA33A1 Rosa/Choque
+   Breakpoints: 360 · 480 · 481–575 · 576 · 768 · 1024 · 1200 · 1440
+================================================================ */
+
+/* ---------------- INICIANTE: azul marinho → azul médio ---------------- */
+.page-membros.page-iniciante{
+    --tt-grad:        linear-gradient(135deg, #110273 0%, #430ABF 100%);
+    --tt-grad-soft:   linear-gradient(135deg, rgba(17,2,115,.18) 0%, rgba(67,10,191,.22) 100%);
+    --tt-glow:        rgba(67, 10, 191, 0.32);
+    --seg-grad:       var(--tt-grad);
+    --seg-grad-soft:  var(--tt-grad-soft);
+    --seg-grad-text:  linear-gradient(135deg, #430ABF 0%, #110273 100%);
+    --seg-accent:     #430ABF;
+    --seg-accent-2:   #110273;
+    --seg-glow:       var(--tt-glow);
+    --seg-hero-rgba-a: rgba(17, 2, 115, 0.20);
+    --seg-hero-rgba-b: rgba(67, 10, 191, 0.28);
+    --seg-cta-rgba-a:  rgba(17, 2, 115, 0.16);
+    --seg-cta-rgba-b:  rgba(67, 10, 191, 0.22);
+    --seg-how-rgba-a:  rgba(17, 2, 115, 0.06);
+    --seg-how-rgba-b:  rgba(67, 10, 191, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+    --tt-node: 58px; --tt-gap-col: 14px; --tt-gap-row: 34px; --tt-cols: 3;
+}
+.tt-tree[data-perfil="iniciante"]{
+    --p-grad:      linear-gradient(135deg, #110273 0%, #430ABF 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(67,10,191,.20) 100%);
+    --p-accent:    #430ABF;
+    --p-accent-2:  #110273;
+    --p-glow:      rgba(67, 10, 191, 0.34);
+    --p-rgba:      67, 10, 191;
+}
+
+/* ---------------- INTERMEDIÁRIO: roxo → rosa/choque ---------------- */
+.page-membros.page-intermediario{
+    --tt-grad:        linear-gradient(135deg, #8C0783 0%, #FA33A1 100%);
+    --tt-grad-soft:   linear-gradient(135deg, rgba(140,7,131,.18) 0%, rgba(250,51,161,.22) 100%);
+    --tt-glow:        rgba(140, 7, 131, 0.32);
+    --seg-grad:       var(--tt-grad);
+    --seg-grad-soft:  var(--tt-grad-soft);
+    --seg-grad-text:  linear-gradient(135deg, #FA33A1 0%, #8C0783 100%);
+    --seg-accent:     #8C0783;
+    --seg-accent-2:   #FA33A1;
+    --seg-glow:       var(--tt-glow);
+    --seg-hero-rgba-a: rgba(140, 7, 131, 0.20);
+    --seg-hero-rgba-b: rgba(250, 51, 161, 0.28);
+    --seg-cta-rgba-a:  rgba(140, 7, 131, 0.16);
+    --seg-cta-rgba-b:  rgba(250, 51, 161, 0.22);
+    --seg-how-rgba-a:  rgba(140, 7, 131, 0.06);
+    --seg-how-rgba-b:  rgba(250, 51, 161, 0.08);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+    --tt-node: 58px; --tt-gap-col: 14px; --tt-gap-row: 34px; --tt-cols: 3;
+}
+.tt-tree[data-perfil="intermediario"]{
+    --p-grad:      linear-gradient(135deg, #8C0783 0%, #FA33A1 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(140,7,131,.16) 0%, rgba(250,51,161,.20) 100%);
+    --p-accent:    #8C0783;
+    --p-accent-2:  #FA33A1;
+    --p-glow:      rgba(140, 7, 131, 0.34);
+    --p-rgba:      140, 7, 131;
+}
+
+/* ---------------- GRADE RESPONSIVA (espelha .page-talentos) ---------------- */
+@media screen and (max-width: 360px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 46px; --tt-gap-col: 9px; --tt-gap-row: 28px; }
+}
+@media screen and (max-width: 480px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 50px; --tt-gap-col: 11px; }
+}
+@media (min-width: 481px) and (max-width: 575px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 54px; }
+}
+@media screen and (min-width: 576px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 58px; --tt-gap-col: 14px; }
+}
+@media screen and (min-width: 768px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 62px; --tt-gap-col: 18px; --tt-gap-row: 40px; }
+}
+@media screen and (min-width: 1024px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 56px; --tt-gap-col: 14px; --tt-gap-row: 38px; }
+}
+@media screen and (min-width: 1200px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 62px; --tt-gap-col: 18px; --tt-gap-row: 42px; }
+}
+@media screen and (min-width: 1440px){
+    .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 68px; --tt-gap-col: 22px; --tt-gap-row: 46px; }
+}

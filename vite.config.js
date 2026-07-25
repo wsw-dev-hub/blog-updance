@@ -111,9 +111,12 @@ export default defineConfig(({ command }) => ({
         'apps/apps': resolve(__dirname, 'src/apps/apps.html'),
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
         'estagio/talentos': resolve(__dirname, 'public/membros/estagio/arvore-de-talentos/index.html'),
+        
         'membros/temporada-free': resolve(__dirname, 'public/membros/temporada-free/index.html'),
 
         'membros/capacitacao': resolve(__dirname, 'public/membros/capacitacao/estagiario.html'),
+        'membros/iniciante': resolve(__dirname, 'public/membros/nivel-iniciante/index.html'),
+        'membros/intermediario': resolve(__dirname, 'public/membros/nivel-intermediario/index.html'),
         
       },
       external: ['ton-connect', 'ton-core'],
