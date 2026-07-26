@@ -112,7 +112,7 @@ export default defineConfig(({ command }) => ({
         //'posts/post-2': resolve(__dirname, 'src/posts/post-2.html'),
         'estagio/talentos': resolve(__dirname, 'public/membros/estagio/arvore-de-talentos/index.html'),
         
-        'membros/temporada-free': resolve(__dirname, 'public/membros/temporada-free/index.html'),
+        //'membros/temporada-free': resolve(__dirname, 'public/membros/temporada-free/index.html'),
 
         'membros/capacitacao': resolve(__dirname, 'public/membros/capacitacao/estagiario.html'),
         'membros/free': resolve(__dirname, 'public/membros/nivel-free/index.html'),
