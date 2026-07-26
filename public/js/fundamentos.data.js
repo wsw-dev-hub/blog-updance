@@ -16,10 +16,33 @@
  *  - Concluir a temporada (todos os nós no máximo) concede a INSÍGNIA
  *    e torna o membro elegível à promoção a Iniciante (checkpoint humano).
  *
+ *  ESTRUTURA (v2 — 2 CARDS LADO A LADO, no modelo da página Iniciante)
+ *  ------------
+ *  Card 1 · ALONGAMENTOS  — trilha simples de aquecimento/alongamento,
+ *          foco em QUEM NUNCA PRATICOU dança. Conteúdo genérico de
+ *          preparo corporal (não usa o catálogo de passos). IDs com
+ *          prefixo próprio 'fund-along-*' para não colidir com o card
+ *          'along' do nível Iniciante (o worker deduplica progresso por
+ *          desafio_id sem filtrar perfil).
+ *  Card 2 · FUNDAMENTOS   — os cinco eixos do movimento + os 15 primeiros
+ *          passos [ BÁSICO ] de Hip Hop Dance (8) e Popping (7) do catálogo.
+ *          Reorganizado: removido o antigo nó 'fund-combinacoes', que era
+ *          uma DUPLICATA de 'fund-vocab-popping' (mesmos IDs fund-pop-d1..d7),
+ *          e faixas reagrupadas para leitura em colunas.
+ *
+ *  Para o BACKEND os dois cards são um só perfil (runtime.perfilId =
+ *  'fundamentos'): o split em colunas é apenas disposição visual. O XPE é
+ *  o total do nível. Cada card tem um nó de conclusão (tipo 'titulo' /
+ *  'insignia'); a elegibilidade exige TODAS as conquistas prontas.
+ *
  *  ISOLAMENTO
  *  ------------
  *  Este arquivo é independente de UDX_TALENTOS. O Free enxerga
  *  apenas esta trilha — nunca as três árvores de carreira.
+ *
+ *  limiarXPE = soma de TODO o XP (único) dos desafios dos dois cards
+ *  (derivado; validado por test_fundamentos.js). Deve casar com o
+ *  'limiar' de worker_trilhas.js para o perfil 'fundamentos'.
  * ================================================================
  */
 (function (global) {
@@ -27,7 +50,7 @@
 
   var F = {
 
-    versao: '1.0.0',
+    versao: '2.0.0',
 
     /* Temporada vigente. A disponibilidade rotaciona; o histórico não. */
     temporada: {
@@ -35,15 +58,15 @@
       nome: 'Temporada 1 — Fundamentos',
       nivelAlvo: 'Free',
       promovePara: 'Iniciante',
-      /* limiarXPE é DERIVADO da soma dos desafios (ver teste de consistência).
+      /* limiarXPE é DERIVADO da soma dos desafios (ver test_fundamentos.js).
          Preenchido aqui com o valor validado para evitar número mágico. */
-      limiarXPE: 342
+      limiarXPE: 554
     },
 
     /* Consumido pelo motor genérico (trilha.js). */
     runtime: {
       perfilId: 'fundamentos',
-      resource: 'temporada-free',
+      resource: 'nivel-free',
       chaveLocal: 'udx:temporada:v1',
       insigniaId: 'fund-insignia',
       api: { me: '/api/me', estado: '/api/trilha/estado?perfil=fundamentos', desafio: '/api/trilha/desafio' }
@@ -60,6 +83,166 @@
     },
 
     perfis: [
+
+      /* ============================================================
+         CARD 1 · ALONGAMENTOS  (simples — para quem nunca dançou)
+         ============================================================ */
+      {
+        id: 'alongamentos',
+        nome: 'Alongamentos',
+        segmento: 'Nunca dancei? Comece aqui',
+        icone: 'mdi-yoga',
+        xpLabel: 'XPE de Alongamentos',
+        resumo: 'Trilha de preparo para o corpo que está começando do zero: ' +
+                'respirar, aquecer e soltar as articulações — sempre no seu ' +
+                'tempo e sem forçar. Cada desafio concluído faz o nó evoluir.',
+        tiers: [
+          { n: 1, nome: 'Respirar & Aquecer' },
+          { n: 2, nome: 'Soltar o Corpo' },
+          { n: 3, nome: 'Conclusão' }
+        ],
+        habilidades: [
+
+          /* -------- FAIXA 1 · RESPIRAR & AQUECER (sem pré-requisito) -------- */
+          {
+            id: 'fund-along-respiracao', tier: 1, col: 1, ranksMax: 3,
+            nome: 'Respiração & Postura', icone: 'mdi-meditation',
+            resumo: 'Respira, encontra o eixo e prepara o corpo antes de tudo.',
+            requer: [],
+            niveis: [
+              'Respiração diafragmática, sentindo o abdômen.',
+              'Alinhamento cabeça–quadril–pés em pé.',
+              'Respiração aplicada a um movimento bem lento.'
+            ],
+            desafios: [
+              { id: 'fund-along-resp-d1', tipo: 'tarefa', xp: 8,
+                nome: 'Respiração · 1',
+                desc: 'Respiração diafragmática, 5 ciclos calmos.' },
+              { id: 'fund-along-resp-d2', tipo: 'tarefa', xp: 10,
+                nome: 'Respiração · 2',
+                desc: 'Alinhamento em pé: cabeça, quadril e pés no mesmo eixo.' },
+              { id: 'fund-along-resp-d3', tipo: 'tarefa', xp: 12,
+                nome: 'Respiração · 3',
+                desc: 'Respiração aplicada a um movimento lento de braços.' }
+            ]
+          },
+          {
+            id: 'fund-along-mobilidade', tier: 1, col: 2, ranksMax: 4,
+            nome: 'Mobilidade Articular', icone: 'mdi-rotate-3d-variant',
+            resumo: 'Solta as articulações antes de qualquer esforço.',
+            requer: [],
+            niveis: [
+              'Círculos de pescoço e ombros, sem forçar.',
+              'Círculos de punhos e cotovelos.',
+              'Círculos de quadril e joelhos.',
+              'Tornozelos e mobilização suave da coluna.'
+            ],
+            desafios: [
+              { id: 'fund-along-mob-d1', tipo: 'tarefa', xp: 8,
+                nome: 'Mobilidade · 1', desc: 'Círculos de pescoço e ombros.' },
+              { id: 'fund-along-mob-d2', tipo: 'tarefa', xp: 10,
+                nome: 'Mobilidade · 2', desc: 'Círculos de punhos e cotovelos.' },
+              { id: 'fund-along-mob-d3', tipo: 'tarefa', xp: 12,
+                nome: 'Mobilidade · 3', desc: 'Círculos de quadril e joelhos.' },
+              { id: 'fund-along-mob-d4', tipo: 'tarefa', xp: 14,
+                nome: 'Mobilidade · 4', desc: 'Tornozelos e mobilização suave da coluna.' }
+            ]
+          },
+          {
+            id: 'fund-along-aquece', tier: 1, col: 3, ranksMax: 3,
+            nome: 'Aquecimento Leve', icone: 'mdi-heart-pulse',
+            resumo: 'Eleva a temperatura do corpo em ritmo confortável.',
+            requer: [],
+            niveis: [
+              'Marcha no lugar, sem pressa.',
+              'Elevação de joelhos leve.',
+              'Balanço de braços integrado à marcha.'
+            ],
+            desafios: [
+              { id: 'fund-along-aq-d1', tipo: 'tarefa', xp: 8,
+                nome: 'Aquecimento · 1', desc: 'Marcha no lugar por 2 minutos.' },
+              { id: 'fund-along-aq-d2', tipo: 'tarefa', xp: 10,
+                nome: 'Aquecimento · 2', desc: 'Elevação de joelhos em ritmo confortável.' },
+              { id: 'fund-along-aq-d3', tipo: 'tarefa', xp: 12,
+                nome: 'Aquecimento · 3', desc: 'Balanço de braços junto com a marcha.' }
+            ]
+          },
+
+          /* -------- FAIXA 2 · SOLTAR O CORPO -------- */
+          {
+            id: 'fund-along-pernas', tier: 2, col: 1, ranksMax: 3,
+            nome: 'Pernas & Panturrilhas', icone: 'mdi-human-handsdown',
+            resumo: 'Alonga a parte de trás das pernas — o ponto fraco de quem começa.',
+            requer: ['fund-along-respiracao'],
+            niveis: [
+              'Panturrilha na parede, sem dor.',
+              'Isquiotibiais sentado, joelho levemente dobrado.',
+              'Inclinação em pé com apoio das mãos.'
+            ],
+            desafios: [
+              { id: 'fund-along-per-d1', tipo: 'tarefa', xp: 10,
+                nome: 'Pernas · 1', desc: 'Alongamento de panturrilha na parede.' },
+              { id: 'fund-along-per-d2', tipo: 'tarefa', xp: 12,
+                nome: 'Pernas · 2', desc: 'Isquiotibiais sentado, joelho levemente flexionado.' },
+              { id: 'fund-along-per-d3', tipo: 'tarefa', xp: 14,
+                nome: 'Pernas · 3', desc: 'Inclinação em pé com apoio, respirando.' }
+            ]
+          },
+          {
+            id: 'fund-along-quadril', tier: 2, col: 2, ranksMax: 3,
+            nome: 'Quadril Suave', icone: 'mdi-human-handsup',
+            resumo: 'Abre o quadril com apoios e sem forçar amplitude.',
+            requer: ['fund-along-mobilidade'],
+            niveis: [
+              'Borboleta assistida, cotovelos nos joelhos.',
+              'Figura-4 deitado, uma perna de cada vez.',
+              'Afundo baixo com apoio das mãos no chão.'
+            ],
+            desafios: [
+              { id: 'fund-along-qua-d1', tipo: 'tarefa', xp: 10,
+                nome: 'Quadril · 1', desc: 'Borboleta assistida, cotovelos nos joelhos.' },
+              { id: 'fund-along-qua-d2', tipo: 'tarefa', xp: 12,
+                nome: 'Quadril · 2', desc: 'Figura-4 deitado, uma perna de cada vez.' },
+              { id: 'fund-along-qua-d3', tipo: 'tarefa', xp: 14,
+                nome: 'Quadril · 3', desc: 'Afundo baixo com apoio, sem forçar.' }
+            ]
+          },
+          {
+            id: 'fund-along-tronco', tier: 2, col: 3, ranksMax: 3,
+            nome: 'Coluna & Tronco', icone: 'mdi-spa-outline',
+            resumo: 'Mobiliza a coluna e alonga o tronco com controle.',
+            requer: ['fund-along-aquece'],
+            niveis: [
+              'Gato-camelo, movimento lento.',
+              'Rotação de tronco sentado, ambos os lados.',
+              'Alongamento lateral em pé, braço acima da cabeça.'
+            ],
+            desafios: [
+              { id: 'fund-along-tro-d1', tipo: 'tarefa', xp: 10,
+                nome: 'Tronco · 1', desc: 'Gato-camelo, 8 repetições lentas.' },
+              { id: 'fund-along-tro-d2', tipo: 'tarefa', xp: 12,
+                nome: 'Tronco · 2', desc: 'Rotação de tronco sentado, ambos os lados.' },
+              { id: 'fund-along-tro-d3', tipo: 'tarefa', xp: 14,
+                nome: 'Tronco · 3', desc: 'Alongamento lateral em pé, sem forçar a lombar.' }
+            ]
+          },
+
+          /* -------- FAIXA 3 · CONCLUSÃO (título do card) -------- */
+          {
+            id: 'fund-along-titulo', tier: 3, col: 2, tipo: 'titulo', ranksMax: 1,
+            nome: 'Alongamentos ✓', icone: 'mdi-medal-outline',
+            resumo: 'Conclusão do card Alongamentos — corpo aquecido e mais solto, ' +
+                    'pronto para começar os fundamentos.',
+            requer: ['fund-along-pernas', 'fund-along-quadril', 'fund-along-tronco'],
+            niveis: ['Card concluído — corpo pronto para os fundamentos.'],
+            desafios: []
+          }
+        ]
+      },
+
+      /* ============================================================
+         CARD 2 · FUNDAMENTOS  (reorganizado — sem o nó duplicado)
+         ============================================================ */
       {
         id: 'fundamentos',
         nome: 'Fundamentos',
@@ -67,19 +250,23 @@
         icone: 'mdi-seed-outline',
         xpLabel: 'XPE de Fundamentos',
         resumo: 'A porta de entrada: os cinco eixos do movimento e os primeiros ' +
-                '15 passos de Hip Hop Dance e Popping. Sem alocar pontos — cada ' +
-                'desafio concluído faz o nó evoluir.',
+                '15 passos [ BÁSICO ] de Hip Hop Dance e Popping. Sem alocar pontos — ' +
+                'cada desafio concluído faz o nó evoluir.',
         tiers: [
-          { n: 1, nome: 'Eixos do Movimento', requisito: 0 },
-          { n: 2, nome: 'Primeiros Passos',   requisito: 0 }
+          { n: 1, nome: 'Eixos do Movimento' },
+          { n: 2, nome: 'Fluxo de Movimentos' },
+          { n: 3, nome: 'Primeiros Passos' },
+          { n: 4, nome: 'Combinações' },
+          { n: 5, nome: 'Conclusão' }
         ],
         habilidades: [
 
-          /* ---------------- FAIXA 1 · EIXOS ---------------- */
+          /* ---------------- FAIXA 1 · EIXOS BASE (sem pré-requisito) ---------------- */
           {
             id: 'fund-pulso', tier: 1, col: 1, ranksMax: 4,
             nome: 'Pulso', icone: 'mdi-pulse',
             resumo: 'A pulsação do corpo no tempo da música — antes de qualquer passo.',
+            requer: [],
             niveis: [
               'Pulsa em diferentes velocidades musicais, mantendo o tempo.',
               'Alterna pulsos pequenos e amplos sem perder o pulso.',
@@ -105,6 +292,7 @@
             id: 'fund-balancos', tier: 1, col: 2, ranksMax: 4,
             nome: 'Balanços', icone: 'mdi-swap-horizontal-bold',
             resumo: 'Transferência de peso legível de uma base para a outra.',
+            requer: [],
             niveis: [
               'Balança lateralmente percebendo a troca real de peso.',
               'Balança para frente/trás e explora diagonais.',
@@ -130,6 +318,7 @@
             id: 'fund-caminhadas', tier: 1, col: 3, ranksMax: 4,
             nome: 'Caminhadas', icone: 'mdi-walk',
             resumo: 'Deslocar com intenção: cada passo diz alguma coisa.',
+            requer: [],
             niveis: [
               'Caminha em diferentes direções mantendo o eixo.',
               'Varia velocidade e tamanho do passo.',
@@ -151,11 +340,13 @@
                 desc: 'Caminhar sobre 3 estilos musicais, deixando a música mudar a qualidade.' }
             ]
           },
+
+          /* ---------------- FAIXA 2 · ISOLAÇÃO & FLUXO ---------------- */
           {
-            id: 'fund-circulares', tier: 1, col: 1, ranksMax: 5,
+            id: 'fund-circulares', tier: 2, col: 1, ranksMax: 5,
             nome: 'Movimentos Circulares', icone: 'mdi-rotate-3d-variant',
             resumo: 'Círculos por articulação — a base da isolação.',
-            requer: ['fund-pulso'],
+            requer: ['fund-pulso', 'fund-balancos'],
             niveis: [
               'Círculos de cabeça, ombros e braços.',
               'Círculos de caixa torácica e quadris.',
@@ -182,10 +373,10 @@
             ]
           },
           {
-            id: 'fund-ondulacoes', tier: 1, col: 2, ranksMax: 5,
+            id: 'fund-ondulacoes', tier: 2, col: 3, ranksMax: 5,
             nome: 'Ondulações', icone: 'mdi-wave',
             resumo: 'A continuidade entre segmentos: o movimento viaja pelo corpo.',
-            requer: ['fund-circulares'],
+            requer: ['fund-balancos', 'fund-caminhadas'],
             niveis: [
               'Inicia a onda pelo peito, com controle da sequência.',
               'Inicia a onda pela cabeça e ombros.',
@@ -212,12 +403,12 @@
             ]
           },
 
-          /* ---------------- FAIXA 2 · PRIMEIROS PASSOS ---------------- */
+          /* ---------------- FAIXA 3 · PRIMEIROS PASSOS (catálogo [ BÁSICO ]) ---------------- */
           {
-            id: 'fund-vocab-hiphop', tier: 2, col: 1, ranksMax: 8,
+            id: 'fund-vocab-hiphop', tier: 3, col: 1, ranksMax: 8,
             nome: 'Vocabulário Hip Hop', icone: 'mdi-shoe-sneaker',
             resumo: 'Os 8 primeiros passos [ BÁSICO ] de Hip Hop Dance do catálogo.',
-            requer: ['fund-pulso', 'fund-caminhadas'],
+            requer: ['fund-circulares', 'fund-ondulacoes'],
             niveis: [
               '2 Steps — deslocamento base no tempo.',
               '4 Steps — extensão do 2 Steps em quatro apoios.',
@@ -240,10 +431,10 @@
             ]
           },
           {
-            id: 'fund-vocab-popping', tier: 2, col: 3, ranksMax: 7,
+            id: 'fund-vocab-popping', tier: 3, col: 3, ranksMax: 7,
             nome: 'Vocabulário Popping', icone: 'mdi-flash-outline',
             resumo: 'Os 7 primeiros passos [ BÁSICO ] de Popping do catálogo.',
-            requer: ['fund-circulares'],
+            requer: ['fund-circulares', 'fund-ondulacoes'],
             niveis: [
               'Hit / Pop — contração e relaxamento no tempo.',
               'Roll — rolamento contínuo de articulação.',
@@ -264,16 +455,58 @@
             ]
           },
 
-          /* ---------------- INSÍGNIA (não é título) ---------------- */
+
+          /* ---------------- FAIXA 4  COMBINAÇÕES E SEQUÊNCIA COREOGRÁFICA ---------------*/
           {
-            id: 'fund-insignia', tier: 2, col: 2, tipo: 'insignia', ranksMax: 1,
+            "id": "fund-coreo",
+            "tier": 4,
+            "col": 2,
+            "ranksMax": 3,
+            "nome": "Sequência Coreográfica",
+            "icone": "mdi-music-note-eighth",
+            "resumo": "Frase curta com o vocabulário desta rodada.",
+            "requer": [
+                'fund-vocab-hiphop',
+                'fund-vocab-popping'
+            ],
+            "niveis": [
+                "Parte A.",
+                "Parte B.",
+                "A+B no tempo, com feeling."
+            ],
+            "desafios": [
+                {
+                    "id": "seg-coreo-d1",
+                    "tipo": "tarefa",
+                    "xp": 16,
+                    "nome": "Sequência Coreográfica · 1",
+                    "desc": "Parte A."
+                },
+                {
+                    "id": "seg-coreo-d2",
+                    "tipo": "tarefa",
+                    "xp": 18,
+                    "nome": "Sequência Coreográfica · 2",
+                    "desc": "Parte B."
+                },
+                {
+                    "id": "seg-coreo-d3",
+                    "tipo": "tarefa",
+                    "xp": 20,
+                    "nome": "Sequência Coreográfica · 3",
+                    "desc": "A+B no tempo, com feeling."
+                }
+              ]
+            },
+          
+          /* ---------------- FAIXA 5 · INSÍGNIA (conclusão da temporada) ---------------- */
+          {
+            id: 'fund-insignia', tier: 5, col: 2, tipo: 'insignia', ranksMax: 1,
             nome: 'Fundamentos Concluídos', icone: 'mdi-medal-outline',
             resumo: 'Insígnia permanente e cumulativa. Registra a conclusão da ' +
                     'Temporada 1 e torna o membro elegível à promoção para Iniciante. ' +
                     'Não habilita nada fora da plataforma — não é um título de carreira.',
-            requer: ['fund-pulso', 'fund-balancos', 'fund-caminhadas',
-                     'fund-circulares', 'fund-ondulacoes',
-                     'fund-vocab-hiphop', 'fund-vocab-popping'],
+            requer: ['fund-combinacoes', 'fund-coreo'],
             niveis: ['Insígnia conquistada — elegível à banca de promoção para Iniciante.'],
             desafios: []
           }

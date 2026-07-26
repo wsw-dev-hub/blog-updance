@@ -12,33 +12,54 @@
    Breakpoints: 360 · 480 · 481–575 · 576 · 768 · 1024 · 1200 · 1440
 ================================================================ */
 
-/* ---------------- INICIANTE: azul marinho → azul médio ---------------- */
+/* ---------------- INICIANTE — identidade da página (topbar/hero) ---------------- */
+/* 3 cards com cores próprias (ver blocos .tt-tier[data-tier] abaixo). A página
+   usa o azul do Card 1 como identidade no topo/hero. */
 .page-membros.page-iniciante{
-    --tt-grad:        linear-gradient(135deg, #110273 0%, #430ABF 100%);
-    --tt-grad-soft:   linear-gradient(135deg, rgba(17,2,115,.18) 0%, rgba(67,10,191,.22) 100%);
-    --tt-glow:        rgba(67, 10, 191, 0.32);
+    --tt-grad:        linear-gradient(135deg, #110273 0%, #030BA6 100%);
+    --tt-grad-soft:   linear-gradient(135deg, rgba(17,2,115,.18) 0%, rgba(3,11,166,.22) 100%);
+    --tt-glow:        rgba(3, 11, 166, 0.32);
     --seg-grad:       var(--tt-grad);
     --seg-grad-soft:  var(--tt-grad-soft);
-    --seg-grad-text:  linear-gradient(135deg, #430ABF 0%, #110273 100%);
-    --seg-accent:     #430ABF;
+    --seg-grad-text:  linear-gradient(135deg, #030BA6 0%, #110273 100%);
+    --seg-accent:     #030BA6;
     --seg-accent-2:   #110273;
     --seg-glow:       var(--tt-glow);
     --seg-hero-rgba-a: rgba(17, 2, 115, 0.20);
-    --seg-hero-rgba-b: rgba(67, 10, 191, 0.28);
+    --seg-hero-rgba-b: rgba(3, 11, 166, 0.28);
     --seg-cta-rgba-a:  rgba(17, 2, 115, 0.16);
-    --seg-cta-rgba-b:  rgba(67, 10, 191, 0.22);
+    --seg-cta-rgba-b:  rgba(3, 11, 166, 0.22);
     --seg-how-rgba-a:  rgba(17, 2, 115, 0.06);
-    --seg-how-rgba-b:  rgba(67, 10, 191, 0.08);
+    --seg-how-rgba-b:  rgba(3, 11, 166, 0.08);
     --seg-step-bg:     rgba(17, 2, 115, 0.18);
     --tt-node: 58px; --tt-gap-col: 14px; --tt-gap-row: 34px; --tt-cols: 3;
 }
-.tt-tree[data-perfil="iniciante"]{
-    --p-grad:      linear-gradient(135deg, #110273 0%, #430ABF 100%);
-    --p-grad-soft: linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(67,10,191,.20) 100%);
-    --p-accent:    #430ABF;
-    --p-accent-2:  #110273;
-    --p-glow:      rgba(67, 10, 191, 0.34);
-    --p-rgba:      67, 10, 191;
+/* fallback de perfil */
+.tt-tree[data-perfil="along"], .tt-tree[data-perfil="seg"], .tt-tree[data-perfil="boost"]{
+    --p-grad: linear-gradient(135deg, #110273 0%, #030BA6 100%);
+    --p-accent: #030BA6; --p-accent-2: #110273; --p-glow: rgba(3,11,166,.34); --p-rgba: 3, 11, 166;
+}
+
+/* Card 1 · Alongamentos — Azul (marinho → azul) */
+.page-iniciante .tt-tree[data-perfil="along"]{
+    --p-grad:      linear-gradient(135deg, #110273 0%, #030BA6 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(3,11,166,.20) 100%);
+    --p-accent:    #030BA6; --p-accent-2: #110273;
+    --p-glow:      rgba(3, 11, 166, 0.34); --p-rgba: 3, 11, 166;
+}
+/* Card 2 · Segunda Rodada — Roxo → Rosa/opaco */
+.page-iniciante .tt-tree[data-perfil="seg"]{
+    --p-grad:      linear-gradient(135deg, #8C0783 0%, #BF0449 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(140,7,131,.16) 0%, rgba(191,4,73,.20) 100%);
+    --p-accent:    #BF0449; --p-accent-2: #8C0783;
+    --p-glow:      rgba(191, 4, 73, 0.34); --p-rgba: 191, 4, 73;
+}
+/* Card 3 · Boost a Groove — Vermelho → Laranja (energia) */
+.page-iniciante .tt-tree[data-perfil="boost"]{
+    --p-grad:      linear-gradient(135deg, #F20505 0%, #F27405 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(242,5,5,.16) 0%, rgba(242,116,5,.20) 100%);
+    --p-accent:    #F27405; --p-accent-2: #F20505;
+    --p-glow:      rgba(242, 116, 5, 0.34); --p-rgba: 242, 116, 5;
 }
 
 /* ---------------- INTERMEDIÁRIO: roxo → rosa/choque ---------------- */

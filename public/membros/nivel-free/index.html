@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/css/trailsFormat.css">
 <link rel="stylesheet" href="/css/format.css">
 
-<!-- Reusa as classes .tt-* e os tokens de perfil (inclui data-perfil="fundamentos") -->
+<!-- Reusa as classes .tt-* e os tokens de perfil (data-perfil="fundamentos" | "alongamentos") -->
 <link rel="stylesheet" href="/css/talentTree.css">
 <link rel="stylesheet" href="/css/fundamentos.css">
 
@@ -116,8 +116,10 @@
           <div class="eyebrow"><b>05</b><span>Primeiros Passos</span></div>
           <h1>Comece <em>pelos fundamentos</em></h1>
           <p class="lead">
-            Cinco eixos do movimento — pulso, balanços, caminhadas, círculos e ondulações —
-            mais os 15 primeiros passos de Hip Hop Dance e Popping. Cada desafio concluído
+            Dois cards lado a lado: <b>Alongamentos</b> (respirar, aquecer e soltar o
+            corpo — para quem nunca dançou, sempre sem forçar) e <b>Fundamentos</b> (os
+            cinco eixos do movimento — pulso, balanços, caminhadas, círculos e ondulações —
+            mais os 15 primeiros passos de Hip Hop Dance e Popping). Cada desafio concluído
             faz o nó evoluir; aqui não se gasta ponto. Complete a temporada e fique
             elegível à promoção para Iniciante.
           </p>
@@ -150,7 +152,7 @@
         </div>
       </section>
 
-      <!-- Trilha de fundamentos -->
+      <!-- Trilhas: Alongamentos + Fundamentos (cards lado a lado) -->
       <section class="trails-section" style="padding-top:0">
         <div class="auto-container">
           <div class="tt-board" id="tfBoard"></div>
@@ -207,6 +209,9 @@
     © Up Dance — Temporada Free. Este conteúdo é pessoal e intransferível.
   </footer>
 
+  <!-- Camadas flutuantes: pop-up de informações (hover/foco/toque) + toast.
+       #tfTip é obrigatório para o motor renderizar os tooltips dos nós. -->
+  <div class="tt-tip"   id="tfTip"   role="tooltip" aria-hidden="true"></div>
   <div class="tt-toast" id="tfToast" role="status" aria-live="polite"></div>
 
   <!-- Scripts: dados primeiro, motor depois. NÃO carrega as três árvores. -->

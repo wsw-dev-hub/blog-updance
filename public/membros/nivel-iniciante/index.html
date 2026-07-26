@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/css/trailsFormat.css">
 <link rel="stylesheet" href="/css/format.css">
 
-<!-- Reusa as classes .tt-* e os tokens de perfil (inclui data-perfil="fundamentos") -->
+<!-- Reusa as classes .tt-* e os tokens de perfil por card (data-perfil="along" | "seg" | "boost") -->
 <link rel="stylesheet" href="/css/talentTree.css">
 <link rel="stylesheet" href="/css/niveis.css">
 
@@ -85,7 +85,7 @@
 </style>
 </head>
 
-<!-- page-temporada ativa o escopo de tokens da temporada Free em talentTree.css -->
+<!-- page-iniciante ativa os tokens do nível Iniciante em niveis.css -->
 <body class="page-membros page-iniciante">
 
   <header class="members-topbar">
@@ -115,7 +115,7 @@
           </span>
           <div class="eyebrow"><b>05</b><span>Nível Iniciante</span></div>
           <h1>Nível <em>Iniciante</em></h1>
-          <p class="lead">O vocabulário [ BÁSICO ] do catálogo — Hip Hop Dance, Popping, House e Locking — em nós encadeados por modalidade. Cada desafio concluído faz o nó evoluir; aqui não se aloca ponto. Complete o nível e fique elegível à promoção para Intermediário.</p>
+          <p class="lead">Três cards, três cores: <b>Alongamentos</b> (aquecimento e alongamentos básicos para ganhar mobilidade), <b>Segunda Rodada</b> (novos básicos de HipHop e Popping, fundamentos mais complexos, níveis, combinações e sequência coreográfica) e <b>Boost a Groove</b> (feeling, flow, flava, as três cinturas, combinações, combos e coreografia). Cada desafio concluído faz o nó evoluir; aqui não se aloca ponto.</p>
           <div class="type-chip" id="userChip" hidden>
             <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
             <span>Conectado como <b id="userEmail">—</b></span>
@@ -137,15 +137,15 @@
             </div>
             <h2>Experiência <em>de ecossistema</em></h2>
             <p class="lead">
-              Cada desafio concluído soma XPE. Ao atingir o total da temporada, você
-              conclui a fase e fica elegível para a próxima.
+              Cada desafio concluído soma XPE. Ao atingir o total do nível, você
+              conclui a fase e fica elegível ao próximo.
             </p>
           </div>
           <div class="tt-wallet" id="tfProgress"></div>
         </div>
       </section>
 
-      <!-- Trilha de fundamentos -->
+      <!-- Trilha do nível -->
       <section class="trails-section" style="padding-top:0">
         <div class="auto-container">
           <div class="tt-board" id="tfBoard"></div>
@@ -185,10 +185,10 @@
               <span class="mdi mdi-medal-outline" aria-hidden="true"></span>
               <span>Conquista</span>
             </div>
-            <h2>Insígnia <em>da temporada</em></h2>
+            <h2>Insígnia <em>do nível</em></h2>
             <p class="lead">
               Registro permanente e cumulativo. A insígnia não abre portas fora da
-              plataforma — ela marca a sua evolução e a elegibilidade para Iniciante.
+              plataforma — ela marca a sua evolução e a elegibilidade para Intermediário.
             </p>
           </div>
           <ul class="tt-titles" id="tfBadges"></ul>
@@ -199,9 +199,11 @@
   </main>
 
   <footer class="members-footer">
-    © Up Dance — Temporada Free. Este conteúdo é pessoal e intransferível.
+    © Up Dance — Nível Iniciante. Este conteúdo é pessoal e intransferível.
   </footer>
 
+  <!-- Camadas flutuantes: pop-up de informações (hover/toque) + toast -->
+  <div class="tt-tip"   id="tfTip"   role="tooltip" aria-hidden="true"></div>
   <div class="tt-toast" id="tfToast" role="status" aria-live="polite"></div>
 
   <!-- Scripts: dados primeiro, motor depois. NÃO carrega as três árvores. -->

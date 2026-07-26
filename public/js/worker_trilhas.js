@@ -5,11 +5,12 @@
    Reusa as tabelas talent_* com perfil_id = <perfil>.
 ================================================================ */
 
-/* Config por trilha. O limiar é DERIVADO da soma dos desafios de cada
-   data module (validado por teste): 342 / 1160 / 1472. */
+/* Config por trilha. O limiar é DERIVADO da soma dos desafios (únicos) de
+   cada data module (validado por teste). fundamentos = 342 (7 nós) + 212
+   (card Alongamentos) = 554. */
 const TRILHAS = {
-  fundamentos:   { resource: 'temporada-free',        limiar: 342,  insignia: 'fund-insignia' },
-  iniciante:     { resource: 'nivel-iniciante',       limiar: 1160, insignia: 'ini-insignia'  },
+  fundamentos:   { resource: 'temporada-free',        limiar: 554,  insignia: 'fund-insignia' },
+  iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
   intermediario: { resource: 'nivel-intermediario',   limiar: 1472, insignia: 'int-insignia'  },
 };
 

@@ -52,18 +52,16 @@
     --p-rgba:      3, 11, 166;
 }
 
-/* 2b) CARD · Alongamentos: azul marinho → azul (paleta oficial da página).
-   Card de entrada para quem nunca dançou. Reusa a definição canônica do
-   card "Alongamentos" da página Iniciante (niveis.css): marinho #110273 →
-   azul #030BA6. Encadeia com o card Fundamentos (#030BA6 → #BF0449) na
-   ordem de desenvolvimento: marinho → azul → rosa/opaco. */
+/* 2b) CARD · Alongamentos: teal → verde (paleta calma de aquecimento).
+   Card de entrada para quem nunca dançou — distinto do azul/rosa dos
+   Fundamentos, mas dentro do mesmo escopo .page-temporada. */
 .tt-tree[data-perfil="alongamentos"]{
-    --p-grad:      linear-gradient(135deg, #110273 0%, #030BA6 100%);
-    --p-grad-soft: linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(3,11,166,.20) 100%);
-    --p-accent:    #030BA6;
-    --p-accent-2:  #110273;
-    --p-glow:      rgba(3, 11, 166, 0.34);
-    --p-rgba:      3, 11, 166;
+    --p-grad:      linear-gradient(135deg, #0E9E8F 0%, #86C232 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(14,158,143,.16) 0%, rgba(134,194,50,.20) 100%);
+    --p-accent:    #0E9E8F;
+    --p-accent-2:  #86C232;
+    --p-glow:      rgba(14, 158, 143, 0.34);
+    --p-rgba:      14, 158, 143;
 }
 
 /* 3) GRADE RESPONSIVA — espelha talentTree.css para .page-temporada
