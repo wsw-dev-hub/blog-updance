@@ -115,6 +115,7 @@ export default {
 
       // ---- TRILHAS DE NÍVEL (Free / Iniciante / Intermediário) ----
       if (pathname === '/api/trilha/estado')                                 return trilhaEstado(request, env, url);
+      if (pathname === '/api/reputacao/estado')                              return reputacaoEstado(request, env);
       if (pathname === '/api/trilha/desafio' && request.method === 'POST')   return trilhaEnviarDesafio(request, env);
 
       // ---- ÁRVORE DE TALENTOS (admin) ----
@@ -125,6 +126,10 @@ export default {
       if (pathname === '/api/admin/talentos/avaliar' && request.method === 'POST') {
         const a = await getAdmin(request, env);
         return a ? talentosAvaliar(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/talentos/reavaliar' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? talentosReavaliar(request, env, a) : json({ erro: 'não autorizado' }, 403);
       }
 
       // ---- ADMIN ----
@@ -574,6 +579,14 @@ async function talentosAvaliar(request, env, admin) {
   await env.DB.batch(escritas);
  
   if (decisao === 'aprovado') { await trilhaAoAprovar(env, reg.email, reg.perfil_id); }   // ◀── INSERIR
+
+  // ◀── REPUTAÇÃO & DESEMPENHO: nota absoluta opcional na aprovação (reavaliável depois via /api/admin/talentos/reavaliar)
+  if (decisao === 'aprovado' && body.nota != null) {
+    const _nota = notaValida(body.nota);
+    if (_nota !== null) {
+      await registrarNota(env, { progressoId: id, email: reg.email, perfil: reg.perfil_id, desafioId: reg.desafio_id, nota: _nota, avaliador: admin.email || 'admin', parecer });
+    }
+  }
   
   await logEvent(env, reg.email, 'talento_desafio_' + decisao,
     `${reg.desafio_id} por ${admin.email || 'admin'}`);
@@ -1297,4 +1310,3 @@ function emailReset(link) {
     ${botao(link, 'Criar nova senha')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Se não foi você, ignore este e-mail — sua senha atual continua válida.</p>`);
 }
-

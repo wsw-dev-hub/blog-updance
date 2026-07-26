@@ -1,0 +1,152 @@
+@charset "utf-8";
+/* ================================================================
+   REPUTAÇÃO & DESEMPENHO — Up Dance Experience
+   /css/reputacao.css
+   ----------------------------------------------------------------
+   Companheiro de talentTree.css (carregar DEPOIS). NÃO redefine .tt-*.
+   (1) Escopos .page-reputacao (membro) e .page-avaliacao (coordenação)
+       com a paleta oficial. (2) Componentes novos: fila de avaliação,
+       medidor de desempenho e progresso de título. Reusa .tt-wallet,
+       .tt-titles, .tt-panel, .tt-btn, .tt-toast.
+
+   Paleta oficial: #110273 Marinho · #430ABF Azul Médio · #8C0783 Roxo ·
+                   #FA33A1 Rosa/Choque · #BF0449 Rosa/Opaco
+   Breakpoints: 360 · 480 · 481–575 · 576 · 768 · 1024 · 1200 · 1440
+================================================================ */
+
+/* ---------------- ESCOPO · TELA DO MEMBRO (reputação): roxo → rosa/choque ---------------- */
+.page-membros.page-reputacao{
+    --tt-grad:        linear-gradient(135deg, #8C0783 0%, #FA33A1 100%);
+    --tt-grad-soft:   linear-gradient(135deg, rgba(140,7,131,.18) 0%, rgba(250,51,161,.22) 100%);
+    --tt-glow:        rgba(140, 7, 131, 0.32);
+    --seg-grad:       var(--tt-grad);
+    --seg-grad-soft:  var(--tt-grad-soft);
+    --seg-grad-text:  linear-gradient(135deg, #FA33A1 0%, #8C0783 100%);
+    --seg-accent:     #8C0783;
+    --seg-accent-2:   #FA33A1;
+    --seg-glow:       var(--tt-glow);
+    --seg-hero-rgba-a: rgba(140, 7, 131, 0.20);
+    --seg-hero-rgba-b: rgba(250, 51, 161, 0.28);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+}
+
+/* ---------------- ESCOPO · PAINEL DA COORDENAÇÃO (avaliação): azul médio → roxo ---------------- */
+.page-membros.page-avaliacao{
+    --tt-grad:        linear-gradient(135deg, #430ABF 0%, #8C0783 100%);
+    --tt-grad-soft:   linear-gradient(135deg, rgba(67,10,191,.18) 0%, rgba(140,7,131,.22) 100%);
+    --tt-glow:        rgba(67, 10, 191, 0.32);
+    --seg-grad:       var(--tt-grad);
+    --seg-grad-soft:  var(--tt-grad-soft);
+    --seg-grad-text:  linear-gradient(135deg, #8C0783 0%, #430ABF 100%);
+    --seg-accent:     #430ABF;
+    --seg-accent-2:   #8C0783;
+    --seg-glow:       var(--tt-glow);
+    --seg-hero-rgba-a: rgba(67, 10, 191, 0.20);
+    --seg-hero-rgba-b: rgba(140, 7, 131, 0.28);
+    --seg-step-bg:     rgba(17, 2, 115, 0.18);
+}
+
+/* ================================================================
+   GRADIENTES DE ITEM (--w-grad das .tt-wallet) — SÓ paleta oficial
+================================================================ */
+.rep-grad-pr  { --w-grad: linear-gradient(135deg, #8C0783 0%, #FA33A1 100%); } /* Reputação */
+.rep-band-0   { --w-grad: linear-gradient(135deg, #5708A6 0%, #8C0783 100%); } /* sem banda  */
+.rep-band-1   { --w-grad: linear-gradient(135deg, #110273 0%, #430ABF 100%); } /* Consistente */
+.rep-band-2   { --w-grad: linear-gradient(135deg, #430ABF 0%, #8C0783 100%); } /* Destaque    */
+.rep-band-3   { --w-grad: linear-gradient(135deg, #8C0783 0%, #BF0449 100%); } /* Excelência  */
+.rep-band-4   { --w-grad: linear-gradient(135deg, #8C0783 0%, #FA33A1 100%); } /* Elite       */
+
+/* ================================================================
+   TELA DO MEMBRO — grade e progresso de título
+================================================================ */
+.rep-cols{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.rep-metric__next{
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; margin-top: 8px;
+    font-size: 11px; color: var(--udx-text-muted);
+}
+.rep-metric__next b{ color: var(--udx-text); font-weight: 600; }
+
+/* selo de banda ao lado do valor de Desempenho */
+.rep-pill{
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 2px 9px; border-radius: 50px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: #fff; background: var(--w-grad, var(--seg-grad));
+}
+.rep-pill .mdi{ font-size: 13px; }
+.rep-pill--muted{ background: rgba(223, 224, 242, 0.12); color: var(--udx-text-muted); }
+
+/* abas de perfil já existem em .tt-profile-tabs — nada a redefinir */
+
+/* ================================================================
+   PAINEL DA COORDENAÇÃO — fila de avaliação
+================================================================ */
+.aval-list{ display: grid; grid-template-columns: 1fr; gap: 12px; }
+.aval-item{
+    border-radius: var(--udx-radius-md);
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    padding: 14px 16px;
+    transition: border-color 240ms ease;
+}
+.aval-item:hover{ border-color: var(--udx-border-hover); }
+.aval-item__head{
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+.aval-item__desafio{ font-size: 14.5px; font-weight: 600; color: var(--udx-text); }
+.aval-item__tag{
+    font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: #fff; background: var(--seg-grad); padding: 2px 9px; border-radius: 50px;
+}
+.aval-item__meta{
+    font-size: 12px; color: var(--udx-text-muted);
+    display: flex; gap: 6px 14px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.aval-item__meta b{ color: var(--udx-text); font-weight: 600; }
+.aval-item__prova{
+    font-size: 12.5px; color: var(--udx-text);
+    background: var(--seg-step-bg); border-radius: var(--udx-radius-sm);
+    padding: 8px 11px; margin-bottom: 12px; word-break: break-word;
+}
+
+.aval-form{ display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.aval-nota{ display: flex; align-items: center; gap: 10px; flex: 1; min-width: 220px; }
+.aval-nota label{ font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--udx-text-muted); }
+.aval-nota input[type="range"]{ flex: 1; min-width: 90px; accent-color: var(--seg-accent-2); }
+.aval-nota__num{
+    width: 62px; text-align: center;
+    padding: 7px 8px; border-radius: var(--udx-radius-sm);
+    border: 1px solid var(--udx-border);
+    background: rgba(2, 2, 26, 0.55); color: var(--udx-text);
+    font-family: var(--udx-font); font-size: 14px; font-weight: 700;
+}
+.aval-actions{ display: flex; gap: 8px; }
+.aval-empty{ color: var(--udx-text-muted); font-size: 13px; padding: 8px 2px; }
+
+/* ================================================================
+   GRADE RESPONSIVA — espelha os breakpoints estabelecidos
+================================================================ */
+@media screen and (min-width: 576px){
+    .rep-cols{ grid-template-columns: repeat(2, 1fr); }
+}
+@media screen and (min-width: 768px){
+    .aval-item__meta{ font-size: 12.5px; }
+}
+@media screen and (min-width: 1024px){
+    .rep-cols{ grid-template-columns: repeat(3, 1fr); }
+}
+@media screen and (min-width: 1200px){
+    .rep-cols{ gap: 16px; }
+}
+@media screen and (max-width: 480px){
+    .aval-form{ align-items: stretch; }
+    .aval-actions{ width: 100%; }
+    .aval-actions .tt-btn{ flex: 1; justify-content: center; }
+}

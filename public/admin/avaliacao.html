@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avaliação — Coordenação Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/format.css">
+<link rel="stylesheet" href="/css/talentTree.css">
+<link rel="stylesheet" href="/css/niveis.css">
+<link rel="stylesheet" href="/css/reputacao.css">
+
+<style>
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem; padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50); flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 50px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff; box-shadow: 0 6px 18px var(--seg-glow); font-size: 12px;
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-voltar, .members-topbar .btn-sair{
+    background: transparent; color: var(--udx-text); border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm); font-family: var(--udx-font);
+    font-size: .88rem; font-weight: 500; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-voltar:hover, .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08); border-color: var(--udx-primary-hot); color: #fff;
+  }
+  .members-main{ padding-bottom: 40px; }
+  .estagio-tag{
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px; padding: 6px 14px;
+    border-radius: 50px; background: var(--seg-grad-soft); border: 1px solid var(--seg-accent);
+    color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .estagio-tag .mdi{ font-size: 14px; color: var(--seg-accent); }
+  .members-footer{
+    padding: 20px 22px; text-align: center; color: var(--udx-text-muted);
+    font-size: .8rem; border-top: 1px solid var(--udx-border);
+  }
+  .reaval-form{ display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .reaval-form input{
+    padding: 8px 10px; border-radius: var(--udx-radius-sm); border: 1px solid var(--udx-border);
+    background: rgba(2, 2, 26, 0.55); color: var(--udx-text); font-family: var(--udx-font); font-size: 13px;
+  }
+  .reaval-form input#reavId{ width: 130px; }
+</style>
+</head>
+
+<body class="page-membros page-avaliacao">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge">
+      <span class="mdi mdi-clipboard-check-outline" aria-hidden="true"></span>
+      <span>Coordenação · Avaliação</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/admin/" aria-label="Voltar para o painel">
+      <span class="mdi mdi-arrow-left" aria-hidden="true"></span> Painel
+    </a>
+    <button class="btn-sair" id="sair">Sair</button>
+  </header>
+
+  <main class="members-main">
+
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <span class="estagio-tag">
+            <span class="mdi mdi-clipboard-check-outline" aria-hidden="true"></span> Fila de avaliação
+          </span>
+          <div class="eyebrow"><b>·</b><span>Coordenação</span></div>
+          <h1>Lançar <em>notas</em></h1>
+          <p class="lead">Cada envio recebe uma <b>nota absoluta de 0 a 100</b>. A nota alimenta a
+            Reputação (acumulada) e o Desempenho (recente) do membro no perfil do desafio.
+            Você pode reavaliar um item já aprovado a qualquer momento.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fila de pendentes -->
+    <section class="trails-section" style="padding-bottom:0">
+      <div class="auto-container">
+        <div class="tt-panel">
+          <div class="tt-panel__head">
+            <div class="tt-panel__icon"><span class="mdi mdi-timer-sand" aria-hidden="true"></span></div>
+            <div class="tt-panel__title"><span>Pendentes</span><h3 id="filaTitulo">Fila de validação</h3></div>
+            <button class="tt-btn" id="recarregar"><span class="mdi mdi-refresh"></span> Recarregar</button>
+          </div>
+          <div class="aval-list" id="fila"></div>
+          <div class="aval-empty" id="filaVazia" hidden>Nada pendente. Tudo em dia. ✦</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reavaliação por id -->
+    <section class="trails-section" style="padding-top:14px">
+      <div class="auto-container">
+        <div class="tt-panel">
+          <div class="tt-panel__head">
+            <div class="tt-panel__icon"><span class="mdi mdi-refresh-circle" aria-hidden="true"></span></div>
+            <div class="tt-panel__title"><span>Reavaliar</span><h3>Rever a nota de um item aprovado</h3></div>
+          </div>
+          <div class="reaval-form">
+            <input type="number" id="reavId" placeholder="ID do progresso" min="1" aria-label="ID do progresso">
+            <div class="aval-nota" style="flex:0 1 260px">
+              <label for="reavNota">Nota</label>
+              <input type="range" id="reavNotaRange" min="0" max="100" value="80">
+              <input type="number" id="reavNota" class="aval-nota__num" min="0" max="100" value="80">
+            </div>
+            <input type="text" id="reavParecer" placeholder="Parecer (opcional)" style="flex:1;min-width:180px" aria-label="Parecer">
+            <button class="tt-btn tt-btn--primary" id="reavBtn"><span class="mdi mdi-check-bold"></span> Reavaliar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="members-footer">© Up Dance — Coordenação. Lançamentos de avaliação.</footer>
+
+  <div class="tt-toast" id="avalToast" role="status" aria-live="polite"></div>
+
+  <script src="/js/reputacao.data.js"></script>
+  <script>
+  (function (win, doc) {
+    'use strict';
+    var REP = win.UDX_REP;
+    var API = {
+      fila:      '/api/admin/talentos/fila',
+      avaliar:   '/api/admin/talentos/avaliar',
+      reavaliar: '/api/admin/talentos/reavaliar',
+      logout:    '/api/admin/logout',
+    };
+    var $ = function (s, c) { return (c || doc).querySelector(s); };
+    function el(t, cls, html){ var n=doc.createElement(t); if(cls)n.className=cls; if(html!=null)n.innerHTML=html; return n; }
+    function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function toast(msg){ var t=$('#avalToast'); t.textContent=msg; t.classList.add('is-open'); setTimeout(function(){ t.classList.remove('is-open'); }, 2600); }
+
+    function pill(nota){
+      var b = REP.bandaDesempenho(nota);
+      var cls = b ? 'rep-band-' + b.id.split('-')[1] : 'rep-band-0';
+      return b
+        ? '<span class="rep-pill ' + cls + '"><span class="mdi ' + b.icone + '"></span>' + esc(b.nome) + '</span>'
+        : '<span class="rep-pill rep-pill--muted">Abaixo de ' + REP.titulosDesempenho[0].min + '</span>';
+    }
+
+    function post(url, body){
+      return fetch(url, { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) })
+        .then(function(r){ return r.json().then(function(j){ return { ok:r.ok, status:r.status, j:j }; }); });
+    }
+
+    function linhaFila(item){
+      var wrap = el('div', 'aval-item');
+      wrap.dataset.id = item.progresso_id;
+      var head = el('div', 'aval-item__head');
+      head.appendChild(el('span', 'aval-item__desafio', esc(item.desafio || item.habilidade || 'Desafio')));
+      head.appendChild(el('span', 'aval-item__tag', esc(REP.perfilLabel(item.perfil) || item.perfil || '')));
+      wrap.appendChild(head);
+
+      wrap.appendChild(el('div', 'aval-item__meta',
+        '<span>Membro: <b>' + esc(item.email) + '</b></span>' +
+        '<span>Habilidade: <b>' + esc(item.habilidade || '—') + '</b></span>' +
+        '<span>Tipo: <b>' + esc(item.tipo || '—') + '</b></span>' +
+        '<span>XP: <b>' + esc(item.xp != null ? item.xp : '—') + '</b></span>' +
+        '<span>#' + esc(item.progresso_id) + '</span>'));
+
+      if (item.comprovacao) wrap.appendChild(el('div', 'aval-item__prova', '“' + esc(item.comprovacao) + '”'));
+
+      var form = el('div', 'aval-form');
+      var notaBox = el('div', 'aval-nota');
+      notaBox.innerHTML =
+        '<label>Nota</label>' +
+        '<input type="range" min="0" max="100" value="80" class="js-range">' +
+        '<input type="number" class="aval-nota__num js-num" min="0" max="100" value="80">' +
+        '<span class="js-pill">' + '' + '</span>';
+      form.appendChild(notaBox);
+
+      var actions = el('div', 'aval-actions');
+      var bOk = el('button', 'tt-btn tt-btn--primary', '<span class="mdi mdi-check-bold"></span> Aprovar com nota');
+      var bNo = el('button', 'tt-btn tt-btn--danger', '<span class="mdi mdi-close-thick"></span> Recusar');
+      actions.appendChild(bOk); actions.appendChild(bNo);
+      form.appendChild(actions);
+      wrap.appendChild(form);
+
+      var range = notaBox.querySelector('.js-range');
+      var num   = notaBox.querySelector('.js-num');
+      var pillS = notaBox.querySelector('.js-pill');
+      function sync(v){ v = Math.max(0, Math.min(100, parseInt(v||0,10))); range.value=v; num.value=v; pillS.innerHTML = pill(v); }
+      range.addEventListener('input', function(){ sync(range.value); });
+      num.addEventListener('input', function(){ sync(num.value); });
+      sync(80);
+
+      function trava(t){ bOk.disabled = bNo.disabled = t; }
+      bOk.addEventListener('click', function(){
+        trava(true);
+        post(API.avaliar, { id: item.progresso_id, decisao: 'aprovado', nota: parseInt(num.value,10) })
+          .then(function(res){
+            if (res.ok && res.j && res.j.ok){ wrap.remove(); toast('Aprovado com nota ' + num.value + '.'); checarVazia(); }
+            else { trava(false); toast((res.j && res.j.erro) || 'Falha ao aprovar.'); }
+          }).catch(function(){ trava(false); toast('Erro de rede.'); });
+      });
+      bNo.addEventListener('click', function(){
+        trava(true);
+        post(API.avaliar, { id: item.progresso_id, decisao: 'recusado' })
+          .then(function(res){
+            if (res.ok && res.j && res.j.ok){ wrap.remove(); toast('Recusado.'); checarVazia(); }
+            else { trava(false); toast((res.j && res.j.erro) || 'Falha ao recusar.'); }
+          }).catch(function(){ trava(false); toast('Erro de rede.'); });
+      });
+      return wrap;
+    }
+
+    function checarVazia(){
+      var vazia = !$('#fila').children.length;
+      $('#filaVazia').hidden = !vazia;
+    }
+    function carregarFila(){
+      var box = $('#fila'); box.innerHTML = '';
+      fetch(API.fila, { credentials:'same-origin' })
+        .then(function(r){ return r.ok ? r.json() : { fila: [] }; })
+        .then(function(j){
+          (j.fila || []).forEach(function(item){ box.appendChild(linhaFila(item)); });
+          $('#filaTitulo').textContent = 'Fila de validação · ' + (j.fila ? j.fila.length : 0);
+          checarVazia();
+        })
+        .catch(function(){ toast('Não foi possível carregar a fila.'); });
+    }
+
+    // reavaliação por id
+    (function(){
+      var r = $('#reavNotaRange'), n = $('#reavNota');
+      function sync(v){ v = Math.max(0, Math.min(100, parseInt(v||0,10))); r.value=v; n.value=v; }
+      r.addEventListener('input', function(){ sync(r.value); });
+      n.addEventListener('input', function(){ sync(n.value); });
+      $('#reavBtn').addEventListener('click', function(){
+        var id = parseInt($('#reavId').value, 10);
+        if (!id){ toast('Informe o ID do progresso.'); return; }
+        post(API.reavaliar, { id: id, nota: parseInt(n.value,10), parecer: $('#reavParecer').value || '' })
+          .then(function(res){
+            if (res.ok && res.j && res.j.ok) toast('Reavaliado: nota ' + n.value + '.');
+            else toast((res.j && res.j.erro) || 'Falha na reavaliação.');
+          }).catch(function(){ toast('Erro de rede.'); });
+      });
+    }());
+
+    $('#recarregar').addEventListener('click', carregarFila);
+    $('#sair').addEventListener('click', function(){
+      fetch(API.logout, { method:'POST', credentials:'same-origin' }).catch(function(){}).finally(function(){ location.href='/admin/'; });
+    });
+    carregarFila();
+  }(window, document));
+  </script>
+</body>
+</html>

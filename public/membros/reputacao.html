@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meu Progresso — Up Dance</title>
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+<!-- Design tokens e componentes do projeto (reuso integral) -->
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/format.css">
+<link rel="stylesheet" href="/css/talentTree.css">
+<link rel="stylesheet" href="/css/niveis.css">
+<link rel="stylesheet" href="/css/reputacao.css">
+
+<style>
+  /* Escopo local do shell — idêntico ao padrão das páginas de membro. */
+  .members-topbar{
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
+    flex-wrap: wrap;
+  }
+  .members-topbar img{ width: 34px; height: 34px; }
+  .members-topbar .marca{
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .members-topbar .type-badge{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 50px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--seg-grad); color: #fff; box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw; white-space: normal; line-height: 1.15; font-size: 12px;
+  }
+  .members-topbar .type-badge .mdi{ font-size: 14px; }
+  .members-topbar .spacer{ flex: 1; }
+  .members-topbar .btn-voltar, .members-topbar .btn-sair{
+    background: transparent; color: var(--udx-text);
+    border: 1.5px solid rgba(223, 224, 242, 0.40);
+    padding: 8px 16px; border-radius: var(--udx-radius-sm);
+    font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
+  }
+  .members-topbar .btn-voltar{ margin-bottom: 12px; }
+  .members-topbar .btn-voltar:hover, .members-topbar .btn-sair:hover{
+    background-color: rgba(223, 224, 242, 0.08);
+    border-color: var(--udx-primary-hot); color: #fff;
+  }
+  .members-topbar .btn-voltar .mdi{ font-size: 16px; }
+  .members-main{ padding-bottom: 40px; }
+  .members-hero .type-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding: 6px 14px; border-radius: 50px;
+    background: rgba(2, 2, 26, 0.55); border: 1px solid var(--udx-border);
+    color: var(--udx-text); font-size: 12px; font-weight: 600;
+  }
+  .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
+  .estagio-tag{
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 6px; padding: 6px 14px; border-radius: 50px;
+    background: var(--seg-grad-soft); border: 1px solid var(--seg-accent);
+    color: #fff; font-size: 11.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .estagio-tag .mdi{ font-size: 14px; color: var(--seg-accent); }
+  .members-footer{
+    padding: 20px 22px; text-align: center;
+    color: var(--udx-text-muted); font-size: .8rem;
+    border-top: 1px solid var(--udx-border);
+  }
+</style>
+</head>
+
+<!-- page-reputacao ativa os tokens desta tela em reputacao.css -->
+<body class="page-membros page-reputacao">
+
+  <header class="members-topbar">
+    <img src="/images/icons/udx-icon.png" alt="">
+    <span class="marca">Up Dance</span>
+    <span class="type-badge">
+      <span class="mdi mdi-shield-star-outline" aria-hidden="true"></span>
+      <span>Meu Progresso</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/membros/" aria-label="Voltar para a Área de Membros">
+      <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+      Área de Membros
+    </a>
+    <button class="btn-sair" id="sair">Sair</button>
+  </header>
+
+  <main class="members-main">
+
+    <section class="trails-hero">
+      <div class="auto-container">
+        <div class="trails-hero__inner members-hero">
+          <span class="estagio-tag">
+            <span class="mdi mdi-shield-star-outline" aria-hidden="true"></span>
+            Reputação &amp; Desempenho
+          </span>
+          <div class="eyebrow"><b>07</b><span>Meu Progresso</span></div>
+          <h1>Reputação &amp; <em>Desempenho</em></h1>
+          <p class="lead">Sua <b>Reputação</b> soma a qualidade de tudo o que você já entregou; seu
+            <b>Desempenho</b> reflete a sua forma recente. As duas crescem com as notas que a
+            coordenação lança nos seus desafios — e você acompanha por perfil aqui.</p>
+          <div class="type-chip" id="userChip" hidden>
+            <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
+            <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="repApp" hidden>
+      <!-- Seletor de perfil -->
+      <section class="trails-section" style="padding-bottom:0">
+        <div class="auto-container">
+          <div class="tt-profile-tabs" id="repTabs" role="tablist"></div>
+        </div>
+      </section>
+
+      <!-- Reputação & Desempenho -->
+      <section class="trails-section" style="padding-top:14px">
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow"><span class="mdi mdi-chart-line" aria-hidden="true"></span><span>Suas moedas</span></div>
+            <h2>Reputação <em>e Desempenho</em></h2>
+          </div>
+          <div class="rep-cols" id="repMetrics"></div>
+        </div>
+      </section>
+
+      <!-- Títulos -->
+      <section class="trails-section" style="padding-top:0">
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow"><span class="mdi mdi-trophy-variant" aria-hidden="true"></span><span>Conquistas</span></div>
+            <h2>Seus <em>títulos</em></h2>
+            <p class="lead">Títulos são por perfil: você pode ser referência num perfil e estar começando em outro.</p>
+          </div>
+          <ul class="tt-titles" id="repTitulos"></ul>
+        </div>
+      </section>
+    </div><!-- /#repApp -->
+
+    <div id="repEmpty" hidden>
+      <section class="trails-section">
+        <div class="auto-container">
+          <div class="tt-panel">
+            <div class="tt-panel__empty">
+              <span class="mdi mdi-clipboard-text-clock-outline" aria-hidden="true"></span>
+              Ainda não há avaliações lançadas. Assim que a coordenação avaliar seus desafios,
+              sua reputação e seu desempenho aparecem aqui.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="members-footer">
+    © Up Dance — Meu Progresso. Este conteúdo é pessoal e intransferível.
+  </footer>
+
+  <div class="tt-toast" id="repToast" role="status" aria-live="polite"></div>
+
+  <script src="/js/reputacao.data.js"></script>
+  <script>
+  (function (win, doc) {
+    'use strict';
+    var REP = win.UDX_REP;
+    var API = { me: '/api/me', estado: '/api/reputacao/estado' };
+    var $ = function (s, c) { return (c || doc).querySelector(s); };
+    function el(t, cls, html){ var n=doc.createElement(t); if(cls)n.className=cls; if(html!=null)n.innerHTML=html; return n; }
+    function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+    var estado = null;          // { global, porPerfil, titulos }
+    var escopoAtivo = '_global';
+
+    function bandaClasse(pd){
+      var b = REP.bandaDesempenho(pd);
+      if (!b) return 'rep-band-0';
+      return 'rep-band-' + b.id.split('-')[1];
+    }
+    function dadosDoEscopo(id){
+      return id === '_global' ? estado.global : (estado.porPerfil[id] || { pr:0, pd:0, n:0 });
+    }
+    function titulosDoEscopo(id){
+      return (estado.titulos || []).filter(function(t){ return t.escopo === id; });
+    }
+    function metaTitulo(id){
+      var all = REP.titulosReputacao.concat(REP.titulosDesempenho);
+      for (var i=0;i<all.length;i++) if (all[i].id === id) return all[i];
+      return { id: id, nome: id, icone: 'mdi-medal-outline' };
+    }
+
+    function renderTabs(){
+      var tabs = $('#repTabs'); tabs.innerHTML = '';
+      var ids = ['_global'].concat(Object.keys(estado.porPerfil));
+      ids.forEach(function(id){
+        var b = el('button', 'tt-profile-tab', '<span class="mdi mdi-account-star-outline"></span>' + esc(REP.perfilLabel(id)));
+        b.setAttribute('role','tab');
+        b.setAttribute('aria-selected', id === escopoAtivo ? 'true' : 'false');
+        b.addEventListener('click', function(){ escopoAtivo = id; renderTabs(); renderMetrics(); renderTitulos(); });
+        tabs.appendChild(b);
+      });
+    }
+
+    function walletItem(nome, gradClasse, valorHTML, extraHTML){
+      var it = el('div', 'tt-wallet__item ' + gradClasse);
+      it.appendChild(el('div', 'tt-wallet__icon', '<span class="mdi ' + (gradClasse==='rep-grad-pr'?'mdi-shield-star':'mdi-speedometer') + '"></span>'));
+      var info = el('div', 'tt-wallet__info');
+      info.appendChild(el('span', 'tt-wallet__name', esc(nome)));
+      info.appendChild(el('div', 'tt-wallet__value', valorHTML));
+      if (extraHTML) info.insertAdjacentHTML ? info.appendChild(extraHTML) : null;
+      it.appendChild(info);
+      return { item: it, info: info };
+    }
+
+    function barra(frac){
+      var wrap = el('div', 'tt-wallet__bar');
+      wrap.appendChild(el('div', 'tt-wallet__fill'));
+      wrap.firstChild.style.width = Math.round(frac*100) + '%';
+      return wrap;
+    }
+
+    function renderMetrics(){
+      var box = $('#repMetrics'); box.innerHTML = '';
+      var d = dadosDoEscopo(escopoAtivo);
+
+      // Reputação (PR)
+      var prNext = REP.proximoTitulo(d.pr, REP.titulosReputacao);
+      var prAtual = REP.tituloAtual(d.pr, REP.titulosReputacao);
+      var pr = walletItem('Reputação', 'rep-grad-pr', '<b>' + fmt(d.pr) + '</b> pts');
+      var prLine = el('div', 'rep-metric__next');
+      if (prNext){
+        prLine.innerHTML = '<span>Próximo: <b>' + esc(prNext.titulo.nome) + '</b></span><span>' + fmt(d.pr) + ' / ' + fmt(prNext.titulo.min) + '</span>';
+      } else {
+        prLine.innerHTML = '<span>Título máximo alcançado' + (prAtual?': <b>'+esc(prAtual.nome)+'</b>':'') + '</span>';
+      }
+      pr.info.appendChild(barra(prNext ? prNext.progresso : 1));
+      pr.info.appendChild(prLine);
+      box.appendChild(pr.item);
+
+      // Desempenho (PD)
+      var banda = REP.bandaDesempenho(d.pd);
+      var pdNext = REP.proximoTitulo(d.pd, REP.titulosDesempenho);
+      var pill = banda
+        ? '<span class="rep-pill ' + bandaClasse(d.pd) + '"><span class="mdi ' + banda.icone + '"></span>' + esc(banda.nome) + '</span>'
+        : '<span class="rep-pill rep-pill--muted">Sem banda ainda</span>';
+      var pd = walletItem('Desempenho', bandaClasse(d.pd), '<b>' + d.pd + '</b>/100 &nbsp;' + pill);
+      pd.info.appendChild(barra(d.pd/100));
+      var pdLine = el('div', 'rep-metric__next');
+      pdLine.innerHTML = pdNext
+        ? '<span>Próxima banda: <b>' + esc(pdNext.titulo.nome) + '</b> (≥' + pdNext.titulo.min + ')</span><span>' + d.n + ' avaliação(ões)</span>'
+        : '<span>Banda máxima alcançada</span><span>' + d.n + ' avaliação(ões)</span>';
+      pd.info.appendChild(pdLine);
+      box.appendChild(pd.item);
+    }
+
+    function renderTitulos(){
+      var ul = $('#repTitulos'); ul.innerHTML = '';
+      var ts = titulosDoEscopo(escopoAtivo);
+      if (!ts.length){
+        ul.appendChild(el('li', 'tt-title', '<span class="mdi mdi-lock-outline"></span> Nenhum título neste perfil ainda — continue entregando.'));
+        return;
+      }
+      ts.sort(function(a,b){ return a.eixo < b.eixo ? -1 : 1; });
+      ts.forEach(function(t){
+        var m = metaTitulo(t.titulo_id);
+        var li = el('li', 'tt-title is-earned',
+          '<span class="mdi ' + m.icone + '"></span> ' + esc(m.nome) +
+          ' <small style="opacity:.7">· ' + (t.eixo === 'reputacao' ? 'Reputação' : 'Desempenho') + '</small>');
+        ul.appendChild(li);
+      });
+    }
+
+    function toast(msg){
+      var t = $('#repToast'); t.textContent = msg; t.classList.add('is-open');
+      setTimeout(function(){ t.classList.remove('is-open'); }, 2600);
+    }
+
+    function carregar(){
+      fetch(API.me, { credentials:'same-origin' }).then(function(r){ return r.ok?r.json():null; }).then(function(me){
+        if (me && me.email){ $('#userEmail').textContent = me.email; $('#userChip').hidden = false; }
+      }).catch(function(){});
+
+      fetch(API.estado, { credentials:'same-origin' })
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(j){
+          if (!j || !j.reputacao){ $('#repEmpty').hidden = false; return; }
+          estado = j.reputacao;
+          var temDados = (estado.global && estado.global.n > 0) || Object.keys(estado.porPerfil||{}).length > 0;
+          if (!temDados){ $('#repEmpty').hidden = false; return; }
+          $('#repApp').hidden = false;
+          renderTabs(); renderMetrics(); renderTitulos();
+        })
+        .catch(function(){ $('#repEmpty').hidden = false; toast('Não foi possível carregar agora.'); });
+    }
+
+    var sair = $('#sair');
+    if (sair) sair.addEventListener('click', function(){
+      fetch('/api/member/logout', { method:'POST', credentials:'same-origin' }).catch(function(){}).finally(function(){ location.href='/'; });
+    });
+    carregar();
+  }(window, document));
+  </script>
+</body>
+</html>
