@@ -9,11 +9,12 @@
    cada data module (validado por teste). fundamentos = 608 = soma dos 59
    desafios ÚNICOS dos 2 cards (Alongamentos + Fundamentos), já com os IDs
    do nó fund-coreo renomeados para fund-coreo-d1..d3 (sem colisão com a
-   trilha Iniciante). */
+   trilha Iniciante). intermediario = 2430 = soma dos 166 desafios ÚNICOS dos
+   3 cards (Preparo + Cultura & Vocabulário + Corpo & Improviso), IDs 'i2-*'. */
 const TRILHAS = {
   fundamentos:   { resource: 'temporada-free',        limiar: 608,  insignia: 'fund-insignia' },
   iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
-  intermediario: { resource: 'nivel-intermediario',   limiar: 1472, insignia: 'int-insignia'  },
+  intermediario: { resource: 'nivel-intermediario',   limiar: 2430, insignia: 'int-insignia'  },
 };
 
 function trilhaConfig(perfil) {

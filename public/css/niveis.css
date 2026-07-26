@@ -91,6 +91,37 @@
     --p-rgba:      140, 7, 131;
 }
 
+/* ---- INTERMEDIÁRIO · 3 CARDS (v2) ----
+   Caminhada pela paleta oficial: Marinho → Azul Médio → Roxo → Rosa/Choque.
+   Card 1 Preparo: #110273 → #430ABF · Card 2 Cultura: #430ABF → #8C0783 ·
+   Card 3 Corpo & Improviso: #8C0783 → #FA33A1. */
+/* fallback de perfil (fora do escopo da página) */
+.tt-tree[data-perfil="prep"], .tt-tree[data-perfil="corp"], .tt-tree[data-perfil="cult"]{
+    --p-grad: linear-gradient(135deg, #430ABF 0%, #8C0783 100%);
+    --p-accent: #8C0783; --p-accent-2: #430ABF; --p-glow: rgba(140,7,131,.34); --p-rgba: 140, 7, 131;
+}
+/* Card 1 · Preparo — Marinho → Azul Médio */
+.page-intermediario .tt-tree[data-perfil="prep"]{
+    --p-grad:      linear-gradient(135deg, #110273 0%, #430ABF 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(67,10,191,.20) 100%);
+    --p-accent:    #430ABF; --p-accent-2: #110273;
+    --p-glow:      rgba(67, 10, 191, 0.34); --p-rgba: 67, 10, 191;
+}
+/* Card 2 · Corpo & Improviso  — Azul Médio → Roxo */
+.page-intermediario .tt-tree[data-perfil="corp"]{
+    --p-grad:      linear-gradient(135deg, #430ABF 0%, #8C0783 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(67,10,191,.16) 0%, rgba(140,7,131,.20) 100%);
+    --p-accent:    #8C0783; --p-accent-2: #430ABF;
+    --p-glow:      rgba(140, 7, 131, 0.34); --p-rgba: 140, 7, 131;
+}
+/* Card 3 · Cultura & Vocabulário — Roxo → Rosa/Choque */
+.page-intermediario .tt-tree[data-perfil="cult"]{
+    --p-grad:      linear-gradient(135deg, #8C0783 0%, #FA33A1 100%);
+    --p-grad-soft: linear-gradient(135deg, rgba(140,7,131,.16) 0%, rgba(250,51,161,.20) 100%);
+    --p-accent:    #FA33A1; --p-accent-2: #8C0783;
+    --p-glow:      rgba(250, 51, 161, 0.34); --p-rgba: 250, 51, 161;
+}
+
 /* ---------------- GRADE RESPONSIVA (espelha .page-talentos) ---------------- */
 @media screen and (max-width: 360px){
     .page-membros.page-iniciante, .page-membros.page-intermediario{ --tt-node: 46px; --tt-gap-col: 9px; --tt-gap-row: 28px; }
