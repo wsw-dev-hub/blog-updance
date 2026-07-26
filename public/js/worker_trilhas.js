@@ -6,10 +6,12 @@
 ================================================================ */
 
 /* Config por trilha. O limiar é DERIVADO da soma dos desafios (únicos) de
-   cada data module (validado por teste). fundamentos = 342 (7 nós) + 212
-   (card Alongamentos) = 554. */
+   cada data module (validado por teste). fundamentos = 608 = soma dos 59
+   desafios ÚNICOS dos 2 cards (Alongamentos + Fundamentos), já com os IDs
+   do nó fund-coreo renomeados para fund-coreo-d1..d3 (sem colisão com a
+   trilha Iniciante). */
 const TRILHAS = {
-  fundamentos:   { resource: 'temporada-free',        limiar: 554,  insignia: 'fund-insignia' },
+  fundamentos:   { resource: 'temporada-free',        limiar: 608,  insignia: 'fund-insignia' },
   iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
   intermediario: { resource: 'nivel-intermediario',   limiar: 1472, insignia: 'int-insignia'  },
 };

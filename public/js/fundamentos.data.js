@@ -58,9 +58,10 @@
       nome: 'Temporada 1 — Fundamentos',
       nivelAlvo: 'Free',
       promovePara: 'Iniciante',
-      /* limiarXPE é DERIVADO da soma dos desafios (ver test_fundamentos.js).
-         Preenchido aqui com o valor validado para evitar número mágico. */
-      limiarXPE: 554
+      /* limiarXPE é DERIVADO da soma dos desafios ÚNICOS (ver test_fundamentos.js).
+         608 = soma dos 59 desafios dos 2 cards, com o nó fund-coreo já
+         usando os IDs fund-coreo-d1..d3 (sem colisão com a trilha Iniciante). */
+      limiarXPE: 608
     },
 
     /* Consumido pelo motor genérico (trilha.js). */
@@ -476,21 +477,21 @@
             ],
             "desafios": [
                 {
-                    "id": "seg-coreo-d1",
+                    "id": "fund-coreo-d1",
                     "tipo": "tarefa",
                     "xp": 16,
                     "nome": "Sequência Coreográfica · 1",
                     "desc": "Parte A."
                 },
                 {
-                    "id": "seg-coreo-d2",
+                    "id": "fund-coreo-d2",
                     "tipo": "tarefa",
                     "xp": 18,
                     "nome": "Sequência Coreográfica · 2",
                     "desc": "Parte B."
                 },
                 {
-                    "id": "seg-coreo-d3",
+                    "id": "fund-coreo-d3",
                     "tipo": "tarefa",
                     "xp": 20,
                     "nome": "Sequência Coreográfica · 3",
@@ -506,7 +507,7 @@
             resumo: 'Insígnia permanente e cumulativa. Registra a conclusão da ' +
                     'Temporada 1 e torna o membro elegível à promoção para Iniciante. ' +
                     'Não habilita nada fora da plataforma — não é um título de carreira.',
-            requer: ['fund-combinacoes', 'fund-coreo'],
+            requer: ['fund-coreo'],
             niveis: ['Insígnia conquistada — elegível à banca de promoção para Iniciante.'],
             desafios: []
           }
