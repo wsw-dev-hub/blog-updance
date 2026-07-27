@@ -39,6 +39,22 @@ const MEMBER_TYPES = ['Premium','Professor(a)','Assistente','Monitor(a)','Estagi
 // ============================ [ Para Implementar - Cursos & Treinamentos ] ===================================== //
 // [ 'Cursos & Treinamentos', 'Aprimoramento Técnico', 'Os Sgredos da Arte Performática' ]
 
+// Nível do card (Opção 2): o tipo MAIS BAIXO da escada que consta no access_rules.
+// LEVEL_ORDER espelha MEMBER_TYPES invertido (base → topo) p/ garantir strings idênticas.
+const LEVEL_ORDER = [...MEMBER_TYPES].reverse();
+const LEVEL_SLUG = {
+  'Free':'free', 'Iniciante':'iniciante', 'Básico':'basico', 'Intermediário':'intermediario',
+  'Estagiário(a)':'estagiario', 'Monitor(a)':'monitor', 'Assistente':'assistente',
+  'Professor(a)':'professor', 'Premium':'premium',
+};
+function nivelDoRecurso(typeSet){
+  if (!typeSet || !typeSet.size) return null;
+  for (const t of LEVEL_ORDER){          // base → topo: 1º que bate é o tier de entrada
+    if (typeSet.has(t)) return LEVEL_SLUG[t] || null;
+  }
+  return null;
+}
+
 // chave de cache KV para o mapa de regras de acesso
 const ACCESS_CACHE_KEY = 'access:rules';
 const ACCESS_CACHE_TTL = 300; // 5 min
@@ -292,7 +308,8 @@ async function meusAcessos(request, env) {
   const placeholders = types.map(() => '?').join(',');
   const [recursos, rules, prods] = await env.DB.batch([
     env.DB.prepare(
-      'SELECT key, label, path_prefix, icon, description FROM resources ORDER BY label'
+      //'SELECT key, label, path_prefix, icon, description FROM resources ORDER BY label'
+      'SELECT key, label, path_prefix, icon, description, created_at FROM resources ORDER BY label'
     ),
     env.DB.prepare(
       'SELECT DISTINCT resource_key FROM access_rules WHERE member_type IN (' + placeholders + ')'
@@ -308,6 +325,8 @@ async function meusAcessos(request, env) {
   ]);
 
   const liberados = new Set((rules.results || []).map(r => r.resource_key));
+  // mapa { key: Set<type> } de TODAS as regras (cacheado no KV) — p/ derivar o nível
+  const regrasMap = await carregarRegrasAcesso(env);
 
   // agrupa produtos por resource_key
   const produtosPorRecurso = {};
@@ -321,6 +340,7 @@ async function meusAcessos(request, env) {
   const resources = (recursos.results || []).map(r => ({
     ...r,
     allowed:  liberados.has(r.key),
+    level:    nivelDoRecurso(regrasMap[r.key]),   // slug do tier de entrada (ou null)
     // Regra de herança: só entrega a lista de produtos se o membro tem acesso ao card.
     // Isso evita expor a lista de conteúdos de um card bloqueado.
     products: liberados.has(r.key) ? (produtosPorRecurso[r.key] || []) : [],

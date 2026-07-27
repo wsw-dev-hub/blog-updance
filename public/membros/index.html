@@ -130,6 +130,46 @@
   }
   .trail-x .lock-note .mdi{ font-size: 14px; }
 
+  /* Paleta por nível (Opção 2) — sobrescreve o contrato --seg-* no card.
+     Só tokens oficiais. Card sem data-lvl (ou nível sem paleta) mantém a
+     paleta padrão de .page-membros. */
+  .trail-x[data-lvl="free"]{
+    --seg-grad:      linear-gradient(135deg, #030BA6 0%, #BF0449 100%);
+    --seg-grad-soft: linear-gradient(135deg, rgba(3,11,166,.18) 0%, rgba(191,4,73,.22) 100%);
+    --seg-grad-text: linear-gradient(135deg, #BF0449 0%, #030BA6 100%);
+    --seg-accent:    #030BA6; --seg-accent-2: #BF0449;
+    --seg-glow:      rgba(3, 11, 166, 0.32);
+  }
+  .trail-x[data-lvl="iniciante"]{
+    --seg-grad:      linear-gradient(135deg, #110273 0%, #030BA6 100%);
+    --seg-grad-soft: linear-gradient(135deg, rgba(17,2,115,.18) 0%, rgba(3,11,166,.22) 100%);
+    --seg-grad-text: linear-gradient(135deg, #030BA6 0%, #110273 100%);
+    --seg-accent:    #030BA6; --seg-accent-2: #110273;
+    --seg-glow:      rgba(3, 11, 166, 0.32);
+  }
+  .trail-x[data-lvl="intermediario"]{
+    --seg-grad:      linear-gradient(135deg, #8C0783 0%, #FA33A1 100%);
+    --seg-grad-soft: linear-gradient(135deg, rgba(140,7,131,.18) 0%, rgba(250,51,161,.22) 100%);
+    --seg-grad-text: linear-gradient(135deg, #FA33A1 0%, #8C0783 100%);
+    --seg-accent:    #8C0783; --seg-accent-2: #FA33A1;
+    --seg-glow:      rgba(140, 7, 131, 0.32);
+  }
+  /* professor — TENTATIVO (herdado de talentTree.css data-perfil="professor"); CONFIRMAR */
+  .trail-x[data-lvl="professor"]{
+    --seg-grad:      linear-gradient(135deg, #5708A6 0%, #430ABF 100%);
+    --seg-grad-soft: linear-gradient(135deg, rgba(87,8,166,.18) 0%, rgba(67,10,191,.22) 100%);
+    --seg-grad-text: linear-gradient(135deg, #430ABF 0%, #5708A6 100%);
+    --seg-accent:    #430ABF; --seg-accent-2: #5708A6;
+    --seg-glow:      rgba(67, 10, 191, 0.32);
+  }
+  /* AGUARDANDO HEX OFICIAL — enquanto não vierem, estes níveis caem no fallback:
+  .trail-x[data-lvl="basico"]{ }
+  .trail-x[data-lvl="estagiario"]{ }
+  .trail-x[data-lvl="monitor"]{ }
+  .trail-x[data-lvl="assistente"]{ }
+  .trail-x[data-lvl="premium"]{ }
+  */
+
   /* Lista de produtos dentro do card (turno 13) */
   .products-list{
     margin: 12px 0 0;
@@ -464,6 +504,7 @@
           var num  = 'Recurso ' + String(i + 1).padStart(2, '0');
           var icon = safeIcon(r.icon);
           var desc = r.description || 'Recurso da área de membros.';
+          var lvlAttr = r.level ? ' data-lvl="'+esc(r.level)+'"' : '';
           var href, ctaText, ctaIcon, lockNote, lockedCls;
 
           if (r.allowed && r.path_prefix){
@@ -515,7 +556,7 @@
               '</a>';
 
           return ''+
-          '<article class="trail-x'+lockedCls+'" data-resource="'+esc(r.key)+'">'+
+          '<article class="trail-x'+lockedCls+'"'+lvlAttr+' data-resource="'+esc(r.key)+'">'+
             '<div class="trail-x__top">'+
               '<span class="trail-x__icon"><span class="mdi mdi-'+esc(icon)+'"></span></span>'+
               '<div>'+
