@@ -35,6 +35,8 @@ const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
 //const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Intermediário','Iniciante','Aluno','Free'];
 const MEMBER_TYPES = ['Premium','Professor(a)','Assistente','Monitor(a)','Estagiário(a)','Intermediário','Básico','Iniciante','Free'];
 
+const MEMBER_TYPES = ['Free','Iniciante','Básico','Intermediário','Estagiário(a)','Monitor(a)','Assistente','Professor(a)','Premium'];
+
 // [ Premium, Professor, Assistnte, Monitor, Estagiário, Intermediário, Básico, Iniciante, Free ]
 // ============================ [ Para Implementar - Cursos & Treinamentos ] ===================================== //
 // [ 'Cursos & Treinamentos', 'Aprimoramento Técnico', 'Os Sgredos da Arte Performática' ]
