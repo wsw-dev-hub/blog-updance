@@ -260,7 +260,50 @@
     </section>
 
     <!-- SEÇÃO DINÂMICA — populada por JS a partir de /api/me/access -->
-    <section class="trails-section">
+    <!--<section class="trails-section">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-star-four-points-outline" aria-hidden="true"></span>
+            <span>Seu conteúdo por plano</span>
+          </div>
+          <h2>O que está <em>disponível para você</em></h2>
+          <p class="lead">
+            Os recursos abaixo refletem seu plano atual. Itens em destaque
+            estão liberados; os esmaecidos podem ser desbloqueados com um
+            plano superior.
+          </p>
+        </div>
+
+        <div class="members-state" id="membersLoading"><p>Carregando seus acessos…</p></div>
+        <div class="members-state" id="membersEmpty" hidden>
+          <p>Nenhum recurso cadastrado ainda. Volte em breve.</p>
+        </div>
+        <div class="trails-list members-list" id="membersList" hidden></div>
+      </div>
+    </section>-->
+
+    <!-- SEÇÃO DINÂMICA 1 — NOVIDADES (recém-adicionados; exibida por JS só se houver) -->
+    <section class="trails-section" id="novidadesSection" hidden>
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-new-box" aria-hidden="true"></span>
+            <span>Novidades</span>
+          </div>
+          <h2>Adicionado <em>recentemente</em></h2>
+          <p class="lead">
+            O que entrou por último na sua área — fique de olho, a lista
+            cresce toda semana.
+          </p>
+        </div>
+
+        <div class="trails-list members-list" id="novidadesList"></div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO DINÂMICA 2 — PLANOS E RECURSOS (todos os demais) -->
+    <section class="trails-section" id="recursosSection">
       <div class="auto-container">
         <div class="trails-section__head ts__h">
           <div class="eyebrow">
@@ -369,6 +412,9 @@
     var loading        = document.getElementById('membersLoading');
     var emptyState     = document.getElementById('membersEmpty');
     var list           = document.getElementById('membersList');
+    var novidadesSection = document.getElementById('novidadesSection');
+    var novidadesList    = document.getElementById('novidadesList');
+    var recursosSection  = document.getElementById('recursosSection');
 
     fetch('/api/me', { credentials: 'same-origin' })
       .then(function(r){ return r.ok ? r.json() : null; })
@@ -397,7 +443,18 @@
         recursos.forEach(function(r){ if(r.allowed) liberados++; });
         statResources.textContent = liberados;
 
-        list.innerHTML = recursos.map(function(r, i){
+        // Novidade = recurso criado nos últimos NOVIDADE_DIAS dias (created_at vem do backend)
+        var NOVIDADE_DIAS = 14;
+        var limiteNovidade = Date.now() - NOVIDADE_DIAS * 864e5;
+        var novidades = [], demais = [];
+        recursos.forEach(function(r, i){
+          r.__i = i; // índice global preserva o rótulo "Recurso NN" nas duas listas
+          var t = r.created_at ? Date.parse(r.created_at) : NaN;
+          if (!isNaN(t) && t >= limiteNovidade) novidades.push(r);
+          else demais.push(r);
+        });
+
+        function cardHtml(r, i){
           var num  = 'Recurso ' + String(i + 1).padStart(2, '0');
           var icon = safeIcon(r.icon);
           var desc = r.description || 'Recurso da área de membros.';
@@ -465,8 +522,14 @@
             ctaHtml +
             lockNote +
           '</article>';
-        }).join('');
+        }
 
+        novidadesList.innerHTML = novidades.map(function(r){ return cardHtml(r, r.__i); }).join('');
+        list.innerHTML          = demais.map(function(r){ return cardHtml(r, r.__i); }).join('');
+
+        // esconde a seção que ficar vazia (nunca as duas: recursos.length > 0 aqui)
+        novidadesSection.hidden = (novidades.length === 0);
+        recursosSection.hidden  = (demais.length === 0);
         list.hidden = false;
       })
       .catch(function(){
