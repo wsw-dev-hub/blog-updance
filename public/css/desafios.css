@@ -1,63 +1,24 @@
 @charset "utf-8";
 /* ================================================================
-   CENTRAL DE DESAFIOS — Up Dance Experience
+   DESAFIOS (foco no nó) — Up Dance Experience
    /css/desafios.css
    ----------------------------------------------------------------
    Companheiro de talentTree.css (carregar DEPOIS). NÃO redefine
-   nenhuma classe .tt-* : apenas (1) acrescenta, sob o escopo
-   .page-desafios, o realce do nó SELECIONADO e o esmaecimento dos
-   nós BLOQUEADOS (destaque para os desbloqueados) e (2) cria os
-   componentes novos de contabilização (painéis de contagem),
-   reputação (títulos/escadas) e a referência de Maestria.
+   nenhuma classe .tt-*. A página não tem mais árvore: mostra só o
+   grupo de desafios do nó requisitado. A PALETA vem da page-class da
+   árvore de origem (fundamentos.css / niveis.css / talentTree.css),
+   aplicada em runtime por desafios.js — aqui só usamos --seg-*/--udx-*.
 
-   Reusa .tt-board/.tt-tree/.tt-tier/.tt-node/.tt-links, .tt-panel,
-   .tt-challenges/.tt-challenge, .tt-titles/.tt-title-card, .tt-chip,
-   .tt-legend e os tokens --udx-* / --seg-* já definidos no projeto.
-
-   Paleta: só tokens oficiais (--seg-* herdados do escopo de nível/
-   perfil ativo no <body> e --udx-* de blog.css).
-   Breakpoints: espelham mediaQuery.css — 360 · 480 · 481–575 · 576 ·
-                768 · 1024 · 1200 · 1440 (mobile-first min-width).
+   Reusa .tt-panel / .tt-panel__head / .tt-challenges / .tt-challenge /
+   .tt-chip. Componentes próprios: contadores (.dx-metric), pílula de
+   estado (.dx-state-pill) e selo de status (.dx-status).
+   Breakpoints: 576 · 1024 · 1200 · máx-480 (espelham mediaQuery.css).
 ================================================================ */
 
 /* ================================================================
-   1) REALCE — nó selecionado + nós desbloqueados (destaque)
-   Somente combinações AINDA NÃO estilizadas na base (.is-selected)
-   ou ajustes de opacidade escopados a esta página (não forkam .tt-*).
+   1) CONTADORES DO NÓ (contabilização)
 ================================================================ */
-.page-desafios .dx-board .tt-node{
-    transition: transform 240ms ease, border-color 240ms ease,
-                box-shadow 240ms ease, opacity 240ms ease, filter 240ms ease;
-}
-/* nó ALVO da seleção — anel de destaque na cor do card/perfil */
-.page-desafios .dx-board .tt-node.is-selected{
-    border-color: var(--seg-accent-2, var(--udx-primary-hot));
-    box-shadow: 0 0 0 3px var(--seg-glow, rgba(250, 51, 161, .32)),
-                0 10px 34px var(--seg-glow, rgba(250, 51, 161, .32));
-    transform: translateY(-2px);
-    z-index: 2;
-}
-.page-desafios .dx-board .tt-node.is-selected .mdi{ color: #fff; }
-.page-desafios .dx-board .tt-node.is-selected + .tt-node__label{
-    color: var(--udx-text); font-weight: 600;
-}
-/* nós BLOQUEADOS recuam para que os desbloqueados ganhem destaque */
-.page-desafios .dx-board.dx-focus .tt-node.is-locked{
-    opacity: .38; filter: saturate(.55);
-}
-.page-desafios .dx-board.dx-focus .tt-node.is-locked + .tt-node__label{ opacity: .5; }
-.page-desafios .dx-board.dx-focus .tt-node.is-locked.is-selected{
-    opacity: 1; filter: none;                    /* selecionar sempre revela */
-}
-/* faixa/coluna do nó selecionado sobressai levemente */
-.page-desafios .dx-board .tt-tree.dx-has-sel{ border-color: var(--seg-accent); }
-
-/* ================================================================
-   2) PANORAMA — cartões de contabilização (contadores)
-================================================================ */
-.dx-tally{
-    display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 6px;
-}
+.dx-tally{ display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 16px; }
 .dx-metric{
     position: relative; overflow: hidden;
     border: 1px solid var(--udx-border); border-radius: var(--udx-radius-md);
@@ -67,12 +28,11 @@
 .dx-metric:hover{ border-color: var(--udx-border-hover); }
 .dx-metric::before{
     content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 4px;
-    background: var(--w-grad, var(--seg-grad));
+    background: var(--seg-grad);
 }
 .dx-metric__label{
     font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-    color: var(--udx-text-muted);
-    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--udx-text-muted); display: inline-flex; align-items: center; gap: 6px;
 }
 .dx-metric__label .mdi{ font-size: 14px; color: var(--seg-accent); }
 .dx-metric__value{
@@ -91,14 +51,13 @@
 }
 .dx-metric__fill{
     display: block; height: 100%; border-radius: 50px;
-    background: var(--w-grad, var(--seg-grad)); transition: width 420ms ease;
+    background: var(--seg-grad); transition: width 420ms ease;
 }
-/* linha de chips por tipo (Tarefa/Atividade/Evento) */
-.dx-typerow{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+/* chips por tipo (Tarefa/Atividade/Evento) */
+.dx-typerow{ display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ================================================================
-   3) NÓ SELECIONADO — cabeçalho, mini-contadores e lista
-   (reusa .tt-panel / .tt-panel__head / .tt-challenges / .tt-challenge)
+   2) CABEÇALHO DO NÓ (dentro de .tt-panel) — estado + pendência
 ================================================================ */
 .dx-node-tally{ display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 14px; }
 .dx-state-pill{
@@ -111,7 +70,9 @@
 .dx-state-pill--locked{ background: rgba(223, 224, 242, 0.12); color: var(--udx-text-muted); }
 .dx-state-pill--done{ background: linear-gradient(135deg, #430ABF 0%, #8C0783 100%); }
 
-/* selo de status (substitui o CTA de envio — esta página é somente leitura) */
+/* ================================================================
+   3) SELO DE STATUS do item (página é somente leitura)
+================================================================ */
 .dx-status{
     display: inline-flex; align-items: center; gap: 6px; align-self: center;
     padding: 6px 13px; border-radius: 50px; white-space: nowrap;
@@ -126,94 +87,14 @@
 }
 
 /* ================================================================
-   4) REPUTAÇÃO — títulos / escadas (somente leitura)
-================================================================ */
-.dx-rep{ display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 18px; }
-.dx-rep-card{
-    border: 1px solid var(--udx-border); border-radius: var(--udx-radius-md);
-    background: rgba(2, 2, 26, 0.55); padding: 16px 18px;
-}
-.dx-rep-card__head{
-    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
-    padding-bottom: 12px; border-bottom: 1px solid var(--udx-border);
-}
-.dx-rep-card__icon{
-    width: 34px; height: 34px; border-radius: 9px; flex: 0 0 auto;
-    display: grid; place-items: center; color: #fff; background: var(--seg-grad);
-}
-.dx-rep-card__icon .mdi{ font-size: 18px; }
-.dx-rep-card__scope{ font-size: 14.5px; font-weight: 700; color: var(--udx-text); }
-.dx-rep-card__n{ font-size: 11.5px; color: var(--udx-text-muted); }
-.dx-rep-axis{ margin-top: 12px; }
-.dx-rep-axis__top{
-    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
-    font-size: 12px; color: var(--udx-text-muted); margin-bottom: 7px;
-}
-.dx-rep-axis__top b{ color: var(--udx-text); font-weight: 600; }
-.dx-rep-badge{
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 10px; border-radius: 50px; color: #fff;
-    font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
-}
-.dx-rep-badge .mdi{ font-size: 13px; }
-.dx-rep-badge--muted{ background: rgba(223, 224, 242, 0.12); color: var(--udx-text-muted); }
-.dx-rep-bar{
-    height: 8px; border-radius: 50px; overflow: hidden;
-    background: rgba(223, 224, 242, 0.10);
-}
-.dx-rep-bar__fill{ display: block; height: 100%; border-radius: 50px; transition: width 420ms ease; }
-.dx-rep-axis__next{ font-size: 11px; color: var(--udx-text-muted); margin-top: 6px; }
-.dx-rep-axis__next b{ color: var(--udx-text); font-weight: 600; }
-/* legenda das escadas oficiais (degraus) */
-.dx-ladder{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.dx-ladder__step{
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 11px; border-radius: 50px;
-    font-size: 11px; font-weight: 600; color: var(--udx-text-muted);
-    border: 1px solid var(--udx-border); background: rgba(2, 2, 26, 0.45);
-}
-.dx-ladder__step .mdi{ font-size: 14px; }
-.dx-ladder__step.is-reached{ color: #fff; border-color: transparent; }
-
-/* ================================================================
-   5) MAESTRIA — referência (a construir; evolução da Reputação)
-================================================================ */
-.dx-maestria{
-    display: flex; align-items: center; gap: 16px;
-    border: 1px dashed var(--udx-border); border-radius: var(--udx-radius-md);
-    background: rgba(2, 2, 26, 0.40); padding: 18px 20px; color: var(--udx-text-muted);
-}
-.dx-maestria__icon{
-    width: 46px; height: 46px; flex: 0 0 auto; border-radius: 12px;
-    display: grid; place-items: center;
-    color: var(--udx-text-muted); border: 1px solid var(--udx-border);
-    background: rgba(223, 224, 242, 0.05);
-}
-.dx-maestria__icon .mdi{ font-size: 24px; }
-.dx-maestria__body b{ color: var(--udx-text); font-weight: 600; display: block; margin-bottom: 3px; }
-.dx-maestria__body p{ margin: 0; font-size: 13px; }
-.dx-soon{
-    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px;
-    padding: 3px 10px; border-radius: 50px;
-    font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-    color: #fff; background: var(--seg-grad-soft); border: 1px solid var(--seg-accent);
-}
-
-/* ================================================================
-   GRADE RESPONSIVA — espelha os breakpoints estabelecidos
+   GRADE RESPONSIVA
 ================================================================ */
 @media screen and (min-width: 576px){
     .dx-tally{ grid-template-columns: repeat(2, 1fr); }
-    .dx-rep{ grid-template-columns: repeat(2, 1fr); }
-}
-@media screen and (min-width: 1024px){
-    .dx-tally{ grid-template-columns: repeat(4, 1fr); }
 }
 @media screen and (min-width: 1200px){
     .dx-tally{ gap: 16px; }
-    .dx-rep{ gap: 16px; }
 }
 @media screen and (max-width: 480px){
     .dx-metric__value{ font-size: 26px; }
-    .dx-maestria{ flex-direction: column; align-items: flex-start; text-align: left; }
 }

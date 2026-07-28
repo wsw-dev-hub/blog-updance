@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Central de Desafios — Up Dance</title>
+<title>Desafios — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
@@ -15,14 +15,19 @@
 <link rel="stylesheet" href="/css/trailsFormat.css">
 <link rel="stylesheet" href="/css/format.css">
 
-<!-- Reusa as classes .tt-* e os tokens de perfil por card -->
+<!-- Reusa .tt-panel / .tt-challenges / .tt-chip e provê os escopos de paleta.
+     Cada árvore de origem tem sua page-class; o motor aplica a correta em runtime.
+       page-temporada .......... fundamentos.css
+       page-iniciante/-intermediario  niveis.css
+       page-talentos ........... talentTree.css
+     (page-tecnico / page-reputacao entram quando os arquivos chegarem.) -->
 <link rel="stylesheet" href="/css/talentTree.css">
 <link rel="stylesheet" href="/css/niveis.css">
-<!-- Componentes desta página (contadores, escadas, referência de Maestria) -->
+<link rel="stylesheet" href="/css/fundamentos.css">
 <link rel="stylesheet" href="/css/desafios.css">
 
 <style>
-  /* Escopo local — idêntico ao da Árvore/Trilha: apenas topbar/hero/footer. */
+  /* Escopo local — idêntico às demais páginas: apenas topbar/hero/footer. */
   .members-topbar{
     position: sticky; top: 0; z-index: 300;
     display: flex; align-items: center; gap: .8rem;
@@ -43,7 +48,8 @@
     display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 12px; border-radius: 50px; font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase;
-    background: var(--seg-grad); color: #fff; box-shadow: 0 6px 18px var(--seg-glow);
+    background: var(--seg-grad, linear-gradient(135deg,#8C0783,#FA33A1)); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow, rgba(140,7,131,.32));
     max-width: 60vw; white-space: normal; line-height: 1.15; font-size: 12px;
   }
   .members-topbar .type-badge .mdi{ font-size: 14px; }
@@ -87,18 +93,15 @@
 </style>
 </head>
 
-<!-- page-iniciante ativa os tokens do nível ativo (niveis.css); page-desafios
-     ativa o realce de nó + componentes desta página (desafios.css).
-     Para retargetar a página a outra árvore: troque o data module (abaixo) e a
-     classe de nível (ex.: page-intermediario / page-temporada / page-talentos). -->
-<body class="page-membros page-iniciante page-desafios">
+<!-- A page-class da árvore de origem (paleta) é adicionada em runtime por desafios.js -->
+<body class="page-membros page-desafios">
 
   <header class="members-topbar">
     <img src="/images/icons/udx-icon.png" alt="">
     <span class="marca">Up Dance</span>
     <span class="type-badge">
       <span class="mdi mdi-flag-checkered" aria-hidden="true"></span>
-      <span>Central de Desafios</span>
+      <span id="dxTreeName">Desafios</span>
     </span>
     <span class="spacer"></span>
     <a class="btn-voltar" href="/membros/" aria-label="Voltar para a Área de Membros">
@@ -116,14 +119,13 @@
         <div class="trails-hero__inner members-hero">
           <span class="estagio-tag">
             <span class="mdi mdi-flag-checkered" aria-hidden="true"></span>
-            Central de Desafios
+            <span id="dxKicker">Desafios</span>
           </span>
-          <div class="eyebrow"><b>·</b><span>Desafios, atividades e eventos</span></div>
-          <h1>Seus <em>desafios</em></h1>
-          <p class="lead">Selecione um nó no mapa para ver e contabilizar o grupo de <b>desafios</b>,
-            <b>atividades</b> e <b>eventos</b> ligados a ele. O painel destaca o nó selecionado e os nós já
-            <b>desbloqueados</b>, soma o que você concluiu por tipo e reflete sua <b>Reputação</b> em títulos e escadas.
-            É uma visão de leitura — o envio de comprovação continua na página da árvore.</p>
+          <div class="eyebrow"><b>·</b><span>Tarefas, atividades e eventos</span></div>
+          <h1>Desafios de <em id="dxNodeName">—</em></h1>
+          <p class="lead">Aqui está o grupo de desafios do nó que você escolheu na árvore:
+            a contagem por tipo, o que já está concluído e o que falta. Envio de comprovação
+            continua na página da árvore.</p>
           <div class="type-chip" id="userChip" hidden>
             <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
             <span>Conectado como <b id="userEmail">—</b></span>
@@ -132,126 +134,35 @@
       </div>
     </section>
 
-    <!-- APLICAÇÃO -->
+    <!-- APLICAÇÃO — somente o grupo do nó requisitado -->
     <div id="dxApp" hidden>
-
-      <!-- Panorama (contadores agregados) -->
-      <section class="trails-section" style="padding-bottom:0">
-        <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-counter" aria-hidden="true"></span>
-              <span>Panorama</span>
-            </div>
-            <h2>O que já <em>conta a seu favor</em></h2>
-            <p class="lead">Contagem sobre os nós <b>desbloqueados</b>: desafios concluídos, pendências,
-              experiência confirmada e conquistas — quebrada por Tarefa, Atividade e Evento.</p>
-          </div>
-          <div class="dx-tally" id="dxTally"></div>
-        </div>
-      </section>
-
-      <!-- Mapa da árvore -->
-      <section class="trails-section" style="padding-top:24px;padding-bottom:0">
-        <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-sitemap-outline" aria-hidden="true"></span>
-              <span>Mapa</span>
-            </div>
-            <h2>Escolha um <em>nó</em></h2>
-            <p class="lead">Clique num nó para focar seus desafios. Os nós desbloqueados ficam em destaque;
-              os bloqueados recuam.</p>
-          </div>
-          <div class="tt-profile-tabs" id="dxTabs" role="tablist" aria-label="Cartões da árvore"></div>
-          <div class="tt-board" id="dxBoard"></div>
-          <div class="tt-legend">
-            <span class="tt-legend__item"><span class="tt-legend__dot"></span> Bloqueado</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--available"></span> Disponível</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--ranked"></span> Em desenvolvimento</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--maxed"></span> Dominado</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--titulo"></span> Conquista</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Desafios do nó selecionado -->
-      <section class="trails-section" style="padding-top:24px;padding-bottom:0">
+      <section class="trails-section" style="padding-top:24px">
         <div class="auto-container">
           <span id="desafios" class="tt-anchor" aria-hidden="true"></span>
           <div class="trails-section__head ts__h">
             <div class="eyebrow">
-              <span class="mdi mdi-flag-checkered" aria-hidden="true"></span>
-              <span>Nó selecionado</span>
+              <span class="mdi mdi-counter" aria-hidden="true"></span>
+              <span>Contagem do nó</span>
             </div>
             <h2>O grupo <em>deste nó</em></h2>
-            <p class="lead">Lista completa com o status de cada item e a contagem do grupo por tipo.</p>
+            <p class="lead">Quebra por Tarefa, Atividade e Evento, com o status de cada item.</p>
           </div>
+
+          <!-- contadores do nó -->
+          <div class="dx-tally" id="dxTally"></div>
+
+          <!-- cabeçalho do nó + lista de desafios -->
           <div class="tt-panel" id="dxNode"></div>
         </div>
       </section>
-
-      <!-- Reputação (títulos / escadas) -->
-      <section class="trails-section" style="padding-top:24px;padding-bottom:0">
-        <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-shield-star-outline" aria-hidden="true"></span>
-              <span>Reputação</span>
-            </div>
-            <h2>Títulos <em>e escadas</em></h2>
-            <p class="lead">Reputação (PR, acumulada) e Desempenho (PD, forma recente) por escopo, com o
-              título atual e o próximo degrau. A autoridade é do servidor; aqui é só leitura.</p>
-          </div>
-          <div class="dx-rep" id="dxRep"></div>
-        </div>
-      </section>
-
-      <!-- Maestria (referência — a construir) -->
-      <section class="trails-section" style="padding-top:24px">
-        <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-diamond-stone" aria-hidden="true"></span>
-              <span>Maestria</span>
-            </div>
-            <h2>Próximo <em>horizonte</em></h2>
-          </div>
-          <div class="dx-maestria">
-            <span class="dx-maestria__icon"><span class="mdi mdi-diamond-stone" aria-hidden="true"></span></span>
-            <div class="dx-maestria__body">
-              <span class="dx-soon"><span class="mdi mdi-timer-sand" aria-hidden="true"></span>Em breve</span>
-              <b>Árvore de Maestria</b>
-              <p>Evolução da Reputação — os nós de Maestria vão promover PR/PD a trilhas de domínio.
-                Estrutura e dados serão construídos em etapa posterior; esta seção fica reservada como referência.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
     </div><!-- /#dxApp -->
   </main>
 
   <footer class="members-footer">
-    © Up Dance — Central de Desafios. Este conteúdo é pessoal e intransferível.
+    © Up Dance — Desafios. Este conteúdo é pessoal e intransferível.
   </footer>
 
-  <!-- Scripts: (1) UM data module da árvore, (2) reputação, (3) motor.
-       Trocar o data module + a classe de nível no <body> retargeta a página. -->
-  <script src="/js/iniciante.data.js"></script>
-  <script src="/js/reputacao.data.js"></script>
+  <!-- Só o motor. Ele lê ?arvore=&hab=, aplica a paleta da origem e injeta o data module. -->
   <script src="/js/desafios.js"></script>
-  <script>
-    (function () {
-      'use strict';
-      var sair = document.getElementById('sair');
-      if (!sair) { return; }
-      sair.addEventListener('click', function () {
-        fetch('/api/member/logout', { method: 'POST', credentials: 'same-origin' })
-          .catch(function () {})
-          .finally(function () { location.href = '/'; });
-      });
-    }());
-  </script>
 </body>
 </html>
