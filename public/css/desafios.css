@@ -7,7 +7,7 @@
    dados informativos (pontos, habilidades, reputação, títulos,
    maestrias). A PALETA de cada bloco vem da page-class ativa naquele
    escopo (origem no <body>; família reputação num envelope
-   .page-reputacao). Aqui só usamos --seg-*/--udx-*.
+   .page-reputacao). Aqui só usamos --seg---udx-*.
 
    Reusa .tt-panel / .tt-challenges / .tt-chip.
    Breakpoints: 576 · 768 · 1024 · 1200 · máx-480 (mediaQuery.css).
