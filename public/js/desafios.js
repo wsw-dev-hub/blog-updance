@@ -73,7 +73,7 @@
     if (!CFG) { falhar('Origem não reconhecida. Abra um nó a partir de uma das árvores.'); return; }
     if (!HAB) { falhar('Nenhum nó informado. Volte à árvore e clique em "Ir para os desafios".'); return; }
 
-    doc.body.classList.add(CFG.classe);                 // paleta da origem
+    doc.body.classList.add('page-membros', CFG.classe); // paleta da origem (compound .page-membros.page-*)          // paleta da origem
     doc.body.setAttribute('data-categoria', CFG.categoria);
     var t1 = $('#dxTreeName'); if (t1) { t1.textContent = CFG.rotulo; }
     var t2 = $('#dxKicker');   if (t2) { t2.textContent = CFG.rotulo; }
@@ -267,7 +267,7 @@
     /* ---------- 2) INFORMATIVOS ---------- */
     function renderPontos() {
       var c = $('#dxPontos'); if (!c) { return; }
-      var body = '<div class="dx-tally dx-tally--2">';
+      var body = '<div class="dx-tally dx-tally--1">';
       if (IS_TAL) {
         (DADOS.perfis || []).forEach(function (p) {
           var xp = Estado.xpPerfil[p.id] || 0; var pts = Regras.pontosTotais(p.id); var gastos = Regras.pontosGastos(p.id);
