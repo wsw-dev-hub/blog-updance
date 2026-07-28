@@ -1,22 +1,20 @@
 @charset "utf-8";
 /* ================================================================
-   DESAFIOS (foco no nó) — Up Dance Experience
-   /css/desafios.css
+   DESAFIOS (v3) — Up Dance Experience  ·  /css/desafios.css
    ----------------------------------------------------------------
-   Companheiro de talentTree.css (carregar DEPOIS). NÃO redefine
-   nenhuma classe .tt-*. A página não tem mais árvore: mostra só o
-   grupo de desafios do nó requisitado. A PALETA vem da page-class da
-   árvore de origem (fundamentos.css / niveis.css / talentTree.css),
-   aplicada em runtime por desafios.js — aqui só usamos --seg-*/--udx-*.
+   Companheiro de talentTree.css (carregar DEPOIS). NÃO redefine .tt-*.
+   A página mostra os desafios do nó da árvore originária (tt-panel) +
+   dados informativos (pontos, habilidades, reputação, títulos,
+   maestrias). A PALETA de cada bloco vem da page-class ativa naquele
+   escopo (origem no <body>; família reputação num envelope
+   .page-reputacao). Aqui só usamos --seg-*/--udx-*.
 
-   Reusa .tt-panel / .tt-panel__head / .tt-challenges / .tt-challenge /
-   .tt-chip. Componentes próprios: contadores (.dx-metric), pílula de
-   estado (.dx-state-pill) e selo de status (.dx-status).
-   Breakpoints: 576 · 1024 · 1200 · máx-480 (espelham mediaQuery.css).
+   Reusa .tt-panel / .tt-challenges / .tt-chip.
+   Breakpoints: 576 · 768 · 1024 · 1200 · máx-480 (mediaQuery.css).
 ================================================================ */
 
 /* ================================================================
-   1) CONTADORES DO NÓ (contabilização)
+   CONTADORES (.dx-metric) — usados no nó e nos informativos
 ================================================================ */
 .dx-tally{ display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 16px; }
 .dx-metric{
@@ -26,10 +24,7 @@
     transition: border-color 240ms ease;
 }
 .dx-metric:hover{ border-color: var(--udx-border-hover); }
-.dx-metric::before{
-    content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 4px;
-    background: var(--seg-grad);
-}
+.dx-metric::before{ content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 4px; background: var(--seg-grad); }
 .dx-metric__label{
     font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
     color: var(--udx-text-muted); display: inline-flex; align-items: center; gap: 6px;
@@ -44,20 +39,13 @@
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .dx-metric__value small{ font-size: 15px; font-weight: 600; color: var(--udx-text-muted); }
-.dx-metric__sub{ font-size: 12px; color: var(--udx-text-muted); margin-top: 6px; }
-.dx-metric__bar{
-    margin-top: 12px; height: 8px; border-radius: 50px;
-    background: rgba(223, 224, 242, 0.10); overflow: hidden;
-}
-.dx-metric__fill{
-    display: block; height: 100%; border-radius: 50px;
-    background: var(--seg-grad); transition: width 420ms ease;
-}
-/* chips por tipo (Tarefa/Atividade/Evento) */
+.dx-metric__sub{ font-size: 12px; color: var(--udx-text-muted); margin-top: 6px; min-height: 1em; }
+.dx-metric__bar{ margin-top: 12px; height: 8px; border-radius: 50px; background: rgba(223, 224, 242, 0.10); overflow: hidden; }
+.dx-metric__fill{ display: block; height: 100%; border-radius: 50px; background: var(--seg-grad); transition: width 420ms ease; }
 .dx-typerow{ display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ================================================================
-   2) CABEÇALHO DO NÓ (dentro de .tt-panel) — estado + pendência
+   CABEÇALHO DO NÓ — estado + pendência + selo de status
 ================================================================ */
 .dx-node-tally{ display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 14px; }
 .dx-state-pill{
@@ -69,21 +57,81 @@
 .dx-state-pill .mdi{ font-size: 13px; }
 .dx-state-pill--locked{ background: rgba(223, 224, 242, 0.12); color: var(--udx-text-muted); }
 .dx-state-pill--done{ background: linear-gradient(135deg, #430ABF 0%, #8C0783 100%); }
-
-/* ================================================================
-   3) SELO DE STATUS do item (página é somente leitura)
-================================================================ */
 .dx-status{
     display: inline-flex; align-items: center; gap: 6px; align-self: center;
     padding: 6px 13px; border-radius: 50px; white-space: nowrap;
     font-family: var(--udx-font); font-size: 12.5px; font-weight: 600;
-    border: 1px solid var(--udx-border); color: var(--udx-text-muted);
-    background: rgba(2, 2, 26, 0.45);
+    border: 1px solid var(--udx-border); color: var(--udx-text-muted); background: rgba(2, 2, 26, 0.45);
 }
 .dx-status .mdi{ font-size: 15px; }
-.dx-status--done{
-    color: #fff; border-color: transparent;
-    background: linear-gradient(135deg, #430ABF 0%, #8C0783 100%);
+.dx-status--done{ color: #fff; border-color: transparent; background: linear-gradient(135deg, #430ABF 0%, #8C0783 100%); }
+
+/* ================================================================
+   INFORMATIVOS — grade de cartões (pontos / habilidades / reputação…)
+================================================================ */
+.dx-info{ display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+.dx-info-card{
+    border: 1px solid var(--udx-border); border-radius: var(--udx-radius-lg);
+    background: rgba(2, 2, 26, 0.42); padding: 18px 18px 20px;
+}
+.dx-info-head{ display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.dx-info-head > .mdi{
+    width: 34px; height: 34px; flex: 0 0 auto; border-radius: 9px;
+    display: grid; place-items: center; color: #fff; background: var(--seg-grad); font-size: 18px;
+}
+.dx-info-head h3{ margin: 0; font-size: 15px; font-weight: 700; color: var(--udx-text); }
+.dx-info-head p{ margin: 2px 0 0; font-size: 11.5px; color: var(--udx-text-muted); }
+.dx-info-card .dx-tally{ margin-bottom: 12px; }
+.dx-note{ font-size: 12.5px; color: var(--udx-text-muted); margin: 4px 0 0; }
+
+/* ================================================================
+   REPUTAÇÃO — eixos PR/PD (escadas)
+================================================================ */
+.dx-rep-card{ display: grid; grid-template-columns: 1fr; gap: 14px; }
+.dx-rep-axis__top{
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    font-size: 12px; color: var(--udx-text-muted); margin-bottom: 7px;
+}
+.dx-rep-axis__top b{ color: var(--udx-text); font-weight: 600; }
+.dx-rep-badge{
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 50px; color: #fff; font-size: 10.5px; font-weight: 700;
+}
+.dx-rep-badge .mdi{ font-size: 13px; }
+.dx-rep-badge--muted{ background: rgba(223, 224, 242, 0.12); color: var(--udx-text-muted); }
+.dx-rep-bar{ height: 8px; border-radius: 50px; overflow: hidden; background: rgba(223, 224, 242, 0.10); }
+.dx-rep-bar__fill{ display: block; height: 100%; border-radius: 50px; transition: width 420ms ease; }
+.dx-rep-axis__next{ font-size: 11px; color: var(--udx-text-muted); margin-top: 6px; }
+.dx-rep-axis__next b{ color: var(--udx-text); font-weight: 600; }
+
+/* ================================================================
+   TÍTULOS — degraus/insígnias conquistados (chips)
+================================================================ */
+.dx-ladder{ display: flex; flex-wrap: wrap; gap: 8px; }
+.dx-ladder__step{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 11px; border-radius: 50px;
+    font-size: 11px; font-weight: 600; color: #fff; border: 1px solid transparent;
+}
+.dx-ladder__step .mdi{ font-size: 14px; }
+
+/* ================================================================
+   MAESTRIAS — referência (a construir)
+================================================================ */
+.dx-maestria{ display: flex; align-items: center; gap: 16px; }
+.dx-maestria__icon{
+    width: 46px; height: 46px; flex: 0 0 auto; border-radius: 12px;
+    display: grid; place-items: center;
+    color: var(--udx-text-muted); border: 1px solid var(--udx-border); background: rgba(223, 224, 242, 0.05);
+}
+.dx-maestria__icon .mdi{ font-size: 24px; }
+.dx-maestria__body b{ color: var(--udx-text); font-weight: 600; display: block; margin: 3px 0; }
+.dx-maestria__body p{ margin: 0; font-size: 13px; color: var(--udx-text-muted); }
+.dx-soon{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: #fff; background: var(--seg-grad-soft); border: 1px solid var(--seg-accent);
 }
 
 /* ================================================================
@@ -91,10 +139,15 @@
 ================================================================ */
 @media screen and (min-width: 576px){
     .dx-tally{ grid-template-columns: repeat(2, 1fr); }
+    .dx-tally--1{ grid-template-columns: 1fr; }
+}
+@media screen and (min-width: 992px){
+    .dx-info{ grid-template-columns: repeat(2, 1fr); }
 }
 @media screen and (min-width: 1200px){
     .dx-tally{ gap: 16px; }
 }
 @media screen and (max-width: 480px){
     .dx-metric__value{ font-size: 26px; }
+    .dx-maestria{ flex-direction: column; align-items: flex-start; text-align: left; }
 }
