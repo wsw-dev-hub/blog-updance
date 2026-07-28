@@ -530,7 +530,7 @@
     transform: translateY(6px);
     transition: opacity 180ms ease, transform 180ms ease;
 }
-.tt-tip.is-open{ opacity: 1; transform: translateY(0); }
+.tt-tip.is-open{ opacity: 1; transform: translateY(0); pointer-events: auto; }
 .tt-tip__head{
     display: flex; align-items: flex-start; gap: 10px;
     padding-bottom: 10px; margin-bottom: 10px;
@@ -596,6 +596,38 @@
     margin: 10px 0 0; padding-top: 9px;
     border-top: 1px dashed var(--udx-border);
     font-size: 10.5px; color: var(--udx-text-muted); line-height: 1.5;
+}
+
+/* --- Link do tooltip -> area de desafios/atividades (hover/foco/toque) --- */
+.tt-tip__go{
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 12px; padding: 8px 13px;
+    border-radius: 50px;
+    background: var(--tip-grad, var(--seg-grad));
+    color: #fff; text-decoration: none;
+    font-family: var(--udx-font);
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+}
+.tt-tip__go .mdi{ font-size: 15px; }
+.tt-tip__go:hover,
+.tt-tip__go:focus-visible{
+    color: #fff; transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 11px 26px rgba(0, 0, 0, 0.55);
+}
+
+/* --- Ancora de rolagem invisivel: alvo dos links do tooltip.
+   Ocupa o layout (rolagem funciona) mas nao aparece para o usuario. --- */
+.tt-anchor{
+    display: block;
+    width: 0; height: 0;
+    margin: 0; padding: 0; border: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    scroll-margin-top: 92px; /* compensa a .members-topbar fixa */
 }
 
 

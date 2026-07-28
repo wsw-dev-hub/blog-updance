@@ -129,6 +129,8 @@
   var UI = {
     refs: {},
     selecionado: null,
+    perfilVisivel: null,
+    tipFixo: false,        // tooltip "preso" após clique no nó (popover)
 
     montar: function () {
       UI.refs.board    = $('#tfBoard');
@@ -136,6 +138,8 @@
       UI.refs.badges   = $('#tfBadges');
       UI.refs.progress = $('#tfProgress');
       UI.refs.tip      = $('#tfTip');
+      UI.refs.tabs     = $('#tfProfileTabs');
+      if (!UI.perfilVisivel && PERFIS[0]) { UI.perfilVisivel = PERFIS[0].id; }
     },
 
     renderProgresso: function () {
@@ -161,6 +165,62 @@
     renderBoard: function () {
       var b = UI.refs.board; b.innerHTML = '';
       PERFIS.forEach(function (p) { b.appendChild(UI.renderTree(p)); });
+      UI.aplicarVisibilidade();
+    },
+
+    /* ---------- seletor de cartoes (abas — mobile/tablet) ----------
+       Espelha o comportamento de #ttProfileTabs da Arvore de Talentos:
+       abaixo de 1024px mostra um card por vez; em >=1024px o CSS oculta as
+       abas e o board volta a exibir todas as colunas lado a lado. */
+    gradDoPerfil: function (perfilId) {
+      var grad = 'var(--seg-grad)', glow = 'var(--seg-glow)';
+      var tree = UI.refs.board && $('.tt-tree[data-perfil="' + perfilId + '"]', UI.refs.board);
+      if (tree && win.getComputedStyle) {
+        var cs = win.getComputedStyle(tree);
+        var g = (cs.getPropertyValue('--p-grad') || '').trim();
+        var w = (cs.getPropertyValue('--p-glow') || '').trim();
+        if (g) { grad = g; }
+        if (w) { glow = w; }
+      }
+      return { grad: grad, glow: glow };
+    },
+
+    renderTabs: function () {
+      var c = UI.refs.tabs;
+      if (!c) { return; }
+      if (!PERFIS || PERFIS.length < 2) { c.hidden = true; c.innerHTML = ''; return; }
+      c.hidden = false;
+      c.innerHTML = '';
+      PERFIS.forEach(function (p) {
+        var cor = UI.gradDoPerfil(p.id);
+        var b = el('button', 'tt-profile-tab',
+          '<span class="mdi ' + p.icone + '"></span><span>' + escapar(p.nome) + '</span>');
+        b.type = 'button';
+        b.setAttribute('role', 'tab');
+        b.setAttribute('data-perfil', p.id);
+        b.setAttribute('aria-selected', p.id === UI.perfilVisivel ? 'true' : 'false');
+        b.style.setProperty('--tab-grad', cor.grad);
+        b.style.setProperty('--tab-glow', cor.glow);
+        b.addEventListener('click', function () {
+          UI.perfilVisivel = p.id;
+          UI.renderTabs();
+          UI.aplicarVisibilidade();
+        });
+        c.appendChild(b);
+      });
+    },
+
+    aplicarVisibilidade: function () {
+      if (!UI.refs.board) { return; }
+      var trees = $$('.tt-tree', UI.refs.board);
+      if (!PERFIS || PERFIS.length < 2) {
+        trees.forEach(function (t) { t.classList.remove('is-hidden'); });
+      } else {
+        trees.forEach(function (t) {
+          t.classList.toggle('is-hidden', t.getAttribute('data-perfil') !== UI.perfilVisivel);
+        });
+      }
+      UI.desenharConectores();
     },
 
     renderTree: function (perfil) {
@@ -221,7 +281,8 @@
       btn.setAttribute('aria-label', hab.nome + (conquista ? '' : ' — nível ' + rank + ' de ' + hab.ranksMax));
       btn.innerHTML = '<span class="mdi ' + hab.icone + '"></span>' +
         (conquista ? '' : '<span class="tt-node__rank">' + rank + '/' + hab.ranksMax + '</span>');
-      btn.addEventListener('click', function () { UI.selecionar(hab.id); UI.mostrarTip(hab, btn); });
+      /* O nó apenas ABRE (e FIXA) o tooltip; quem seleciona + navega é o botão. */
+      btn.addEventListener('click', function () { UI.tipFixo = true; UI.mostrarTip(hab, btn); });
 
       var label = el('span', 'tt-node__label', escapar(hab.nome));
       wrap.appendChild(btn);
@@ -354,6 +415,7 @@
 
     mostrarTip: function (hab, alvo) {
       var tip = UI.refs.tip; if (!tip || !hab) { return; }
+      win.clearTimeout(UI.tipTimer);
       var perfil    = perfilPorId(hab.perfilId);
       var rank      = Regras.rank(hab);
       var pend      = Regras.pendencias(hab);
@@ -403,6 +465,10 @@
                   : 'Conclua todos os nós deste card para desbloquear.') + '</p>';
       }
 
+      html += '<a class="tt-tip__go" href="#desafios" data-hab="' + escapar(hab.id) + '">' +
+                '<span class="mdi mdi-flag-checkered" aria-hidden="true"></span>' +
+                (conquista ? 'Ver atividades do card' : 'Ir para os desafios') + '</a>';
+
       tip.innerHTML = html;
       tip.classList.add('is-open');
       tip.setAttribute('aria-hidden', 'false');
@@ -425,12 +491,35 @@
 
     esconderTip: function () {
       var tip = UI.refs.tip; if (!tip) { return; }
+      win.clearTimeout(UI.tipTimer);
+      UI.tipFixo = false;
+      var ae = doc.activeElement;                 // nunca ocultar (aria-hidden) um descendente focado
+      if (ae && tip.contains(ae) && ae.blur) { ae.blur(); }
       tip.classList.remove('is-open');
       tip.setAttribute('aria-hidden', 'true');
     },
 
+    /* Rola até a âncora #desafios compensando a altura REAL da topbar fixa
+       (no mobile ela quebra em 2 linhas e fica bem mais alta que no desktop). */
+    irParaDesafios: function () {
+      var alvo = doc.getElementById('desafios');
+      if (!alvo) { return; }
+      var bar = doc.querySelector('.members-topbar');
+      var off = (bar ? bar.getBoundingClientRect().height : 60) + 12;
+      var y = alvo.getBoundingClientRect().top + (win.pageYOffset || 0) - off;
+      if (y < 0) { y = 0; }
+      if (win.scrollTo) { win.scrollTo({ top: y, behavior: 'smooth' }); }
+      else { win.scroll(0, y); }
+    },
+
+    pedirEsconderTip: function () {
+      if (UI.tipFixo) { return; }                 // popover fixado não fecha por mouseout
+      win.clearTimeout(UI.tipTimer);
+      UI.tipTimer = win.setTimeout(function () { UI.esconderTip(); }, 260);
+    },
+
     renderTudo: function () {
-      UI.renderProgresso(); UI.renderBoard(); UI.renderBadges();
+      UI.renderProgresso(); UI.renderBoard(); UI.renderTabs(); UI.renderBadges();
       if (!UI.selecionado && PERFIS[0] && PERFIS[0].habilidades[0]) { UI.selecionar(PERFIS[0].habilidades[0].id); }
       else { UI.renderPanel(); }
       if (win.requestAnimationFrame) { win.requestAnimationFrame(UI.desenharConectores); }
@@ -439,8 +528,10 @@
 
     toast: function (msg) {
       var t = $('#tfToast'); if (!t) { return; }
-      t.textContent = msg; t.classList.add('is-visible');
-      win.setTimeout(function () { t.classList.remove('is-visible'); }, 3200);
+      t.innerHTML = '<span class="mdi mdi-check-circle-outline"></span><span>' + escapar(msg) + '</span>';
+      t.classList.add('is-open');                 // classe correta (CSS estiliza .tt-toast.is-open)
+      win.clearTimeout(UI.toastTimer);
+      UI.toastTimer = win.setTimeout(function () { t.classList.remove('is-open'); }, 3200);
     }
   };
 
@@ -498,7 +589,7 @@
         if (hab) { UI.mostrarTip(hab, btn); }
       });
       UI.refs.board.addEventListener('mouseout', function (ev) {
-        if (ev.target.closest('.tt-node')) { UI.esconderTip(); }
+        if (ev.target.closest('.tt-node')) { UI.pedirEsconderTip(); }
       });
       UI.refs.board.addEventListener('focusin', function (ev) {
         var btn = ev.target.closest('.tt-node'); if (!btn) { return; }
@@ -506,6 +597,23 @@
         if (hab) { UI.mostrarTip(hab, btn); }
       });
       UI.refs.board.addEventListener('focusout', function () { UI.esconderTip(); });
+
+      /* pop-up permanece aberto enquanto o ponteiro esta sobre ele
+         (permite clicar no link "Ir para os desafios") */
+      if (UI.refs.tip) {
+        UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
+        UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });
+        UI.refs.tip.addEventListener('click', function (ev) {
+          var a = ev.target.closest('.tt-tip__go');
+          if (!a) { return; }
+          ev.preventDefault();                       // rola sempre (evita no-op de hash repetido)
+          var id = a.getAttribute('data-hab');
+          if (id) { UI.selecionar(id); }
+          UI.esconderTip();
+          UI.irParaDesafios();
+        });
+      }
+
       /* toque: fecha o pop-up ao rolar ou tocar fora de um nó */
       win.addEventListener('scroll', function () { UI.esconderTip(); }, { passive: true });
       doc.addEventListener('pointerdown', function (ev) {

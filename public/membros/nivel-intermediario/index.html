@@ -148,6 +148,8 @@
       <!-- Trilha de fundamentos -->
       <section class="trails-section" style="padding-top:0">
         <div class="auto-container">
+          <div class="tt-profile-tabs" id="tfProfileTabs" role="tablist"
+               aria-label="Cartões do nível"></div>
           <div class="tt-board" id="tfBoard"></div>
           <div class="tt-legend">
             <span class="tt-legend__item"><span class="tt-legend__dot"></span> Bloqueado</span>
@@ -162,6 +164,7 @@
       <!-- Desafios do nó selecionado -->
       <section class="trails-section" style="padding-top:0">
         <div class="auto-container">
+          <span id="desafios" class="tt-anchor" aria-hidden="true"></span>
           <div class="trails-section__head ts__h">
             <div class="eyebrow">
               <span class="mdi mdi-flag-checkered" aria-hidden="true"></span>
@@ -202,7 +205,8 @@
     © Up Dance — Temporada Free. Este conteúdo é pessoal e intransferível.
   </footer>
 
-  <div class="tt-toast" id="tfToast" role="status" aria-live="polite"></div>
+  <div class="tt-tip"   id="tfTip"   role="tooltip" aria-hidden="true"></div>
+  <!--<div class="tt-toast" id="tfToast" role="status" aria-live="polite"></div>-->
 
   <!-- Scripts: dados primeiro, motor depois. NÃO carrega as três árvores. -->
   <script src="/js/intermediario.data.js"></script>

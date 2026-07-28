@@ -325,6 +325,7 @@
   var UI = {
 
     refs: {},
+    tipFixo: false,        // tooltip "preso" após clique no nó (popover)
 
     montarEsqueleto: function () {
       UI.refs.board   = $('#ttBoard');
@@ -720,6 +721,7 @@
     /* ---------- tooltip ---------- */
     mostrarTip: function (hab, alvo) {
       var tip    = UI.refs.tip;
+      win.clearTimeout(UI.tipTimer);
       var perfil = perfilPorId(hab.perfilId);
       var rank   = Estado.rank(hab.id);
       var pend   = Regras.pendencias(hab);
@@ -763,8 +765,13 @@
                 'Clique direito (ou Alt+clique): −1 nível</p>';
       }
 
+      html += '<a class="tt-tip__go" href="#desafios" data-hab="' + escapar(hab.id) + '">' +
+                '<span class="mdi mdi-flag-checkered" aria-hidden="true"></span>' +
+                'Ir para os desafios</a>';
+
       tip.innerHTML = html;
       tip.classList.add('is-open');
+      tip.setAttribute('aria-hidden', 'false');
       UI.posicionarTip(alvo);
     },
 
@@ -787,7 +794,34 @@
       tip.style.top  = top + 'px';
     },
 
-    esconderTip: function () { UI.refs.tip.classList.remove('is-open'); },
+    esconderTip: function () {
+      var tip = UI.refs.tip;
+      win.clearTimeout(UI.tipTimer);
+      UI.tipFixo = false;
+      var ae = doc.activeElement;                 // nunca ocultar (aria-hidden) um descendente focado
+      if (ae && tip.contains(ae) && ae.blur) { ae.blur(); }
+      tip.classList.remove('is-open');
+      tip.setAttribute('aria-hidden', 'true');
+    },
+
+    /* Rola até a âncora #desafios compensando a altura REAL da topbar fixa
+       (no mobile ela quebra em 2 linhas e fica bem mais alta que no desktop). */
+    irParaDesafios: function () {
+      var alvo = doc.getElementById('desafios');
+      if (!alvo) { return; }
+      var bar = doc.querySelector('.members-topbar');
+      var off = (bar ? bar.getBoundingClientRect().height : 60) + 12;
+      var y = alvo.getBoundingClientRect().top + (win.pageYOffset || 0) - off;
+      if (y < 0) { y = 0; }
+      if (win.scrollTo) { win.scrollTo({ top: y, behavior: 'smooth' }); }
+      else { win.scroll(0, y); }
+    },
+
+    pedirEsconderTip: function () {
+      if (UI.tipFixo) { return; }                 // popover fixado não fecha por mouseout
+      win.clearTimeout(UI.tipTimer);
+      UI.tipTimer = win.setTimeout(function () { UI.esconderTip(); }, 260);
+    },
 
     /* ---------- toast ---------- */
     toast: function (msg, erro) {
@@ -965,7 +999,7 @@
 
       UI.renderPanel();
       var novo = $('[data-hab="' + hab.id + '"]', UI.refs.board);
-      if (novo) { UI.mostrarTip(hab, novo); }
+      if (novo) { UI.tipFixo = true; UI.mostrarTip(hab, novo); }
     });
 
     UI.refs.board.addEventListener('contextmenu', function (ev) {
@@ -978,7 +1012,7 @@
       Acoes.remover(hab);
       UI.renderPanel();
       var novo = $('[data-hab="' + hab.id + '"]', UI.refs.board);
-      if (novo) { UI.mostrarTip(hab, novo); }
+      if (novo) { UI.tipFixo = true; UI.mostrarTip(hab, novo); }
     });
 
     /* --- tooltip no hover / foco --- */
@@ -989,7 +1023,7 @@
       if (hab) { UI.mostrarTip(hab, btn); }
     });
     UI.refs.board.addEventListener('mouseout', function (ev) {
-      if (ev.target.closest('.tt-node')) { UI.esconderTip(); }
+      if (ev.target.closest('.tt-node')) { UI.pedirEsconderTip(); }
     });
     UI.refs.board.addEventListener('focusin', function (ev) {
       var btn = ev.target.closest('.tt-node');
@@ -1002,6 +1036,22 @@
       }
     });
     UI.refs.board.addEventListener('focusout', UI.esconderTip);
+
+    /* pop-up permanece aberto enquanto o ponteiro esta sobre ele
+       (permite clicar no link "Ir para os desafios") */
+    if (UI.refs.tip) {
+      UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
+      UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });
+      UI.refs.tip.addEventListener('click', function (ev) {
+        var a = ev.target.closest('.tt-tip__go');
+        if (!a) { return; }
+        ev.preventDefault();                       // rola sempre (evita no-op de hash repetido)
+        var id = a.getAttribute('data-hab');
+        if (id) { UI.habSelecionada = id; UI.renderPanel(); }
+        UI.esconderTip();
+        UI.irParaDesafios();
+      });
+    }
 
     /* --- teclado: Backspace/Delete remove --- */
     UI.refs.board.addEventListener('keydown', function (ev) {

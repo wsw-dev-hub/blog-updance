@@ -35,7 +35,7 @@ const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
 //const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Intermediário','Iniciante','Aluno','Free'];
 //const MEMBER_TYPES = ['Premium','Professor(a)','Assistente','Monitor(a)','Estagiário(a)','Intermediário','Básico','Iniciante','Free'];
 
-const MEMBER_TYPES = ['Free','Iniciante','Básico','Intermediário','Estagiário(a)','Monitor(a)','Assistente','Professor(a)','Premium'];
+const MEMBER_TYPES = ['Free','Iniciante','Intermediário','Técnico','Estagiário(a)','Monitor(a)','Assistente','Professor(a)','Premium'];
 
 // [ Premium, Professor, Assistnte, Monitor, Estagiário, Intermediário, Básico, Iniciante, Free ]
 // ============================ [ Para Implementar - Cursos & Treinamentos ] ===================================== //
@@ -45,7 +45,7 @@ const MEMBER_TYPES = ['Free','Iniciante','Básico','Intermediário','Estagiário
 // LEVEL_ORDER espelha MEMBER_TYPES invertido (base → topo) p/ garantir strings idênticas.
 const LEVEL_ORDER = [...MEMBER_TYPES].reverse();
 const LEVEL_SLUG = {
-  'Free':'free', 'Iniciante':'iniciante', 'Básico':'basico', 'Intermediário':'intermediario',
+  'Free':'free', 'Iniciante':'iniciante', 'Intermediário':'intermediario', 'Técnico':'tecnico',
   'Estagiário(a)':'estagiario', 'Monitor(a)':'monitor', 'Assistente':'assistente',
   'Professor(a)':'professor', 'Premium':'premium',
 };
