@@ -43,6 +43,7 @@
   var CHAVE_LOCAL   = 'udx:talentos:v1';
   var MAX_PAGINAS   = 5;
   var XP_POR_PONTO  = DADOS.xpPorPonto || 100;
+  var ARVORE        = DADOS.arvore || 'talentos';   // chave de ROTAS em desafios.js
 
   var $  = function (sel, ctx) { return (ctx || doc).querySelector(sel); };
   var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || doc).querySelectorAll(sel)); };
@@ -765,7 +766,9 @@
                 'Clique direito (ou Alt+clique): −1 nível</p>';
       }
 
-      html += '<a class="tt-tip__go" href="#desafios" data-hab="' + escapar(hab.id) + '">' +
+       var destinoDesafios = '/membros/desafios/?arvore=' + encodeURIComponent(ARVORE) +
+                            '&hab=' + encodeURIComponent(hab.id);
+      html += '<a class="tt-tip__go" href="' + escapar(destinoDesafios) + '" data-hab="' + escapar(hab.id) + '">' +
                 '<span class="mdi mdi-flag-checkered" aria-hidden="true"></span>' +
                 'Ir para os desafios</a>';
 
@@ -1039,7 +1042,7 @@
 
     /* pop-up permanece aberto enquanto o ponteiro esta sobre ele
        (permite clicar no link "Ir para os desafios") */
-    if (UI.refs.tip) {
+    /*if (UI.refs.tip) {
       UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
       UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });
       UI.refs.tip.addEventListener('click', function (ev) {
@@ -1050,6 +1053,16 @@
         if (id) { UI.habSelecionada = id; UI.renderPanel(); }
         UI.esconderTip();
         UI.irParaDesafios();
+      });
+    }*/
+   if (UI.refs.tip) {
+      UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
+      UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });
+      /* "Ir para os desafios" agora é link real p/ /membros/desafios/?arvore=&hab=.
+         Sem preventDefault: preserva navegação nativa (inclui abrir em nova aba); só fecha o tip. */
+      UI.refs.tip.addEventListener('click', function (ev) {
+        if (!ev.target.closest('.tt-tip__go')) { return; }
+        UI.esconderTip();
       });
     }
 
