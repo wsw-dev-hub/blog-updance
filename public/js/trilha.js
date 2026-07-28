@@ -26,6 +26,9 @@
   var RT  = (DADOS && DADOS.runtime) || {};
   var API = RT.api || { me: '/api/me', estado: '/api/temporada/estado', desafio: '/api/temporada/desafio' };
   var CHAVE_LOCAL = RT.chaveLocal || 'udx:temporada:v1';
+  /* Chave da árvore p/ desafios.js (ROTAS): fundamentos | iniciante | intermediario.
+     É o mesmo perfil do backend (RT.perfilId, usado no envio de desafio). */
+  var ARVORE = RT.arvore || RT.perfilId || '';
 
   var $  = function (s, c) { return (c || doc).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); };
@@ -465,7 +468,9 @@
                   : 'Conclua todos os nós deste card para desbloquear.') + '</p>';
       }
 
-      html += '<a class="tt-tip__go" href="#desafios" data-hab="' + escapar(hab.id) + '">' +
+      var destinoDesafios = '/membros/desafios/?arvore=' + encodeURIComponent(ARVORE) +
+                            '&hab=' + encodeURIComponent(hab.id);
+      html += '<a class="tt-tip__go" href="' + escapar(destinoDesafios) + '" data-hab="' + escapar(hab.id) + '">' +
                 '<span class="mdi mdi-flag-checkered" aria-hidden="true"></span>' +
                 (conquista ? 'Ver atividades do card' : 'Ir para os desafios') + '</a>';
 
@@ -603,14 +608,11 @@
       if (UI.refs.tip) {
         UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
         UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });
+        /* "Ir para os desafios" agora é link real p/ /membros/desafios/?arvore=&hab=.
+           Sem preventDefault: preserva navegação nativa (inclui abrir em nova aba); só fecha o tip. */
         UI.refs.tip.addEventListener('click', function (ev) {
-          var a = ev.target.closest('.tt-tip__go');
-          if (!a) { return; }
-          ev.preventDefault();                       // rola sempre (evita no-op de hash repetido)
-          var id = a.getAttribute('data-hab');
-          if (id) { UI.selecionar(id); }
+          if (!ev.target.closest('.tt-tip__go')) { return; }
           UI.esconderTip();
-          UI.irParaDesafios();
         });
       }
 
