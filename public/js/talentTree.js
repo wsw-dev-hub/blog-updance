@@ -1018,43 +1018,7 @@
       if (novo) { UI.tipFixo = true; UI.mostrarTip(hab, novo); }
     });
 
-    /* --- tooltip no hover / foco --- */
-    /*UI.refs.board.addEventListener('mouseover', function (ev) {
-      var btn = ev.target.closest('.tt-node');
-      if (!btn) { return; }
-      var hab = DADOS.indice[btn.getAttribute('data-hab')];
-      if (hab) { UI.mostrarTip(hab, btn); }
-    });
-    UI.refs.board.addEventListener('mouseout', function (ev) {
-      if (ev.target.closest('.tt-node')) { UI.pedirEsconderTip(); }
-    });
-    UI.refs.board.addEventListener('focusin', function (ev) {
-      var btn = ev.target.closest('.tt-node');
-      if (!btn) { return; }
-      var hab = DADOS.indice[btn.getAttribute('data-hab')];
-      if (hab) {
-        UI.habSelecionada = hab.id;
-        UI.renderPanel();
-        UI.mostrarTip(hab, btn);
-      }
-    });*/
-    //UI.refs.board.addEventListener('focusout', UI.esconderTip);
-
-    /* pop-up permanece aberto enquanto o ponteiro esta sobre ele
-       (permite clicar no link "Ir para os desafios") */
-    /*if (UI.refs.tip) {
-      UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
-      UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });
-      UI.refs.tip.addEventListener('click', function (ev) {
-        var a = ev.target.closest('.tt-tip__go');
-        if (!a) { return; }
-        ev.preventDefault();                       // rola sempre (evita no-op de hash repetido)
-        var id = a.getAttribute('data-hab');
-        if (id) { UI.habSelecionada = id; UI.renderPanel(); }
-        UI.esconderTip();
-        UI.irParaDesafios();
-      });
-    }*/
+    /* --- tooltip no click/touch / foco --- */
    UI.refs.board.addEventListener('click', function (ev) {
       var btn = ev.target.closest('.tt-node');
       if (!btn) { return; }
@@ -1100,8 +1064,6 @@
     });
 
    if (UI.refs.tip) {
-      /*UI.refs.tip.addEventListener('mouseenter', function () { win.clearTimeout(UI.tipTimer); });
-      UI.refs.tip.addEventListener('mouseleave', function () { if (!UI.tipFixo) { UI.esconderTip(); } });*/
       /* "Ir para os desafios" agora é link real p/ /membros/desafios/?arvore=&hab=.
          Sem preventDefault: preserva navegação nativa (inclui abrir em nova aba); só fecha o tip. */
       UI.refs.tip.addEventListener('click', function (ev) {
