@@ -12,7 +12,7 @@
    trilha Iniciante). intermediario = 2430 = soma dos 166 desafios ÚNICOS dos
    3 cards (Preparo + Cultura & Vocabulário + Corpo & Improviso), IDs 'i2-*'. */
 const TRILHAS = {
-  fundamentos:   { resource: 'fundamentos-free',      limiar: 608,  insignia: 'fund-insignia' },
+  fundamentos:   { resource: 'nivel-free',            limiar: 608,  insignia: 'fund-insignia' },
   iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
   intermediario: { resource: 'nivel-intermediario',   limiar: 2430, insignia: 'int-insignia'  },
 };
