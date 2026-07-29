@@ -1019,7 +1019,7 @@
     });
 
     /* --- tooltip no hover / foco --- */
-    UI.refs.board.addEventListener('mouseover', function (ev) {
+    /*UI.refs.board.addEventListener('mouseover', function (ev) {
       var btn = ev.target.closest('.tt-node');
       if (!btn) { return; }
       var hab = DADOS.indice[btn.getAttribute('data-hab')];
@@ -1038,7 +1038,7 @@
         UI.mostrarTip(hab, btn);
       }
     });
-    UI.refs.board.addEventListener('focusout', UI.esconderTip);
+    UI.refs.board.addEventListener('focusout', UI.esconderTip);*/
 
     /* pop-up permanece aberto enquanto o ponteiro esta sobre ele
        (permite clicar no link "Ir para os desafios") */
