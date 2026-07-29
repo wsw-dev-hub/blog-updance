@@ -25,7 +25,7 @@
 
   /* origem → { paleta (page-class) , data module , categoria , rótulos } */
   var ROTAS = {
-    fundamentos:   { classe: 'page-temporada',     data: '/js/fundamentos.data.js',   rotulo: 'Temporada Free',      categoria: 'habilidades', catLabel: 'Habilidades', catIcone: 'mdi-star-four-points-outline' },
+    fundamentos:   { classe: 'page-temporada',     data: '/js/fundamentos.data.js',   rotulo: 'Nível Free',          categoria: 'habilidades', catLabel: 'Habilidades', catIcone: 'mdi-star-four-points-outline' },
     iniciante:     { classe: 'page-iniciante',     data: '/js/iniciante.data.js',     rotulo: 'Nível Iniciante',     categoria: 'habilidades', catLabel: 'Habilidades', catIcone: 'mdi-star-four-points-outline' },
     intermediario: { classe: 'page-intermediario', data: '/js/intermediario.data.js', rotulo: 'Nível Intermediário', categoria: 'habilidades', catLabel: 'Habilidades', catIcone: 'mdi-star-four-points-outline' },
     talentos:      { classe: 'page-talentos',      data: '/js/talentTree.data.js',    rotulo: 'Árvore de Talentos',  categoria: 'talentos',    catLabel: 'Talentos',    catIcone: 'mdi-family-tree' }
