@@ -1332,3 +1332,309 @@ function emailReset(link) {
     ${botao(link, 'Criar nova senha')}
     <p style="color:#6f6c94;font-size:12px;margin:24px 0 0">Se não foi você, ignore este e-mail — sua senha atual continua válida.</p>`);
 }
+
+/* ================================================================
+   >>> MESCLADO DE worker_trilhas.js — movido para o escopo de modulo
+   do index.js para reutilizar os helpers (json, getMember, podeAcessar,
+   logEvent, contador, CNT_PENDENTES). Corrige ReferenceError -> 500 em
+   /api/trilha/estado, /api/trilha/desafio e no gancho trilhaAoAprovar.
+================================================================ */
+/* ================================================================
+   TRILHAS DE NÍVEL (Free / Iniciante / Intermediário) — backend
+   GENERALIZADO. Substitui os endpoints /api/temporada/* por
+   /api/trilha/*, distinguindo o nível por 'perfil'.
+   Reusa as tabelas talent_* com perfil_id = <perfil>.
+================================================================ */
+
+/* Config por trilha. O limiar é DERIVADO da soma dos desafios (únicos) de
+   cada data module (validado por teste). fundamentos = 608 = soma dos 59
+   desafios ÚNICOS dos 2 cards (Alongamentos + Fundamentos), já com os IDs
+   do nó fund-coreo renomeados para fund-coreo-d1..d3 (sem colisão com a
+   trilha Iniciante). intermediario = 2430 = soma dos 166 desafios ÚNICOS dos
+   3 cards (Preparo + Cultura & Vocabulário + Corpo & Improviso), IDs 'i2-*'. */
+const TRILHAS = {
+  fundamentos:   { resource: 'temporada-free',        limiar: 608,  insignia: 'fund-insignia' },
+  iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
+  intermediario: { resource: 'nivel-intermediario',   limiar: 2430, insignia: 'int-insignia'  },
+};
+
+function trilhaConfig(perfil) {
+  return Object.prototype.hasOwnProperty.call(TRILHAS, perfil) ? TRILHAS[perfil] : null;
+}
+
+/* Portaria por trilha: membro com acesso ao resource daquele nível. */
+async function trilhaGuard(request, env, perfil) {
+  const cfg = trilhaConfig(perfil);
+  if (!cfg) return { erro: json({ erro: 'Trilha desconhecida.' }, 400) };
+  const m = await getMember(request, env);
+  if (!m) return { erro: json(null, 401) };
+  const types = Array.isArray(m.types) && m.types.length ? m.types : [m.type || 'Free'];
+  const ok = await podeAcessar(env, types, cfg.resource);
+  if (!ok) return { erro: json({ erro: 'sem acesso' }, 403) };
+  return { email: m.email, types, cfg };
+}
+
+/* XPE = soma dos desafios aprovados do perfil. */
+async function recalcularXPETrilha(env, email, perfil) {
+  const row = await env.DB.prepare(
+    "SELECT COALESCE(SUM(xp),0) AS xpe FROM talent_progresso " +
+    "WHERE email = ? AND perfil_id = ? AND status = 'aprovado'"
+  ).bind(email, perfil).first();
+  return row ? row.xpe : 0;
+}
+
+/* GET /api/trilha/estado?perfil=<perfil> */
+async function trilhaEstado(request, env, url) {
+  url = url || new URL(request.url);
+  try{
+    const perfil = (url.searchParams.get('perfil') || '').trim();
+    const g = await trilhaGuard(request, env, perfil);
+    if (g.erro) return g.erro;
+
+    const [aprovados, insignias] = await env.DB.batch([
+      env.DB.prepare(
+        "SELECT desafio_id FROM talent_progresso " +
+        "WHERE email = ? AND perfil_id = ? AND status = 'aprovado'"
+      ).bind(g.email, perfil),
+      env.DB.prepare(
+        "SELECT titulo_id FROM talent_titulos WHERE email = ? AND perfil_id = ?"
+      ).bind(g.email, perfil),
+    ]);
+
+    const xpe = await recalcularXPETrilha(env, g.email, perfil);
+    return json({
+      perfil,
+      xpe,
+      desafios:  (aprovados.results || []).map(r => r.desafio_id),
+      insignias: (insignias.results || []).map(r => r.titulo_id),
+      elegivel:  xpe >= g.cfg.limiar,
+    });
+ } catch (e) {
+   return json({ erro: 'debug', message: String((e && e.message) || e), stack: String((e && e.stack) || '') }, 500);
+ }
+}
+
+/* POST /api/trilha/desafio  Body: { perfil, desafio, comprovacao? }
+   Toda aprovação passa por revisão humana → entra como 'pendente'
+   (auto_aprovar é ignorado aqui de propósito; ver decisão de produto). */
+async function trilhaEnviarDesafio(request, env) {
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  const perfil    = String(body.perfil  || '').trim();
+  const desafioId = String(body.desafio || '').slice(0, 60);
+  const g = await trilhaGuard(request, env, perfil);
+  if (g.erro) return g.erro;
+  if (!desafioId) return json({ ok: false, erro: 'Desafio não informado.' }, 400);
+
+  /* Só aceita desafios REALMENTE do perfil desta trilha. */
+  const d = await env.DB.prepare(
+    "SELECT id, perfil_id, xp FROM talent_desafios WHERE id = ? AND ativo = 1 AND perfil_id = ?"
+  ).bind(desafioId, perfil).first();
+  if (!d) {
+    await logEvent(env, g.email, 'trilha_desafio_erro', `${perfil}: ${desafioId}`);
+    return json({ ok: false, erro: 'Desafio inexistente ou fora da trilha.' }, 404);
+  }
+
+  const jaTem = await env.DB.prepare(
+    'SELECT status FROM talent_progresso WHERE email = ? AND desafio_id = ?'
+  ).bind(g.email, desafioId).first();
+  if (jaTem) return json({ ok: true, status: jaTem.status, duplicado: true });
+
+  const comprovacao = String(body.comprovacao || '').slice(0, 500);
+
+  /* Revisão obrigatória: sempre 'pendente'. */
+  await env.DB.batch([
+    env.DB.prepare(
+      'INSERT INTO talent_progresso (email, desafio_id, perfil_id, xp, status, comprovacao) ' +
+      "VALUES (?, ?, ?, ?, 'pendente', ?)"
+    ).bind(g.email, desafioId, perfil, d.xp, comprovacao),
+    contador(env, CNT_PENDENTES, 1),
+  ]);
+  await logEvent(env, g.email, 'trilha_desafio_pendente', `${perfil}: ${desafioId}`);
+  return json({ ok: true, status: 'pendente' });
+}
+
+/* Concessão da insígnia + elegibilidade acontece na APROVAÇÃO (fila de revisão).
+   Ganchar no fluxo de aprovação existente (talentosAvaliar): após marcar
+   'aprovado', se o perfil for uma trilha e o XPE cruzar o limiar, gravar a
+   insígnia da trilha. Ver inserção apontada no texto. */
+async function trilhaAoAprovar(env, email, perfil) {
+  const cfg = trilhaConfig(perfil);
+  if (!cfg) return;
+  const xpe = await recalcularXPETrilha(env, email, perfil);
+  if (xpe >= cfg.limiar) {
+    await env.DB.prepare(
+      'INSERT OR IGNORE INTO talent_titulos (email, titulo_id, perfil_id) VALUES (?, ?, ?)'
+    ).bind(email, cfg.insignia, perfil).run();
+  }
+}
+
+/* ================================================================
+   >>> MESCLADO DE worker_reputacao.js — idem: reputacaoEstado,
+   talentosReavaliar, notaValida, registrarNota (usados no router e em
+   talentosAvaliar).
+================================================================ */
+/* ================================================================
+   ECONOMIA DE REPUTAÇÃO & DESEMPENHO — backend
+   Duas moedas DISTINTAS derivadas de notas ABSOLUTAS de avaliação:
+     • PR (Reputação): acumulada — soma das notas ATUAIS. Reconhecimento
+       do corpo de trabalho; cresce com volume × qualidade.
+     • PD (Desempenho): atual — média das últimas N notas (recência).
+       Reflete a "forma" corrente; sobe e desce; escala 0..100.
+   Notas são REAVALIÁVEIS: cada avaliação é uma linha em talent_avaliacoes;
+   a nota atual de um progresso é a de maior id. PR/PD são materializados em
+   talent_reputacao (por perfil e no rollup '_global'), no mesmo padrão de
+   recalcularXP. Reusa helpers globais do index.js (json, logEvent, getMember,
+   getAdmin, contador). Ganchado em talentosAvaliar (ver index.js).
+================================================================ */
+
+const REP = {
+  notaMin: 0,
+  notaMax: 100,          // escala da nota absoluta (ajustável)
+  desempenhoJanela: 10,  // N últimas avaliações que compõem o Desempenho (recência)
+
+  /* Escopo dos TÍTULOS — DECISÃO EM ABERTO (perfil vs global).
+     'perfil'  → títulos por perfil real (bailarino/professor/performer/trilhas)
+     'global'  → um único título agregando todos os perfis ('_global') */
+  escopoTitulos: 'perfil',
+
+  /* Catálogo PROVISÓRIO de títulos (limiares ajustáveis). */
+  titulosReputacao: [   // sobre PR (acumulada)
+    { id: 'rep-1', nome: 'Reconhecido(a)', min: 500  },
+    { id: 'rep-2', nome: 'Referência',     min: 1500 },
+    { id: 'rep-3', nome: 'Autoridade',     min: 4000 },
+    { id: 'rep-4', nome: 'Lenda',          min: 8000 },
+  ],
+  titulosDesempenho: [  // sobre PD (0..100)
+    { id: 'des-1', nome: 'Consistente', min: 60 },
+    { id: 'des-2', nome: 'Destaque',    min: 75 },
+    { id: 'des-3', nome: 'Excelência',  min: 88 },
+    { id: 'des-4', nome: 'Elite',       min: 95 },
+  ],
+};
+
+const GLOBAL = '_global';
+
+function notaValida(x) {
+  const n = Math.round(Number(x));
+  if (!Number.isFinite(n)) return null;
+  if (n < REP.notaMin || n > REP.notaMax) return null;
+  return n;
+}
+
+/* Registra uma nota (1ª avaliação OU reavaliação) e recomputa PR/PD. */
+async function registrarNota(env, { progressoId, email, perfil, desafioId, nota, avaliador, parecer }) {
+  await env.DB.prepare(
+    'INSERT INTO talent_avaliacoes (progresso_id, email, perfil_id, desafio_id, nota, avaliador, parecer) ' +
+    'VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).bind(progressoId, email, perfil, desafioId, nota, avaliador || null, parecer || null).run();
+  await env.DB.prepare(
+    "INSERT INTO counters (name, value) VALUES ('reputacao_avaliacoes', 1) " +
+    "ON CONFLICT(name) DO UPDATE SET value = value + 1"
+  ).run();
+  return recalcularReputacao(env, email);
+}
+
+/* Recomputa PR e PD por perfil e no rollup global, a partir das notas ATUAIS
+   (última avaliação de cada progresso). Materializa em talent_reputacao. */
+async function recalcularReputacao(env, email) {
+  const cur = (await env.DB.prepare(
+    'SELECT a.perfil_id AS perfil, a.nota AS nota, a.id AS aid ' +
+    'FROM talent_avaliacoes a ' +
+    'JOIN (SELECT progresso_id, MAX(id) AS mid FROM talent_avaliacoes WHERE email = ? GROUP BY progresso_id) L ' +
+    '  ON L.progresso_id = a.progresso_id AND L.mid = a.id ' +
+    'WHERE a.email = ? ORDER BY a.id DESC'
+  ).bind(email, email).all()).results || [];
+
+  const grupos = {};                                  // perfil -> [notas em ordem de recência]
+  const push = (k, nota) => { (grupos[k] = grupos[k] || []).push(nota); };
+  cur.forEach(r => { push(r.perfil, r.nota); push(GLOBAL, r.nota); });
+
+  const escopos = [];
+  for (const [perfil, notas] of Object.entries(grupos)) {
+    const pr = notas.reduce((a, n) => a + n, 0);                       // acumulada
+    const jan = notas.slice(0, REP.desempenhoJanela);                 // N mais recentes
+    const pd = jan.length ? Math.round(jan.reduce((a, n) => a + n, 0) / jan.length) : 0;
+    await env.DB.prepare(
+      'INSERT INTO talent_reputacao (email, perfil_id, pr, pd, n_avaliacoes, updated_at) ' +
+      "VALUES (?, ?, ?, ?, ?, datetime('now')) " +
+      'ON CONFLICT(email, perfil_id) DO UPDATE SET ' +
+      "pr = excluded.pr, pd = excluded.pd, n_avaliacoes = excluded.n_avaliacoes, updated_at = datetime('now')"
+    ).bind(email, perfil, pr, pd, notas.length).run();
+    escopos.push({ perfil, pr, pd, n: notas.length });
+  }
+  await concederRepTitulos(env, email, escopos);
+  return escopos;
+}
+
+async function concederRepTitulos(env, email, escopos) {
+  for (const e of escopos) {
+    const isGlobal = e.perfil === GLOBAL;
+    if (REP.escopoTitulos === 'perfil' && isGlobal) continue;
+    if (REP.escopoTitulos === 'global' && !isGlobal) continue;
+    for (const t of REP.titulosReputacao)  if (e.pr >= t.min) await grantRepTitulo(env, email, t.id, 'reputacao',  e.perfil);
+    for (const t of REP.titulosDesempenho) if (e.pd >= t.min) await grantRepTitulo(env, email, t.id, 'desempenho', e.perfil);
+  }
+  await env.DB.prepare(
+    "INSERT INTO counters (name, value) VALUES ('reputacao_titulos', (SELECT COUNT(*) FROM talent_rep_titulos)) " +
+    "ON CONFLICT(name) DO UPDATE SET value = excluded.value"
+  ).run();
+}
+
+async function grantRepTitulo(env, email, tituloId, eixo, escopo) {
+  await env.DB.prepare(
+    'INSERT OR IGNORE INTO talent_rep_titulos (email, titulo_id, eixo, escopo) VALUES (?, ?, ?, ?)'
+  ).bind(email, tituloId, eixo, escopo).run();
+}
+
+/* ------------------------- HANDLERS HTTP ------------------------- */
+
+/* POST /api/admin/talentos/reavaliar  Body: { id, nota, parecer? }
+   Reavalia um progresso JÁ APROVADO (não mexe em status/XP; só nota/PR/PD). */
+async function talentosReavaliar(request, env, admin) {
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  const id = Math.floor(body.id || 0);
+  const nota = notaValida(body.nota);
+  const parecer = String(body.parecer || '').slice(0, 500);
+  if (!id) return json({ ok: false, erro: 'Registro não informado.' }, 400);
+  if (nota === null) return json({ ok: false, erro: `Nota inválida (use ${REP.notaMin}..${REP.notaMax}).` }, 400);
+
+  const reg = await env.DB.prepare(
+    'SELECT email, perfil_id, status, desafio_id FROM talent_progresso WHERE id = ?'
+  ).bind(id).first();
+  if (!reg) return json({ ok: false, erro: 'Registro inexistente.' }, 404);
+  if (reg.status !== 'aprovado') return json({ ok: false, erro: 'Só é possível avaliar itens aprovados.' }, 409);
+
+  await registrarNota(env, {
+    progressoId: id, email: reg.email, perfil: reg.perfil_id, desafioId: reg.desafio_id,
+    nota, avaliador: admin.email || 'admin', parecer,
+  });
+  await logEvent(env, reg.email, 'reputacao_reavaliar', `${reg.desafio_id} nota=${nota} por ${admin.email || 'admin'}`);
+  const estado = await lerReputacao(env, reg.email);
+  return json({ ok: true, nota, reputacao: estado });
+}
+
+/* GET /api/reputacao/estado — PR/PD e títulos do membro logado. */
+async function reputacaoEstado(request, env) {
+  const m = await getMember(request, env);
+  if (!m) return json(null, 401);
+  return json({ ok: true, reputacao: await lerReputacao(env, m.email) });
+}
+
+async function lerReputacao(env, email) {
+  const [rep, tit] = await env.DB.batch([
+    env.DB.prepare('SELECT perfil_id, pr, pd, n_avaliacoes FROM talent_reputacao WHERE email = ?').bind(email),
+    env.DB.prepare('SELECT titulo_id, eixo, escopo FROM talent_rep_titulos WHERE email = ?').bind(email),
+  ]);
+  const porPerfil = {}; let global = { pr: 0, pd: 0, n: 0 };
+  for (const r of (rep.results || [])) {
+    if (r.perfil_id === GLOBAL) global = { pr: r.pr, pd: r.pd, n: r.n_avaliacoes };
+    else porPerfil[r.perfil_id] = { pr: r.pr, pd: r.pd, n: r.n_avaliacoes };
+  }
+  return { global, porPerfil, titulos: (tit.results || []) };
+}
