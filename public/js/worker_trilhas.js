@@ -44,7 +44,8 @@ async function recalcularXPETrilha(env, email, perfil) {
 
 /* GET /api/trilha/estado?perfil=<perfil> */
 async function trilhaEstado(request, env, url) {
-  try{
+  url = url || new URL(request.url);
+  //try{
     const perfil = (url.searchParams.get('perfil') || '').trim();
     const g = await trilhaGuard(request, env, perfil);
     if (g.erro) return g.erro;
@@ -67,9 +68,9 @@ async function trilhaEstado(request, env, url) {
       insignias: (insignias.results || []).map(r => r.titulo_id),
       elegivel:  xpe >= g.cfg.limiar,
     });
- } catch (e) {
+ /*} catch (e) {
    return json({ erro: 'debug', message: String((e && e.message) || e), stack: String((e && e.stack) || '') }, 500);
- }
+ }*/
 }
 
 /* POST /api/trilha/desafio  Body: { perfil, desafio, comprovacao? }
