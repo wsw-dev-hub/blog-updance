@@ -44,28 +44,32 @@ async function recalcularXPETrilha(env, email, perfil) {
 
 /* GET /api/trilha/estado?perfil=<perfil> */
 async function trilhaEstado(request, env, url) {
-  const perfil = (url.searchParams.get('perfil') || '').trim();
-  const g = await trilhaGuard(request, env, perfil);
-  if (g.erro) return g.erro;
+  try{
+    const perfil = (url.searchParams.get('perfil') || '').trim();
+    const g = await trilhaGuard(request, env, perfil);
+    if (g.erro) return g.erro;
 
-  const [aprovados, insignias] = await env.DB.batch([
-    env.DB.prepare(
-      "SELECT desafio_id FROM talent_progresso " +
-      "WHERE email = ? AND perfil_id = ? AND status = 'aprovado'"
-    ).bind(g.email, perfil),
-    env.DB.prepare(
-      "SELECT titulo_id FROM talent_titulos WHERE email = ? AND perfil_id = ?"
-    ).bind(g.email, perfil),
-  ]);
+    const [aprovados, insignias] = await env.DB.batch([
+      env.DB.prepare(
+        "SELECT desafio_id FROM talent_progresso " +
+        "WHERE email = ? AND perfil_id = ? AND status = 'aprovado'"
+      ).bind(g.email, perfil),
+      env.DB.prepare(
+        "SELECT titulo_id FROM talent_titulos WHERE email = ? AND perfil_id = ?"
+      ).bind(g.email, perfil),
+    ]);
 
-  const xpe = await recalcularXPETrilha(env, g.email, perfil);
-  return json({
-    perfil,
-    xpe,
-    desafios:  (aprovados.results || []).map(r => r.desafio_id),
-    insignias: (insignias.results || []).map(r => r.titulo_id),
-    elegivel:  xpe >= g.cfg.limiar,
-  });
+    const xpe = await recalcularXPETrilha(env, g.email, perfil);
+    return json({
+      perfil,
+      xpe,
+      desafios:  (aprovados.results || []).map(r => r.desafio_id),
+      insignias: (insignias.results || []).map(r => r.titulo_id),
+      elegivel:  xpe >= g.cfg.limiar,
+    });
+ } catch (e) {
+   return json({ erro: 'debug', message: String((e && e.message) || e), stack: String((e && e.stack) || '') }, 500);
+ }
 }
 
 /* POST /api/trilha/desafio  Body: { perfil, desafio, comprovacao? }
