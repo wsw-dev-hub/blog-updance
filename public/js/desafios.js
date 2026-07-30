@@ -403,13 +403,14 @@
         renderPontos(); renderHabilidades(); renderReputacao(); renderTitulos();
       });
 
-      /* INSERIR — trilha.js:127 NÃO roda aqui; garantir perfilId por nó p/ resolver a paleta do card */
+    win.UDX_DESAFIOS = { estado: Estado, regras: Regras, no: hab, arvore: ARV, categoria: CFG.categoria };
+  }
+
+  /* trilha.js:127 não roda aqui; garante perfilId por nó p/ resolver a paleta do card.
+       No-op nos dados atuais (perfilId já vem gravado) — mantido por robustez. */
     (DADOS.perfis || []).forEach(function (p) {
       (p.habilidades || []).forEach(function (h) { if (h.perfilId == null) { h.perfilId = p.id; } });
     });
-
-    win.UDX_DESAFIOS = { estado: Estado, regras: Regras, no: hab, arvore: ARV, categoria: CFG.categoria };
-  }
 
   if (doc.readyState === 'loading') { doc.addEventListener('DOMContentLoaded', boot); }
   else { boot(); }
