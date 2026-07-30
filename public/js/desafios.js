@@ -40,7 +40,16 @@
   var PALETAS_PERFIL = {
     bailarino: { grad:'linear-gradient(135deg, #F20505 0%, #8C0783 100%)', gradSoft:'linear-gradient(135deg, rgba(242,5,5,.16) 0%, rgba(140,7,131,.20) 100%)', gradText:'linear-gradient(135deg, #8C0783 0%, #F20505 100%)', accent:'#F20505', glow:'rgba(242, 5, 5, .34)' },
     professor: { grad:'linear-gradient(135deg, #5708A6 0%, #430ABF 100%)', gradSoft:'linear-gradient(135deg, rgba(87,8,166,.16) 0%, rgba(67,10,191,.22) 100%)', gradText:'linear-gradient(135deg, #430ABF 0%, #5708A6 100%)', accent:'#430ABF', glow:'rgba(67, 10, 191, .38)' },
-    performer: { grad:'linear-gradient(135deg, #FA33A1 0%, #F27405 100%)', gradSoft:'linear-gradient(135deg, rgba(250,51,161,.16) 0%, rgba(242,116,5,.20) 100%)', gradText:'linear-gradient(135deg, #F27405 0%, #FA33A1 100%)', accent:'#FA33A1', glow:'rgba(250, 51, 161, .34)' }
+    performer: { grad:'linear-gradient(135deg, #FA33A1 0%, #F27405 100%)', gradSoft:'linear-gradient(135deg, rgba(250,51,161,.16) 0%, rgba(242,116,5,.20) 100%)', gradText:'linear-gradient(135deg, #F27405 0%, #FA33A1 100%)', accent:'#FA33A1', glow:'rgba(250, 51, 161, .34)' },
+    /* INSERIR — perfis das trilhas (espelham --p-* de fundamentos.css / niveis.css) */
+    fundamentos:  { grad:'linear-gradient(135deg, #030BA6 0%, #BF0449 100%)', gradSoft:'linear-gradient(135deg, rgba(3,11,166,.16) 0%, rgba(191,4,73,.20) 100%)', gradText:'linear-gradient(135deg, #BF0449 0%, #030BA6 100%)', accent:'#030BA6', glow:'rgba(3, 11, 166, .34)' },
+    alongamentos: { grad:'linear-gradient(135deg, #110273 0%, #030BA6 100%)', gradSoft:'linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(3,11,166,.20) 100%)', gradText:'linear-gradient(135deg, #030BA6 0%, #110273 100%)', accent:'#030BA6', glow:'rgba(3, 11, 166, .34)' },
+    along:        { grad:'linear-gradient(135deg, #110273 0%, #030BA6 100%)', gradSoft:'linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(3,11,166,.20) 100%)', gradText:'linear-gradient(135deg, #030BA6 0%, #110273 100%)', accent:'#030BA6', glow:'rgba(3, 11, 166, .34)' },
+    seg:          { grad:'linear-gradient(135deg, #8C0783 0%, #BF0449 100%)', gradSoft:'linear-gradient(135deg, rgba(140,7,131,.16) 0%, rgba(191,4,73,.20) 100%)', gradText:'linear-gradient(135deg, #BF0449 0%, #8C0783 100%)', accent:'#BF0449', glow:'rgba(191, 4, 73, .34)' },
+    boost:        { grad:'linear-gradient(135deg, #F20505 0%, #F27405 100%)', gradSoft:'linear-gradient(135deg, rgba(242,5,5,.16) 0%, rgba(242,116,5,.20) 100%)', gradText:'linear-gradient(135deg, #F27405 0%, #F20505 100%)', accent:'#F27405', glow:'rgba(242, 116, 5, .34)' },
+    prep:         { grad:'linear-gradient(135deg, #110273 0%, #430ABF 100%)', gradSoft:'linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(67,10,191,.20) 100%)', gradText:'linear-gradient(135deg, #430ABF 0%, #110273 100%)', accent:'#430ABF', glow:'rgba(67, 10, 191, .34)' },
+    corp:         { grad:'linear-gradient(135deg, #430ABF 0%, #8C0783 100%)', gradSoft:'linear-gradient(135deg, rgba(67,10,191,.16) 0%, rgba(140,7,131,.20) 100%)', gradText:'linear-gradient(135deg, #8C0783 0%, #430ABF 100%)', accent:'#8C0783', glow:'rgba(140, 7, 131, .34)' },
+    cult:         { grad:'linear-gradient(135deg, #8C0783 0%, #FA33A1 100%)', gradSoft:'linear-gradient(135deg, rgba(140,7,131,.16) 0%, rgba(250,51,161,.20) 100%)', gradText:'linear-gradient(135deg, #FA33A1 0%, #8C0783 100%)', accent:'#FA33A1', glow:'rgba(250, 51, 161, .34)' }
   };
 
   var $ = function (s, c) { return (c || doc).querySelector(s); };
@@ -229,7 +238,8 @@
     /* INSERIR: árvore→elementos — a paleta do PERFIL do nó dirige os blocos da origem.
        O envelope .page-reputacao nunca é tocado (isolamento estrutural). */
     function aplicarPaletaOrigem(hab) {
-      if (!IS_TAL || !hab) { return; }                 // trilhas são mono-paleta
+      //if (!IS_TAL || !hab) { return; }                 // trilhas são mono-paleta
+      if (!hab) { return; }                            // vale p/ talentos E trilhas
       var pal = PALETAS_PERFIL[hab.perfilId];
       if (!pal) { return; }               
                    // perfil desconhecido → mantém --seg-* genérico
@@ -392,6 +402,11 @@
         renderTally(hab); renderNode(hab);
         renderPontos(); renderHabilidades(); renderReputacao(); renderTitulos();
       });
+
+      /* INSERIR — trilha.js:127 NÃO roda aqui; garantir perfilId por nó p/ resolver a paleta do card */
+    (DADOS.perfis || []).forEach(function (p) {
+      (p.habilidades || []).forEach(function (h) { if (h.perfilId == null) { h.perfilId = p.id; } });
+    });
 
     win.UDX_DESAFIOS = { estado: Estado, regras: Regras, no: hab, arvore: ARV, categoria: CFG.categoria };
   }
