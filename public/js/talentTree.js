@@ -769,7 +769,7 @@
       var destinoDesafios = '/membros/desafios/?arvore=' + encodeURIComponent(ARVORE) +
                             '&hab=' + encodeURIComponent(hab.id) +
                             '&perfil=' + encodeURIComponent(hab.perfilId);    // ← NOVO: cartão de origem
-      html += '<a class="tt-tip__go" href="' + escapar(destinoDesafios) + '" data-hab="' + escapar(hab.id) + '">' +
+      html += '<a class="tt-tip__go" href="' + escapar(destinoDesafios) + '" data-hab="' + escapar(hab.perfilId) + '">' +
                 '<span class="mdi mdi-flag-checkered" aria-hidden="true"></span>' +
                 'Ir para os desafios</a>';
 
