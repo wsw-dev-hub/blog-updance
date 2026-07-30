@@ -36,6 +36,13 @@
        maestria:  { classe:'page-maestria', data:'/js/maestria.data.js',categoria:'maestrias',   ... } */
   };
 
+  /* INSERIR: paleta por perfil da Árvore de Talentos (espelha --p-* de talentTree.css) */
+  var PALETAS_PERFIL = {
+    bailarino: { grad:'linear-gradient(135deg, #F20505 0%, #8C0783 100%)', gradSoft:'linear-gradient(135deg, rgba(242,5,5,.16) 0%, rgba(140,7,131,.20) 100%)', gradText:'linear-gradient(135deg, #8C0783 0%, #F20505 100%)', accent:'#F20505', glow:'rgba(242, 5, 5, .34)' },
+    professor: { grad:'linear-gradient(135deg, #5708A6 0%, #430ABF 100%)', gradSoft:'linear-gradient(135deg, rgba(87,8,166,.16) 0%, rgba(67,10,191,.22) 100%)', gradText:'linear-gradient(135deg, #430ABF 0%, #5708A6 100%)', accent:'#430ABF', glow:'rgba(67, 10, 191, .38)' },
+    performer: { grad:'linear-gradient(135deg, #FA33A1 0%, #F27405 100%)', gradSoft:'linear-gradient(135deg, rgba(250,51,161,.16) 0%, rgba(242,116,5,.20) 100%)', gradText:'linear-gradient(135deg, #F27405 0%, #FA33A1 100%)', accent:'#FA33A1', glow:'rgba(250, 51, 161, .34)' }
+  };
+
   var $ = function (s, c) { return (c || doc).querySelector(s); };
   function el(t, cls, html) { var n = doc.createElement(t); if (cls) { n.className = cls; } if (html != null) { n.innerHTML = html; } return n; }
   function escapar(s) {
@@ -46,7 +53,6 @@
   var qs = null; try { qs = new win.URLSearchParams(win.location.search); } catch (e) { qs = null; }
   var ARV = qs && qs.get('arvore');
   var HAB = qs && qs.get('hab');
-  var PERFIL = qs && qs.get('perfil');   // ← NOVO: cartão de origem (só Árvore de Talentos)
   if (!HAB) { var hh = (win.location.hash || '').replace(/^#/, ''); if (hh && hh !== 'desafios') { HAB = hh; } }
   var CFG = ARV && ROTAS[ARV];
 
@@ -77,11 +83,6 @@
 
     doc.body.classList.add('page-membros', CFG.classe); // paleta da origem (compound .page-membros.page-*)          // paleta da origem
     doc.body.setAttribute('data-categoria', CFG.categoria);
-    /* Paleta POR CARTÃO: só na Árvore de Talentos. Os Níveis (trilhas)
-       permanecem sem captura/migração de paleta de cartão. */
-    if (ARV === 'talentos' && PERFIL) {
-      doc.body.setAttribute('data-perfil', PERFIL);
-    }
     var t1 = $('#dxTreeName'); if (t1) { t1.textContent = CFG.rotulo; }
     var t2 = $('#dxKicker');   if (t2) { t2.textContent = CFG.rotulo; }
     var t3 = $('#dxCat');      if (t3) { t3.textContent = CFG.catLabel; }
@@ -225,6 +226,28 @@
              '<div><h3>' + escapar(titulo) + '</h3>' + (sub ? '<p>' + escapar(sub) + '</p>' : '') + '</div></div>';
     }
 
+    /* INSERIR: árvore→elementos — a paleta do PERFIL do nó dirige os blocos da origem.
+       O envelope .page-reputacao nunca é tocado (isolamento estrutural). */
+    function aplicarPaletaOrigem(hab) {
+      if (!IS_TAL || !hab) { return; }                 // trilhas são mono-paleta
+      var pal = PALETAS_PERFIL[hab.perfilId];
+      if (!pal) { return; }                            // perfil desconhecido → mantém --seg-* genérico
+      ['#dxNode', '#dxTally', '#dxPontos', '#dxHabilidades'].forEach(function (sel) {
+        var n = $(sel); if (!n) { return; }
+        n.style.setProperty('--seg-grad',      pal.grad);
+        n.style.setProperty('--seg-grad-soft', pal.gradSoft);
+        n.style.setProperty('--seg-grad-text', pal.gradText);
+        n.style.setProperty('--seg-accent',    pal.accent);
+        n.style.setProperty('--seg-glow',      pal.glow);
+      });
+      var node = $('#dxNode');                          // #dxNode reusa .tt-panel → --panel-*
+      if (node) {
+        node.style.setProperty('--panel-grad',   pal.grad);
+        node.style.setProperty('--panel-accent', pal.accent);
+        node.style.setProperty('--panel-glow',   pal.glow);
+      }
+    }
+
     /* ---------- 1) DESAFIOS DO NÓ (origem) ---------- */
     function renderTally(hab) {
       var c = $('#dxTally'); if (!c) { return; }
@@ -364,6 +387,7 @@
       .catch(function () { return Promise.all([Estado.carregar(), Estado.carregarReputacao()]); })
       .then(function () {
         var app = $('#dxApp'); if (app) { app.hidden = false; }
+        aplicarPaletaOrigem(hab);          // <-- INSERIR (antes dos renders)
         renderTally(hab); renderNode(hab);
         renderPontos(); renderHabilidades(); renderReputacao(); renderTitulos();
       });
