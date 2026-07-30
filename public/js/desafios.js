@@ -231,15 +231,16 @@
     function aplicarPaletaOrigem(hab) {
       if (!IS_TAL || !hab) { return; }                 // trilhas são mono-paleta
       var pal = PALETAS_PERFIL[hab.perfilId];
-      if (!pal) { return; }                            // perfil desconhecido → mantém --seg-* genérico
-      ['#dxNode', '#dxTally', '#dxPontos', '#dxHabilidades'].forEach(function (sel) {
-        var n = $(sel); if (!n) { return; }
-        n.style.setProperty('--seg-grad',      pal.grad);
-        n.style.setProperty('--seg-grad-soft', pal.gradSoft);
-        n.style.setProperty('--seg-grad-text', pal.gradText);
-        n.style.setProperty('--seg-accent',    pal.accent);
-        n.style.setProperty('--seg-glow',      pal.glow);
-      });
+      if (!pal) { return; }               
+                   // perfil desconhecido → mantém --seg-* genérico
+      // NOVO: o body passa a carregar a paleta do PERFIL (cobre topbar, hero e o resto)
+      var b = doc.body.style;
+      b.setProperty('--seg-grad',      pal.grad);
+      b.setProperty('--seg-grad-soft', pal.gradSoft);
+      b.setProperty('--seg-grad-text', pal.gradText);
+      b.setProperty('--seg-accent',    pal.accent);
+      b.setProperty('--seg-glow',      pal.glow);
+
       var node = $('#dxNode');                          // #dxNode reusa .tt-panel → --panel-*
       if (node) {
         node.style.setProperty('--panel-grad',   pal.grad);
