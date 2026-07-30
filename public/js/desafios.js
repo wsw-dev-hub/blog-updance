@@ -31,6 +31,7 @@
     talentos:      { classe: 'page-talentos',      data: '/js/talentTree.data.js',    rotulo: 'Árvore de Talentos',  categoria: 'talentos',    catLabel: 'Talentos',    catIcone: 'mdi-family-tree' }
     /* Aguardando arquivos (1 linha cada quando chegarem):
        tecnico:   { classe:'page-tecnico',  data:'/js/tecnico.data.js', categoria:'habilidades', ... },
+       estagio:   { classe:'page-estagio',  data:'/js/tecnico.data.js', categoria:'habilidades', ... },
        titulos:   { classe:'page-reputacao',data:'/js/titulos.data.js', categoria:'titulos',     ... },
        maestria:  { classe:'page-maestria', data:'/js/maestria.data.js',categoria:'maestrias',   ... } */
   };
@@ -45,6 +46,7 @@
   var qs = null; try { qs = new win.URLSearchParams(win.location.search); } catch (e) { qs = null; }
   var ARV = qs && qs.get('arvore');
   var HAB = qs && qs.get('hab');
+  var PERFIL = qs && qs.get('perfil');   // ← NOVO: cartão de origem (só Árvore de Talentos)
   if (!HAB) { var hh = (win.location.hash || '').replace(/^#/, ''); if (hh && hh !== 'desafios') { HAB = hh; } }
   var CFG = ARV && ROTAS[ARV];
 
@@ -75,6 +77,11 @@
 
     doc.body.classList.add('page-membros', CFG.classe); // paleta da origem (compound .page-membros.page-*)          // paleta da origem
     doc.body.setAttribute('data-categoria', CFG.categoria);
+    /* Paleta POR CARTÃO: só na Árvore de Talentos. Os Níveis (trilhas)
+       permanecem sem captura/migração de paleta de cartão. */
+    if (ARV === 'talentos' && PERFIL) {
+      doc.body.setAttribute('data-perfil', PERFIL);
+    }
     var t1 = $('#dxTreeName'); if (t1) { t1.textContent = CFG.rotulo; }
     var t2 = $('#dxKicker');   if (t2) { t2.textContent = CFG.rotulo; }
     var t3 = $('#dxCat');      if (t3) { t3.textContent = CFG.catLabel; }
