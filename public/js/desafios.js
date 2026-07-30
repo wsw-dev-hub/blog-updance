@@ -106,6 +106,12 @@
     var DADOS = win.UDX_TALENTOS || win.UDX_TRILHA;
     if (!DADOS) { falhar('Dados da árvore indisponíveis.'); return; }
 
+    /* trilha.js:127 não roda aqui; garante perfilId por nó p/ resolver a paleta do card.
+       No-op nos dados atuais (perfilId já vem gravado) — mantido por robustez. */
+    (DADOS.perfis || []).forEach(function (p) {
+      (p.habilidades || []).forEach(function (h) { if (h.perfilId == null) { h.perfilId = p.id; } });
+    });
+
     var IS_TAL = !!win.UDX_TALENTOS;
     var RT  = DADOS.runtime || {};
     var IDX = DADOS.indice || {};
@@ -406,11 +412,7 @@
     win.UDX_DESAFIOS = { estado: Estado, regras: Regras, no: hab, arvore: ARV, categoria: CFG.categoria };
   }
 
-  /* trilha.js:127 não roda aqui; garante perfilId por nó p/ resolver a paleta do card.
-       No-op nos dados atuais (perfilId já vem gravado) — mantido por robustez. */
-    (DADOS.perfis || []).forEach(function (p) {
-      (p.habilidades || []).forEach(function (h) { if (h.perfilId == null) { h.perfilId = p.id; } });
-    });
+  
 
   if (doc.readyState === 'loading') { doc.addEventListener('DOMContentLoaded', boot); }
   else { boot(); }
