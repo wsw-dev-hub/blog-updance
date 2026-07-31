@@ -81,6 +81,46 @@
     color: var(--udx-text-muted); font-size: .8rem;
     border-top: 1px solid var(--udx-border);
   }
+
+  /* Card "Ranking sazonal — em breve" */
+  .rep-em-breve{
+    display:flex; align-items:center; gap:14px; padding:16px 18px;
+    border:1px dashed var(--udx-border); border-radius:var(--udx-radius);
+    background:rgba(2,2,26,0.4);
+  }
+  .rep-em-breve .mdi{ font-size:28px; color:var(--seg-accent); }
+  .rep-em-breve h3{ margin:0 0 4px; font-size:1rem; }
+  .rep-em-breve p{ margin:0; color:var(--udx-text-muted); font-size:.85rem; }
+
+  /* Cards de título transversal */
+  .trans-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; }
+  .trans-card{
+    position:relative; padding:16px 18px; border-radius:var(--udx-radius);
+    background:rgba(2,2,26,0.55); border:1px solid var(--udx-border);
+    transition:border-color 280ms ease, transform 280ms ease;
+    overflow:hidden;
+  }
+  .trans-card::before{
+    content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background:linear-gradient(135deg, var(--tc, #430ABF) 0%, transparent 55%);
+    opacity:.18;
+  }
+  .trans-card.is-earned{ border-color:var(--tc, #FA33A1); }
+  .trans-card.is-locked{ opacity:.55; }
+  .trans-card__head{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .trans-card__head .mdi{ font-size:24px; color:var(--tc, #FA33A1); }
+  .trans-card__head h4{ margin:0; font-size:1rem; }
+  .trans-card__desc{ margin:0 0 10px; font-size:.87rem; color:var(--udx-text); }
+  .trans-card__crit{ margin:0; font-size:.78rem; color:var(--udx-text-muted); font-style:italic; }
+  .trans-card__tag{
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:10px; padding:3px 9px; border-radius:50px;
+    background:rgba(255,255,255,0.06); border:1px solid var(--udx-border);
+    font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--udx-text-muted);
+  }
+  .trans-card__tag.is-on{ color:#fff; background:var(--tc,#FA33A1); border-color:transparent; }
+  .trans-card__tag .mdi{ font-size:14px; }
 </style>
 </head>
 
@@ -113,9 +153,10 @@
           </span>
           <div class="eyebrow"><b>07</b><span>Meu Progresso</span></div>
           <h1>Reputação &amp; <em>Desempenho</em></h1>
-          <p class="lead">Sua <b>Reputação</b> soma a qualidade de tudo o que você já entregou; seu
-            <b>Desempenho</b> reflete a sua forma recente. As duas crescem com as notas que a
-            coordenação lança nos seus desafios — e você acompanha por perfil aqui.</p>
+          <p class="lead">Seu <b>Desempenho</b> reflete a sua forma recente, com base nas notas
+            que a coordenação lança nos desafios. Sua <b>Reputação</b> passa a ser sazonal em
+            breve — enquanto isso, seus <b>títulos transversais</b> registram conquistas
+            especiais ao longo da jornada.</p>
           <div class="type-chip" id="userChip" hidden>
             <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
             <span>Conectado como <b id="userEmail">—</b></span>
@@ -125,33 +166,66 @@
     </section>
 
     <div id="repApp" hidden>
-      <!-- Seletor de perfil -->
+      <!-- Seletor de perfil (para PR/PD) -->
       <section class="trails-section" style="padding-bottom:0">
         <div class="auto-container">
           <div class="tt-profile-tabs" id="repTabs" role="tablist"></div>
         </div>
       </section>
 
-      <!-- Reputação & Desempenho -->
+      <!-- Desempenho e Reputação (moedas estatísticas) -->
       <section class="trails-section" style="padding-top:14px">
         <div class="auto-container">
           <div class="trails-section__head ts__h">
             <div class="eyebrow"><span class="mdi mdi-chart-line" aria-hidden="true"></span><span>Suas moedas</span></div>
-            <h2>Reputação <em>e Desempenho</em></h2>
+            <h2>Desempenho <em>&amp; Reputação</em></h2>
+            <p class="lead">O Desempenho mostra a sua forma recente. A Reputação acumula com
+              volume e qualidade — em breve alimenta o ranking sazonal.</p>
           </div>
           <div class="rep-cols" id="repMetrics"></div>
         </div>
       </section>
 
-      <!-- Títulos -->
+      <!-- Ranking sazonal (em breve) -->
       <section class="trails-section" style="padding-top:0">
         <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow"><span class="mdi mdi-trophy-variant" aria-hidden="true"></span><span>Conquistas</span></div>
-            <h2>Seus <em>títulos</em></h2>
-            <p class="lead">Títulos são por perfil: você pode ser referência num perfil e estar começando em outro.</p>
+          <div class="rep-em-breve" role="note">
+            <span class="mdi mdi-clock-outline" aria-hidden="true"></span>
+            <div>
+              <h3>Ranking sazonal — em breve</h3>
+              <p>Os títulos de reputação (Reconhecido(a), Referência, Autoridade, Lenda) passam
+                a ser conquistados dentro de uma <b>temporada de atividades exclusivas</b>. Sua
+                pontuação acumulada segue sendo registrada — os títulos vão retomar assim que
+                a próxima temporada abrir.</p>
+            </div>
           </div>
-          <ul class="tt-titles" id="repTitulos"></ul>
+        </div>
+      </section>
+
+      <!-- Títulos Transversais -->
+      <section class="trails-section" style="padding-top:14px">
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow"><span class="mdi mdi-star-shooting" aria-hidden="true"></span><span>Conquistas transversais</span></div>
+            <h2>Títulos <em>transversais</em></h2>
+            <p class="lead">Marcos especiais concedidos automaticamente quando você cumpre
+              critérios específicos ao longo da sua jornada. Reavaliações podem revogar um
+              título caso o critério deixe de ser atendido.</p>
+          </div>
+          <div class="trans-grid" id="repTransversais"></div>
+        </div>
+      </section>
+
+      <!-- Títulos legados (rep-*/des-*), se houver -->
+      <section class="trails-section" style="padding-top:0" id="repLegadoSec" hidden>
+        <div class="auto-container">
+          <div class="trails-section__head ts__h">
+            <div class="eyebrow"><span class="mdi mdi-history" aria-hidden="true"></span><span>Histórico</span></div>
+            <h2>Títulos <em>anteriores</em></h2>
+            <p class="lead">Títulos concedidos antes da reforma do sistema de reputação. Ficam
+              preservados como registro histórico.</p>
+          </div>
+          <ul class="tt-titles" id="repLegado"></ul>
         </div>
       </section>
     </div><!-- /#repApp -->
@@ -199,13 +273,22 @@
     function dadosDoEscopo(id){
       return id === '_global' ? estado.global : (estado.porPerfil[id] || { pr:0, pd:0, n:0 });
     }
-    function titulosDoEscopo(id){
-      return (estado.titulos || []).filter(function(t){ return t.escopo === id; });
+
+    /* Todos os transversais concedidos ao membro, em QUALQUER escopo.
+       Diferente de rep/des, transversais não são "por perfil". */
+    function transversaisConcedidos(){
+      var set = {};
+      (estado.titulos || []).forEach(function(t){
+        if (t.eixo === 'transversal') set[t.titulo_id] = t;
+      });
+      return set;
     }
-    function metaTitulo(id){
-      var all = REP.titulosReputacao.concat(REP.titulosDesempenho);
-      for (var i=0;i<all.length;i++) if (all[i].id === id) return all[i];
-      return { id: id, nome: id, icone: 'mdi-medal-outline' };
+
+    /* Títulos legados (rep-* /des-*) preservados — histórico. */
+    function legadoConcedido(){
+      return (estado.titulos || []).filter(function(t){
+        return t.eixo === 'reputacao' || t.eixo === 'desempenho';
+      });
     }
 
     function renderTabs(){
@@ -215,18 +298,17 @@
         var b = el('button', 'tt-profile-tab', '<span class="mdi mdi-account-star-outline"></span>' + esc(REP.perfilLabel(id)));
         b.setAttribute('role','tab');
         b.setAttribute('aria-selected', id === escopoAtivo ? 'true' : 'false');
-        b.addEventListener('click', function(){ escopoAtivo = id; renderTabs(); renderMetrics(); renderTitulos(); });
+        b.addEventListener('click', function(){ escopoAtivo = id; renderTabs(); renderMetrics(); });
         tabs.appendChild(b);
       });
     }
 
-    function walletItem(nome, gradClasse, valorHTML, extraHTML){
+    function walletItem(nome, gradClasse, valorHTML){
       var it = el('div', 'tt-wallet__item ' + gradClasse);
       it.appendChild(el('div', 'tt-wallet__icon', '<span class="mdi ' + (gradClasse==='rep-grad-pr'?'mdi-shield-star':'mdi-speedometer') + '"></span>'));
       var info = el('div', 'tt-wallet__info');
       info.appendChild(el('span', 'tt-wallet__name', esc(nome)));
       info.appendChild(el('div', 'tt-wallet__value', valorHTML));
-      if (extraHTML) info.insertAdjacentHTML ? info.appendChild(extraHTML) : null;
       it.appendChild(info);
       return { item: it, info: info };
     }
@@ -242,49 +324,63 @@
       var box = $('#repMetrics'); box.innerHTML = '';
       var d = dadosDoEscopo(escopoAtivo);
 
-      // Reputação (PR)
-      var prNext = REP.proximoTitulo(d.pr, REP.titulosReputacao);
-      var prAtual = REP.tituloAtual(d.pr, REP.titulosReputacao);
-      var pr = walletItem('Reputação', 'rep-grad-pr', '<b>' + fmt(d.pr) + '</b> pts');
-      var prLine = el('div', 'rep-metric__next');
-      if (prNext){
-        prLine.innerHTML = '<span>Próximo: <b>' + esc(prNext.titulo.nome) + '</b></span><span>' + fmt(d.pr) + ' / ' + fmt(prNext.titulo.min) + '</span>';
-      } else {
-        prLine.innerHTML = '<span>Título máximo alcançado' + (prAtual?': <b>'+esc(prAtual.nome)+'</b>':'') + '</span>';
-      }
-      pr.info.appendChild(barra(prNext ? prNext.progresso : 1));
-      pr.info.appendChild(prLine);
-      box.appendChild(pr.item);
-
-      // Desempenho (PD)
+      // Desempenho (PD) — moeda ATIVA como referência visual (pill),
+      // mas sem "próximo título" (o eixo por bandas foi congelado).
       var banda = REP.bandaDesempenho(d.pd);
-      var pdNext = REP.proximoTitulo(d.pd, REP.titulosDesempenho);
       var pill = banda
         ? '<span class="rep-pill ' + bandaClasse(d.pd) + '"><span class="mdi ' + banda.icone + '"></span>' + esc(banda.nome) + '</span>'
         : '<span class="rep-pill rep-pill--muted">Sem banda ainda</span>';
       var pd = walletItem('Desempenho', bandaClasse(d.pd), '<b>' + d.pd + '</b>/100 &nbsp;' + pill);
       pd.info.appendChild(barra(d.pd/100));
       var pdLine = el('div', 'rep-metric__next');
-      pdLine.innerHTML = pdNext
-        ? '<span>Próxima banda: <b>' + esc(pdNext.titulo.nome) + '</b> (≥' + pdNext.titulo.min + ')</span><span>' + d.n + ' avaliação(ões)</span>'
-        : '<span>Banda máxima alcançada</span><span>' + d.n + ' avaliação(ões)</span>';
+      pdLine.innerHTML = '<span>Forma recente</span><span>' + d.n + ' avaliação(ões)</span>';
       pd.info.appendChild(pdLine);
       box.appendChild(pd.item);
+
+      // Reputação (PR) — CONGELADA. Só o valor acumulado, sem
+      // barra de próximo título nem badge de nível.
+      var pr = walletItem('Reputação', 'rep-grad-pr', '<b>' + fmt(d.pr) + '</b> pts');
+      var prLine = el('div', 'rep-metric__next');
+      prLine.innerHTML = '<span>Acumulada — ranking sazonal em breve</span>';
+      pr.info.appendChild(prLine);
+      box.appendChild(pr.item);
     }
 
-    function renderTitulos(){
-      var ul = $('#repTitulos'); ul.innerHTML = '';
-      var ts = titulosDoEscopo(escopoAtivo);
-      if (!ts.length){
-        ul.appendChild(el('li', 'tt-title', '<span class="mdi mdi-lock-outline"></span> Nenhum título neste perfil ainda — continue entregando.'));
-        return;
-      }
-      ts.sort(function(a,b){ return a.eixo < b.eixo ? -1 : 1; });
-      ts.forEach(function(t){
-        var m = metaTitulo(t.titulo_id);
+    function renderTransversais(){
+      var box = $('#repTransversais'); box.innerHTML = '';
+      var conquistados = transversaisConcedidos();
+      REP.titulosTransversais.forEach(function(t){
+        var earned = !!conquistados[t.id];
+        var card = el('div', 'trans-card' + (earned ? ' is-earned' : ' is-locked'));
+        card.style.setProperty('--tc', t.cor);
+        var head = el('div', 'trans-card__head',
+          '<span class="mdi ' + t.icone + '"></span><h4>' + esc(t.nome) + '</h4>');
+        card.appendChild(head);
+        card.appendChild(el('p', 'trans-card__desc', esc(t.descricao)));
+        card.appendChild(el('p', 'trans-card__crit', esc(t.criterio)));
+        var tag = el('span', 'trans-card__tag' + (earned ? ' is-on' : ''),
+          earned
+            ? '<span class="mdi mdi-check-circle"></span> Conquistado · ' + esc(REP.perfilLabel(t.escopo))
+            : '<span class="mdi mdi-lock-outline"></span> Não conquistado');
+        card.appendChild(tag);
+        box.appendChild(card);
+      });
+    }
+
+    function renderLegado(){
+      var ul = $('#repLegado');
+      var sec = $('#repLegadoSec');
+      ul.innerHTML = '';
+      var itens = legadoConcedido();
+      if (!itens.length){ sec.hidden = true; return; }
+      sec.hidden = false;
+      itens.sort(function(a,b){ return a.eixo < b.eixo ? -1 : 1; });
+      itens.forEach(function(t){
+        var m = REP.metaTitulo(t.titulo_id);
         var li = el('li', 'tt-title is-earned',
           '<span class="mdi ' + m.icone + '"></span> ' + esc(m.nome) +
-          ' <small style="opacity:.7">· ' + (t.eixo === 'reputacao' ? 'Reputação' : 'Desempenho') + '</small>');
+          ' <small style="opacity:.7">· ' + (t.eixo === 'reputacao' ? 'Reputação' : 'Desempenho') +
+          ' · ' + esc(REP.perfilLabel(t.escopo)) + '</small>');
         ul.appendChild(li);
       });
     }
@@ -307,7 +403,7 @@
           var temDados = (estado.global && estado.global.n > 0) || Object.keys(estado.porPerfil||{}).length > 0;
           if (!temDados){ $('#repEmpty').hidden = false; return; }
           $('#repApp').hidden = false;
-          renderTabs(); renderMetrics(); renderTitulos();
+          renderTabs(); renderMetrics(); renderTransversais(); renderLegado();
         })
         .catch(function(){ $('#repEmpty').hidden = false; toast('Não foi possível carregar agora.'); });
     }

@@ -67,6 +67,38 @@
     background: rgba(2, 2, 26, 0.55); color: var(--udx-text); font-family: var(--udx-font); font-size: 13px;
   }
   .reaval-form input#reavId{ width: 130px; }
+
+  /* Aviso de revogação (fica sempre visível abaixo do formulário) */
+  .reaval-warn{
+    display:flex; align-items:flex-start; gap:12px;
+    margin-top:14px; padding:12px 16px;
+    border:1px solid #F27405; border-radius:var(--udx-radius-sm);
+    background:rgba(242,116,5,0.08); color:var(--udx-text);
+    font-size:.85rem;
+  }
+  .reaval-warn .mdi{ color:#F27405; font-size:22px; flex-shrink:0; }
+  .reaval-warn b{ color:#F27405; }
+
+  /* Modal de confirmação */
+  .reaval-modal{
+    position:fixed; inset:0; z-index:400; display:none;
+    align-items:center; justify-content:center;
+    background:rgba(2,2,26,0.7); backdrop-filter:blur(6px);
+  }
+  .reaval-modal.is-open{ display:flex; }
+  .reaval-modal__box{
+    background:#02021a; border:1px solid var(--udx-border); border-radius:var(--udx-radius);
+    padding:22px 24px; max-width:520px; width:calc(100% - 32px);
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+  }
+  .reaval-modal__box h3{ margin:0 0 10px; display:flex; align-items:center; gap:10px; }
+  .reaval-modal__box h3 .mdi{ color:#F27405; font-size:26px; }
+  .reaval-modal__box p{ color:var(--udx-text); font-size:.9rem; line-height:1.5; margin:0 0 10px; }
+  .reaval-modal__box p.small{ font-size:.8rem; color:var(--udx-text-muted); }
+  .reaval-modal__box dl{ margin:10px 0 14px; font-size:.85rem; }
+  .reaval-modal__box dt{ color:var(--udx-text-muted); }
+  .reaval-modal__box dd{ margin:0 0 6px; }
+  .reaval-modal__actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap; }
 </style>
 </head>
 
@@ -97,8 +129,9 @@
           <div class="eyebrow"><b>·</b><span>Coordenação</span></div>
           <h1>Lançar <em>notas</em></h1>
           <p class="lead">Cada envio recebe uma <b>nota absoluta de 0 a 100</b>. A nota alimenta a
-            Reputação (acumulada) e o Desempenho (recente) do membro no perfil do desafio.
-            Você pode reavaliar um item já aprovado a qualquer momento.</p>
+            Reputação (acumulada) e o Desempenho (recente) do membro, além de disparar títulos
+            transversais quando o critério é cumprido. Reavaliar um item aprovado atualiza a nota
+            e pode <b>revogar títulos</b> concedidos anteriormente.</p>
         </div>
       </div>
     </section>
@@ -136,6 +169,16 @@
             <input type="text" id="reavParecer" placeholder="Parecer (opcional)" style="flex:1;min-width:180px" aria-label="Parecer">
             <button class="tt-btn tt-btn--primary" id="reavBtn"><span class="mdi mdi-check-bold"></span> Reavaliar</button>
           </div>
+          <div class="reaval-warn" role="note">
+            <span class="mdi mdi-alert-outline" aria-hidden="true"></span>
+            <div>
+              <b>Atenção:</b> reavaliar um item já aprovado substitui a nota anterior desse
+              registro e recalcula automaticamente a Reputação, o Desempenho e os títulos
+              transversais do membro. Uma nota mais baixa <b>pode revogar títulos já concedidos</b>
+              caso o critério deixe de ser atendido. A ação será confirmada em uma janela antes
+              de ser enviada.
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -144,6 +187,27 @@
   <footer class="members-footer">© Up Dance — Coordenação. Lançamentos de avaliação.</footer>
 
   <div class="tt-toast" id="avalToast" role="status" aria-live="polite"></div>
+
+  <!-- Modal de confirmação da reavaliação -->
+  <div class="reaval-modal" id="reavModal" role="dialog" aria-modal="true" aria-labelledby="reavModalTitle">
+    <div class="reaval-modal__box">
+      <h3 id="reavModalTitle"><span class="mdi mdi-alert-outline"></span> Confirmar reavaliação</h3>
+      <p>Você está prestes a substituir a nota atual desse registro. A Reputação, o Desempenho
+        e os títulos transversais do membro serão <b>recalculados automaticamente</b>.</p>
+      <dl>
+        <dt>ID do progresso</dt><dd id="reavModalId">—</dd>
+        <dt>Nova nota</dt><dd id="reavModalNota">—</dd>
+        <dt>Parecer</dt><dd id="reavModalParecer">—</dd>
+      </dl>
+      <p class="small">Se o critério de algum título transversal deixar de ser atendido, o título
+        será <b>revogado</b> nesta mesma ação. A resposta indicará quais títulos foram concedidos
+        ou revogados.</p>
+      <div class="reaval-modal__actions">
+        <button class="tt-btn" id="reavCancelar">Cancelar</button>
+        <button class="tt-btn tt-btn--primary" id="reavConfirmar"><span class="mdi mdi-check-bold"></span> Confirmar reavaliação</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/reputacao.data.js"></script>
   <script>
@@ -197,7 +261,7 @@
         '<label>Nota</label>' +
         '<input type="range" min="0" max="100" value="80" class="js-range">' +
         '<input type="number" class="aval-nota__num js-num" min="0" max="100" value="80">' +
-        '<span class="js-pill">' + '' + '</span>';
+        '<span class="js-pill"></span>';
       form.appendChild(notaBox);
 
       var actions = el('div', 'aval-actions');
@@ -251,20 +315,56 @@
         .catch(function(){ toast('Não foi possível carregar a fila.'); });
     }
 
-    // reavaliação por id
+    // ---------- reavaliação por id (com modal de confirmação) ----------
     (function(){
       var r = $('#reavNotaRange'), n = $('#reavNota');
+      var modal = $('#reavModal');
+      var pendente = null; // { id, nota, parecer }
+
       function sync(v){ v = Math.max(0, Math.min(100, parseInt(v||0,10))); r.value=v; n.value=v; }
       r.addEventListener('input', function(){ sync(r.value); });
       n.addEventListener('input', function(){ sync(n.value); });
+
+      function abrirConfirmacao(dados){
+        pendente = dados;
+        $('#reavModalId').textContent = dados.id;
+        $('#reavModalNota').textContent = dados.nota + ' / 100';
+        $('#reavModalParecer').textContent = dados.parecer || '(sem parecer)';
+        modal.classList.add('is-open');
+      }
+      function fechar(){ modal.classList.remove('is-open'); pendente = null; }
+
       $('#reavBtn').addEventListener('click', function(){
         var id = parseInt($('#reavId').value, 10);
         if (!id){ toast('Informe o ID do progresso.'); return; }
-        post(API.reavaliar, { id: id, nota: parseInt(n.value,10), parecer: $('#reavParecer').value || '' })
+        abrirConfirmacao({
+          id: id,
+          nota: parseInt(n.value,10),
+          parecer: $('#reavParecer').value || ''
+        });
+      });
+      $('#reavCancelar').addEventListener('click', fechar);
+      modal.addEventListener('click', function(e){ if (e.target === modal) fechar(); });
+
+      $('#reavConfirmar').addEventListener('click', function(){
+        if (!pendente) return;
+        var payload = pendente;
+        var btn = this; btn.disabled = true;
+        post(API.reavaliar, payload)
           .then(function(res){
-            if (res.ok && res.j && res.j.ok) toast('Reavaliado: nota ' + n.value + '.');
-            else toast((res.j && res.j.erro) || 'Falha na reavaliação.');
-          }).catch(function(){ toast('Erro de rede.'); });
+            btn.disabled = false;
+            if (res.ok && res.j && res.j.ok) {
+              var msg = 'Reavaliado: nota ' + payload.nota + '.';
+              var rev = (res.j.revogados || []).length;
+              var con = (res.j.concedidos || []).length;
+              if (rev)  msg += ' ' + rev + ' título(s) revogado(s).';
+              if (con)  msg += ' ' + con + ' concedido(s).';
+              toast(msg);
+              fechar();
+            } else {
+              toast((res.j && res.j.erro) || 'Falha na reavaliação.');
+            }
+          }).catch(function(){ btn.disabled = false; toast('Erro de rede.'); });
       });
     }());
 
