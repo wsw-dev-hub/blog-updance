@@ -123,12 +123,6 @@ export default {
       if (pathname === '/api/me')                                           return quemSouEu(request, env);
       if (pathname === '/api/me/access')                                    return meusAcessos(request, env);
 
-      // ── produtos ──
-      if (path === '/api/admin/produtos/list'          && method === 'GET')  return produtosList(request, env);
-      if (path === '/api/admin/produtos/save'          && method === 'POST') return produtosSave(request, env);
-      if (path === '/api/admin/produtos/delete'        && method === 'POST') return produtosDelete(request, env);
-      if (path === '/api/admin/produtos/vinculos/save' && method === 'POST') return produtosVinculosSave(request, env);
-
       // ---- ÁRVORE DE TALENTOS (membro) ----
       if (pathname === '/api/talentos/estado')                                return talentosEstado(request, env);
       if (pathname === '/api/talentos/plano'   && request.method === 'POST')  return talentosSalvarPlano(request, env);
@@ -161,6 +155,31 @@ export default {
       if (pathname === '/api/admin/setup'  && request.method === 'POST') return adminSetup(request, env);
       if (pathname === '/api/admin/login'  && request.method === 'POST') return adminLogin(request, env);
       if (pathname === '/api/admin/logout' && request.method === 'POST') return logoutCookie('a_session', 'asess', request, env);
+      
+      // ── produtos ──
+      if (pathname === '/api/admin/produtos/list')                                    return produtosList(request, env);
+      if (pathname === '/api/admin/produtos/save'          && request.method === 'POST') return produtosSave(request, env);
+      if (pathname === '/api/admin/produtos/delete'        && request.method === 'POST') return produtosDelete(request, env);
+      if (pathname === '/api/admin/produtos/vinculos/save' && request.method === 'POST') return produtosVinculosSave(request, env);
+
+      // ---- ADMIN: produtos ----
+      if (pathname === '/api/admin/produtos/list') {
+        const a = await getAdmin(request, env);
+        return a ? produtosList(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/produtos/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? produtosSave(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/produtos/delete' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? produtosDelete(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/produtos/vinculos/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? produtosVinculosSave(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+
       /* DEPOIS */
       if (pathname === '/api/admin/data') {
         const a = await getAdmin(request, env);

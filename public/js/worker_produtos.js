@@ -1,15 +1,32 @@
 /* ================================================================
    PRODUTOS — CRUD admin + vínculo N:N com resources (trilhas e afins).
    Tabelas usadas (já existentes no D1):
-     - products         (slug único, url obrigatório, external/active flags)
+     - products          (slug único, url obrigatório, external/active flags)
      - resource_products (FK CASCADE em ambos os lados; position por vínculo)
-   Padrão de handler idêntico a worker_trilhas.js:
-     - assume env.DB (D1) e utilitários globais (json, logEvent).
-     - respostas sempre em JSON com { ok, ... } ou { ok:false, erro, ... }.
+   Integração ESM: importado por src/index.js.
+   Assume env.DB (D1). `json` e `logSeguro` são internos ao módulo,
+   já que este arquivo é IMPORTADO (não concatenado).
 ================================================================ */
 
 const PROD_SLUG_RE = /^[a-z0-9-]{2,60}$/;
 const PROD_ICON_RE = /^[a-z0-9-]{2,60}$/;
+
+/* Helper interno: mesma assinatura do `json` global usado no roteador. */
+function json(payload, status) {
+  return new Response(JSON.stringify(payload), {
+    status: status || 200,
+    headers: { 'content-type': 'application/json; charset=utf-8' },
+  });
+}
+
+/* Log defensivo: usa a tabela de events se ela existir; nunca lança. */
+async function logSeguro(env, email, type, detail) {
+  try {
+    await env.DB.prepare(
+      'INSERT INTO events (type, email, detail, created_at) VALUES (?, ?, ?, ?)'
+    ).bind(type, email || null, detail || null, new Date().toISOString()).run();
+  } catch { /* silencioso — logging não pode derrubar o handler */ }
+}
 
 /* Sanitiza / normaliza payload de produto. Retorna { ok, val|erro }. */
 function sanearProduto(body) {
@@ -107,7 +124,7 @@ async function produtosSave(request, env) {
         'WHERE id=?'
       ).bind(v.slug, v.label, v.description, v.url, v.icon, v.external, v.active, now, v.id).run();
       if (!r.meta || r.meta.changes === 0) return json({ ok: false, erro: 'Produto não encontrado.' }, 404);
-      await logEvent(env, null, 'produto_atualizado', v.slug);
+      await logSeguro(env, null, 'produto_atualizado', v.slug);
       return json({ ok: true, id: v.id, criado: false });
     }
 
@@ -118,7 +135,7 @@ async function produtosSave(request, env) {
         'UPDATE products SET label=?, description=?, url=?, icon=?, external=?, active=?, updated_at=? ' +
         'WHERE id=?'
       ).bind(v.label, v.description, v.url, v.icon, v.external, v.active, now, existente.id).run();
-      await logEvent(env, null, 'produto_atualizado', v.slug);
+      await logSeguro(env, null, 'produto_atualizado', v.slug);
       return json({ ok: true, id: existente.id, criado: false });
     }
     const ins = await env.DB.prepare(
@@ -126,7 +143,7 @@ async function produtosSave(request, env) {
       'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     ).bind(v.slug, v.label, v.description, v.url, v.icon, v.external, v.active, now, now).run();
     const newId = ins.meta && ins.meta.last_row_id;
-    await logEvent(env, null, 'produto_criado', v.slug);
+    await logSeguro(env, null, 'produto_criado', v.slug);
     return json({ ok: true, id: newId, criado: true });
   } catch (e) {
     return json({ ok: false, erro: 'Falha ao salvar produto.', message: String((e && e.message) || e) }, 500);
@@ -146,7 +163,7 @@ async function produtosDelete(request, env) {
     const p = await env.DB.prepare('SELECT slug FROM products WHERE id=?').bind(id).first();
     if (!p) return json({ ok: false, erro: 'Produto não encontrado.' }, 404);
     await env.DB.prepare('DELETE FROM products WHERE id=?').bind(id).run();
-    await logEvent(env, null, 'produto_excluido', p.slug);
+    await logSeguro(env, null, 'produto_excluido', p.slug);
     return json({ ok: true });
   } catch (e) {
     return json({ ok: false, erro: 'Falha ao excluir produto.', message: String((e && e.message) || e) }, 500);
@@ -203,9 +220,17 @@ async function produtosVinculosSave(request, env) {
       ).bind(l.resource_key, productId, l.position, now));
     }
     await env.DB.batch(ops);
-    await logEvent(env, null, 'produto_vinculos_atualizados', p.slug + ':' + links.length);
+    await logSeguro(env, null, 'produto_vinculos_atualizados', p.slug + ':' + links.length);
     return json({ ok: true, total: links.length });
   } catch (e) {
     return json({ ok: false, erro: 'Falha ao salvar vínculos.', message: String((e && e.message) || e) }, 500);
   }
 }
+
+/* Exports ESM — o roteador em src/index.js importa estes nomes. */
+export {
+  produtosList,
+  produtosSave,
+  produtosDelete,
+  produtosVinculosSave,
+};
