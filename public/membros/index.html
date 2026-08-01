@@ -270,6 +270,27 @@
     font-size: 18px; color: var(--udx-primary-hot); flex-shrink: 0;
   }
 
+  /* -------------------------------------------------------------
+     Variantes de CTA no card do hub:
+     .trail-x__cta--go   → acesso à área real do recurso (liberado)
+     .trail-x__cta--info → landing descritiva do plano (bloqueado)
+     Ambas herdam o layout de .trail-x__cta; só o tratamento
+     cromático é modulado para leitura imediata do estado.
+  ------------------------------------------------------------- */
+  .trail-x.is-locked .trail-x__cta--info{
+    background: rgba(2, 2, 26, 0.55);
+    color: var(--udx-text);
+    border: 1px solid var(--udx-border);
+    box-shadow: none;
+  }
+  .trail-x.is-locked .trail-x__cta--info:hover,
+  .trail-x.is-locked .trail-x__cta--info:focus-visible{
+    background: rgba(223, 224, 242, 0.06);
+    border-color: var(--udx-primary-hot);
+    color: #fff;
+  }
+  .trail-x.is-locked .trail-x__cta--info .mdi{ font-size: 15px; }
+
   @media (prefers-reduced-motion: reduce){
     .trail-x, .ebooks-list a, .products-list a, .members-topbar .btn-sair{ transition: none; }
   }
@@ -551,16 +572,37 @@
             lockNote = '<span class="lock-note"><span class="mdi mdi-lock-outline"></span> Não disponível no seu plano</span>';
             lockedCls = ' is-locked';
           }*/
-          // Vitrine — nenhum CTA de navegação é emitido pelo hub.
-          // Toda navegação real (trilhas, arquivos, agendamentos) fica dentro
-          // da área do nível correspondente (ex.: /membros/estagio/), acessível
-          // apenas para quem tem o tipo de membro liberado.
+
+          // Estado do card:
+          //  - Liberado com destino:   CTA "Acessar" -> área real do recurso.
+          //  - Liberado sem destino:   chip "Em breve" (recurso ainda em preparo).
+          //  - Bloqueado com nível:    CTA "Conhecer plano" -> landing do plano do recurso.
+          //  - Bloqueado sem nível:    lockNote apenas (defesa; access_rules incompleto).
+          //
+          // A landing descritiva é sempre a página do PLANO referente
+          // (ex.: /planos/estagiario/), derivada de r.level — que o backend
+          // resolve como o tier de entrada em access_rules (nivelDoRecurso).
           var lockedCls = '';
           var lockNote  = '';
+          var ctaHref   = '';
+          var ctaText   = '';
+          var ctaIcon   = '';
+          var ctaCls    = '';
 
-          if (r.allowed && !r.path_prefix){
+          if (r.allowed && r.path_prefix){
+            ctaHref = r.path_prefix;
+            ctaText = 'Acessar';
+            ctaIcon = 'arrow-right';
+            ctaCls  = ' trail-x__cta--go';
+          } else if (r.allowed && !r.path_prefix){
             lockNote = '<span class="lock-note"><span class="mdi mdi-clock-outline"></span> Em breve</span>';
-          } else if (!r.allowed){
+          } else if (!r.allowed && r.level){
+            lockedCls = ' is-locked';
+            ctaHref = '/planos/' + encodeURIComponent(r.level) + '/';
+            ctaText = 'Conhecer plano';
+            ctaIcon = 'information-outline';
+            ctaCls  = ' trail-x__cta--info';
+          } else {
             lockedCls = ' is-locked';
             lockNote  = '<span class="lock-note"><span class="mdi mdi-lock-outline"></span> Não disponível no seu plano</span>';
           }
@@ -627,7 +669,13 @@
           '</article>';
         }*/
 
-        return ''+
+        var ctaHtml = ctaHref
+            ? '<a class="trail-x__cta'+ctaCls+'" href="'+esc(ctaHref)+'">'+
+                esc(ctaText)+' <span class="mdi mdi-'+esc(ctaIcon)+'"></span>'+
+              '</a>'
+            : '';
+
+          return ''+
           '<article class="trail-x'+lockedCls+'"'+lvlAttr+' data-resource="'+esc(r.key)+'">'+
             '<div class="trail-x__top">'+
               '<span class="trail-x__icon"><span class="mdi mdi-'+esc(icon)+'"></span></span>'+
@@ -638,6 +686,7 @@
             '</div>'+
             '<p class="trail-x__desc">'+esc(desc)+'</p>'+
             produtosHtml +
+            ctaHtml +
             lockNote +
           '</article>';
         }
