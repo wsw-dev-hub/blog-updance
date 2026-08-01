@@ -44,6 +44,7 @@
     tiposDesafio: {
       tarefa:    { label: 'Tarefa',    icone: 'mdi-checkbox-marked-circle-outline' },
       atividade: { label: 'Atividade', icone: 'mdi-account-clock-outline' },
+      desafio:   { label: 'Desafio',   icone: 'mdi-hand-coin-outline' },
       evento:    { label: 'Evento',    icone: 'mdi-calendar-star' }
     },
 
