@@ -27,7 +27,7 @@
  */
 
 import { WorkerMailer } from 'worker-mailer';
-import { produtosList, produtosSave, produtosDelete, produtosVinculosSave } from 'worker_produtos.js';
+import { produtosList, produtosSave, produtosDelete, produtosVinculosSave } from 'worker_produtos';
 
 const SESSION_TTL  = 60 * 60 * 24 * 7;
 const MAGIC_TTL    = 60 * 15;
