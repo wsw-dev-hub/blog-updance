@@ -245,6 +245,31 @@
     border-top: 1px solid var(--udx-border);
   }
 
+  /* -------------------------------------------------------------
+     Vitrine — itens vinculados apresentados sem navegação.
+     Só se aplica às listas geradas no hub /membros/ com o
+     modificador .products-list--display; a página de estágio
+     usa .products-list padrão (com links reais) e não é afetada.
+  ------------------------------------------------------------- */
+  .products-list--display .products-list__row{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text);
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    cursor: default;
+    user-select: none;
+  }
+  .products-list--display .products-list__row:hover{
+    background: rgba(2, 2, 26, 0.35);
+    border-color: var(--udx-border);
+    transform: none;
+  }
+  .products-list--display .products-list__row > .mdi:first-child{
+    font-size: 18px; color: var(--udx-primary-hot); flex-shrink: 0;
+  }
+
   @media (prefers-reduced-motion: reduce){
     .trail-x, .ebooks-list a, .products-list a, .members-topbar .btn-sair{ transition: none; }
   }
@@ -505,7 +530,7 @@
           var icon = safeIcon(r.icon);
           var desc = r.description || 'Recurso da área de membros.';
           var lvlAttr = r.level ? ' data-lvl="'+esc(r.level)+'"' : '';
-          var href, ctaText, ctaIcon, lockNote, lockedCls;
+          /*var href, ctaText, ctaIcon, lockNote, lockedCls;
 
           if (r.allowed && r.path_prefix){
             href = r.path_prefix;
@@ -525,11 +550,24 @@
             ctaIcon = 'lock-outline';
             lockNote = '<span class="lock-note"><span class="mdi mdi-lock-outline"></span> Não disponível no seu plano</span>';
             lockedCls = ' is-locked';
+          }*/
+          // Vitrine — nenhum CTA de navegação é emitido pelo hub.
+          // Toda navegação real (trilhas, arquivos, agendamentos) fica dentro
+          // da área do nível correspondente (ex.: /membros/estagio/), acessível
+          // apenas para quem tem o tipo de membro liberado.
+          var lockedCls = '';
+          var lockNote  = '';
+
+          if (r.allowed && !r.path_prefix){
+            lockNote = '<span class="lock-note"><span class="mdi mdi-clock-outline"></span> Em breve</span>';
+          } else if (!r.allowed){
+            lockedCls = ' is-locked';
+            lockNote  = '<span class="lock-note"><span class="mdi mdi-lock-outline"></span> Não disponível no seu plano</span>';
           }
 
           // Lista de produtos (turno 13). O backend só entrega produtos para
           // recursos liberados — cards is-locked sempre chegam com products: [].
-          var produtosHtml = '';
+          /*var produtosHtml = '';
           if (Array.isArray(r.products) && r.products.length){
             produtosHtml = '<ul class="products-list">' + r.products.map(function(p){
               var pIcon = safeIcon(p.icon || 'chevron-right');
@@ -545,11 +583,29 @@
                 '</a>'+
               '</li>';
             }).join('') + '</ul>';
+          }*/
+
+          // Vitrine dos itens vinculados: nome + descrição + ícone temático.
+          // Nenhum <a href> é emitido aqui — o acesso ao item acontece
+          // exclusivamente dentro da área do nível (ex.: /membros/estagio/).
+          var produtosHtml = '';
+          if (Array.isArray(r.products) && r.products.length){
+            produtosHtml = '<ul class="products-list products-list--display">' + r.products.map(function(p){
+              var pIcon = safeIcon(p.icon || 'chevron-right');
+              return '<li>'+
+                '<span class="products-list__row" aria-disabled="true">'+
+                  '<span class="mdi mdi-'+esc(pIcon)+'"></span>'+
+                  '<span class="products-list__label">'+esc(p.label)+
+                    (p.description ? '<span class="products-list__desc">'+esc(p.description)+'</span>' : '')+
+                  '</span>'+
+                '</span>'+
+              '</li>';
+            }).join('') + '</ul>';
           }
 
           // Se o card tem produtos listados, o CTA principal deixa de fazer sentido
           // (os itens são os próprios acessos). Se não tem, mantém o CTA único.
-          var ctaHtml = produtosHtml
+          /*var ctaHtml = produtosHtml
             ? ''
             : '<a class="trail-x__cta" href="'+esc(href)+'">'+
                 esc(ctaText)+' <span class="mdi mdi-'+esc(ctaIcon)+'"></span>'+
@@ -567,6 +623,21 @@
             '<p class="trail-x__desc">'+esc(desc)+'</p>'+
             produtosHtml +
             ctaHtml +
+            lockNote +
+          '</article>';
+        }*/
+
+        return ''+
+          '<article class="trail-x'+lockedCls+'"'+lvlAttr+' data-resource="'+esc(r.key)+'">'+
+            '<div class="trail-x__top">'+
+              '<span class="trail-x__icon"><span class="mdi mdi-'+esc(icon)+'"></span></span>'+
+              '<div>'+
+                '<span class="trail-x__num">'+esc(num)+'</span>'+
+                '<h3>'+esc(r.label || r.key)+'</h3>'+
+              '</div>'+
+            '</div>'+
+            '<p class="trail-x__desc">'+esc(desc)+'</p>'+
+            produtosHtml +
             lockNote +
           '</article>';
         }
