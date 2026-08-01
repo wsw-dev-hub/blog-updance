@@ -123,10 +123,10 @@ export default {
       if (pathname === '/api/me/access')                                    return meusAcessos(request, env);
 
       // ── produtos ──
-      if (path === '/api/admin/produtos/list'          && method === 'GET')  return produtosList(request, env);
+      /*if (path === '/api/admin/produtos/list'          && method === 'GET')  return produtosList(request, env);
       if (path === '/api/admin/produtos/save'          && method === 'POST') return produtosSave(request, env);
       if (path === '/api/admin/produtos/delete'        && method === 'POST') return produtosDelete(request, env);
-      if (path === '/api/admin/produtos/vinculos/save' && method === 'POST') return produtosVinculosSave(request, env);
+      if (path === '/api/admin/produtos/vinculos/save' && method === 'POST') return produtosVinculosSave(request, env);*/
 
       // ---- ÁRVORE DE TALENTOS (membro) ----
       if (pathname === '/api/talentos/estado')                                return talentosEstado(request, env);
