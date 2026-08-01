@@ -251,6 +251,27 @@
   }
   .updated{color:var(--faint);font-size:.74rem;margin-top:1rem;text-align:right}
 
+  /* ── Formulário de produto + linhas de vínculo ── */
+  .prod-form h4{ margin:1.4rem 0 .6rem; color:var(--txt); font-size:.9rem; font-weight:600; }
+  .prod-links-wrap{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:.35rem; padding:.5rem;
+    border:1px solid var(--line); border-radius:10px;
+    background: rgba(2,2,26,.35);
+    max-height:340px; overflow-y:auto;
+  }
+  .prod-link-row{
+    display:flex; align-items:center; gap:.5rem;
+    padding:.4rem .55rem; border-radius:8px;
+    border:1px solid transparent; cursor:pointer;
+    transition:background .15s, border-color .15s;
+  }
+  .prod-link-row:hover{ background:rgba(250,51,161,.06); border-color:rgba(250,51,161,.18); }
+  .prod-link-row input[type="checkbox"]{ accent-color:var(--accent); cursor:pointer; }
+  .prod-link-label{ flex:1; min-width:0; font-size:.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .prod-link-pos{ padding:.25rem .4rem !important; font-size:.75rem !important; text-align:center; }
+  .prod-link-pos:disabled{ opacity:.4; cursor:not-allowed; }
+
   /* ── Breakpoints alinhados com mediaQuery.css ── */
   @media (max-width:480px){
     body{padding:1rem 1rem 2rem}
@@ -296,12 +317,14 @@
         <button class="tab active" data-tab="members"><span class="mdi mdi-account-multiple"></span>Membros<span class="count" id="c-members"></span></button>
         <button class="tab" data-tab="subscribers"><span class="mdi mdi-email-outline"></span>Inscritos<span class="count" id="c-subscribers"></span></button>
         <button class="tab" data-tab="access"><span class="mdi mdi-shield-key-outline"></span>Acessos<span class="count" id="c-access"></span></button>
+        <button class="tab" data-tab="produtos"><span class="mdi mdi-package-variant"></span>Produtos<span class="count" id="c-produtos"></span></button>
         <button class="tab" data-tab="events"><span class="mdi mdi-history"></span>Eventos<span class="count" id="c-events"></span></button>
       </nav>
 
       <section class="panel active" id="panel-members"></section>
       <section class="panel" id="panel-subscribers"></section>
       <section class="panel" id="panel-access"></section>
+      <section class="panel" id="panel-produtos"></section>
       <section class="panel" id="panel-events"></section>
 
       <p class="updated" id="updated"></p>
@@ -638,6 +661,8 @@ function saveResource(){
   /* DEPOIS */
 var eventsLoaded = false;
 var accessLoaded = false;
+var produtosLoaded = false;
+
 function setupTabs(){
   var tabs=document.querySelectorAll(".tab");
   tabs.forEach(function(t){
@@ -651,6 +676,12 @@ function setupTabs(){
       if (t.dataset.tab === "access" && !accessLoaded) {
         accessLoaded = true;
         loadAccess();
+      }
+
+      // lazy-load da aba de produtos
+      if (t.dataset.tab === "produtos" && !produtosLoaded) {
+        produtosLoaded = true;
+        loadProdutos();
       }
       // lazy-load da aba de eventos
       if (t.dataset.tab === "events" && !eventsLoaded) {
@@ -701,6 +732,10 @@ function setupTabs(){
         el("c-access").textContent = "";
         el("panel-access").innerHTML = '<div class="empty">Clique na aba para carregar.</div>';                                          // permite recarregar no "Atualizar"
 
+        el("c-produtos").textContent = "";
+        el("panel-produtos").innerHTML = '<div class="empty">Clique na aba para carregar.</div>';
+        produtosLoaded = false;
+
         el("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
         el("loading").hidden=true;
         el("content").hidden=false;
@@ -721,6 +756,248 @@ function setupTabs(){
 
   el("refresh").addEventListener("click",load);
 
+  /* ── Aba Produtos ── */
+  function loadProdutos(){
+    el("panel-produtos").innerHTML = '<div class="empty">Carregando…</div>';
+    fetch("/api/admin/produtos/list", { credentials:"same-origin" })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok){ el("panel-produtos").innerHTML='<div class="empty">Falha ao carregar.</div>'; return; }
+        el("c-produtos").textContent = "("+(d.products||[]).length+")";
+        el("panel-produtos").innerHTML = produtosPanelHtml(d.products || [], d.resources || []);
+        wireProdutosPanel(d.products || [], d.resources || []);
+      })
+      .catch(function(){ produtosLoaded=false; el("panel-produtos").innerHTML='<div class="empty">Falha de conexão.</div>'; });
+  }
+
+  function produtosPanelHtml(products, resources){
+    var lista = products.length ? productsTable(products) : '<div class="empty">Nenhum produto cadastrado ainda.</div>';
+    return lista + productFormHtml(resources);
+  }
+
+  function productsTable(products){
+    var body = products.map(function(p){
+      var vinc = (p.vinculos || []).length;
+      var iconHtml = p.icon ? '<span class="mdi mdi-'+esc(p.icon)+'" style="color:var(--accent);margin-right:6px"></span>' : '';
+      return '<tr>'+
+        '<td class="email">'+iconHtml+esc(p.label)+
+          '<div class="dim" style="font-size:.72rem">'+esc(p.slug)+'</div>'+
+          (p.description ? '<div class="dim" style="font-size:.72rem;margin-top:2px">'+esc(p.description)+'</div>' : '')+
+        '</td>'+
+        '<td class="dim mono" style="max-width:260px;overflow:hidden;text-overflow:ellipsis">'+
+          '<a href="'+esc(p.url)+'" target="_blank" rel="noopener" style="color:var(--accent)">'+esc(p.url)+'</a></td>'+
+        '<td style="text-align:center">'+ (p.external ? '<span class="badge ok">externo</span>' : '<span class="badge neutral">interno</span>') +'</td>'+
+        '<td style="text-align:center">'+ (p.active   ? '<span class="badge ok">ativo</span>'   : '<span class="badge neutral">inativo</span>') +'</td>'+
+        '<td style="text-align:center"><span class="badge '+ (vinc ? 'pending' : 'neutral') +'">'+vinc+'</span></td>'+
+        '<td style="text-align:center;white-space:nowrap">'+
+          '<button class="ghost-btn prod-edit" data-id="'+p.id+'" title="Editar"><span class="mdi mdi-pencil"></span></button> '+
+          '<button class="ghost-btn prod-del"  data-id="'+p.id+'" data-label="'+esc(p.label)+'" title="Excluir"><span class="mdi mdi-trash-can-outline"></span></button>'+
+        '</td>'+
+      '</tr>';
+    }).join("");
+    return '<div class="table-wrap"><table>'+
+      '<thead><tr>'+
+        '<th>Produto</th><th>URL</th>'+
+        '<th style="text-align:center">Tipo</th>'+
+        '<th style="text-align:center">Status</th>'+
+        '<th style="text-align:center">Trilhas</th>'+
+        '<th style="text-align:center">Ações</th>'+
+      '</tr></thead><tbody>'+body+'</tbody></table></div>';
+  }
+
+  function productFormHtml(resources){
+    var linkRows = resources.map(function(r){
+      return '<label class="prod-link-row" data-key="'+esc(r.key)+'">'+
+        '<input type="checkbox" class="prod-link-chk">'+
+        '<span class="prod-link-label">'+esc(r.label)+
+          '<span class="dim" style="font-size:.7rem;margin-left:.4rem">'+esc(r.key)+'</span>'+
+        '</span>'+
+        '<input type="number" class="prod-link-pos type-sel" value="0" min="0" style="width:70px" title="Posição" disabled>'+
+      '</label>';
+    }).join('');
+    return ''+
+      '<section class="prod-form" id="prodForm" style="margin-top:2rem;padding:1.2rem;border:1px solid var(--line);border-radius:14px;background:var(--card)">'+
+        '<h3 style="margin:0 0 .8rem;color:#fff;font-size:1rem">'+
+          '<span class="mdi mdi-package-variant" style="color:var(--accent);margin-right:.4rem"></span>Novo / editar produto</h3>'+
+        '<input type="hidden" id="prodId">'+
+        '<div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">'+
+          '<label style="display:block"><span class="dim" style="font-size:.72rem">Slug (a-z 0-9 hífen)</span>'+
+            '<input id="prodSlug" class="type-sel" style="width:100%" placeholder="ex.: curso-hhd-basico" autocomplete="off"></label>'+
+          '<label style="display:block"><span class="dim" style="font-size:.72rem">Rótulo</span>'+
+            '<input id="prodLabel" class="type-sel" style="width:100%" placeholder="ex.: Curso HHD Básico"></label>'+
+          '<label style="display:block"><span class="dim" style="font-size:.72rem">URL / Checkout</span>'+
+            '<input id="prodUrl" class="type-sel" style="width:100%" placeholder="https://…"></label>'+
+          '<label style="display:block"><span class="dim" style="font-size:.72rem">Ícone MDI (sem prefixo)</span>'+
+            '<input id="prodIcon" class="type-sel" style="width:100%" placeholder="ex.: package-variant" autocomplete="off"></label>'+
+        '</div>'+
+        '<label style="display:block;margin-top:.6rem"><span class="dim" style="font-size:.72rem">Descrição</span>'+
+          '<textarea id="prodDesc" class="type-sel" style="width:100%;min-height:60px" placeholder="Descrição curta que aparece no card do membro."></textarea></label>'+
+        '<div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:.8rem">'+
+          '<label class="type-chk-item"><input type="checkbox" id="prodExternal"><span>Link externo (abrir em nova aba)</span></label>'+
+          '<label class="type-chk-item"><input type="checkbox" id="prodActive" checked><span>Produto ativo</span></label>'+
+        '</div>'+
+        '<h4><span class="mdi mdi-source-branch" style="color:var(--accent);margin-right:.3rem"></span>'+
+          'Vincular a trilhas / recursos '+
+          '<span class="dim" style="font-weight:400;font-size:.75rem">(N:N — o produto aparece na trilha na posição informada)</span></h4>'+
+        '<div class="prod-links-wrap" id="prodLinks">'+
+          (resources.length ? linkRows : '<div class="empty" style="padding:1.2rem">Nenhum recurso cadastrado. Cadastre em Acessos.</div>') +
+        '</div>'+
+        '<div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">'+
+          '<button class="ghost-btn" id="btnProdSave"><span class="mdi mdi-content-save"></span>Salvar produto</button>'+
+          '<button class="ghost-btn" id="btnProdSaveLinks" disabled title="Salve o produto antes"><span class="mdi mdi-link-variant"></span>Salvar vínculos</button>'+
+          '<button class="ghost-btn" id="btnProdClear"><span class="mdi mdi-broom"></span>Limpar</button>'+
+          '<span id="prodMsg" class="dim" style="font-size:.8rem"></span>'+
+        '</div>'+
+      '</section>';
+  }
+
+  function wireProdutosPanel(products){
+    var byId = {}; products.forEach(function(p){ byId[p.id] = p; });
+
+    document.querySelectorAll(".prod-link-row").forEach(function(row){
+      var chk = row.querySelector(".prod-link-chk");
+      var pos = row.querySelector(".prod-link-pos");
+      chk.addEventListener("change", function(){
+        pos.disabled = !chk.checked;
+        if (!chk.checked) pos.value = 0;
+      });
+    });
+
+    document.querySelectorAll(".prod-edit").forEach(function(b){
+      b.addEventListener("click", function(){
+        var p = byId[b.dataset.id]; if (!p) return;
+        preencherFormProduto(p);
+      });
+    });
+
+    document.querySelectorAll(".prod-del").forEach(function(b){
+      b.addEventListener("click", function(){
+        if (!confirm('Excluir o produto "'+b.dataset.label+'"?\nOs vínculos serão removidos automaticamente (CASCADE).')) return;
+        fetch("/api/admin/produtos/delete", {
+          method:"POST", credentials:"same-origin",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ id: Number(b.dataset.id) })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d && d.ok) { produtosLoaded = false; loadProdutos(); }
+          else alert((d && d.erro) || "Falha ao excluir.");
+        })
+        .catch(function(){ alert("Falha de conexão."); });
+      });
+    });
+
+    document.getElementById("btnProdSave").addEventListener("click", salvarProduto);
+    document.getElementById("btnProdSaveLinks").addEventListener("click", salvarVinculos);
+    document.getElementById("btnProdClear").addEventListener("click", limparFormProduto);
+  }
+
+  function preencherFormProduto(p){
+    document.getElementById("prodId").value       = p.id;
+    document.getElementById("prodSlug").value     = p.slug || "";
+    document.getElementById("prodLabel").value    = p.label || "";
+    document.getElementById("prodUrl").value      = p.url || "";
+    document.getElementById("prodIcon").value     = p.icon || "";
+    document.getElementById("prodDesc").value     = p.description || "";
+    document.getElementById("prodExternal").checked = !!p.external;
+    document.getElementById("prodActive").checked   = p.active !== 0;
+
+    var mapa = {};
+    (p.vinculos || []).forEach(function(v){ mapa[v.resource_key] = v.position; });
+    document.querySelectorAll(".prod-link-row").forEach(function(row){
+      var chk = row.querySelector(".prod-link-chk");
+      var pos = row.querySelector(".prod-link-pos");
+      var k = row.dataset.key;
+      if (Object.prototype.hasOwnProperty.call(mapa, k)) {
+        chk.checked = true; pos.disabled = false; pos.value = mapa[k];
+      } else {
+        chk.checked = false; pos.disabled = true; pos.value = 0;
+      }
+    });
+    var btnLinks = document.getElementById("btnProdSaveLinks");
+    btnLinks.disabled = false; btnLinks.title = "";
+    document.getElementById("prodMsg").textContent = "Editando produto #" + p.id + ".";
+    document.getElementById("prodForm").scrollIntoView({ behavior:"smooth", block:"start" });
+    document.getElementById("prodSlug").focus();
+  }
+
+  function limparFormProduto(){
+    ["prodId","prodSlug","prodLabel","prodUrl","prodIcon","prodDesc"].forEach(function(id){
+      document.getElementById(id).value = "";
+    });
+    document.getElementById("prodExternal").checked = false;
+    document.getElementById("prodActive").checked   = true;
+    document.querySelectorAll(".prod-link-row").forEach(function(row){
+      row.querySelector(".prod-link-chk").checked = false;
+      var pos = row.querySelector(".prod-link-pos"); pos.disabled = true; pos.value = 0;
+    });
+    var btnLinks = document.getElementById("btnProdSaveLinks");
+    btnLinks.disabled = true; btnLinks.title = "Salve o produto antes";
+    document.getElementById("prodMsg").textContent = "";
+  }
+
+  function salvarProduto(){
+    var idRaw = document.getElementById("prodId").value;
+    var body = {
+      slug:        document.getElementById("prodSlug").value,
+      label:       document.getElementById("prodLabel").value,
+      url:         document.getElementById("prodUrl").value,
+      icon:        document.getElementById("prodIcon").value,
+      description: document.getElementById("prodDesc").value,
+      external:    document.getElementById("prodExternal").checked ? 1 : 0,
+      active:      document.getElementById("prodActive").checked   ? 1 : 0,
+    };
+    if (idRaw) body.id = Number(idRaw);
+
+    var msg = document.getElementById("prodMsg");
+    msg.textContent = "Salvando…";
+    fetch("/api/admin/produtos/save", {
+      method:"POST", credentials:"same-origin",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(body)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d && d.ok) {
+        document.getElementById("prodId").value = d.id;
+        var btnLinks = document.getElementById("btnProdSaveLinks");
+        btnLinks.disabled = false; btnLinks.title = "";
+        msg.textContent = (d.criado ? "Produto criado" : "Produto atualizado") + " (#"+d.id+"). Salve os vínculos, se desejar.";
+      } else {
+        msg.textContent = (d && d.erro) || "Falha ao salvar.";
+      }
+    })
+    .catch(function(){ msg.textContent = "Falha de conexão."; });
+  }
+
+  function salvarVinculos(){
+    var id = Number(document.getElementById("prodId").value);
+    if (!id) return;
+    var links = [];
+    document.querySelectorAll(".prod-link-row").forEach(function(row){
+      var chk = row.querySelector(".prod-link-chk");
+      if (!chk.checked) return;
+      var pos = Number(row.querySelector(".prod-link-pos").value) || 0;
+      links.push({ resource_key: row.dataset.key, position: pos });
+    });
+    var msg = document.getElementById("prodMsg");
+    msg.textContent = "Salvando vínculos…";
+    fetch("/api/admin/produtos/vinculos/save", {
+      method:"POST", credentials:"same-origin",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ product_id: id, links: links })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d && d.ok) {
+        msg.textContent = "Vínculos salvos ("+d.total+"). Recarregando…";
+        produtosLoaded = false; loadProdutos();
+      } else {
+        msg.textContent = (d && d.erro) || "Falha ao salvar vínculos.";
+      }
+    })
+    .catch(function(){ msg.textContent = "Falha de conexão."; });
+  }
   setupTabs();
   load();
 </script>
