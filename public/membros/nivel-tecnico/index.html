@@ -737,7 +737,7 @@
 
         // Defesa em profundidade: sem o tipo Aluno, volta ao hub.
         var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
-        if (types.indexOf('Aluno') === -1) {
+        if (types.indexOf('Técnico') === -1) {
           location.href = '/membros/?erro=sem_acesso';
         }
       })
