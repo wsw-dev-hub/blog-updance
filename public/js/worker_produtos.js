@@ -209,3 +209,15 @@ async function produtosVinculosSave(request, env) {
     return json({ ok: false, erro: 'Falha ao salvar vínculos.', message: String((e && e.message) || e) }, 500);
   }
 }
+
+/* ================================================================
+   Exports (Cloudflare Workers modules-format / ESM).
+   Se a integração no worker admin for por CONCATENAÇÃO de arquivos
+   (não por `import`), remova o bloco abaixo — ele quebrará o parse.
+================================================================ */
+export {
+  produtosList,
+  produtosSave,
+  produtosDelete,
+  produtosVinculosSave,
+};
