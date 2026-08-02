@@ -271,6 +271,61 @@
   }
 
   /* -------------------------------------------------------------
+     Seção de itens dentro de cada card (SEMPRE presente).
+     Três estados possíveis para o conteúdo interno:
+       - <ul class="products-list--display">  → vitrine dos itens
+       - <div class="products-list__empty">   → pacote sem itens vinculados
+       - <div class="products-list__empty products-list__empty--locked">
+                                              → pacote bloqueado no plano
+  ------------------------------------------------------------- */
+  .products-list__wrap{
+    display: block;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--udx-border);
+  }
+  .products-list__title{
+    display: flex; align-items: center; gap: 8px;
+    margin: 0 0 8px;
+    font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--udx-text-muted);
+  }
+  .products-list__title .mdi{
+    font-size: 14px; color: var(--udx-primary-hot);
+  }
+
+  .products-list__empty{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text-muted);
+    font-size: 12.5px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.30);
+    border: 1px dashed var(--udx-border);
+  }
+  .products-list__empty .mdi{
+    font-size: 16px; flex-shrink: 0;
+    color: var(--udx-primary-hot);
+  }
+  .products-list__empty--locked{
+    /* No card bloqueado o estado ficam coerente com .is-locked: a mesma
+       borda tracejada, com o ícone de cadeado em tom neutro. */
+    background: rgba(2, 2, 26, 0.20);
+    color: var(--udx-text-muted);
+  }
+  .products-list__empty--locked .mdi{
+    color: var(--udx-text-muted);
+  }
+
+  /* Dentro da seção wrap, remove a borda superior duplicada da própria
+     .products-list padrão (a wrap já traz o divisor). */
+  .products-list__wrap .products-list{
+    margin: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  
+  /* -------------------------------------------------------------
      Variantes de CTA no card do hub:
      .trail-x__cta--go   → acesso à área real do recurso (liberado)
      .trail-x__cta--info → landing descritiva do plano (bloqueado)
@@ -627,23 +682,49 @@
             }).join('') + '</ul>';
           }*/
 
-          // Vitrine dos itens vinculados: nome + descrição + ícone temático.
-          // Nenhum <a href> é emitido aqui — o acesso ao item acontece
-          // exclusivamente dentro da área do nível (ex.: /membros/estagio/).
-          var produtosHtml = '';
-          if (Array.isArray(r.products) && r.products.length){
-            produtosHtml = '<ul class="products-list products-list--display">' + r.products.map(function(p){
-              var pIcon = safeIcon(p.icon || 'chevron-right');
-              return '<li>'+
-                '<span class="products-list__row" aria-disabled="true">'+
-                  '<span class="mdi mdi-'+esc(pIcon)+'"></span>'+
-                  '<span class="products-list__label">'+esc(p.label)+
-                    (p.description ? '<span class="products-list__desc">'+esc(p.description)+'</span>' : '')+
+          // A seção de itens é SEMPRE renderizada — mesmo quando o pacote não
+          // tem produtos associados (ou não estão visíveis pelo bloqueio). O
+          // estado é distinguido por r.allowed cruzado com r.products.length:
+          //
+          //   allowed + com itens  -> lista os itens (vitrine)
+          //   allowed + sem itens  -> "Nenhum item vinculado ainda."
+          //   bloqueado            -> "Itens visíveis quando o plano liberar."
+          //
+          // O caso bloqueado NÃO revela contagem — coerente com a regra de
+          // herança de meusAcessos (backend nunca expõe conteúdo de card
+          // bloqueado). Se o backend passar a enviar products_count, a
+          // mensagem pode ser enriquecida sem quebrar este contrato.
+          var temItens = Array.isArray(r.products) && r.products.length > 0;
+          var listaItens = temItens
+            ? '<ul class="products-list products-list--display">' + r.products.map(function(p){
+                var pIcon = safeIcon(p.icon || 'chevron-right');
+                return '<li>'+
+                  '<span class="products-list__row" aria-disabled="true">'+
+                    '<span class="mdi mdi-'+esc(pIcon)+'"></span>'+
+                    '<span class="products-list__label">'+esc(p.label)+
+                      (p.description ? '<span class="products-list__desc">'+esc(p.description)+'</span>' : '')+
+                    '</span>'+
                   '</span>'+
-                '</span>'+
-              '</li>';
-            }).join('') + '</ul>';
-          }
+                '</li>';
+              }).join('') + '</ul>'
+            : (r.allowed
+                ? '<div class="products-list__empty" role="note">'+
+                    '<span class="mdi mdi-package-variant-closed" aria-hidden="true"></span>'+
+                    '<span>Nenhum item vinculado a este pacote ainda.</span>'+
+                  '</div>'
+                : '<div class="products-list__empty products-list__empty--locked" role="note">'+
+                    '<span class="mdi mdi-lock-outline" aria-hidden="true"></span>'+
+                    '<span>Os itens deste pacote ficam visíveis quando o plano estiver liberado.</span>'+
+                  '</div>');
+
+          var produtosHtml =
+            '<section class="products-list__wrap" aria-label="Itens deste pacote">'+
+              '<h4 class="products-list__title">'+
+                '<span class="mdi mdi-cube-outline" aria-hidden="true"></span>'+
+                '<span>Itens deste pacote</span>'+
+              '</h4>'+
+              listaItens +
+            '</section>';
 
           // Se o card tem produtos listados, o CTA principal deixa de fazer sentido
           // (os itens são os próprios acessos). Se não tem, mantém o CTA único.
