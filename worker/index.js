@@ -157,10 +157,10 @@ export default {
       if (pathname === '/api/admin/logout' && request.method === 'POST') return logoutCookie('a_session', 'asess', request, env);
       
       // ── produtos ──
-      if (pathname === '/api/admin/produtos/list')                                    return produtosList(request, env);
+      /*if (pathname === '/api/admin/produtos/list')                                    return produtosList(request, env);
       if (pathname === '/api/admin/produtos/save'          && request.method === 'POST') return produtosSave(request, env);
       if (pathname === '/api/admin/produtos/delete'        && request.method === 'POST') return produtosDelete(request, env);
-      if (pathname === '/api/admin/produtos/vinculos/save' && request.method === 'POST') return produtosVinculosSave(request, env);
+      if (pathname === '/api/admin/produtos/vinculos/save' && request.method === 'POST') return produtosVinculosSave(request, env);*/
 
       // ---- ADMIN: produtos ----
       if (pathname === '/api/admin/produtos/list') {
@@ -207,6 +207,10 @@ export default {
       if (pathname === '/api/admin/resources/save' && request.method === 'POST') {
         const a = await getAdmin(request, env);
         return a ? adminResourceSave(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/resources/delete' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? adminResourceDelete(request, env, a) : json({ erro: 'não autorizado' }, 403);
       }
 
       // ---- NEWSLETTER ----
@@ -1239,7 +1243,7 @@ async function adminResourceSave(request, env, admin) {
       return json({ ok: false, erro: 'Prefixo de caminho excede 120 caracteres.' }, 400);
     }
   }
-  
+
   if (external_url && !/^https?:\/\//.test(external_url)) {
     return json({ ok: false, erro: 'URL externa deve começar com http:// ou https://' }, 400);
   }
@@ -1266,6 +1270,37 @@ async function adminResourceSave(request, env, admin) {
   await env.KV.delete(ACCESS_CACHE_KEY);
   await logEvent(env, admin.email, 'admin_resource_save', key);
   return json({ ok: true });
+}
+
+async function adminResourceDelete(request, env, admin) {
+  // body: { key: 'chave-do-recurso' }
+  let key = '';
+  try {
+    const b = await request.json();
+    key = (b.key || '').trim().toLowerCase();
+  } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
+
+  if (!/^[a-z0-9\-]{2,60}$/.test(key)) {
+    return json({ ok: false, erro: 'Chave inválida (use a-z, 0-9, hífen).' }, 400);
+  }
+
+  const existe = await env.DB.prepare('SELECT key, label FROM resources WHERE key=?').bind(key).first();
+  if (!existe) return json({ ok: false, erro: 'Recurso não cadastrado.' }, 404);
+
+  // resource_products cascateia por FK ON DELETE CASCADE.
+  // access_rules NÃO cascateia (não há FK) — apagar manualmente.
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM access_rules WHERE resource_key=?').bind(key),
+    env.DB.prepare('DELETE FROM resources    WHERE key=?').bind(key),
+  ]);
+
+  // Duas caches podem estar sujas depois desta operação:
+  //  - access:rules → o map de tipos por recurso mudou
+  //  - admin:data   → a listagem consumida por dadosAdmin traz este recurso
+  await env.KV.delete(ACCESS_CACHE_KEY);
+  await env.KV.delete(ADMIN_CACHE_KEY);
+  await logEvent(env, admin.email, 'admin_resource_delete', key);
+  return json({ ok: true, key, label: existe.label });
 }
 
 async function adminAccessSave(request, env, admin) {

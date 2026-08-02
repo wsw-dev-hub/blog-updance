@@ -491,6 +491,11 @@
       'data-icon="'+esc(r.icon||'')+'" '+
       'data-description="'+esc(r.description||'')+'" '+
       'title="Editar recurso">✎</button>';
+
+    var delBtn = '<button class="ghost-btn acc-del" '+
+      'data-key="'+esc(r.key)+'" '+
+      'data-label="'+esc(r.label||'')+'" '+
+      'title="Excluir pacote"><span class="mdi mdi-trash-can-outline"></span></button>';
     var iconoTag = r.icon ? '<span class="mdi mdi-'+esc(r.icon)+'" style="margin-right:6px;color:var(--accent)"></span>' : '';
     var kindChip = '<span class="badge ok" style="margin-left:8px;vertical-align:middle" title="Este cadastro define um pacote — vira card na área de membros">'+
                      '<span class="mdi mdi-package-variant-closed" style="margin-right:3px"></span>Pacote'+
@@ -502,7 +507,7 @@
       '</td>'+
       '<td class="dim mono">'+(esc(r.path_prefix)||'—')+'</td>'+
       cells +
-      '<td style="text-align:center">'+editBtn+'</td>'+
+      '<td style="text-align:center;white-space:nowrap">'+editBtn+' '+delBtn+'</td>'+
     '</tr>';
   }).join('');
   return '<div class="table-wrap"><table>'+
@@ -537,7 +542,7 @@ function resourceFormHtml(){
       '<textarea id="resDesc" class="type-sel" style="width:100%;min-height:60px" '+
       'placeholder="Descrição curta que aparece no card do membro."></textarea></label>'+
     '<div style="margin-top:.8rem;display:flex;gap:.6rem;flex-wrap:wrap">'+
-      '<button class="ghost-btn" id="btnSaveResource">Salvar recurso</button>'+
+      '<button class="ghost-btn" id="btnSaveResource"><span class="mdi mdi-content-save"></span>Salvar pacote</button>'+
       '<button class="ghost-btn" id="btnClearResource">Limpar</button>'+
       '<span id="resMsg" class="dim" style="font-size:.8rem;align-self:center"></span>'+
     '</div>'+
@@ -572,6 +577,38 @@ function resourceFormHtml(){
         });
       });
 
+      // Excluir: confirma e chama /api/admin/resources/delete
+      document.querySelectorAll(".acc-del").forEach(function(b){
+        b.addEventListener("click", function(){
+          var label = b.dataset.label || b.dataset.key;
+          if (!confirm(
+            'Excluir o pacote "'+label+'"?\n\n' +
+            'As regras de acesso deste pacote e os vínculos com itens (produtos) ' +
+            'serão removidos automaticamente. Esta ação não pode ser desfeita.'
+          )) return;
+          fetch("/api/admin/resources/delete", {
+            method:"POST", credentials:"same-origin",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ key: b.dataset.key })
+          })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if (d && d.ok) {
+              accessLoaded = false;
+              loadAccess();
+              // A aba Produtos também exibe o total de vínculos por item —
+              // força reload dela para refletir a exclusão em cascata.
+              produtosLoaded = false;
+              var msg = document.getElementById("resMsg");
+              if (msg) msg.textContent = 'Pacote "'+label+'" excluído.';
+            } else {
+              alert((d && d.erro) || "Falha ao excluir.");
+            }
+          })
+          .catch(function(){ alert("Falha de conexão."); });
+        });
+      });
+      
       // Salvar recurso (novo ou existente)
       var btnSave = document.getElementById("btnSaveResource");
       if (btnSave) btnSave.addEventListener("click", function(){ saveResource(); });
@@ -605,7 +642,7 @@ function saveResource(){
   .then(function(r){ return r.json(); })
   .then(function(d){
     if(d && d.ok){
-      msg.textContent = "Salvo. Recarregando…";
+      msg.textContent = "Pacote salvo. Recarregando…";
       accessLoaded = false;
       loadAccess();
     } else {
@@ -863,7 +900,7 @@ function setupTabs(){
           (resources.length ? linkRows : '<div class="empty" style="padding:1.2rem">Nenhum pacote cadastrado. Cadastre um pacote primeiro na aba <b>Pacotes</b>.</div>') +
         '</div>'+
         '<div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">'+
-          '<button class="ghost-btn" id="btnProdSave"><span class="mdi mdi-content-save"></span>Salvar produto</button>'+
+          '<button class="ghost-btn" id="btnProdSave"><span class="mdi mdi-content-save"></span>Salvar item</button>'+
           '<button class="ghost-btn" id="btnProdSaveLinks" disabled title="Salve o produto antes"><span class="mdi mdi-link-variant"></span>Salvar vínculos</button>'+
           '<button class="ghost-btn" id="btnProdClear"><span class="mdi mdi-broom"></span>Limpar</button>'+
           '<span id="prodMsg" class="dim" style="font-size:.8rem"></span>'+
