@@ -1201,13 +1201,13 @@ async function adminAccessList(env) {
 }
 
 async function adminResourceSave(request, env, admin) {
-  let key = '', label = '', path_prefix = '', icon = '', description = '';
+  let key = '', label = '', path_prefix = '', icon = '', description = '', external_url = '';
   try { const b = await request.json();
-    key         = (b.key         || '').trim().toLowerCase();
-    label       = (b.label       || '').trim().slice(0, 120);
-    path_prefix = (b.path_prefix || '').trim();
-    icon        = (b.icon        || '').trim().slice(0, 60);   // ex.: 'star-four-points-outline'
-    description = (b.description || '').trim().slice(0, 240);
+    key          = (b.key          || '').trim().toLowerCase();
+    label        = (b.label        || '').trim().slice(0, 120);
+    path_prefix  = (b.path_prefix  || '').trim();
+    icon         = (b.icon         || '').trim().slice(0, 60);   // ex.: 'star-four-points-outline'
+    description  = (b.description  || '').trim().slice(0, 240);
     external_url = (b.external_url || '').trim().slice(0, 500);
   } catch { return json({ ok: false, erro: 'Requisição inválida.' }, 400); }
 
@@ -1221,14 +1221,23 @@ async function adminResourceSave(request, env, admin) {
   }
   
   await env.DB.prepare(
-    'INSERT INTO resources (key, label, path_prefix, icon, description, created_at) ' +
-    'VALUES (?,?,?,?,?,?) ' +
+    'INSERT INTO resources (key, label, path_prefix, icon, description, external_url, created_at) ' +
+    'VALUES (?,?,?,?,?,?,?) ' +
     'ON CONFLICT(key) DO UPDATE SET ' +
-    '  label       = excluded.label, ' +
-    '  path_prefix = excluded.path_prefix, ' +
-    '  icon        = excluded.icon, ' +
-    '  description = excluded.description'
-  ).bind(key, label, path_prefix || null, icon || null, description || null, new Date().toISOString()).run();
+    '  label        = excluded.label, ' +
+    '  path_prefix  = excluded.path_prefix, ' +
+    '  icon         = excluded.icon, ' +
+    '  description  = excluded.description, ' +
+    '  external_url = excluded.external_url'
+  ).bind(
+    key,
+    label,
+    path_prefix  || null,
+    icon         || null,
+    description  || null,
+    external_url || null,
+    new Date().toISOString()
+  ).run();
 
   await env.KV.delete(ACCESS_CACHE_KEY);
   await logEvent(env, admin.email, 'admin_resource_save', key);
