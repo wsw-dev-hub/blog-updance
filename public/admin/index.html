@@ -316,8 +316,8 @@
       <nav class="tabs" id="tabs">
         <button class="tab active" data-tab="members"><span class="mdi mdi-account-multiple"></span>Membros<span class="count" id="c-members"></span></button>
         <button class="tab" data-tab="subscribers"><span class="mdi mdi-email-outline"></span>Inscritos<span class="count" id="c-subscribers"></span></button>
-        <button class="tab" data-tab="access"><span class="mdi mdi-shield-key-outline"></span>Acessos<span class="count" id="c-access"></span></button>
-        <button class="tab" data-tab="produtos"><span class="mdi mdi-package-variant"></span>Produtos<span class="count" id="c-produtos"></span></button>
+        <button class="tab" data-tab="access" title="Pacotes: cards da área de membros e regras de acesso por tipo"><span class="mdi mdi-package-variant-closed"></span>Pacotes<span class="count" id="c-access"></span></button>
+        <button class="tab" data-tab="produtos" title="Itens contidos nos pacotes: conteúdos que aparecem dentro dos cards"><span class="mdi mdi-cube-outline"></span>Itens<span class="count" id="c-produtos"></span></button>
         <button class="tab" data-tab="events"><span class="mdi mdi-history"></span>Eventos<span class="count" id="c-events"></span></button>
       </nav>
 
@@ -471,9 +471,9 @@
   /* ── tabela de eventos ── */
   function accessTable(resources, types){
   if(!resources||!resources.length){
-    return '<div class="empty">Nenhum recurso cadastrado. Use o formulário abaixo para criar o primeiro.</div>' + resourceFormHtml();
+    return '<div class="empty">Nenhum <b>pacote</b> cadastrado. Um pacote é o container que vira um card na área de membros e recebe regras de acesso por tipo. Use o formulário abaixo para criar o primeiro.</div>' + resourceFormHtml();
   }
-  var head = '<th>Recurso</th><th>Prefixo</th>' + types.map(function(t){
+  var head = '<th>Pacote <span class="dim" style="font-weight:400;font-size:.7rem">(recurso)</span></th><th>Prefixo</th>' + types.map(function(t){
     return '<th style="text-align:center">'+esc(t)+'</th>';
   }).join('') + '<th style="text-align:center">Editar</th>';
   var body = resources.map(function(r){
@@ -492,8 +492,11 @@
       'data-description="'+esc(r.description||'')+'" '+
       'title="Editar recurso">✎</button>';
     var iconoTag = r.icon ? '<span class="mdi mdi-'+esc(r.icon)+'" style="margin-right:6px;color:var(--accent)"></span>' : '';
+    var kindChip = '<span class="badge ok" style="margin-left:8px;vertical-align:middle" title="Este cadastro define um pacote — vira card na área de membros">'+
+                     '<span class="mdi mdi-package-variant-closed" style="margin-right:3px"></span>Pacote'+
+                   '</span>';
     return '<tr>'+
-      '<td class="email">'+iconoTag+esc(r.label)+
+      '<td class="email">'+iconoTag+esc(r.label)+kindChip+
         '<div class="dim" style="font-size:.72rem">'+esc(r.key)+'</div>'+
         (r.description ? '<div class="dim" style="font-size:.72rem;margin-top:2px">'+esc(r.description)+'</div>' : '')+
       '</td>'+
@@ -512,7 +515,14 @@
 function resourceFormHtml(){
   return ''+
   '<section style="margin-top:2rem;padding:1.2rem;border:1px solid var(--line);border-radius:12px;background:var(--card)">'+
-    '<h3 style="margin:0 0 .8rem;color:#fff;font-size:1rem">Novo / editar recurso</h3>'+
+    '<h3 style="margin:0 0 .2rem;color:#fff;font-size:1rem">'+
+      '<span class="mdi mdi-package-variant-closed" style="color:var(--accent);margin-right:.4rem"></span>'+
+      'Novo / editar <b>pacote</b> <span class="dim" style="font-weight:400;font-size:.8rem">(recurso)</span>'+
+    '</h3>'+
+    '<p class="dim" style="font-size:.72rem;margin:0 0 .8rem">'+
+      'O pacote se torna um card na área de membros (via <code>path_prefix</code>) e '+
+      'recebe as regras de acesso por tipo. Para cadastrar os <b>itens</b> que aparecem dentro dele, use a aba <b>Itens</b>.'+
+    '</p>'+
     '<div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">'+
       '<label style="display:block"><span class="dim" style="font-size:.72rem">Chave (a-z 0-9 hífen)</span>'+
         '<input id="resKey" class="type-sel" style="width:100%" placeholder="ex.: area-premium" autocomplete="off"></label>'+
@@ -779,8 +789,11 @@ function setupTabs(){
     var body = products.map(function(p){
       var vinc = (p.vinculos || []).length;
       var iconHtml = p.icon ? '<span class="mdi mdi-'+esc(p.icon)+'" style="color:var(--accent);margin-right:6px"></span>' : '';
+      var kindChip = '<span class="badge neutral" style="margin-left:8px;vertical-align:middle" title="Este cadastro define um item — aparece dentro dos pacotes vinculados">'+
+                       '<span class="mdi mdi-cube-outline" style="margin-right:3px"></span>Item'+
+                     '</span>';
       return '<tr>'+
-        '<td class="email">'+iconHtml+esc(p.label)+
+        '<td class="email">'+iconHtml+esc(p.label)+kindChip+
           '<div class="dim" style="font-size:.72rem">'+esc(p.slug)+'</div>'+
           (p.description ? '<div class="dim" style="font-size:.72rem;margin-top:2px">'+esc(p.description)+'</div>' : '')+
         '</td>'+
@@ -797,10 +810,10 @@ function setupTabs(){
     }).join("");
     return '<div class="table-wrap"><table>'+
       '<thead><tr>'+
-        '<th>Produto</th><th>URL</th>'+
+        '<th>Item <span class="dim" style="font-weight:400;font-size:.7rem">(produto)</span></th><th>URL</th>'+
         '<th style="text-align:center">Tipo</th>'+
         '<th style="text-align:center">Status</th>'+
-        '<th style="text-align:center">Trilhas</th>'+
+        '<th style="text-align:center" title="Em quantos pacotes este item aparece">Pacotes</th>'+
         '<th style="text-align:center">Ações</th>'+
       '</tr></thead><tbody>'+body+'</tbody></table></div>';
   }
@@ -817,7 +830,14 @@ function setupTabs(){
     }).join('');
     return ''+
       '<section class="prod-form" id="prodForm" style="margin-top:2rem;padding:1.2rem;border:1px solid var(--line);border-radius:14px;background:var(--card)">'+
-        '<h3 style="margin:0 0 .8rem;color:#fff;font-size:1rem">'+
+          '<h3 style="margin:0 0 .2rem;color:#fff;font-size:1rem">'+
+          '<span class="mdi mdi-cube-outline" style="color:var(--accent);margin-right:.4rem"></span>'+
+          'Novo / editar <b>item</b> <span class="dim" style="font-weight:400;font-size:.8rem">(produto)</span>'+
+        '</h3>'+
+        '<p class="dim" style="font-size:.72rem;margin:0 0 .8rem">'+
+          'Um item é um conteúdo que aparece dentro de um ou mais <b>pacotes</b>. '+
+          'Marque abaixo em quais pacotes ele deve aparecer e em que posição.'+
+        '</p>'+
           '<span class="mdi mdi-package-variant" style="color:var(--accent);margin-right:.4rem"></span>Novo / editar produto</h3>'+
         '<input type="hidden" id="prodId">'+
         '<div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">'+
@@ -837,10 +857,10 @@ function setupTabs(){
           '<label class="type-chk-item"><input type="checkbox" id="prodActive" checked><span>Produto ativo</span></label>'+
         '</div>'+
         '<h4><span class="mdi mdi-source-branch" style="color:var(--accent);margin-right:.3rem"></span>'+
-          'Vincular a trilhas / recursos '+
-          '<span class="dim" style="font-weight:400;font-size:.75rem">(N:N — o produto aparece na trilha na posição informada)</span></h4>'+
+          'Vincular a pacotes '+
+          '<span class="dim" style="font-weight:400;font-size:.75rem">(o item aparece dentro do card do pacote, na posição informada)</span></h4>'+
         '<div class="prod-links-wrap" id="prodLinks">'+
-          (resources.length ? linkRows : '<div class="empty" style="padding:1.2rem">Nenhum recurso cadastrado. Cadastre em Acessos.</div>') +
+          (resources.length ? linkRows : '<div class="empty" style="padding:1.2rem">Nenhum pacote cadastrado. Cadastre um pacote primeiro na aba <b>Pacotes</b>.</div>') +
         '</div>'+
         '<div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">'+
           '<button class="ghost-btn" id="btnProdSave"><span class="mdi mdi-content-save"></span>Salvar produto</button>'+
