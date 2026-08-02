@@ -118,7 +118,7 @@ export default defineConfig(({ command }) => ({
         'membros/free': resolve(__dirname, 'public/membros/nivel-free/index.html'),
         'membros/iniciante': resolve(__dirname, 'public/membros/nivel-iniciante/index.html'),
         'membros/intermediario': resolve(__dirname, 'public/membros/nivel-intermediario/index.html'),
-        'membros/hab-intermediario': resolve(__dirname, 'public/membros/nivel-intermediario/trilha/index.html'),
+        'membros/hab-intermediario': resolve(__dirname, 'public/membros/nivel-intermediario/arvore-de-habilidades/index.html'),
         
       },
       external: ['ton-connect', 'ton-core'],
