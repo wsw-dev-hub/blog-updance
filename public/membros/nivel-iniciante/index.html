@@ -3,89 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nível Iniciante — Up Dance</title>
+<title>Área do Nível Iniciante — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
-<!-- Design tokens e componentes do projeto (reuso integral) -->
+<!-- Design tokens e componentes do projeto -->
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/blog.css">
 <link rel="stylesheet" href="/css/trailsFormat.css">
+<!--<link rel="stylesheet" href="/css/mediaQuery.css">-->
 <link rel="stylesheet" href="/css/format.css">
-
-<!-- Reusa as classes .tt-* e os tokens de perfil por card (data-perfil="along" | "seg" | "boost") -->
-<link rel="stylesheet" href="/css/talentTree.css">
+<!-- Paleta oficial marinho → azul do Iniciante (fonte da verdade) -->
 <link rel="stylesheet" href="/css/niveis.css">
 
 <style>
-  /* Escopo local — idêntico ao da Árvore, apenas topbar/hero/footer. */
+  /* -------------------------------------------------------------
+     Escopo Iniciante — paleta oficial marinho #110273 → azul
+     #030BA6 (mesma definição de /css/niveis.css). Este bloco inline
+     replica os tokens para manter a página auto-suficiente caso
+     niveis.css não esteja carregado, seguindo o padrão de
+     estagiario.html / premium/index.html / intermediario.html.
+  ------------------------------------------------------------- */
+  .page-membros.page-iniciante{
+    --i-grad:        linear-gradient(135deg, #110273 0%, #030BA6 100%);
+    --i-grad-soft:   linear-gradient(135deg, rgba(17,2,115,.18) 0%, rgba(3,11,166,.22) 100%);
+    --i-grad-text:   linear-gradient(135deg, #030BA6 0%, #110273 100%);
+    --i-navy:        #110273;
+    --i-blue:        #030BA6;
+    --i-glow:        rgba(3, 11, 166, 0.32);
+
+    --seg-grad:      var(--i-grad);
+    --seg-grad-soft: var(--i-grad-soft);
+    --seg-grad-text: var(--i-grad-text);
+    --seg-accent:    var(--i-blue);
+    --seg-accent-2:  var(--i-navy);
+    --seg-glow:      var(--i-glow);
+
+    --seg-hero-rgba-a: rgba(17,  2, 115, 0.20);
+    --seg-hero-rgba-b: rgba( 3, 11, 166, 0.28);
+    --seg-cta-rgba-a:  rgba(17,  2, 115, 0.16);
+    --seg-cta-rgba-b:  rgba( 3, 11, 166, 0.22);
+    --seg-how-rgba-a:  rgba(17,  2, 115, 0.06);
+    --seg-how-rgba-b:  rgba( 3, 11, 166, 0.08);
+    --seg-step-bg:     rgba(17,  2, 115, 0.18);
+  }
+
+  /* Topbar */
   .members-topbar{
     position: sticky; top: 0; z-index: 300;
     display: flex; align-items: center; gap: .8rem;
     padding: 12px 22px;
     background: rgba(2, 2, 26, 0.96);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--udx-border);
     box-shadow: 0 2px 24px rgba(0, 0, 0, 0.50);
     flex-wrap: wrap;
   }
   .members-topbar img{ width: 34px; height: 34px; }
   .members-topbar .marca{
-    font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.25rem;
     background: linear-gradient(to top, #fb8460, #f13aa1);
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .members-topbar .type-badge{
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 12px; border-radius: 50px; font-weight: 700;
+    padding: 4px 12px; border-radius: 50px;
+    font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase;
-    background: var(--seg-grad); color: #fff; box-shadow: 0 6px 18px var(--seg-glow);
-    max-width: 60vw; white-space: normal; line-height: 1.15; font-size: 12px;
+    background: var(--seg-grad); color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow);
+    max-width: 60vw;
+    white-space: normal;
+    line-height: 1.15;
+    font-size: 10.5px;
   }
   .members-topbar .type-badge .mdi{ font-size: 14px; }
   .members-topbar .spacer{ flex: 1; }
-  .members-topbar .btn-voltar, .members-topbar .btn-sair{
-    background: transparent; color: var(--udx-text);
+  .members-topbar .btn-voltar,
+  .members-topbar .btn-sair{
+    background: transparent;
+    color: var(--udx-text);
     border: 1.5px solid rgba(223, 224, 242, 0.40);
     padding: 8px 16px; border-radius: var(--udx-radius-sm);
     font-family: var(--udx-font); font-size: .88rem; font-weight: 500;
-    cursor: pointer; text-decoration: none;
+    cursor: pointer;
+    text-decoration: none;
     display: inline-flex; align-items: center; gap: 6px;
     transition: background-color 280ms ease, border-color 280ms ease, color 280ms ease;
   }
-  .members-topbar .btn-voltar{ margin-bottom: 12px; }
-  .members-topbar .btn-voltar:hover, .members-topbar .btn-sair:hover{
+  .members-topbar .btn-voltar{
+    margin-bottom: 12px;
+  }
+  .members-topbar .btn-voltar:hover,
+  .members-topbar .btn-sair:hover{
     background-color: rgba(223, 224, 242, 0.08);
-    border-color: var(--udx-primary-hot); color: #fff;
+    border-color: var(--udx-primary-hot);
+    color: #fff;
   }
   .members-topbar .btn-voltar .mdi{ font-size: 16px; }
+
   .members-main{ padding-bottom: 40px; }
+
+  /* Hero */
   .members-hero .type-chip{
     display: inline-flex; align-items: center; gap: 8px;
     margin-top: 10px; padding: 6px 14px; border-radius: 50px;
-    background: rgba(2, 2, 26, 0.55); border: 1px solid var(--udx-border);
-    color: var(--udx-text); font-size: 12px; font-weight: 600;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    color: var(--udx-text);
+    font-size: 12px; font-weight: 600;
   }
   .members-hero .type-chip .mdi{ font-size: 15px; color: var(--seg-accent); }
-  .estagio-tag{
+  .members-hero .type-chip b{ font-weight: 700; }
+
+  .iniciante-tag{
     display: inline-flex; align-items: center; gap: 8px;
-    margin-bottom: 6px; padding: 6px 14px; border-radius: 50px;
-    background: var(--seg-grad-soft); border: 1px solid var(--seg-accent);
-    color: #fff; font-size: 11.5px; font-weight: 700;
+    margin-bottom: 6px;
+    padding: 6px 14px; border-radius: 50px;
+    background: var(--seg-grad-soft);
+    border: 1px solid var(--seg-accent);
+    color: #fff;
+    font-size: 11.5px; font-weight: 700;
     letter-spacing: 0.08em; text-transform: uppercase;
   }
-  .estagio-tag .mdi{ font-size: 14px; color: var(--seg-accent); }
+  .iniciante-tag .mdi{ font-size: 14px; color: var(--seg-accent-2); }
+
+  /* Grid */
+  .members-list{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 780px){
+    .members-list{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Selo do card */
+  .trail-x .iniciante-flag{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #fff;
+    padding: 3px 10px; border-radius: 50px;
+    background: var(--seg-grad);
+    box-shadow: 0 4px 14px var(--seg-glow);
+    margin-bottom: 8px;
+  }
+  .trail-x .iniciante-flag .mdi{ font-size: 13px; }
+
+  /* Card em progresso (recurso ainda bloqueado nesta fase) */
+  .trail-x.is-progress{
+    opacity: .70;
+  }
+  .trail-x.is-progress .trail-x__cta{
+    background: rgba(2, 2, 26, 0.65);
+    color: var(--udx-text-muted);
+    box-shadow: none;
+    border: 1px solid var(--udx-border);
+  }
+  .trail-x .progress-note{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--udx-text-muted);
+    margin-top: 4px;
+  }
+  .trail-x .progress-note .mdi{ font-size: 14px; color: var(--seg-accent-2); }
+
+  /* Barra de progresso da trilha Iniciante */
+  .stage-progress{
+    margin-top: 16px;
+    background: rgba(2, 2, 26, 0.55);
+    border: 1px solid var(--udx-border);
+    border-radius: var(--udx-radius-sm);
+    padding: 14px 16px;
+  }
+  .stage-progress__head{
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px;
+    font-size: 12.5px; color: var(--udx-text-muted);
+    margin-bottom: 8px;
+  }
+  .stage-progress__head b{
+    color: var(--udx-text); font-weight: 700;
+  }
+  .stage-progress__bar{
+    height: 8px; border-radius: 50px;
+    background: rgba(223, 224, 242, 0.10);
+    overflow: hidden;
+  }
+  .stage-progress__fill{
+    height: 100%;
+    background: var(--seg-grad);
+    border-radius: 50px;
+    box-shadow: 0 0 12px var(--seg-glow);
+  }
+
+  /* Listas dentro dos cards */
+  .products-list, .ebooks-list{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .products-list li, .ebooks-list li{ margin: 0; padding: 0; }
+  .products-list a, .ebooks-list a{
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--udx-radius-sm);
+    color: var(--udx-text); text-decoration: none;
+    font-size: 13px; line-height: 1.4;
+    background: rgba(2, 2, 26, 0.35);
+    border: 1px solid var(--udx-border);
+    transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+  }
+  .products-list a:hover, .ebooks-list a:hover{
+    border-color: var(--seg-accent);
+    background: rgba(3, 11, 166, 0.08);
+    transform: translateX(3px);
+  }
+  .products-list a > .mdi:first-child,
+  .ebooks-list a .mdi{
+    font-size: 18px; color: var(--seg-accent-2); flex-shrink: 0;
+  }
+  .products-list__label{
+    display: flex; flex-direction: column;
+    flex: 1; min-width: 0;
+  }
+  .products-list__desc{
+    font-size: 11.5px; color: var(--udx-text-muted); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* Checklist da rotina de treino */
+  .checklist{
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px dashed var(--udx-border);
+    list-style: none;
+    display: grid; gap: 8px;
+  }
+  .checklist li{
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--udx-text); line-height: 1.5;
+  }
+  .checklist li .mdi{
+    font-size: 18px; flex-shrink: 0; margin-top: 1px;
+    color: var(--seg-accent);
+  }
+  .checklist li.done{ color: var(--udx-text-muted); }
+  .checklist li.done .mdi{ color: var(--seg-accent-2); }
+  .checklist li.todo .mdi{ color: rgba(223, 224, 242, 0.35); }
+
   .members-footer{
     padding: 20px 22px; text-align: center;
     color: var(--udx-text-muted); font-size: .8rem;
     border-top: 1px solid var(--udx-border);
   }
+
+  @media (prefers-reduced-motion: reduce){
+    .trail-x, .ebooks-list a, .products-list a,
+    .members-topbar .btn-sair, .members-topbar .btn-voltar{ transition: none; }
+  }
 </style>
 </head>
 
-<!-- page-iniciante ativa os tokens do nível Iniciante em niveis.css -->
 <body class="page-membros page-iniciante">
 
   <header class="members-topbar">
@@ -109,121 +295,410 @@
     <section class="trails-hero">
       <div class="auto-container">
         <div class="trails-hero__inner members-hero">
-          <span class="estagio-tag">
+          <span class="iniciante-tag">
             <span class="mdi mdi-numeric-1-box-outline" aria-hidden="true"></span>
             Nível Iniciante
           </span>
-          <div class="eyebrow"><b>05</b><span>Nível Iniciante</span></div>
-          <h1>Nível <em>Iniciante</em></h1>
-          <p class="lead">Três cards, três cores: <b>Alongamentos</b> (aquecimento e alongamentos básicos para ganhar mobilidade), <b>Segunda Rodada</b> (novos básicos de HipHop e Popping, fundamentos mais complexos, níveis, combinações e sequência coreográfica) e <b>Boost a Groove</b> (feeling, flow, flava, as três cinturas, combinações, combos e coreografia). Cada desafio concluído faz o nó evoluir; aqui não se aloca ponto.</p>
+
+          <div class="eyebrow">
+            <b>05</b>
+            <span>Área do Nível Iniciante</span>
+          </div>
+          <h1>Mobilidade, groove <em>e primeiros passos</em></h1>
+          <p class="lead">
+            O nível em que o corpo é preparado e o vocabulário de dança urbana
+            começa a virar linguagem. Três frentes de estudo compõem a jornada:
+            <b>Alongamentos</b> (aquecimento, mobilidade e postura),
+            <b>Segunda Rodada</b> (novos básicos de HipHop e Popping,
+            combinações e sequência coreográfica) e
+            <b>Boost a Groove</b> (feeling, flow, flava, as três cinturas
+            e coreografia).
+          </p>
+
           <div class="type-chip" id="userChip" hidden>
             <span class="mdi mdi-account-check-outline" aria-hidden="true"></span>
             <span>Conectado como <b id="userEmail">—</b></span>
+          </div>
+
+          <div class="trails-stats" style="margin-top:26px">
+            <div class="trails-stats__item">
+              <b id="statXpe">— XPE</b>
+              <span>Rumo aos 1634 XPE</span>
+            </div>
+            <div class="trails-stats__item">
+              <b>Iniciante</b>
+              <span>Seu nível atual</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- APLICAÇÃO -->
-    <div id="tfApp" hidden>
+    <!-- SEÇÃO — Recursos liberados no nível -->
+    <section class="trails-section">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-star-four-points-outline" aria-hidden="true"></span>
+            <span>Seu conteúdo por nível</span>
+          </div>
+          <h2>O que está <em>disponível para você</em></h2>
+          <p class="lead">
+            Recursos liberados no Nível Iniciante. Alguns cards abrem
+            conforme você acumula XPE nos desafios.
+          </p>
+        </div>
 
-      <!-- Progresso XPE -->
-      <section class="trails-section" style="padding-bottom:0">
-        <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-lightning-bolt" aria-hidden="true"></span>
-              <span>Seu progresso</span>
+        <div class="trails-list members-list">
+
+          <!-- Card 1 — Trilha Iniciante -->
+          <article class="trail-x">
+            <span class="iniciante-flag">
+              <span class="mdi mdi-numeric-1-box-outline"></span> Iniciante
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-map-marker-path"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 01</span>
+                <h3>Trilha Iniciante</h3>
+              </div>
             </div>
-            <h2>Experiência <em>de ecossistema</em></h2>
-            <p class="lead">
-              Cada desafio concluído soma XPE. Ao atingir o total do nível, você
-              conclui a fase e fica elegível ao próximo.
+            <p class="trail-x__desc">
+              As três frentes que compõem o nível: <b>Alongamentos</b>
+              (aquecimento, mobilidade articular, cadeia posterior,
+              quadril, coluna), <b>Segunda Rodada</b> (novos básicos de
+              HipHop e Popping com combinações e sequência coreográfica)
+              e <b>Boost a Groove</b> (feeling, flow, flava e as três
+              cinturas). Ao fechar as três, a insígnia
+              <em>ini-insignia</em> é liberada.
             </p>
-          </div>
-          <div class="tt-wallet" id="tfProgress"></div>
-        </div>
-      </section>
-
-      <!-- Trilha do nível -->
-      <section class="trails-section" style="padding-top:0">
-        <div class="auto-container">
-          <div class="tt-profile-tabs" id="tfProfileTabs" role="tablist"
-               aria-label="Cartões do nível">
-          </div>
-          <div class="tt-board" id="tfBoard"></div>
-          <div class="tt-legend">
-            <span class="tt-legend__item"><span class="tt-legend__dot"></span> Bloqueado</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--available"></span> Disponível</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--ranked"></span> Em desenvolvimento</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--maxed"></span> Dominado</span>
-            <span class="tt-legend__item"><span class="tt-legend__dot tt-legend__dot--titulo"></span> Insígnia</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Desafios do nó selecionado -->
-      <section class="trails-section" style="padding-top:0">
-        <div class="auto-container">
-          <span id="desafios" class="tt-anchor" aria-hidden="true"></span>
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-flag-checkered" aria-hidden="true"></span>
-              <span>Desafios</span>
+            <div class="stage-progress">
+              <div class="stage-progress__head">
+                <span>XPE acumulados no nível</span>
+                <b id="xpeLabel">— de 1634</b>
+              </div>
+              <div class="stage-progress__bar">
+                <div class="stage-progress__fill" id="xpeFill" style="width:0%"></div>
+              </div>
             </div>
-            <h2>Como <em>evoluir cada nó</em></h2>
-            <p class="lead">
-              Envie a comprovação por aqui. Tarefas simples entram na hora; o resto é
-              validado pela coordenação — o XPE cai assim que aprovado.
-            </p>
-          </div>
-          <div class="tt-panel" id="tfPanel"></div>
-        </div>
-      </section>
+            <a class="trail-x__cta" href="/trilhas/iniciante/">
+              Continuar de onde parei <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
 
-      <!-- Insígnia -->
-      <section class="trails-section" style="padding-top:0">
-        <div class="auto-container">
-          <div class="trails-section__head ts__h">
-            <div class="eyebrow">
-              <span class="mdi mdi-medal-outline" aria-hidden="true"></span>
-              <span>Conquista</span>
+          <!-- Card 2 — Biblioteca do Iniciante -->
+          <article class="trail-x">
+            <span class="iniciante-flag">
+              <span class="mdi mdi-numeric-1-box-outline"></span> Iniciante
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-bookshelf"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 02</span>
+                <h3>Biblioteca do Iniciante</h3>
+              </div>
             </div>
-            <h2>Insígnia <em>do nível</em></h2>
-            <p class="lead">
-              Registro permanente e cumulativo. A insígnia não abre portas fora da
-              plataforma — ela marca a sua evolução e a elegibilidade para Intermediário.
+            <p class="trail-x__desc">
+              Materiais de apoio das três frentes do nível: guias de
+              aquecimento, referências de básicos de HipHop e Popping,
+              e primeiras noções de groove. Atualizados sempre que uma
+              nova frente é liberada.
             </p>
-          </div>
-          <ul class="tt-titles" id="tfBadges"></ul>
-        </div>
-      </section>
+            <ul class="ebooks-list">
+              <li>
+                <a href="/iniciante/ebooks/aquecimento-mobilidade.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Aquecimento e mobilidade — guia essencial
+                </a>
+              </li>
+              <li>
+                <a href="/iniciante/ebooks/hhd-basicos.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  HipHop Dance — básicos e combinações
+                </a>
+              </li>
+              <li>
+                <a href="/iniciante/ebooks/popping-basicos.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Popping — primeiros passos
+                </a>
+              </li>
+              <li>
+                <a href="/iniciante/ebooks/groove-tres-cinturas.pdf">
+                  <span class="mdi mdi-file-pdf-box"></span>
+                  Groove e as três cinturas
+                </a>
+              </li>
+            </ul>
+          </article>
 
-    </div><!-- /#tfApp -->
+          <!-- Card 3 — Aulas ao vivo do Iniciante -->
+          <article class="trail-x">
+            <span class="iniciante-flag">
+              <span class="mdi mdi-numeric-1-box-outline"></span> Iniciante
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-video-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 03</span>
+                <h3>Aulas ao vivo do nível</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Encontros semanais para revisar aquecimento, treinar os
+              básicos e trabalhar groove com feedback direto da coordenação.
+            </p>
+            <a class="trail-x__cta" href="/iniciante/aulas-ao-vivo/">
+              Ver próximo encontro <span class="mdi mdi-calendar-outline"></span>
+            </a>
+          </article>
+
+          <!-- Card 4 — Rotina de treino -->
+          <article class="trail-x">
+            <span class="iniciante-flag">
+              <span class="mdi mdi-numeric-1-box-outline"></span> Iniciante
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-clipboard-list-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 04</span>
+                <h3>Rotina de treino</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Checklist semanal para manter as três frentes em movimento sem
+              sobrecarregar corpo nem cabeça.
+            </p>
+            <ul class="checklist">
+              <li class="done">
+                <span class="mdi mdi-check-circle"></span>
+                Aquecimento e mobilidade (Alongamentos)
+              </li>
+              <li class="done">
+                <span class="mdi mdi-check-circle"></span>
+                Treinar um básico de HHD ou Popping (Segunda Rodada)
+              </li>
+              <li>
+                <span class="mdi mdi-circle-outline"></span>
+                15 min de groove com as três cinturas (Boost a Groove)
+              </li>
+              <li class="todo">
+                <span class="mdi mdi-circle-outline"></span>
+                Registrar 1 desafio para avaliação
+              </li>
+              <li class="todo">
+                <span class="mdi mdi-circle-outline"></span>
+                Rever o básico aprendido na semana
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 5 — Comunidade Iniciante -->
+          <article class="trail-x">
+            <span class="iniciante-flag">
+              <span class="mdi mdi-numeric-1-box-outline"></span> Iniciante
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-account-group-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 05</span>
+                <h3>Comunidade Iniciante</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Grupo fechado com quem está no mesmo nível — troca de vídeos
+              de estudo, apoio nos desafios e trocas sobre o que está
+              funcionando na rotina.
+            </p>
+            <a class="trail-x__cta" href="/iniciante/comunidade/">
+              Entrar na comunidade <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 6 — Árvore de Talentos -->
+          <article class="trail-x">
+            <span class="iniciante-flag">
+              <span class="mdi mdi-numeric-1-box-outline"></span> Iniciante
+            </span>
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-family-tree"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 06</span>
+                <h3>Árvore de Talentos</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Seu plano de carreira dentro da Up Dance. Três perfis
+              profissionais — Bailarino(a), Professor(a) e Performer — com
+              habilidades destraváveis pelos pontos de talento conquistados
+              nos desafios do nível.
+            </p>
+            <a class="trail-x__cta" href="/membros/estagio/arvore-de-talentos/">
+              Abrir minha árvore <span class="mdi mdi-arrow-right"></span>
+            </a>
+          </article>
+
+          <!-- Card 7 — Checkpoint (em progresso) -->
+          <article class="trail-x is-progress">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-flag-checkered"></span></span>
+              <div>
+                <span class="trail-x__num">Recurso 07</span>
+                <h3>Checkpoint do nível</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Sua avaliação prática ao final desta fase. Libera automaticamente
+              quando você atingir 1634 XPE somando as três frentes.
+            </p>
+            <a class="trail-x__cta" href="#" aria-disabled="true">
+              Disponível ao concluir o nível <span class="mdi mdi-lock-clock"></span>
+            </a>
+            <p class="progress-note" id="checkpointNote">
+              <span class="mdi mdi-information-outline"></span>
+              Faltam <span id="xpeGap">—</span> XPE para desbloquear
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO — Próximos passos -->
+    <section class="trails-section" style="padding-top:0">
+      <div class="auto-container">
+        <div class="trails-section__head ts__h">
+          <div class="eyebrow">
+            <span class="mdi mdi-stairs-up" aria-hidden="true"></span>
+            <span>Próximos passos</span>
+          </div>
+          <h2>Depois do Iniciante, <em>o que vem?</em></h2>
+          <p class="lead">
+            A jornada Up Dance é progressiva. Veja o que se abre quando você
+            fechar as três frentes deste nível.
+          </p>
+        </div>
+
+        <div class="trails-list members-list">
+          <article class="trail-x is-progress">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-medal-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Próximo nível</span>
+                <h3>Intermediário</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Aprofundamento de corporeidade, groove e improviso, em diálogo
+              com a história e o vocabulário do Hip Hop, Popping, Breaking
+              (Top Rock) e Locking. Requer conclusão do Checkpoint deste nível.
+            </p>
+            <p class="progress-note">
+              <span class="mdi mdi-lock-clock"></span>
+              Requer conclusão do Checkpoint do nível
+            </p>
+          </article>
+
+          <article class="trail-x is-progress">
+            <div class="trail-x__top">
+              <span class="trail-x__icon"><span class="mdi mdi-school-outline"></span></span>
+              <div>
+                <span class="trail-x__num">Trilha alternativa</span>
+                <h3>Programa de Estágio</h3>
+              </div>
+            </div>
+            <p class="trail-x__desc">
+              Formação de professores da casa — para quem quer atuar no ensino
+              da Up Dance. Acesso mediante convite da coordenação.
+            </p>
+            <p class="progress-note">
+              <span class="mdi mdi-lock-clock"></span>
+              Requer conversa com a coordenação
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — falar com coordenação -->
+    <section class="trails-cta">
+      <div class="auto-container">
+        <div class="trails-cta__box">
+          <h2>Precisa <em>de apoio?</em></h2>
+          <p>Fale com a coordenação para tirar dúvidas sobre desafios do nível, pedir uma reavaliação ou orientar seu próximo passo na trilha.</p>
+          <div class="trails-cta__ctas">
+            <a class="home-cta home-cta--solid" href="/contato/?assunto=nivel-iniciante">
+              <span class="mdi mdi-message-text-outline"></span>
+              Falar com a coordenação
+            </a>
+            <a class="home-cta home-cta--ghost" href="/iniciante/faq/">
+              <span class="mdi mdi-help-circle-outline"></span>
+              Perguntas frequentes
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="members-footer">
-    © Up Dance — Nível Iniciante. Este conteúdo é pessoal e intransferível.
+    © Up Dance — Área do Nível Iniciante. Este conteúdo é pessoal e intransferível.
   </footer>
 
-  <!-- Camadas flutuantes: pop-up de informações (hover/toque) + toast -->
-  <div class="tt-tip"   id="tfTip"   role="tooltip" aria-hidden="true"></div>
-  <div class="tt-toast" id="tfToast" role="status" aria-live="polite"></div>
+<script>
+  (function(){
+    'use strict';
 
-  <!-- Scripts: dados primeiro, motor depois. NÃO carrega as três árvores. -->
-  <script src="/js/iniciante.data.js"></script>
-  <script src="/js/trilha.js"></script>
-  <script>
-    (function () {
-      'use strict';
-      var sair = document.getElementById('sair');
-      if (!sair) { return; }
-      sair.addEventListener('click', function () {
-        fetch('/api/member/logout', { method: 'POST', credentials: 'same-origin' })
-          .catch(function () {})
-          .finally(function () { location.href = '/'; });
-      });
-    }());
-  </script>
+    var userChip  = document.getElementById('userChip');
+    var userEmail = document.getElementById('userEmail');
+    var xpeLabel  = document.getElementById('xpeLabel');
+    var xpeFill   = document.getElementById('xpeFill');
+    var xpeGap    = document.getElementById('xpeGap');
+    var statXpe   = document.getElementById('statXpe');
+
+    var LIMIAR_XPE = 1634;
+
+    // Só preenche identidade e mantém o botão Sair funcional.
+    // A rota /membros/* já é protegida pelo Worker.
+    fetch('/api/me', { credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(u){
+        if(!u || !u.email){ location.href = '/entrar/'; return; }
+        userEmail.textContent = u.email;
+        userChip.hidden = false;
+
+        // Defesa em profundidade: sem o tipo Iniciante, volta ao hub.
+        // Observação: MEMBER_TYPES em index.js usa "Iniciante" sem acento nem sufixo.
+        var types = Array.isArray(u.types) && u.types.length ? u.types : [u.type || 'Free'];
+        if (types.indexOf('Iniciante') === -1) {
+          location.href = '/membros/?erro=sem_acesso';
+        }
+      })
+      .catch(function(){ /* silencia — página segue utilizável */ });
+
+    // XPE do usuário na trilha iniciante (limiar 1634, insígnia ini-insignia)
+    // Endpoint canônico do worker_trilhas.js: GET /api/trilha/estado?perfil=iniciante
+    fetch('/api/trilha/estado?perfil=iniciante', { credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(s){
+        if (!s || typeof s.xpe !== 'number') return;
+        var xpe = Math.max(0, Math.min(LIMIAR_XPE, s.xpe|0));
+        var pct = Math.round((xpe / LIMIAR_XPE) * 100);
+        if (statXpe)  statXpe.textContent  = xpe + ' XPE';
+        if (xpeLabel) xpeLabel.textContent = xpe + ' de ' + LIMIAR_XPE;
+        if (xpeFill)  xpeFill.style.width  = pct + '%';
+        if (xpeGap)   xpeGap.textContent   = Math.max(0, LIMIAR_XPE - xpe);
+      })
+      .catch(function(){ /* silencia — barra fica em 0 */ });
+
+    document.getElementById('sair').addEventListener('click', function(){
+      fetch('/api/member/logout', { method:'POST', credentials:'same-origin' })
+        .catch(function(){})
+        .finally(function(){ location.href = '/'; });
+    });
+  })();
+</script>
+
 </body>
 </html>
