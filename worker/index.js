@@ -222,8 +222,17 @@ export default {
         const m = await getMember(request, env);
         if (!m) return Response.redirect(url.origin + '/entrar/', 302);
 
+        // Comparação de prefixo LITERAL (sem LIKE) — imune a coringas embutidos
+        // em path_prefix (`%`, `_`) e ao limite "LIKE pattern too complex" do
+        // SQLite/D1. Também filtra path_prefix NULL/vazio, que antes poderiam
+        // gerar match universal.
         const recurso = await env.DB.prepare(
-          'SELECT key FROM resources WHERE ? LIKE path_prefix || \'%\' ORDER BY length(path_prefix) DESC LIMIT 1'
+          'SELECT key FROM resources ' +
+          ' WHERE path_prefix IS NOT NULL ' +
+          '   AND path_prefix <> \'\' ' +
+          '   AND substr(?1, 1, length(path_prefix)) = path_prefix ' +
+          ' ORDER BY length(path_prefix) DESC ' +
+          ' LIMIT 1'
         ).bind(pathname).first();
 
         if (recurso) {
@@ -1216,6 +1225,21 @@ async function adminResourceSave(request, env, admin) {
   // sanidade: nome de ícone MDI segue o padrão "coisa-coisa-coisa"
   if (icon && !/^[a-z0-9\-]{2,60}$/.test(icon)) return json({ ok: false, erro: 'Ícone inválido (use nome MDI sem prefixo "mdi-").' }, 400);
     
+  // path_prefix, quando informado, precisa começar em '/' e não pode conter
+  // coringas do LIKE (%, _). Isso previne o erro "LIKE or GLOB pattern too
+  // complex" e mantém o middleware de acesso previsível.
+  if (path_prefix) {
+    if (path_prefix[0] !== '/') {
+      return json({ ok: false, erro: 'Prefixo de caminho deve começar com "/".' }, 400);
+    }
+    if (/[%_]/.test(path_prefix)) {
+      return json({ ok: false, erro: 'Prefixo de caminho não pode conter os caracteres "%" ou "_".' }, 400);
+    }
+    if (path_prefix.length > 120) {
+      return json({ ok: false, erro: 'Prefixo de caminho excede 120 caracteres.' }, 400);
+    }
+  }
+  
   if (external_url && !/^https?:\/\//.test(external_url)) {
     return json({ ok: false, erro: 'URL externa deve começar com http:// ou https://' }, 400);
   }
