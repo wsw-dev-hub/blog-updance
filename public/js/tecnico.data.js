@@ -284,7 +284,7 @@
           },
           {
             id: 'tec-hdi-titulo',
-            tier: 4, col: 1, ranksMax: 1,
+            tier: 4, col: 2, ranksMax: 1,
             nome: 'House Dance & Up Rock I ✓', icone: 'mdi-medal-outline',
             resumo: 'Conclusão do card House Dance & Up Rock I.',
             tipo: 'titulo',
@@ -317,7 +317,7 @@
         habilidades: [
           {
             id: 'tec-hdii-hd2',
-            tier: 1, col: 1, ranksMax: 5,
+            tier: 1, col: 2, ranksMax: 5,
             nome: 'House Dance II', icone: 'mdi-account-music',
             resumo: 'Vocabulário avançado do estilo — a fundação de tudo que vem depois.',
             requer: [],
@@ -482,7 +482,7 @@
           },
           {
             id: 'tec-hdii-titulo',
-            tier: 6, col: 1, ranksMax: 1,
+            tier: 6, col: 2, ranksMax: 1,
             nome: 'House Dance & Up Rock II ✓', icone: 'mdi-medal-outline',
             resumo: 'Conclusão do card House Dance & Up Rock II.',
             tipo: 'titulo',
