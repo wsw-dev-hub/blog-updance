@@ -15,7 +15,7 @@ const TRILHAS = {
   fundamentos:   { resource: 'nivel-free',            limiar: 608,  insignia: 'fund-insignia' },
   iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
   intermediario: { resource: 'nivel-intermediario',   limiar: 2430, insignia: 'int-insignia'  },
-  tecnico:       { resource: 'nivel-tecnico',         limiar: 3260, categoria:'tec-insignia' },
+  tecnico:       { resource: 'nivel-tecnico',         limiar: 3300, categoria:'tec-insignia' },
   /* Aguardando arquivos (1 linha cada quando chegarem):
        
        estagio:    { classe:'page-estagio',     limiar: 000, categoria:'est-insignia', },

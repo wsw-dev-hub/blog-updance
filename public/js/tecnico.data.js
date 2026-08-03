@@ -1,16 +1,19 @@
 /**
  * UP DANCE EXPERIENCE — NÍVEL TÉCNICO — 3 CARDS LADO A LADO
- * Card 1 · Preparo Motor    (aquecimento, alongamento, guias do movimento, coordenação motora)
- * Card 2 · House Dance I    (introdução, história, musicalidade, improviso, composição, forma-variações-estado)
- * Card 3 · House Dance II   (sequência coreográfica, formas, geometrias, fluxo, níveis, complexidade,
- *                            personagens, coreografia autoral)
+ * Card 1 · Preparo Motor           (aquecimento, alongamento, guias do movimento, coordenação motora)
+ * Card 2 · House Dance & Up Rock I  (introdução, história, musicalidade, improviso, composição,
+ *                                    forma-variações-estado, Up Rock: fundação e ataques-drops)
+ * Card 3 · House Dance & Up Rock II (sequência, formas, geometrias, fluxo, níveis, complexidade,
+ *                                    personagens, coreografia autoral, Up Rock: solo e virtuosismo)
  * Backend: perfil_id 'tecnico' (runtime.perfilId) — o split em colunas é só disposição visual.
  * Prefixo global de IDs: 'tec-*' (evita colisão com fund-* / iniciante / intermediario / arvore).
+ * Up Rock: 4 nós × 5 desafios = 20 desafios cobrindo os 23 movimentos catalogados
+ *          (aba BREAKING STEPS · col E — 3 pares afins agrupados no último desafio de 3 nós).
  * limiarXPE = soma de TODO o XP dos desafios (derivado; ver worker_trilhas.js).
- *   Cálculo:  Card1 = 5 nós × 100 + 30 =  530
- *             Card2 = 6 nós × 175 + 40 = 1090
- *             Card3 = 8 nós × 190 + 60 = 1580
- *             TOTAL = 3260
+ *   Cálculo:  Card1 =  5 nós × 100 + 30      =  530
+ *             Card2 =  8 nós × 175 + 40      = 1440   (era 6 nós = 1090; +2 nós Up Rock)
+ *             Card3 = 11 nós × 190 + 60      = 2150   (era 9 nós = 1770; +2 nós Up Rock)
+ *             TOTAL                          = 4120
  */
 (function (global) {
   'use strict';
@@ -21,7 +24,7 @@
       nome: 'Técnico',
       nivelAlvo: 'Técnico',
       promovePara: 'Estagiário(a)',
-      limiarXPE: 3260
+      limiarXPE: 4120
     },
     runtime: {
       perfilId:   'tecnico',
@@ -148,13 +151,13 @@
          ============================================================ */
       {
         id: 'hdi-tec',
-        nome: 'House Dance I',
-        segmento: 'Introdução, história, escuta, criação',
+        nome: 'House Dance & Up Rock I',
+        segmento: 'House Dance e Up Rock: introdução, escuta, criação, vocabulário',
         icone: 'mdi-music-circle-outline',
-        xpLabel: 'House I',
+        xpLabel: 'HD & UR I',
         tiers: [
           { n: 1, nome: 'Introdução & Contexto' },
-          { n: 2, nome: 'Escuta & Criação' },
+          { n: 2, nome: 'Escuta, criação & vocabulário' },
           { n: 3, nome: 'Composição' },
           { n: 4, nome: 'Conclusão' }
         ],
@@ -190,6 +193,21 @@
             ]
           },
           {
+            id: 'tec-uprock-fund',
+            tier: 1, col: 3, ranksMax: 5,
+            nome: 'Up Rock — Fundação', icone: 'mdi-boxing-glove',
+            resumo: 'Rocks básicos e arm punches — o vocabulário-fundação do Up Rock.',
+            requer: [],
+            niveis: ['Front-back-down.', 'Step-front step-back.', 'Side-to-side.', 'Arm punch base.', 'Combinações.'],
+            desafios: [
+              { id: 'tec-uprock-fund-d1', tipo: 'tarefa',    xp: 25, nome: 'Fundação · 1', desc: 'Front Back and Down em base 4/4.' },
+              { id: 'tec-uprock-fund-d2', tipo: 'tarefa',    xp: 30, nome: 'Fundação · 2', desc: 'Step Front–Step Back and Down.' },
+              { id: 'tec-uprock-fund-d3', tipo: 'tarefa',    xp: 35, nome: 'Fundação · 3', desc: 'Side to Side–Front–Back and Down.' },
+              { id: 'tec-uprock-fund-d4', tipo: 'tarefa',    xp: 40, nome: 'Fundação · 4', desc: 'Arm Punch–Front–Back and Down.' },
+              { id: 'tec-uprock-fund-d5', tipo: 'atividade', xp: 45, nome: 'Fundação · 5', desc: 'Combinar Arm Punch–Roll e Arm Punch–Kick em 8 tempos.' }
+            ]
+          },
+          {
             id: 'tec-hdi-music',
             tier: 2, col: 1, ranksMax: 5,
             nome: 'Musicalidade', icone: 'mdi-metronome',
@@ -217,6 +235,21 @@
               { id: 'tec-hdi-improv-d3', tipo: 'tarefa', xp: 35, nome: 'Improviso · 3', desc: 'Freestyle de 2 min com câmera parada.' },
               { id: 'tec-hdi-improv-d4', tipo: 'tarefa', xp: 40, nome: 'Improviso · 4', desc: 'Freestyle com restrição (ex.: só Jack).' },
               { id: 'tec-hdi-improv-d5', tipo: 'evento',  xp: 45, nome: 'Improviso · 5', desc: 'Participar de 1 cypher da comunidade.' }
+            ]
+          },
+          {
+            id: 'tec-uprock-atq',
+            tier: 2, col: 3, ranksMax: 5,
+            nome: 'Up Rock — Ataques & Drops', icone: 'mdi-arrow-down-bold-circle-outline',
+            resumo: 'Jumps, drops e finalizações teatrais que marcam o gesto.',
+            requer: ['tec-uprock-fund'],
+            niveis: ['Jump to side.', 'Jump with turn.', 'Drop de joelho.', 'Drop lateral.', 'Dolphin drop.'],
+            desafios: [
+              { id: 'tec-uprock-atq-d1', tipo: 'tarefa',    xp: 25, nome: 'Ataques · 1', desc: 'Jump to Side–Back Knee and Down.' },
+              { id: 'tec-uprock-atq-d2', tipo: 'tarefa',    xp: 30, nome: 'Ataques · 2', desc: 'Jump to Side–Back Knee Turn and Down.' },
+              { id: 'tec-uprock-atq-d3', tipo: 'tarefa',    xp: 35, nome: 'Ataques · 3', desc: 'Drop Knee to Front.' },
+              { id: 'tec-uprock-atq-d4', tipo: 'tarefa',    xp: 40, nome: 'Ataques · 4', desc: 'Drop to Side.' },
+              { id: 'tec-uprock-atq-d5', tipo: 'atividade', xp: 45, nome: 'Ataques · 5', desc: 'Dolphin Drop com aterrissagem controlada.' }
             ]
           },
           {
@@ -252,13 +285,13 @@
           {
             id: 'tec-hdi-titulo',
             tier: 4, col: 1, ranksMax: 1,
-            nome: 'House Dance I ✓', icone: 'mdi-medal-outline',
-            resumo: 'Conclusão do card House Dance I.',
+            nome: 'House Dance & Up Rock I ✓', icone: 'mdi-medal-outline',
+            resumo: 'Conclusão do card House Dance & Up Rock I.',
             tipo: 'titulo',
-            requer: ['tec-hdi-comp', 'tec-hdi-mfv'],
+            requer: ['tec-hdi-comp', 'tec-hdi-mfv', 'tec-uprock-atq'],
             niveis: ['Card concluído.'],
             desafios: [
-              { id: 'tec-hdi-titulo-d1', tipo: 'atividade', xp: 40, nome: 'Selo · House Dance I', desc: 'Marcado pela coordenação após revisão dos 6 nós.' }
+              { id: 'tec-hdi-titulo-d1', tipo: 'atividade', xp: 40, nome: 'Selo · House Dance & Up Rock I', desc: 'Marcado pela coordenação após revisão dos 8 nós.' }
             ]
           }
         ]
@@ -269,10 +302,10 @@
          ============================================================ */
       {
         id: 'hdii-tec',
-        nome: 'House Dance II',
-        segmento: 'Sequência, formas, palco, autoria',
+        nome: 'House Dance & Up Rock II',
+        segmento: 'House Dance e Up Rock: sequência, palco, autoria, virtuosismo',
         icone: 'mdi-drama-masks',
-        xpLabel: 'House II',
+        xpLabel: 'HD & UR II',
         tiers: [
           { n: 1, nome: 'Vocabulário Avançado' },
           { n: 2, nome: 'Bases avançadas' },
@@ -328,6 +361,21 @@
             ]
           },
           {
+            id: 'tec-uprock-solo',
+            tier: 2, col: 3, ranksMax: 5,
+            nome: 'Up Rock — Solo & Deslocamentos', icone: 'mdi-run',
+            resumo: 'Solos de chão, shifts e deslocamentos que costuram o palco.',
+            requer: ['tec-hdii-hd2'],
+            niveis: ['Suicide.', 'Ground drop.', 'Shift.', 'Double shift.', 'Worm.'],
+            desafios: [
+              { id: 'tec-uprock-solo-d1', tipo: 'tarefa',    xp: 30, nome: 'Solo · 1', desc: 'Suicide com aterrissagem controlada.' },
+              { id: 'tec-uprock-solo-d2', tipo: 'tarefa',    xp: 34, nome: 'Solo · 2', desc: 'Ground Drop com transição para o próximo passo.' },
+              { id: 'tec-uprock-solo-d3', tipo: 'tarefa',    xp: 38, nome: 'Solo · 3', desc: 'Shift com deslocamento no espaço.' },
+              { id: 'tec-uprock-solo-d4', tipo: 'tarefa',    xp: 42, nome: 'Solo · 4', desc: 'Double Shift em par ou dueto.' },
+              { id: 'tec-uprock-solo-d5', tipo: 'atividade', xp: 46, nome: 'Solo · 5', desc: 'Worm executado em 8 tempos com fluidez.' }
+            ]
+          },
+          {
             id: 'tec-hdii-geo',
             tier: 3, col: 1, ranksMax: 5,
             nome: 'Geometrias & Transições no Palco', icone: 'mdi-vector-square',
@@ -355,6 +403,21 @@
               { id: 'tec-hdii-flux-d3', tipo: 'tarefa', xp: 38, nome: 'Fluxo · 3', desc: 'Fluxo em unísono com par.' },
               { id: 'tec-hdii-flux-d4', tipo: 'tarefa', xp: 42, nome: 'Fluxo · 4', desc: 'Contra-fluxo em par (chamado e resposta).' },
               { id: 'tec-hdii-flux-d5', tipo: 'atividade', xp: 46, nome: 'Fluxo · 5', desc: 'Alternância consciente em coreografia.' }
+            ]
+          },
+          {
+            id: 'tec-uprock-virt',
+            tier: 3, col: 3, ranksMax: 5,
+            nome: 'Up Rock — Virtuosismo', icone: 'mdi-star-four-points',
+            resumo: 'Acrobacias autorais que assinam o gesto no palco.',
+            requer: ['tec-uprock-solo'],
+            niveis: ['Donkey.', 'Macaco.', 'Neck spring.', 'Hand hop.', 'Combinação teatral.'],
+            desafios: [
+              { id: 'tec-uprock-virt-d1', tipo: 'tarefa',    xp: 30, nome: 'Virtuosismo · 1', desc: 'Donkey com aterrissagem em pé.' },
+              { id: 'tec-uprock-virt-d2', tipo: 'tarefa',    xp: 34, nome: 'Virtuosismo · 2', desc: 'Macaco com controle de amplitude.' },
+              { id: 'tec-uprock-virt-d3', tipo: 'tarefa',    xp: 38, nome: 'Virtuosismo · 3', desc: 'Neck Spring — base e variação Half Twist.' },
+              { id: 'tec-uprock-virt-d4', tipo: 'tarefa',    xp: 42, nome: 'Virtuosismo · 4', desc: 'Hand Hop em 3 repetições contínuas.' },
+              { id: 'tec-uprock-virt-d5', tipo: 'atividade', xp: 46, nome: 'Virtuosismo · 5', desc: 'Combinar Ninja e Coin Drop em finalização teatral.' }
             ]
           },
           {
@@ -420,13 +483,13 @@
           {
             id: 'tec-hdii-titulo',
             tier: 6, col: 1, ranksMax: 1,
-            nome: 'House Dance II ✓', icone: 'mdi-medal-outline',
-            resumo: 'Conclusão do card House Dance II.',
+            nome: 'House Dance & Up Rock II ✓', icone: 'mdi-medal-outline',
+            resumo: 'Conclusão do card House Dance & Up Rock II.',
             tipo: 'titulo',
-            requer: ['tec-hdii-pers', 'tec-hdii-auto'],
+            requer: ['tec-hdii-pers', 'tec-hdii-auto', 'tec-uprock-virt'],
             niveis: ['Card concluído.'],
             desafios: [
-              { id: 'tec-hdii-titulo-d1', tipo: 'atividade', xp: 60, nome: 'Selo · House Dance II', desc: 'Marcado pela coordenação após revisão dos 8 nós.' }
+              { id: 'tec-hdii-titulo-d1', tipo: 'atividade', xp: 60, nome: 'Selo · House Dance & Up Rock II', desc: 'Marcado pela coordenação após revisão dos 10 nós.' }
             ]
           }
         ]
@@ -439,7 +502,7 @@
       id: 'tec-insignia',
       nome: 'Insígnia do Nível Técnico',
       icone: 'mdi-medal',
-      resumo: 'Concedida ao atingir 3260 XPE somando os três cards. Habilita elegibilidade ao Programa de Estágio.'
+      resumo: 'Concedida ao atingir 4120 XPE somando os três cards. Habilita elegibilidade ao Programa de Estágio.'
     }
   };
 
