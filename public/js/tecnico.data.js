@@ -272,7 +272,7 @@
             tier: 3, col: 2, ranksMax: 5,
             nome: 'Movimento • Forma • Variações • Estado', icone: 'mdi-shape-outline',
             resumo: 'Um movimento gera muitos — variações e estado.',
-            requer: ['tec-hdi-music', 'tec-hdi-improv'],
+            requer: ['tec-hdi-music', 'tec-hdi-improv', 'tec-uprock-atq'],
             niveis: ['Um movimento.', 'Duas formas.', 'Quatro variações.', 'Estado neutro.', 'Estado presente.'],
             desafios: [
               { id: 'tec-hdi-mfv-d1', tipo: 'tarefa', xp: 25, nome: 'MFV · 1', desc: 'Escolher 1 movimento-base.' },
@@ -288,7 +288,7 @@
             nome: 'House Dance & Up Rock I ✓', icone: 'mdi-medal-outline',
             resumo: 'Conclusão do card House Dance & Up Rock I.',
             tipo: 'titulo',
-            requer: ['tec-hdi-comp', 'tec-hdi-mfv', 'tec-uprock-atq'],
+            requer: ['tec-hdi-comp', 'tec-hdi-mfv'],
             niveis: ['Card concluído.'],
             desafios: [
               { id: 'tec-hdi-titulo-d1', tipo: 'atividade', xp: 40, nome: 'Selo · House Dance & Up Rock I', desc: 'Marcado pela coordenação após revisão dos 8 nós.' }
@@ -470,7 +470,7 @@
             tier: 5, col: 2, ranksMax: 5,
             nome: 'Coreografia Autoral', icone: 'mdi-fountain-pen-tip',
             resumo: 'Autor de si — criar, editar, entregar coreografia própria.',
-            requer: ['tec-hdii-niv', 'tec-hdii-comp'],
+            requer: ['tec-hdii-niv', 'tec-hdii-comp', 'tec-uprock-virt' ],
             niveis: ['Intenção.', 'Rascunho de 16 tempos.', 'Extensão para 32.', 'Edição e refinamento.', 'Entrega em vídeo.'],
             desafios: [
               { id: 'tec-hdii-auto-d1', tipo: 'tarefa', xp: 30, nome: 'Autoral · 1', desc: 'Definir intenção e música.' },
@@ -486,7 +486,7 @@
             nome: 'House Dance & Up Rock II ✓', icone: 'mdi-medal-outline',
             resumo: 'Conclusão do card House Dance & Up Rock II.',
             tipo: 'titulo',
-            requer: ['tec-hdii-pers', 'tec-hdii-auto', 'tec-uprock-virt'],
+            requer: ['tec-hdii-pers', 'tec-hdii-auto'],
             niveis: ['Card concluído.'],
             desafios: [
               { id: 'tec-hdii-titulo-d1', tipo: 'atividade', xp: 60, nome: 'Selo · House Dance & Up Rock II', desc: 'Marcado pela coordenação após revisão dos 10 nós.' }
