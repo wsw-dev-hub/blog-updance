@@ -51,12 +51,15 @@
     prep:         { grad:'linear-gradient(135deg, #110273 0%, #430ABF 100%)', gradSoft:'linear-gradient(135deg, rgba(17,2,115,.16) 0%, rgba(67,10,191,.20) 100%)', gradText:'linear-gradient(135deg, #430ABF 0%, #110273 100%)', accent:'#430ABF', glow:'rgba(67, 10, 191, .34)' },
     corp:         { grad:'linear-gradient(135deg, #430ABF 0%, #8C0783 100%)', gradSoft:'linear-gradient(135deg, rgba(67,10,191,.16) 0%, rgba(140,7,131,.20) 100%)', gradText:'linear-gradient(135deg, #8C0783 0%, #430ABF 100%)', accent:'#8C0783', glow:'rgba(140, 7, 131, .34)' },
     cult:         { grad:'linear-gradient(135deg, #8C0783 0%, #FA33A1 100%)', gradSoft:'linear-gradient(135deg, rgba(140,7,131,.16) 0%, rgba(250,51,161,.20) 100%)', gradText:'linear-gradient(135deg, #FA33A1 0%, #8C0783 100%)', accent:'#FA33A1', glow:'rgba(250, 51, 161, .34)' },
-    /* Perfis do Nível Técnico (espelham a paleta âmbar → coral do aluno.html) */
-    'prep-tec':   { grad:'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)', gradSoft:'linear-gradient(135deg, rgba(245,158,11,.16) 0%, rgba(251,191,36,.20) 100%)', gradText:'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', accent:'#f59e0b', glow:'rgba(245, 158, 11, .34)' },
-    'hdi-tec':    { grad:'linear-gradient(135deg, #fbbf24 0%, #fb7185 100%)', gradSoft:'linear-gradient(135deg, rgba(251,191,36,.16) 0%, rgba(251,113,133,.20) 100%)', gradText:'linear-gradient(135deg, #fb7185 0%, #fbbf24 100%)', accent:'#fb7185', glow:'rgba(251, 113, 133, .34)' },
-    'hdii-tec':   { grad:'linear-gradient(135deg, #fb7185 0%, #e11d48 100%)', gradSoft:'linear-gradient(135deg, rgba(251,113,133,.16) 0%, rgba(225,29,72,.20) 100%)', gradText:'linear-gradient(135deg, #e11d48 0%, #fb7185 100%)', accent:'#e11d48', glow:'rgba(225, 29, 72, .34)' }
+    /* Perfis do Nível Técnico — progressão laranja→rosa/choque→vinho→roxo,
+       espelhando 1:1 as regras .page-tecnico .tt-tree[data-perfil="..."]
+       de tecnico.html. Card central (hdi-tec) reproduz o gradiente do hub
+       .page-nivel-tecnico; laterais avançam um degrau em cada direção. */
+    'prep-tec':   { grad:'linear-gradient(135deg, #F27405 0%, #FA33A1 100%)', gradSoft:'linear-gradient(135deg, rgba(242,116,5,.16) 0%, rgba(250,51,161,.20) 100%)', gradText:'linear-gradient(135deg, #FA33A1 0%, #F27405 100%)', accent:'#F27405', glow:'rgba(242, 116, 5, .34)' },
+    'hdi-tec':    { grad:'linear-gradient(135deg, #F27405 0%, #BF0449 100%)', gradSoft:'linear-gradient(135deg, rgba(242,116,5,.16) 0%, rgba(191,4,73,.20) 100%)', gradText:'linear-gradient(135deg, #BF0449 0%, #F27405 100%)', accent:'#BF0449', glow:'rgba(191, 4, 73, .34)' },
+    'hdii-tec':   { grad:'linear-gradient(135deg, #BF0449 0%, #8C0783 100%)', gradSoft:'linear-gradient(135deg, rgba(191,4,73,.16) 0%, rgba(140,7,131,.20) 100%)', gradText:'linear-gradient(135deg, #8C0783 0%, #BF0449 100%)', accent:'#8C0783', glow:'rgba(140, 7, 131, .34)' }
   };
-
+  
   var $ = function (s, c) { return (c || doc).querySelector(s); };
   function el(t, cls, html) { var n = doc.createElement(t); if (cls) { n.className = cls; } if (html != null) { n.innerHTML = html; } return n; }
   function escapar(s) {
