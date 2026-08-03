@@ -10,7 +10,7 @@
  *   Cálculo:  Card1 = 5 nós × 100 + 30 =  530
  *             Card2 = 6 nós × 175 + 40 = 1090
  *             Card3 = 8 nós × 190 + 60 = 1580
- *             TOTAL = 3200
+ *             TOTAL = 3260
  */
 (function (global) {
   'use strict';
@@ -21,7 +21,7 @@
       nome: 'Técnico',
       nivelAlvo: 'Técnico',
       promovePara: 'Estagiário(a)',
-      limiarXPE: 3390
+      limiarXPE: 3260
     },
     runtime: {
       perfilId:   'tecnico',
@@ -439,7 +439,7 @@
       id: 'tec-insignia',
       nome: 'Insígnia do Nível Técnico',
       icone: 'mdi-medal',
-      resumo: 'Concedida ao atingir 3200 XPE somando os três cards. Habilita elegibilidade ao Programa de Estágio.'
+      resumo: 'Concedida ao atingir 3260 XPE somando os três cards. Habilita elegibilidade ao Programa de Estágio.'
     }
   };
 
