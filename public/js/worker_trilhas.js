@@ -15,7 +15,7 @@ const TRILHAS = {
   fundamentos:   { resource: 'nivel-free',            limiar: 608,  insignia: 'fund-insignia' },
   iniciante:     { resource: 'nivel-iniciante',       limiar: 1634, insignia: 'ini-insignia'  },
   intermediario: { resource: 'nivel-intermediario',   limiar: 2430, insignia: 'int-insignia'  },
-  tecnico:       { resource: 'nivel-tecnico',         limiar: 3300, categoria:'tec-insignia' },
+  tecnico:       { resource: 'nivel-tecnico',         limiar: 4120, insignia: 'tec-insignia' },
   /* Aguardando arquivos (1 linha cada quando chegarem):
        
        estagio:    { classe:'page-estagio',     limiar: 000, categoria:'est-insignia', },
@@ -41,10 +41,17 @@ async function trilhaGuard(request, env, perfil) {
 }
 
 /* XPE = soma dos desafios aprovados do perfil. */
-async function recalcularXPETrilha(env, email, perfil) {
+/*async function recalcularXPETrilha(env, email, perfil) {
   const row = await env.DB.prepare(
     "SELECT COALESCE(SUM(xp),0) AS xpe FROM talent_progresso " +
     "WHERE email = ? AND perfil_id = ? AND status = 'aprovado'"
+  ).bind(email, perfil).first();
+  return row ? row.xpe : 0;
+}*/
+async function recalcularXPETrilha(env, email, perfil) {
+  const row = await env.DB.prepare(
+    "SELECT COALESCE(SUM(xp),0) AS xpe FROM trilha_progresso " +
+    "WHERE email = ? AND nivel_id = ? AND status = 'aprovado'"
   ).bind(email, perfil).first();
   return row ? row.xpe : 0;
 }
@@ -57,13 +64,22 @@ async function trilhaEstado(request, env, url) {
     const g = await trilhaGuard(request, env, perfil);
     if (g.erro) return g.erro;
 
-    const [aprovados, insignias] = await env.DB.batch([
+    /*const [aprovados, insignias] = await env.DB.batch([
       env.DB.prepare(
         "SELECT desafio_id FROM talent_progresso " +
         "WHERE email = ? AND perfil_id = ? AND status = 'aprovado'"
       ).bind(g.email, perfil),
       env.DB.prepare(
         "SELECT titulo_id FROM talent_titulos WHERE email = ? AND perfil_id = ?"
+      ).bind(g.email, perfil),
+    ]);*/
+    const [aprovados, insignias] = await env.DB.batch([
+      env.DB.prepare(
+        "SELECT desafio_id FROM trilha_progresso " +
+        "WHERE email = ? AND nivel_id = ? AND status = 'aprovado'"
+      ).bind(g.email, perfil),
+      env.DB.prepare(
+        "SELECT insignia_id AS titulo_id FROM trilha_insignias WHERE email = ? AND nivel_id = ?"
       ).bind(g.email, perfil),
     ]);
 
@@ -95,25 +111,38 @@ async function trilhaEnviarDesafio(request, env) {
   if (!desafioId) return json({ ok: false, erro: 'Desafio não informado.' }, 400);
 
   /* Só aceita desafios REALMENTE do perfil desta trilha. */
-  const d = await env.DB.prepare(
+  /*const d = await env.DB.prepare(
     "SELECT id, perfil_id, xp FROM talent_desafios WHERE id = ? AND ativo = 1 AND perfil_id = ?"
+  ).bind(desafioId, perfil).first();*/
+  const d = await env.DB.prepare(
+    "SELECT id, nivel_id, xp FROM trilha_desafios WHERE id = ? AND ativo = 1 AND nivel_id = ?"
   ).bind(desafioId, perfil).first();
   if (!d) {
     await logEvent(env, g.email, 'trilha_desafio_erro', `${perfil}: ${desafioId}`);
     return json({ ok: false, erro: 'Desafio inexistente ou fora da trilha.' }, 404);
   }
 
-  const jaTem = await env.DB.prepare(
+  /*const jaTem = await env.DB.prepare(
     'SELECT status FROM talent_progresso WHERE email = ? AND desafio_id = ?'
+  ).bind(g.email, desafioId).first();*/
+  const jaTem = await env.DB.prepare(
+    'SELECT status FROM trilha_progresso WHERE email = ? AND desafio_id = ?'
   ).bind(g.email, desafioId).first();
   if (jaTem) return json({ ok: true, status: jaTem.status, duplicado: true });
 
   const comprovacao = String(body.comprovacao || '').slice(0, 500);
 
   /* Revisão obrigatória: sempre 'pendente'. */
-  await env.DB.batch([
+  /*await env.DB.batch([
     env.DB.prepare(
       'INSERT INTO talent_progresso (email, desafio_id, perfil_id, xp, status, comprovacao) ' +
+      "VALUES (?, ?, ?, ?, 'pendente', ?)"
+    ).bind(g.email, desafioId, perfil, d.xp, comprovacao),
+    contador(env, CNT_PENDENTES, 1),
+  ]);*/
+  await env.DB.batch([
+    env.DB.prepare(
+      'INSERT INTO trilha_progresso (email, desafio_id, nivel_id, xp, status, comprovacao) ' +
       "VALUES (?, ?, ?, ?, 'pendente', ?)"
     ).bind(g.email, desafioId, perfil, d.xp, comprovacao),
     contador(env, CNT_PENDENTES, 1),
@@ -126,13 +155,23 @@ async function trilhaEnviarDesafio(request, env) {
    Ganchar no fluxo de aprovação existente (talentosAvaliar): após marcar
    'aprovado', se o perfil for uma trilha e o XPE cruzar o limiar, gravar a
    insígnia da trilha. Ver inserção apontada no texto. */
-async function trilhaAoAprovar(env, email, perfil) {
+/*async function trilhaAoAprovar(env, email, perfil) {
   const cfg = trilhaConfig(perfil);
   if (!cfg) return;
   const xpe = await recalcularXPETrilha(env, email, perfil);
   if (xpe >= cfg.limiar) {
     await env.DB.prepare(
       'INSERT OR IGNORE INTO talent_titulos (email, titulo_id, perfil_id) VALUES (?, ?, ?)'
+    ).bind(email, cfg.insignia, perfil).run();
+  }
+}*/
+async function trilhaAoAprovar(env, email, perfil) {
+  const cfg = trilhaConfig(perfil);
+  if (!cfg) return;
+  const xpe = await recalcularXPETrilha(env, email, perfil);
+  if (xpe >= cfg.limiar) {
+    await env.DB.prepare(
+      'INSERT OR IGNORE INTO trilha_insignias (email, insignia_id, nivel_id) VALUES (?, ?, ?)'
     ).bind(email, cfg.insignia, perfil).run();
   }
 }
