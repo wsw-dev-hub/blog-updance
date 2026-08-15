@@ -33,6 +33,14 @@ const SESSION_TTL  = 60 * 60 * 24 * 7;
 const MAGIC_TTL    = 60 * 15;
 const COOLDOWN_TTL = 60;
 const RESET_TTL    = 60 * 30;   // 30 minutos para o link de redefinição
+/* ─────────────────────────────────────────────────────────────
+   Handoff cross-subdomain (blog ↔ apps sob *.workers.dev)
+   TTL curto + uso único: o token vale apenas para um adopt.
+   APPS_ORIGIN: destino canônico das redireções pós-handoff e
+   whitelist de `next` (defesa contra open-redirect).
+───────────────────────────────────────────────────────────── */
+const HANDOFF_TTL = 60; // segundos — janela para o adopt do outro subdomínio
+const APPS_ORIGIN = 'https://app.updance.workers.dev';
 //const MEMBER_TYPES = ['Premium','Professor(a)','Monitor(a)','Assistente','Estagiário(a)','Intermediário','Iniciante','Aluno','Free'];
 //const MEMBER_TYPES = ['Premium','Professor(a)','Assistente','Monitor(a)','Estagiário(a)','Intermediário','Básico','Iniciante','Free'];
 
@@ -122,6 +130,8 @@ export default {
       if (pathname === '/api/auth/verify')                                  return verificarLink(request, url, env);
       if (pathname === '/api/me')                                           return quemSouEu(request, env);
       if (pathname === '/api/me/access')                                    return meusAcessos(request, env);
+	  
+	  if (pathname === '/api/session/bridge')                                return sessionBridge(request, url, env);
 
       // ---- ÁRVORE DE TALENTOS (membro) ----
       if (pathname === '/api/talentos/estado')                                return talentosEstado(request, env);
@@ -337,6 +347,55 @@ async function logoutCookie(cookieName, prefixo, request, env) {
 async function quemSouEu(request, env) {
   const m = await getMember(request, env);
   return m ? json(m) : json(null, 401);
+}
+/* ─────────────────────────────────────────────────────────────
+   sessionBridge — GET /api/session/bridge?next=<url>
+   Chamado por app.updance.workers.dev quando o gate detecta
+   ausência de sessão no host de apps. Objetivos:
+     1) Se há m_session válida em blog.*, emite handoff token
+        (uso único, TTL 60 s) e 302 → apps/adopt.
+     2) Caso contrário, 302 → /entrar/ (atende ao P.S. de
+        redirecionar para "a página de acesso, em membros").
+   Segurança:
+     • `next` só é aceito se começar com APPS_ORIGIN + '/'
+       (whitelist estrita contra open-redirect); em qualquer
+       outra forma, cai no default APPS_ORIGIN + '/apps/'.
+     • `next` é gravado NO KV junto do sid, não trafega pela
+       URL do adopt — cliente só vê `t=<tok>` opaco.
+     • Token de 32 bytes randômicos, delete-on-read no adopt.
+───────────────────────────────────────────────────────────── */
+async function sessionBridge(request, url, env) {
+  const rawNext = url.searchParams.get('next') || '';
+  const next = (typeof rawNext === 'string'
+                && rawNext.startsWith(APPS_ORIGIN + '/'))
+    ? rawNext
+    : (APPS_ORIGIN + '/apps/');
+
+  const sid = readCookie(request, 'm_session');
+  const m   = sid ? await lerSessao(env, 'msess', sid) : null;
+
+  if (!m) {
+    // Sem sessão válida em blog.* → manda para /entrar/.
+    // (Encaminha `next` para uso futuro por /entrar/, caso venha
+    // a suportar retorno pós-login. Ignorar não quebra nada.)
+    return Response.redirect(
+      url.origin + '/entrar/?next=' + encodeURIComponent(next),
+      302
+    );
+  }
+
+  // Sessão válida → mint handoff (uso único, TTL curto).
+  const tok = randomToken(32);
+  await env.KV.put(
+    'handoff:' + tok,
+    JSON.stringify({ sid: sid, next: next }),
+    { expirationTtl: HANDOFF_TTL }
+  );
+
+  return Response.redirect(
+    APPS_ORIGIN + '/api/session/adopt?t=' + encodeURIComponent(tok),
+    302
+  );
 }
 async function meusAcessos(request, env) {
   const m = await getMember(request, env);
