@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UDX · Ficha de Avaliação · Manuella</title>
+<meta name="description" content="Ficha de avaliação individual — Up Dance Xperience. Fundamentos, leitura técnica e direcionamentos de treino.">
+
+<link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+
+<!-- Base visual da plataforma UDX -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/blog.css">
+<link rel="stylesheet" href="/css/trailsFormat.css">
+<link rel="stylesheet" href="/css/format.css">
+<link rel="stylesheet" href="/css/format_modal-trilhas.css">
+<link rel="stylesheet" href="/css/mediaQuery.css">
+
+<!-- Editor carregado por último para isolar a ficha das regras genéricas da plataforma -->
+<link rel="stylesheet" href="./editor_v19.css">
+
+<script>
+(function(){
+    try{
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-bs-theme', theme);
+    }catch(_){ }
+})();
+</script>
+
+</head>
+<body class="page-apps udx-assessment-page">
+<header class="members-topbar udx-assessment-topbar" aria-label="Identificação do módulo">
+    <img src="/images/icons/udx-icon.ico" alt="Up Dance Xperience" class="udx-assessment-topbar__icon">
+    <!--<span class="marca">Up Dance</span>-->
+    <span class="type-badge udx-assessment-topbar__badge">
+        <span class="mdi mdi-clipboard-text-outline" aria-hidden="true"></span>
+        <span>Avaliações</span>
+    </span>
+    <span class="spacer"></span>
+    <a class="btn-voltar" href="/admin/" aria-label="Voltar ao painel administrativo">
+        <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+        Voltar ao painel
+    </a>
+</header>
+
+<main class="udx-assessment-app" id="udxAssessmentApp">
+
+<!-- =========================================================
+     PÁGINA 1 — FICHA DE AVALIAÇÃO
+     Acento: wine-magenta (pulso · entrega · execução)
+========================================================= -->
+<section class="page1" data-udx-fixed-page="page1" style="
+    --accent: #BF0449;
+    --accent-soft: #fdeef5;
+    --accent-grad: linear-gradient(180deg, #FA33A1 0%, #BF0449 100%);
+">
+    <div class="journey" data-udx-journey></div>
+
+    <header class="page__header">
+        <span class="eyebrow">
+			<img class="ico" src="/images/icons/udx-icon.ico"/>
+			<span class="eyebrow-dot">
+			</span>Avaliador · <span data-udx-field="professorNome">—</span></span>
+        <span class="chapter-tag"><span data-udx-field="alunoNome">Manuella</span> · <span data-udx-field="turmaOrganizacional">UDX Danças Urbanas</span></span>
+    </header>
+
+	<img class="logo" data-udx-logo src="./logos/Norte Danse.png" alt="Logo da escola / projeto"/>
+ 
+    <!-- Cabeçalho da ficha: nome + nota geral (hero com gradiente completo) -->
+    <div class="ficha-head">
+        <div class="ficha-head__left">
+            <span class="eyebrow">Aluno(a) avaliado(a) </span><span class="eyebrow-mid" data-udx-field="semestre">1º Semestre 2026</span>
+            <h1 class="name" data-udx-field="alunoNome">Manuella</h1>
+            <div class="meta" data-udx-list="tagsModalidades">
+                <span data-udx-derived="contagemFundamentosTag"></span>
+				<span>Improviso</span>
+				<span>Sequência Coreográfica</span>
+            </div>
+        </div>
+        <div class="grade-hero" data-udx-derived="mediaGeral-aria">
+            <div>
+                <span class="grade-label">Nota Geral</span>
+                <span class="grade-num" data-udx-derived="mediaGeral">7.2</span>
+                <span class="grade-scale">de 10</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fundamentos: 9 eixos com score chips coloridos por faixa -->
+    <section class="fund-block">
+        <span class="section-eyebrow">Fundamentos avaliados</span><span class="section-eyebrow-mid" data-udx-field="modalidadeTurma">Hip Hop Infantil</span>
+        <h2 class="section-title">Leitura por <em>eixo técnico</em></h2>
+
+        <div class="fund-grid" data-udx-list="fundamentos">
+            <div class="fund-row" data-fund-id="pulso" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Pulso</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--wine">5.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="balancos" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Balanços</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--wine">6.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="caminhadas" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Caminhadas</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--purple">7.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="ondulacoes" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Ondulações</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--hot">8.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="circulares" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Mov. Circulares</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--hot">8.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="ritmo" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Ritmo</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--indigo">10.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="transferencia" data-fund-tipo="fundamento">
+                <span class="fund-row__name">Transf. de peso</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--wine">6.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="seq" data-fund-tipo="complementar">
+                <span class="fund-row__name">Seq. Coreográfica</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--purple">7.0</span>
+            </div>
+            <div class="fund-row" data-fund-id="improviso" data-fund-tipo="complementar" style="grid-column: 1 / -1;">
+                <span class="fund-row__name">Improviso</span>
+                <span class="fund-row__leader"></span>
+                <span class="fund-row__score score--hot">8.0</span>
+            </div>
+        </div>
+
+        <!-- Legenda cromática — os 4 eixos da psicologia de cores -->
+        <div class="tier-legend">
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#BF0449"></span>
+                5.0–6.4 · a refinar
+            </span>
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#5708A6"></span>
+                6.5–7.4 · profundidade consolidada
+            </span>
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#FA33A1"></span>
+                7.5–8.9 · presença viva
+            </span>
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#110273"></span>
+                9.0-10.0 · domínio consciente
+            </span>
+        </div>
+
+        <!-- Resumo por eixo cromático -->
+        <div class="fund-summary">
+            <div class="summary-card" data-udx-derived-card="pontoForte" style="--card-accent:#110273">
+                <div class="summary-card__label">Ponto forte</div>
+                <div class="summary-card__value" data-udx-derived="pontoForteNome">Ritmo</div>
+                <div class="summary-card__caption" data-udx-derived="pontoForteCaption">Domínio total · nota 10</div>
+            </div>
+            <div class="summary-card" data-udx-derived-card="media" style="--card-accent:#5708A6">
+                <div class="summary-card__label" data-udx-derived="mediaLabel">Média dos 9 eixos</div>
+                <div class="summary-card__value" data-udx-derived="mediaGeral">7.2</div>
+                <div class="summary-card__caption" data-udx-derived="mediaCaption">Faixa profundidade consolidada</div>
+            </div>
+            <div class="summary-card" data-udx-derived-card="atencao" style="--card-accent:#BF0449">
+                <div class="summary-card__label">Em atenção</div>
+                <div class="summary-card__value" data-udx-derived="emAtencaoCount">3</div>
+                <div class="summary-card__caption" data-udx-derived="emAtencaoLista">Pulso · Balanços · Caminhadas</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="page__footer">
+        <span class="brand"><span class="brand-mark"></span>Up Dance Xperience</span>
+        <span class="num" data-udx-pagenum>página <b>01</b> / 03</span>
+    </footer>
+</section>
+
+<!-- =========================================================
+     PÁGINA PERF-1 — CRITÉRIOS PERFORMÁTICOS
+========================================================= -->
+<section class="pagePerf1 udx-hidden" data-udx-fixed-page="pagePerf1">
+    <button type="button" class="udx-page-remove" data-udx-remove-page="pagePerf1">× Remover</button>
+    <div class="journey" data-udx-journey></div>
+
+    <header class="page__header">
+        <span class="eyebrow">
+            <img class="ico" src="./logos/udx-icon.ico"/>
+            <span class="eyebrow-dot"></span>Avaliador · <span data-udx-field="professorNome">—</span></span>
+        <span class="chapter-tag"><span data-udx-field="alunoNome">Manuella</span> · <span data-udx-field="turmaOrganizacional">UDX Danças Urbanas</span></span>
+    </header>
+
+    <img class="logo" data-udx-logo src="./logos/Norte Danse.png" alt="Logo da escola / projeto"/>
+
+    <div class="ficha-head ficha-head--performatico">
+        <div class="ficha-head__left">
+            <span class="eyebrow">Aluna avaliada </span><span class="eyebrow-mid" data-udx-field="semestre">1º Semestre 2026</span>
+            <h1 class="name" data-udx-field="alunoNome">Manuella</h1>
+            <div class="meta">
+                <span data-udx-derived="contagemPerformaticosTag">0 Critérios</span>
+                <span>Eixo Performático</span>
+                <span data-udx-field="modalidadeTurma">Hip Hop Infantil</span>
+            </div>
+        </div>
+        <div class="grade-hero grade-hero--performatico" data-udx-derived="mediaGeralPerformatica-aria">
+            <div>
+                <span class="grade-label">Nota Performática</span>
+                <span class="grade-num" data-udx-derived="mediaGeralPerformatica">—</span>
+                <span class="grade-scale">de 10</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="fund-block">
+        <span class="section-eyebrow">Critérios performáticos</span><span class="section-eyebrow-mid" data-udx-field="modalidadeTurma">Hip Hop Infantil</span>
+        <h2 class="section-title">Leitura por <em>eixo performático</em></h2>
+
+        <div class="fund-grid" data-udx-list="performaticos"></div>
+
+        <div class="tier-legend">
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#BF0449"></span>
+                5.0–6.4 · a refinar
+            </span>
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#5708A6"></span>
+                6.5–7.4 · profundidade consolidada
+            </span>
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#FA33A1"></span>
+                7.5–8.9 · presença viva
+            </span>
+            <span class="tier-legend__item">
+                <span class="tier-legend__dot" style="background:#110273"></span>
+                9.0-10.0 · domínio consciente
+            </span>
+        </div>
+
+        <div class="fund-summary">
+            <div class="summary-card" data-udx-derived-card="pontoFortePerf" style="--card-accent:#110273">
+                <div class="summary-card__label">Ponto forte (perf.)</div>
+                <div class="summary-card__value" data-udx-derived="pontoFortePerfNome">—</div>
+                <div class="summary-card__caption" data-udx-derived="pontoFortePerfCaption">Sem notas preenchidas</div>
+            </div>
+            <div class="summary-card" data-udx-derived-card="mediaPerf" style="--card-accent:#FA33A1">
+                <div class="summary-card__label" data-udx-derived="mediaPerfLabel">Média performática</div>
+                <div class="summary-card__value" data-udx-derived="mediaGeralPerformatica">—</div>
+                <div class="summary-card__caption" data-udx-derived="mediaPerfCaption">Faixa —</div>
+            </div>
+            <div class="summary-card" data-udx-derived-card="atencaoPerf" style="--card-accent:#BF0449">
+                <div class="summary-card__label">Em atenção (perf.)</div>
+                <div class="summary-card__value" data-udx-derived="emAtencaoPerfCount">0</div>
+                <div class="summary-card__caption" data-udx-derived="emAtencaoPerfLista">—</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="page__footer">
+        <span class="brand"><span class="brand-mark"></span>Up Dance Xperience</span>
+        <span class="num" data-udx-pagenum>página -- / --</span>
+    </footer>
+</section>
+
+<!-- =========================================================
+     PÁGINA 2 — LEITURA TÉCNICA E DIRECIONAMENTOS
+     Acento raiz: roxo (profundidade/intuição — leitura da aluna)
+     Callout de foco: hot pink (presença)
+     Dicas: índigo (foco/disciplina)
+========================================================= -->
+<section class="page2" data-udx-fixed-page="page2" style="
+    --accent: #5708A6;
+    --accent-soft: #f4eefc;
+    --accent-grad: linear-gradient(180deg, #5708A6 0%, #110273 100%);
+">
+    <div class="journey" data-udx-journey></div>
+
+    <header class="page__header">
+	<span class="eyebrow">
+			<img class="ico" src="./logos/udx-icon.ico"/>
+			<span class="eyebrow-dot"></span>Leitura Técnica</span>
+        <span class="chapter-tag"><span data-udx-field="alunoNome">Manuella</span> · Ficha <span data-udx-fichanum>01</span></span>
+    </header>
+
+    <!-- OBSERVAÇÕES — acento roxo (profundidade/intuição) -->
+    <span class="section-eyebrow">Observações do avaliador</span>
+    <h2 class="section-title">O que a <em>execução</em> revela</h2>
+
+    <div class="dual-block" data-udx-list="observacoes">
+        <div class="obs-item">
+            <p class="lead">Musicalidade e leitura de espaço</p>
+            <p>Possui <strong>bom ritmo musical</strong> e um bom tempo de resposta entre a identificação dos passos e movimentos e sua execução.</p>
+        </div>
+
+        <div class="obs-item">
+            <p class="lead">Improviso e aplicação dos fundamentos</p>
+            <p>Conseguiu <strong>executar os fundamentos de forma razoável</strong> durante o improviso, conectando bem os passos básicos, mantendo o ritmo e <strong>aproveitando bem o espaço à sua volta</strong>.</p>
+        </div>
+
+        <div class="obs-item">
+            <p class="lead">Sequência coreográfica</p>
+            <p>Na sequência coreográfica, teve <strong>um pouco de dificuldades para conectar alguns fundamentos</strong>, mas conseguiu manter o ritmo — porém com <strong>movimentos encurtados</strong> e <strong>ocupando o mínimo de espaço</strong> à sua volta.</p>
+        </div>
+    </div>
+
+    <!-- LEITURA DE PERFIL — 2 insights comportamentais (roxo/intuição) -->
+    <div style="margin-top: 8mm;">
+        <span class="section-eyebrow">Leitura de perfil</span>
+        <h2 class="section-title">O que a <em>postura em aula</em> revela</h2>
+
+        <div class="insight-pair">
+            <div class="insight-card">
+                <span class="insight-card__label">Solo × grupo</span>
+                <p class="insight-card__text">Demonstra <strong>mais energia e desenvoltura ao dançar sozinha</strong> do que em grupo — o corpo entrega mais quando não está sob os olhos da classe.</p>
+            </div>
+            <div class="insight-card">
+                <span class="insight-card__label">Observação × execução</span>
+                <p class="insight-card__text">Apesar da timidez, tem uma <strong>capacidade de observação muito boa</strong> — mas passar mais tempo observando o que é feito pela classe do que executando torna seu desenvolvimento mais lento.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALLOUT DE FOCO — hot pink (presença/vibração) -->
+    <aside class="focus-callout" data-udx-derived-card="focusCallout">
+        <div class="focus-badge">
+            <span data-udx-derived="emAtencaoCount">3</span>
+            <span style="font-size:7pt; letter-spacing:0.2em; font-style:normal; font-weight:600; text-transform:uppercase;">focos</span>
+        </div>
+        <div>
+            <span class="focus-callout__label">Fundamentos em atenção</span>
+            <h3 class="focus-callout__title" data-udx-derived="emAtencaoTitulo"><em>Pulso</em> · <em>Balanços</em> · <em>Caminhadas</em></h3>
+            <p class="focus-callout__body">Aproveite o <strong>espelho</strong> para se observar enquanto executa cada instrução — o olho de fora refina o que o corpo ainda entrega no automático.</p>
+        </div>
+    </aside>
+
+    
+
+    <!-- Footer da página 2 (leitura técnica + comportamental) -->
+    <footer class="page__footer">
+        <span class="brand"><span class="brand-mark"></span>Up Dance Xperience</span>
+        <span class="num" data-udx-pagenum>página <b>02</b> / 03</span>
+    </footer>
+</section>
+
+<!-- =========================================================
+     PÁGINA PERF-2 — LEITURA PERFORMÁTICA
+========================================================= -->
+<section class="pagePerf2 udx-hidden" data-udx-fixed-page="pagePerf2">
+    <button type="button" class="udx-page-remove" data-udx-remove-page="pagePerf2">× Remover</button>
+    <div class="journey" data-udx-journey></div>
+
+    <header class="page__header">
+        <span class="eyebrow">
+            <img class="ico" src="./logos/udx-icon.ico"/>
+            <span class="eyebrow-dot"></span>Leitura Performática</span>
+        <span class="chapter-tag"><span data-udx-field="alunoNome">Manuella</span> · Ficha <span data-udx-fichanum>--</span></span>
+    </header>
+
+    <span class="section-eyebrow">Observações performáticas</span>
+    <h2 class="section-title">O que a <em>presença</em> revela</h2>
+
+    <div class="dual-block" data-udx-list="observacoesPerformaticas"></div>
+
+    <div style="margin-top: 8mm;">
+        <span class="section-eyebrow">Leitura de perfil performático</span>
+        <h2 class="section-title">O que o <em>corpo em cena</em> revela</h2>
+
+        <div class="insight-pair" data-udx-list="insightsPerformaticos"></div>
+    </div>
+
+    <aside class="focus-callout udx-hidden" data-udx-derived-card="focusCalloutPerf">
+        <div class="focus-badge">
+            <span data-udx-derived="emAtencaoPerfCount">0</span><br>
+            <span style="font-size:7pt; letter-spacing:0.2em; font-style:normal; font-weight:600; text-transform:uppercase;">focos</span>
+        </div>
+        <div>
+            <span class="focus-callout__label">Critérios performáticos em atenção</span>
+            <h3 class="focus-callout__title" data-udx-derived="emAtencaoPerfTitulo">—</h3>
+            <p class="focus-callout__body">Explore o <strong>espelho e o vídeo</strong> como ferramentas de leitura — o que o corpo entrega em presença, o olho externo consolida.</p>
+        </div>
+    </aside>
+
+    <footer class="page__footer">
+        <span class="brand"><span class="brand-mark"></span>Up Dance Xperience</span>
+        <span class="num" data-udx-pagenum>página -- / --</span>
+    </footer>
+</section>
+
+<!-- =========================================================
+     PÁGINA 3 — DICAS E PRÓXIMOS PASSOS DE TREINO
+     Acento raiz: índigo (foco/disciplina — direcionamento)
+========================================================= -->
+<section class="page3" data-udx-fixed-page="page3" style="
+    --accent: #110273;
+    --accent-soft: #eeeefc;
+    --accent-grad: linear-gradient(180deg, #5708A6 0%, #110273 100%);
+">
+    <div class="journey" data-udx-journey></div>
+
+    <header class="page__header">
+        <span class="eyebrow">
+			<img class="ico" src="./logos/udx-icon.ico"/>
+			<span class="eyebrow-dot"></span>Direcionamentos de Treino</span>
+        <span class="chapter-tag"><span data-udx-field="alunoNome">Manuella</span> · Ficha <span data-udx-fichanum>02</span></span>
+    </header>
+	
+	<!-- NOTA DE HÁBITO — índigo (foco/postura em aula) -->
+    <aside class="discipline-note">
+        <div class="discipline-note__mark">!</div>
+        <div class="discipline-note__body">
+            <span class="discipline-note__label">Hábito a cuidar</span>
+            <p class="discipline-note__text">Um hábito a ser cuidado é <strong>dançar com a boca aberta</strong>. Além de contribuir para reduzir bastante a energia dos movimentos, pode trazer riscos caso ocorra algum contato inesperado durante aulas, ensaios ou apresentações.</p>
+        </div>
+    </aside>
+
+    <!-- DICAS — acento índigo (foco/disciplina) -->
+    <span class="section-eyebrow">Próximos passos de treino</span>
+    <h2 class="section-title">Dicas para a <em>próxima sessão</em></h2>
+
+    <div class="tips-grid" data-udx-list="dicas">
+        <div class="tip-card">
+            <div class="tip-card__num">01</div>
+            <div>
+                <h4 class="tip-card__title">Posicionamento dos pés</h4>
+                <p class="tip-card__text">Dê mais atenção ao <strong>apoio dos pés nas transferências de peso</strong>. É ali que o passo básico ganha estabilidade e o pulso encontra o chão.</p>
+            </div>
+        </div>
+
+        <div class="tip-card">
+            <div class="tip-card__num">02</div>
+            <div>
+                <h4 class="tip-card__title">Flexão de joelhos ao marcar o pulso</h4>
+                <p class="tip-card__text">Reforce a <strong>flexão consciente dos joelhos</strong> em cada marcação do pulso — é a mola que sustenta a musicalidade sem endurecer o quadril.</p>
+            </div>
+        </div>
+
+        <div class="tip-card">
+            <div class="tip-card__num">03</div>
+            <div>
+                <h4 class="tip-card__title">Balanço do tronco no passo básico</h4>
+                <p class="tip-card__text">Trabalhe o <strong>balanço do tronco durante a execução dos passos básicos</strong>. Quando o tronco responde, o balanço deixa de ser gesto e vira leitura de tempo.</p>
+            </div>
+        </div>
+
+        <div class="tip-card">
+            <div class="tip-card__num">04</div>
+            <div>
+                <h4 class="tip-card__title">Caminhadas em 4 tempos</h4>
+                <p class="tip-card__text">Nas caminhadas, faça <strong>sempre as marcações em 4 tempos</strong>. É a contagem que estabiliza o deslocamento e evita que o passo se encolha junto com o corpo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assinatura de encerramento -->
+    <div class="sign-off" data-udx-signoff>
+        <p class="sign-off__quote">Observar é começar a entender — mas é entrando na roda que o corpo aprende, erra e ganha desenvoltura.</p>
+        <div class="sign-off__sig">
+            <strong>Up Dance Xperience</strong>
+            Ficha de Avaliação · v.01
+        </div>
+    </div>
+
+    <footer class="page__footer">
+        <span class="brand"><span class="brand-mark"></span>Up Dance Xperience</span>
+        <span class="num" data-udx-pagenum>página <b>03</b> / 03</span>
+    </footer>
+</section>
+
+<!-- =========================================================
+     PÁGINA PERF-3 — DICAS PERFORMÁTICAS
+========================================================= -->
+<section class="pagePerf3 udx-hidden" data-udx-fixed-page="pagePerf3">
+    <button type="button" class="udx-page-remove" data-udx-remove-page="pagePerf3">× Remover</button>
+    <div class="journey" data-udx-journey></div>
+
+    <header class="page__header">
+        <span class="eyebrow">
+            <img class="ico" src="./logos/udx-icon.ico"/>
+            <span class="eyebrow-dot"></span>Leitura Performática</span>
+        <span class="chapter-tag"><span data-udx-field="alunoNome">Manuella</span> · Ficha <span data-udx-fichanum>--</span></span>
+    </header>
+
+    <aside class="discipline-note udx-hidden" data-udx-derived-card="disciplinaNotaPerformatica">
+        <div class="discipline-note__mark">!</div>
+        <div class="discipline-note__body">
+            <span class="discipline-note__label" data-udx-field="disciplinaPerfLabel">Hábito performático a cuidar</span>
+            <p class="discipline-note__text" data-udx-field="disciplinaPerfTexto"></p>
+        </div>
+    </aside>
+
+    <span class="section-eyebrow">Próximos passos performáticos</span>
+    <h2 class="section-title">Dicas para a <em>próxima cena</em></h2>
+
+    <div class="tips-grid" data-udx-list="dicasPerformaticas"></div>
+
+    <footer class="page__footer">
+        <span class="brand"><span class="brand-mark"></span>Up Dance Xperience</span>
+        <span class="num" data-udx-pagenum>página -- / --</span>
+    </footer>
+</section>
+
+</main>
+
+<button type="button" class="udx-editor__toggle" id="udxEditorToggle" aria-controls="udxEditor" aria-expanded="true">
+    <span class="mdi mdi-tune-variant" aria-hidden="true"></span>
+    <span>Editor</span>
+</button>
+
+<button type="button" class="udx-editor__quick-print" id="udxPrintPreviewQuick" aria-label="Visualizar impressão">
+    <span class="mdi mdi-printer-eye" aria-hidden="true"></span>
+    <span>Visualizar impressão</span>
+</button>
+
+<aside class="udx-editor" id="udxEditor" aria-label="Editor de avaliação">
+    <div class="udx-editor__brand">
+        <div class="udx-editor__brand-mark">
+            <img src="/images/icons/udx.png" alt="Up Dance Xperience" class="udx-editor__brand-logo">
+        </div>
+        <div class="udx-editor__brand-copy">
+            <span class="udx-editor__brand-eyebrow">Up Dance Xperience</span>
+            <strong>Editor de avaliação</strong>
+        </div>
+    </div>
+
+    <div class="udx-theme-control" aria-label="Tema da interface">
+        <div>
+            <span class="udx-theme-control__eyebrow">Aparência</span>
+            <strong>Tema do sistema</strong>
+        </div>
+        <button type="button" class="udx-theme-toggle" id="udxThemeToggle" aria-pressed="false" title="Alternar tema claro/escuro">
+            <span class="udx-theme-toggle__icon" aria-hidden="true">☾</span>
+            <span class="udx-theme-toggle__text">Escuro</span>
+        </button>
+    </div>
+
+    <h3>Dados da turma</h3>
+    <label>Nome da aluna</label>
+    <input type="text" data-udx-input="alunoNome">
+    <label>Nome do professor</label>
+    <input type="text" data-udx-input="professorNome" placeholder="—">
+    <label>Semestre</label>
+    <input type="text" data-udx-input="semestre">
+    <label>Turma organizacional</label>
+    <input type="text" data-udx-input="turmaOrganizacional">
+    <label>Modalidade / turma</label>
+    <input type="text" data-udx-input="modalidadeTurma">
+
+    <label>Logo da ficha</label>
+    <div class="udx-upload">
+        <input class="udx-upload__input" type="file" id="udxLogoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+        <label class="udx-upload__button" for="udxLogoInput">
+            <span class="udx-upload__icon" aria-hidden="true">↑</span>
+            <span>Selecionar logo</span>
+        </label>
+        <span class="udx-upload__filename" id="udxLogoFilename" aria-live="polite">Nenhum arquivo selecionado</span>
+    </div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm udx-editor__btn--ghost udx-upload__reset" id="udxLogoReset">Restaurar logo padrão</button>
+
+    <label>Modalidades avaliadas (tags)</label>
+    <div data-udx-input-list="tagsModalidades"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm udx-editor__btn--ghost" data-udx-add="tagsModalidades">+ adicionar tag</button>
+
+    <h3>Observações</h3>
+    <p class="udx-editor__hint">Use <code>**texto**</code> para negrito.</p>
+    <div data-udx-input-list="observacoes"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="observacoes">+ adicionar observação</button>
+
+    <h3>Dicas</h3>
+    <p class="udx-editor__hint">Use <code>**texto**</code> para negrito.</p>
+    <div data-udx-input-list="dicas"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="dicas">+ adicionar dica</button>
+
+    <h3>Notas dos fundamentos</h3>
+    <p class="udx-editor__hint">Deixe em branco para excluir da contagem. Escala 0–10.</p>
+    <div data-udx-input-list="fundamentos"></div>
+
+    <h3>Eixo performático</h3>
+    <p class="udx-editor__hint">O eixo só é exibido na ficha enquanto houver ao menos um critério performático.</p>
+    <div id="udxPerfActivateHost"></div>
+
+    <div id="udxPerfEditorBlock">
+    <h3>Notas de performance</h3>
+    <p class="udx-editor__hint">Deixe em branco para excluir da contagem. Escala 0–10. Os critérios são fixos; somente as notas são editáveis.</p>
+    <div data-udx-input-list="performaticos"></div>
+
+    <h3>Observações performáticas</h3>
+    <p class="udx-editor__hint">Use <code>**texto**</code> para negrito.</p>
+    <div data-udx-input-list="observacoesPerformaticas"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="observacoesPerformaticas">+ adicionar observação (perf.)</button>
+
+    <h3>Insights performáticos</h3>
+    <p class="udx-editor__hint">Cartões pareados de leitura de perfil performático.</p>
+    <div data-udx-input-list="insightsPerformaticos"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="insightsPerformaticos">+ adicionar insight (perf.)</button>
+
+    <h3>Hábito performático a cuidar</h3>
+    <p class="udx-editor__hint">Deixe o texto em branco para ocultar a nota.</p>
+    <label>Rótulo</label>
+    <input type="text" data-udx-input="disciplinaPerfLabel" placeholder="Hábito performático a cuidar">
+    <label>Texto</label>
+    <textarea data-udx-input="disciplinaPerfTexto" placeholder="Use **negrito** onde precisar."></textarea>
+
+    <h3>Dicas performáticas</h3>
+    <p class="udx-editor__hint">Use <code>**texto**</code> para negrito.</p>
+    <div data-udx-input-list="dicasPerformaticas"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="dicasPerformaticas">+ adicionar dica (perf.)</button>
+    </div>
+
+    <h3>Páginas da Vizualização</h3>
+    <p class="udx-editor__hint">Remova ou reinsira páginas pré-existentes da visualização. A paginação e a jornada são atualizadas automaticamente.</p>
+    <div class="udx-editor__fixed-pages" id="udxFixedPagesEditor" aria-live="polite"></div>
+
+    <h3>Páginas extras</h3>
+    <p class="udx-editor__hint">Inseridas entre a Leitura Técnica e os Direcionamentos.</p>
+    <div data-udx-input-list="paginasExtras"></div>
+    <button type="button" class="udx-editor__btn udx-editor__btn--sm udx-editor__btn--ghost" data-udx-add="paginasExtras">+ adicionar página</button>
+
+    <div class="udx-editor__overflow" id="udxOverflow" aria-live="polite"></div>
+
+    <div class="udx-editor__actions">
+        <button type="button" class="udx-editor__btn" id="udxSave">Salvar</button>
+        <button type="button" class="udx-editor__btn udx-editor__btn--print" id="udxPrintPreview">Visualizar impressão</button>
+        <button type="button" class="udx-editor__btn udx-editor__btn--pdf" id="udxExportPdf">Gerar PDF</button>
+        <button type="button" class="udx-editor__btn udx-editor__btn--ghost" id="udxExport">Exportar JSON</button>
+        <button type="button" class="udx-editor__btn udx-editor__btn--danger" id="udxReset">Restaurar seed</button>
+    </div>
+</aside>
+
+<div class="udx-print-preview-bar" id="udxPrintPreviewBar" aria-hidden="true">
+    <div class="udx-print-preview-bar__label">
+        <strong>Visualização de impressão</strong>
+        <span>A4 · somente páginas visíveis</span>
+    </div>
+    <div class="udx-print-preview-bar__actions">
+        <div class="udx-preview-zoom" role="group" aria-label="Controle de zoom da visualização">
+            <button type="button" class="udx-preview-zoom__btn" id="udxZoomOut" aria-label="Diminuir zoom" title="Diminuir zoom">−</button>
+            <button type="button" class="udx-preview-zoom__value" id="udxZoomReset" aria-label="Restaurar zoom para 100%" title="Restaurar para 100%">100%</button>
+            <button type="button" class="udx-preview-zoom__btn" id="udxZoomIn" aria-label="Aumentar zoom" title="Aumentar zoom">+</button>
+        </div>
+        <button type="button" class="udx-print-preview-bar__btn udx-print-preview-bar__btn--ghost" id="udxPrintPreviewClose">Voltar ao editor</button>
+        <button type="button" class="udx-print-preview-bar__btn udx-print-preview-bar__btn--pdf" id="udxExportPdfPreview">Baixar PDF</button>
+        <button type="button" class="udx-print-preview-bar__btn" id="udxPrintNow">Imprimir</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Exportação fiel das folhas visíveis para PDF -->
+<script src="https://unpkg.com/html2canvas-pro@1.6.6/dist/html2canvas-pro.min.js"
+        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/html2canvas-pro@1.6.6/dist/html2canvas-pro.min.js'"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="./editor_v19.js"></script>
+</body>
+</html>

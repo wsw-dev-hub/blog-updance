@@ -1,0 +1,2760 @@
+/* ============================================================
+   TOKENS — paleta pocket-book UDX (clube.html / blog.css)
+============================================================ */
+:root{
+    /* Paleta primária */
+    --udx-wine:      #BF0449;   /* rosa-vinho — pulso, entrega    */
+    --udx-hot:       #FA33A1;   /* rosa choque — vibração, presença */
+    --udx-blood:     #F20505;   /* alerta pontual                 */
+    --udx-purple:    #5708A6;   /* roxo — profundidade, intuição  */
+    --udx-indigo:    #110273;   /* índigo — foco, disciplina      */
+
+    /* Neutros editoriais */
+    --udx-ink:       #14102b;
+    --udx-ink-soft:  #46425f;
+    --udx-muted:     #7a7590;
+    --udx-line:      #ece7f3;
+    --udx-line-soft: #f4f0f8;
+
+    /* Tints */
+    --tint-pink:     #fdeef5;
+    --tint-hot:      #fee6f2;
+    --tint-lavender: #f4eefc;
+    --tint-indigo:   #eeeefc;
+    --tint-cream:    #fbf8f3;
+
+    /* Tipografia */
+    --serif:         'Playfair Display', Georgia, serif;
+    --sans:          'Poppins', system-ui, sans-serif;
+
+    /* Gradientes de assinatura */
+    --grad-full:     linear-gradient(135deg, #BF0449 0%, #FA33A1 33%, #5708A6 66%, #110273 100%);
+    --grad-warm:     linear-gradient(180deg, #FA33A1 0%, #BF0449 100%);
+    --grad-cool:     linear-gradient(180deg, #5708A6 0%, #110273 100%);
+    --grad-clube:    linear-gradient(135deg, #FA33A1 0%, #110273 100%);
+
+    /* Acento por página — sobrescrito inline */
+    --accent:        #BF0449;
+    --accent-soft:   var(--tint-pink);
+    --accent-grad:   var(--grad-warm);
+}
+
+*{ box-sizing: border-box; }
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #d60126 transparent;
+}
+
+body{
+    font-family: var(--sans);
+    color: var(--udx-ink);
+    background: #d9d6e4;
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+img{ max-width: 100%; display: block; }
+
+/* ============================================================
+   PÁGINA A4
+============================================================ */
+.page, .page1, .page2, .page3{
+    width: 210mm;
+    min-height: 297mm;
+    padding: 18mm 18mm 16mm;
+    margin: 12mm auto;
+    background: #fff;
+    box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+}
+.page:last-child, .page1:last-child, .page2:last-child, .page3:last-child{ page-break-after: auto; break-after: auto; }
+
+/* Faixa lateral — tingida pelo acento da página */
+.page::before,
+.page1::before,
+.page2::before,
+.page3::before{
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: var(--accent-grad);
+}
+
+/* ============================================================
+   HEADER / FOOTER
+============================================================ */
+.page__header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5mm;
+    margin-bottom: 8mm;
+    border-bottom: 1px solid var(--udx-line);
+    font-size: 9pt;
+    letter-spacing: 0.08em;
+    color: var(--udx-muted);
+    text-transform: uppercase;
+}
+.page__header .eyebrow{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+}
+.page__header .eyebrow-dot{
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+}
+.page__header .chapter-tag{
+    color: var(--udx-ink-soft);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+}
+
+.page__footer{
+    margin-top: auto;
+    padding-top: 6mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9pt;
+    color: var(--udx-muted);
+    border-top: 1px solid var(--udx-line);
+    letter-spacing: 0.06em;
+}
+.page__footer .brand{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 8.5pt;
+}
+.page__footer .brand-mark{
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent-grad);
+    display: inline-block;
+}
+.page__footer .num{
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11pt;
+    color: var(--udx-ink-soft);
+}
+.page__footer .num b{
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+/* Indicador de jornada — pontos no topo */
+.journey{
+    position: absolute;
+    top: 8mm; right: 18mm;
+    display: flex; gap: 5px;
+    z-index: 2;
+}
+.journey span{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--udx-line);
+    display: block;
+}
+.journey span.is-here{
+    width: 22px;
+    border-radius: 3px;
+    background: var(--accent-grad);
+}
+
+/* ============================================================
+   ELEMENTOS EDITORIAIS BASE
+============================================================ */
+.section-eyebrow,
+.section-eyebrow-mid{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 8.5pt;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 4mm;
+}
+.section-eyebrow-mid{ margin-left: 10px; }
+.section-eyebrow::before,
+.section-eyebrow-mid::before{
+    content: "";
+    width: 20px; height: 2px;
+    background: var(--accent);
+    display: inline-block;
+}
+.section-title{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 17pt;
+    line-height: 1.15;
+    color: var(--udx-ink);
+    letter-spacing: -0.01em;
+    margin: 0 0 3mm;
+}
+.section-title em{
+    font-style: italic;
+    color: var(--accent);
+}
+.prose{
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: var(--udx-ink-soft);
+    margin: 0 0 4mm;
+}
+.prose strong{ color: var(--udx-ink); font-weight: 600; }
+.prose em{
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 500;
+}
+
+/* ============================================================
+   PÁGINA 1 — CABEÇALHO DA FICHA
+============================================================ */
+.ficha-head{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    /*gap: 12mm;*/
+    align-items: end;
+    margin-bottom: 9mm;
+    padding-bottom: 8mm;
+    border-bottom: 1px solid var(--udx-line-soft);
+}
+.ficha-head__left .eyebrow,
+.ficha-head__left .eyebrow-mid{
+    font-size: 8.5pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--udx-wine);
+    margin-bottom: 3mm;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.ficha-head__left .eyebrow-mid{ padding-left:10px; }
+.ficha-head__left .eyebrow::before,
+.ficha-head__left .eyebrow-mid::before{
+    content: "";
+    width: 18px; height: 2px;
+    background: var(--grad-full);
+    display: inline-block;
+}
+.ficha-head__left .name{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 42pt;
+    line-height: 1;
+    color: var(--udx-ink);
+    letter-spacing: -0.015em;
+    margin: 0;
+}
+.ficha-head__left .meta{
+    margin-top: 4mm;
+    font-size: 9.5pt;
+    color: var(--udx-ink-soft);
+    line-height: 1.6;
+}
+.ficha-head__left .meta span{
+    display: inline-block;
+    padding: 1mm 3.5mm;
+    margin-right: 2mm;
+    background: var(--tint-lavender);
+    color: var(--udx-purple);
+    border-radius: 20px;
+    font-size: 8.5pt;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Nota geral — hero com gradiente completo (todos os 4 eixos) */
+.grade-hero{
+    width: 52mm;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--grad-full);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(87, 8, 166, 0.28);
+    position: relative;
+}
+.grade-hero::before{
+    content: "";
+    position: absolute;
+    inset: 2mm;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.35);
+    pointer-events: none;
+}
+.grade-hero .grade-label{
+    font-size: 7.5pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.85;
+    display: block;
+    margin-bottom: 1mm;
+}
+.grade-hero .grade-num{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 40pt;
+    line-height: 1;
+    display: block;
+}
+.grade-hero .grade-scale{
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 9pt;
+    opacity: 0.75;
+    margin-top: 1mm;
+    display: block;
+}
+
+/* ============================================================
+   FUNDAMENTOS — LISTA COM LEADER E SCORE CHIPS
+============================================================ */
+.fund-block{
+    margin-top: 2mm;
+}
+.fund-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm 12mm;
+    margin-top: 5mm;
+}
+.fund-row{
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    padding: 2mm 0;
+    border-bottom: 1px dotted var(--udx-line);
+}
+.fund-row__name{
+    font-size: 10.5pt;
+    font-weight: 500;
+    color: var(--udx-ink);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+.fund-row__leader{
+    flex: 1;
+    border-bottom: 1px dotted transparent;
+    min-width: 4mm;
+}
+.fund-row__score{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 13pt;
+    line-height: 1;
+    padding: 1.5mm 3.5mm;
+    border-radius: 6px;
+    letter-spacing: -0.01em;
+    min-width: 14mm;
+    text-align: center;
+    color: #fff;
+}
+/* Tiers cromáticos por faixa de nota (mapeamento aos 4 eixos) */
+.score--wine  { background: var(--udx-wine);   }  /* 5.0–6.4 · pulso/entrega a refinar */
+.score--purple{ background: var(--udx-purple); }  /* 6.5–7.4 · profundidade consolidada */
+.score--hot   { background: var(--udx-hot);    }  /* 7.5–8.9 · presença viva */
+.score--indigo{ background: var(--udx-indigo); }  /* 9.0–10.0 · foco/domínio consciente */
+
+/* Legenda das faixas cromáticas */
+.tier-legend{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4mm;
+    margin-top: 2mm;
+    padding: 4mm 5mm;
+    background: var(--udx-line-soft);
+    border-radius: 8px;
+    font-size: 8.5pt;
+    color: var(--udx-ink-soft);
+    letter-spacing: 0.04em;
+}
+.tier-legend__item{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.tier-legend__dot{
+    width: 10px; height: 10px; border-radius: 50%;
+}
+
+/* Resumo com médias por eixo */
+.fund-summary{
+    margin-top: 6mm;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4mm;
+}
+.summary-card{
+    padding: 4mm 5mm;
+    border-radius: 10px;
+    border: 1px solid var(--udx-line);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.summary-card::before{
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--udx-wine));
+}
+.summary-card__label{
+    font-size: 7.5pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--card-accent, var(--udx-wine));
+    margin-bottom: 1.5mm;
+}
+.summary-card__value{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 22pt;
+    line-height: 1;
+    color: var(--udx-ink);
+}
+.summary-card__caption{
+    font-size: 8.5pt;
+    color: var(--udx-muted);
+    margin-top: 1.5mm;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   PÁGINA 2 — LEITURA E DIRECIONAMENTOS
+============================================================ */
+.dual-block{
+    display: grid;
+    gap: 4mm;
+}
+.obs-item{
+    padding: 2mm 6mm;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+}
+.obs-item .lead{
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 10.5pt;
+    color: var(--accent);
+    margin: 0 0 2mm;
+    letter-spacing: 0.02em;
+}
+.obs-item p{
+    font-size: 8pt;
+    line-height: 1.6;
+    color: var(--udx-ink-soft);
+    margin: 0;
+}
+.obs-item p strong{
+    color: var(--udx-ink);
+    font-weight: 600;
+}
+
+/* Leitura de perfil — pares de insight comportamental (roxo/intuição) */
+.insight-pair{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+    margin-top: 4mm;
+}
+.insight-card{
+    padding: 3mm 4mm 3mm 5mm;
+    background: var(--tint-lavender);
+    border-left: 2px solid var(--udx-purple);
+    border-radius: 0 8px 8px 0;
+}
+.insight-card__label{
+    display: block;
+    font-size: 7pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--udx-purple);
+    margin-bottom: 1.5mm;
+}
+.insight-card__text{
+    font-size: 8pt;
+    line-height: 1.5;
+    color: var(--udx-ink-soft);
+    margin: 0;
+}
+.insight-card__text strong{
+    color: var(--udx-purple);
+    font-weight: 600;
+}
+
+/* Nota de disciplina — índigo (foco/hábito) */
+.discipline-note{
+    margin: 5mm 0 6mm;
+	margin-bottom: 29mm;
+    padding: 4mm 5mm 4mm 6mm;
+    background: linear-gradient(135deg, #eeeefc 0%, #f4eefc 100%);
+    border-left: 3px solid var(--udx-indigo);
+    border-radius: 0 10px 10px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5mm;
+    align-items: center;
+}
+.discipline-note__mark{
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--udx-indigo);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 14pt;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+}
+.discipline-note__body{
+    display: flex;
+    flex-direction: column;
+    gap: 1mm;
+}
+.discipline-note__label{
+    font-size: 7.5pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--udx-indigo);
+}
+.discipline-note__text{
+    font-size: 8.5pt;
+    line-height: 1.5;
+    color: var(--udx-ink-soft);
+    margin: 0;
+}
+.discipline-note__text strong{
+    color: var(--udx-indigo);
+    font-weight: 600;
+}
+
+/* Callout de foco — hot pink (presença/vibração) */
+.focus-callout{
+    margin: 6mm 0;
+    padding: 2mm 7mm;
+    background: linear-gradient(135deg, #FA33A1 0%, #BF0449 100%);
+    color: #fff;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6mm;
+    align-items: center;
+}
+.focus-callout::after{
+    content: "";
+    position: absolute;
+    right: -20mm; top: -20mm;
+    width: 60mm; height: 60mm;
+    background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 65%);
+    pointer-events: none;
+}
+.focus-callout__label{
+    font-size: 7.5pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: 2mm;
+    display: block;
+}
+.focus-callout__title{
+    font-family: var(--serif);
+    font-weight: 700;
+    /*font-size: 20pt;*/
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+.focus-callout__title em{
+    font-style: italic;
+    font-weight: 600;
+}
+.focus-callout__body{
+    font-size: 8pt;
+    line-height: 1.55;
+    opacity: 0.95;
+    margin: 2mm 0 0;
+    max-width: 105mm;
+}
+.focus-badge{
+    width: 24mm;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.4);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 21pt;
+    line-height: 1.1;
+    padding: 3mm;
+    z-index: 1;
+}
+
+/* Dicas — cartões numerados índigo (foco/disciplina) */
+.tips-grid{
+    display: grid;
+    gap: 2mm;
+    margin-top: 5mm;
+}
+.tip-card{
+    display: grid;
+    grid-template-columns: 14mm 1fr;
+    gap: 2mm;
+    padding: 2mm 5mm;
+    border: 1px solid var(--udx-line);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    background: #fff;
+}
+.tip-card__num{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 26pt;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+}
+.tip-card__title{
+    font-size: 9.5pt;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 1.5mm;
+}
+.tip-card__text{
+    font-size: 8pt;
+    line-height: 1.55;
+    color: var(--udx-ink-soft);
+    margin: 0;
+}
+.tip-card__text strong{
+    color: var(--udx-ink);
+    font-weight: 600;
+}
+
+/* Assinatura de encerramento */
+.sign-off{
+    /*margin-top: 48mm;*/
+	margin-top: auto;
+    padding-top: 3mm;
+    border-top: 1px solid var(--udx-line-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8mm;
+}
+.sign-off__quote{
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 7pt;
+    line-height: 1.4;
+    color: var(--udx-ink);
+    max-width: 110mm;
+    margin: 0;
+}
+.sign-off__quote::before{
+    content: "“";
+    font-size: 22pt;
+    color: var(--udx-purple);
+    line-height: 0;
+    margin-right: 2mm;
+    vertical-align: -8px;
+}
+.sign-off__sig{
+    text-align: right;
+    font-size: 8pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--udx-muted);
+    font-weight: 500;
+}
+.sign-off__sig strong{
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 12pt;
+    color: var(--udx-indigo);
+    letter-spacing: 0.02em;
+    text-transform: none;
+    margin-bottom: 1mm;
+}
+
+/* ============================================================
+   PRINT
+============================================================ */
+@page{ size: A4; margin: 0; }
+@media print{
+    body{ background: #fff; }
+    .page{
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+    }
+}
+img.logo{ 
+	margin-top:55px;
+	position: absolute;
+	width: 150px	
+}
+img.ico{ 
+	position: relative;
+	width:25px; }
+
+/* ============================================================
+   EDITOR — painel lateral (D1=b, D2=a, D5, D6)
+   Oculto na impressão. Body ganha padding-right quando aberto.
+============================================================ */
+.udx-editor{
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 360px;
+    background: #fff;
+    border-left: 1px solid var(--udx-line);
+    box-shadow: -6px 0 24px rgba(0,0,0,.12);
+    overflow-y: auto;
+    z-index: 9999;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--udx-ink);
+    padding: 16px 18px 24px;
+    transform: translateX(0);
+    transition: transform .25s ease;
+}
+.udx-editor.is-collapsed{ transform: translateX(340px); }
+body.udx-editor-open{ padding-right: 360px; }
+body.udx-editor-open.udx-editor-collapsed{ padding-right: 20px; }
+
+.udx-editor__toggle{
+    position: fixed;
+    top: 82px; right: 372px;
+    z-index: 10000;
+    background: var(--udx-indigo);
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(17,2,115,.22);
+    transition: right .25s ease, transform .2s ease, filter .2s ease, box-shadow .2s ease;
+}
+body.udx-editor-collapsed .udx-editor__toggle{ right: 12px; }
+
+/* Atalho flutuante de impressão — acompanha o botão Editor. */
+.udx-editor__quick-print{
+    position: fixed;
+    top: 118px;
+    right: 372px;
+	margin-top: 10px;
+    z-index: 10000;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(17, 2, 115, .94);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(17,2,115,.22);
+    transition: right .25s ease, transform .2s ease, filter .2s ease, box-shadow .2s ease;
+}
+.udx-editor__quick-print:hover, .udx-editor__toggle:hover{
+    filter: brightness(1.10);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(102,16,242,.30);
+}
+.udx-editor__quick-print:focus-visible{
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(250,51,161,.30), 0 8px 22px rgba(102,16,242,.30);
+}
+.udx-editor__quick-print .mdi{ font-size: 15px; line-height: 1; }
+body.udx-editor-collapsed .udx-editor__quick-print{ right: 12px; }
+
+.udx-editor h3{
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--udx-indigo);
+    margin: 14px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--udx-line);
+    letter-spacing: -0.01em;
+}
+.udx-editor h3:first-child{ margin-top: 0; }
+.udx-editor label{
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--udx-muted);
+    margin: 8px 0 3px;
+}
+.udx-editor input[type=text],
+.udx-editor textarea{
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--udx-line);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--udx-ink);
+    background: #fff;
+    box-sizing: border-box;
+    resize: vertical;
+}
+.udx-editor input[type=text]:focus,
+.udx-editor textarea:focus{
+    outline: none;
+    border-color: var(--udx-purple);
+    box-shadow: 0 0 0 2px rgba(87,8,166,.15);
+}
+.udx-editor textarea{ min-height: 60px; font-family: inherit; line-height: 1.4; }
+
+.udx-editor__item{
+    border: 1px solid var(--udx-line);
+    border-left: 3px solid var(--udx-purple);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    background: var(--udx-line-soft);
+}
+.udx-editor__item--dica{ border-left-color: var(--udx-indigo); }
+.udx-editor__item-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--udx-muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+.udx-editor__tag-row{
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+.udx-editor__tag-row input{ flex: 1; }
+
+.udx-editor__btn{
+    background: var(--udx-purple);
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: .04em;
+}
+.udx-editor__btn--sm{ padding: 3px 8px; font-size: 10px; }
+.udx-editor__btn--danger{ background: #d60126; /*background: var(--udx-blood);*/ }
+.udx-editor__btn--ghost{
+    background: transparent;
+    color: var(--udx-muted);
+    border: 1px solid var(--udx-line);
+}
+.udx-editor__btn, .udx-editor__btn + .udx-editor__btn{ margin-left: 4px; }
+/*.udx-editor__actions{
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}*/
+.udx-editor__actions {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-top: 12px;
+	gap: 8px;
+}
+
+.udx-editor__hint{
+    font-size: 10px;
+    color: var(--udx-muted);
+    font-style: italic;
+    margin: 4px 0 6px;
+}
+
+
+/* ============================================================
+   PÁGINAS FIXAS — CONTROLE PELO EDITOR
+============================================================ */
+.udx-editor__fixed-pages{
+    display: grid;
+    gap: 6px;
+    margin: 6px 0 12px;
+}
+.udx-editor__fixed-page-row{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 9px;
+    border: 1px solid var(--udx-line);
+    border-left: 3px solid var(--udx-purple);
+    border-radius: 6px;
+    background: var(--udx-line-soft);
+}
+.udx-editor__fixed-page-info{
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.udx-editor__fixed-page-title{
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--udx-ink);
+}
+.udx-editor__fixed-page-status{
+    width: fit-content;
+    font-size: 9px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 700;
+}
+.udx-editor__fixed-page-status.is-visible{ color: var(--udx-purple); }
+.udx-editor__fixed-page-status.is-hidden{ color: var(--udx-blood); }
+.udx-editor__fixed-pages-empty{
+    padding: 8px 9px;
+    border: 1px dashed var(--udx-line);
+    border-radius: 6px;
+    font-size: 10px;
+    color: var(--udx-muted);
+}
+
+/* Tema escuro do painel */
+:root[data-bs-theme="dark"] .udx-editor__fixed-page-row{
+    background: rgba(2, 2, 26, .42);
+    border-color: rgba(223,224,242,.13);
+}
+:root[data-bs-theme="dark"] .udx-editor__fixed-page-title{
+    color: var(--udx-text, #DFE0F2);
+}
+:root[data-bs-theme="dark"] .udx-editor__fixed-page-status.is-visible{
+    color: #b394e8;
+}
+:root[data-bs-theme="dark"] .udx-editor__fixed-page-status.is-hidden{
+    color: #ff7aa8;
+}
+
+@media (max-width: 480px){
+    .udx-editor__fixed-page-row{
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 9px;
+    }
+    .udx-editor__fixed-page-title{ font-size: 11.5px; }
+}
+
+/* Monitor de overflow por página */
+.udx-editor__overflow{
+    margin-top: 12px;
+    padding: 8px 10px;
+    background: var(--tint-indigo);
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+.udx-editor__overflow-row{
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+.udx-editor__overflow-row.is-over{
+    color: var(--udx-blood);
+    font-weight: 600;
+}
+.udx-editor__overflow-row.is-ok{ color: var(--udx-purple); }
+
+@media print{
+    .udx-editor, .udx-editor__toggle{ display: none !important; }
+    body{ padding-right: 0 !important; }
+}
+
+/* ============================================================
+   N4 — Estruturas dinâmicas
+============================================================ */
+.udx-hidden{ display: none !important; }
+
+.page-extra{
+    width: 210mm;
+    min-height: 297mm;
+    padding: 18mm 18mm 16mm;
+    margin: 12mm auto;
+    background: #fff;
+    box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    --accent: #5708A6;
+    --accent-soft: #f4eefc;
+    --accent-grad: linear-gradient(180deg, #5708A6 0%, #110273 100%);
+}
+.page-extra::before{
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: var(--accent-grad);
+}
+.page-extra__title{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 17pt;
+    line-height: 1.15;
+    color: var(--udx-ink);
+    letter-spacing: -0.01em;
+    margin: 4mm 0 5mm;
+}
+.page-extra__body{
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: var(--udx-ink-soft);
+    white-space: pre-wrap;
+    flex: 1;
+}
+
+.udx-editor__nota-row{
+    display: grid;
+    grid-template-columns: 1fr 60px 24px;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 11px;
+}
+.udx-editor__nota-row input[type=number]{
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid var(--udx-line);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 12px;
+    box-sizing: border-box;
+    text-align: right;
+}
+.udx-editor__nota-row .udx-editor__nota-tier{
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    background: var(--udx-line);
+    display: inline-block;
+}
+.udx-editor__nota-row .udx-editor__nota-name{
+    font-weight: 500;
+    color: var(--udx-ink);
+}
+.udx-editor__nota-row .udx-editor__nota-name .udx-editor__nota-tipo{
+    font-size: 9px;
+    color: var(--udx-muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-left: 4px;
+}
+.udx-editor__page-item{
+    border: 1px solid var(--udx-line);
+    border-left: 3px solid var(--udx-purple);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background: var(--udx-line-soft);
+}
+
+/* ============================================================
+   PÁGINAS PERFORMÁTICAS — acento hot (#FA33A1)
+============================================================ */
+.pagePerf1, .pagePerf2, .pagePerf3{
+    width: 210mm;
+    min-height: 297mm;
+    padding: 18mm 18mm 16mm;
+    margin: 12mm auto;
+    background: #fff;
+    box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    --accent:      #FA33A1;
+    --accent-soft: #fee6f2;
+    --accent-grad: linear-gradient(180deg, #FA33A1 0%, #BF0449 100%);
+}
+.pagePerf1::before,
+.pagePerf2::before,
+.pagePerf3::before{
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: var(--accent-grad);
+}
+.pagePerf1:last-child, .pagePerf2:last-child, .pagePerf3:last-child{
+    page-break-after: auto; break-after: auto;
+}
+
+.udx-page-remove{
+    position: absolute;
+    top: 6mm; right: 6mm;
+    z-index: 3;
+    background: var(--udx-blood);
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.85;
+	visibility:hidden;
+}
+.udx-page-remove:hover{ opacity: 1; }
+@media print{ .udx-page-remove{ display: none !important; } }
+
+.udx-editor__hidden-flag{
+    display: block;
+    margin: 6px 0 4px;
+    padding: 5px 8px;
+    background: var(--tint-pink);
+    border-left: 3px solid var(--udx-wine);
+    border-radius: 3px;
+    font-size: 10.5px;
+    color: var(--udx-ink-soft);
+}
+.udx-editor__hidden-flag button{
+    margin-left: 6px;
+    background: var(--udx-indigo);
+    color: #fff;
+    border: 0;
+    border-radius: 3px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.udx-editor__activate{
+    display: block;
+    width: 100%;
+    margin: 6px 0 4px;
+    padding: 8px 10px;
+    background: linear-gradient(135deg, #FA33A1 0%, #BF0449 100%);
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+/* ============================================================
+   V4 — FICHA DO EIXO PERFORMÁTICO
+============================================================ */
+.ficha-head--performatico{
+    margin-top: 7mm;
+}
+.grade-hero--performatico{
+    background: linear-gradient(135deg, #FA33A1 0%, #BF0449 45%, #5708A6 100%);
+    box-shadow: 0 8px 24px rgba(250, 51, 161, .25);
+}
+.pagePerf1 .logo{
+    margin-top: 55px;
+}
+.udx-editor__nota-row--editable{
+    grid-template-columns: minmax(0, 1fr) 70px 12px 24px;
+    align-items: center;
+    gap: 6px;
+}
+.udx-editor__criteria-name{
+    width: 100%;
+    min-width: 0;
+    padding: 5px 6px;
+    border: 1px solid var(--udx-line);
+    border-radius: 4px;
+    font: inherit;
+    color: var(--udx-ink);
+    background: #fff;
+}
+.udx-editor__criteria-remove{
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--udx-line-soft);
+    color: var(--udx-blood);
+    font-weight: 700;
+    cursor: pointer;
+}
+.udx-editor__criteria-remove:hover{
+    background: #fde8e8;
+}
+
+
+/* ============================================================
+   EIXO PERFORMÁTICO — CONTROLE GLOBAL DO EDITOR
+============================================================ */
+#udxPerfActivateHost{
+    margin: 6px 0 10px;
+}
+.udx-editor__perf-axis-actions{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.udx-editor__perf-axis-status{
+    font-size: 10px;
+    color: var(--udx-purple);
+    font-weight: 600;
+    letter-spacing: .02em;
+}
+.udx-editor__perf-remove-all{
+    width: 100%;
+    margin-top: 4px;
+}
+#udxPerfEditorBlock.udx-hidden{
+    display: none !important;
+}
+
+
+/* ============================================================
+   V7 — VISUALIZAÇÃO DE IMPRESSÃO
+============================================================ */
+.udx-editor__btn--print{
+    background: var(--udx-indigo);
+}
+
+.udx-print-preview-bar{
+    position: fixed;
+    left: 50%;
+    top: 12px;
+    transform: translateX(-50%) translateY(-140%);
+    z-index: 20000;
+    min-width: 420px;
+    max-width: calc(100vw - 32px);
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(20,16,43,.96);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.28);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: var(--sans);
+    transition: transform .22s ease;
+}
+.udx-print-preview-bar__label{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.2;
+}
+.udx-print-preview-bar__label strong{
+    font-size: 12px;
+    letter-spacing: .04em;
+}
+.udx-print-preview-bar__label span{
+    font-size: 10px;
+    color: rgba(255,255,255,.68);
+}
+.udx-print-preview-bar__actions{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.udx-print-preview-bar__btn{
+    border: 0;
+    border-radius: 5px;
+    padding: 7px 11px;
+    background: var(--udx-hot);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.udx-print-preview-bar__btn--ghost{
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.24);
+}
+
+body.udx-print-preview{
+    padding-right: 0 !important;
+    background: #cbc8d5;
+}
+body.udx-print-preview .udx-editor,
+body.udx-print-preview .udx-editor__toggle,
+body.udx-print-preview .udx-editor__quick-print,
+body.udx-print-preview .udx-page-remove{
+    display: none !important;
+}
+body.udx-print-preview .udx-print-preview-bar{
+    transform: translateX(-50%) translateY(0);
+}
+body.udx-print-preview .page,
+body.udx-print-preview .page1,
+body.udx-print-preview .page2,
+body.udx-print-preview .page3,
+body.udx-print-preview .pagePerf1,
+body.udx-print-preview .pagePerf2,
+body.udx-print-preview .pagePerf3,
+body.udx-print-preview .page-extra{
+    margin-top: 24mm;
+    margin-bottom: 12mm;
+    box-shadow: 0 8px 30px rgba(0,0,0,.20);
+}
+body.udx-print-preview .udx-hidden{
+    display: none !important;
+}
+
+@media (max-width: 560px){
+    .udx-print-preview-bar{
+        min-width: 0;
+        width: calc(100vw - 20px);
+        align-items: stretch;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .udx-print-preview-bar__actions{
+        width: 100%;
+    }
+    .udx-print-preview-bar__btn{
+        flex: 1;
+    }
+}
+
+@media print{
+    .udx-print-preview-bar{ display: none !important; }
+    body,
+    body.udx-print-preview{
+        background: #fff !important;
+        padding: 0 !important;
+    }
+    .udx-editor,
+    .udx-editor__toggle,
+    .udx-editor__quick-print,
+    .udx-page-remove{
+        display: none !important;
+    }
+    .page,
+    .page1,
+    .page2,
+    .page3,
+    .pagePerf1,
+    .pagePerf2,
+    .pagePerf3,
+    .page-extra{
+        margin: 0 !important;
+        box-shadow: none !important;
+        width: 210mm !important;
+        min-height: 297mm !important;
+        page-break-after: always;
+        break-after: page;
+    }
+    .udx-hidden{ display: none !important; }
+}
+
+/* ============================================================
+   V8 — TEMA ESCURO
+   Referência cromática: superfícies #02021a, cartões translúcidos,
+   bordas índigo/roxo e gradientes UDX.
+============================================================ */
+:root{
+    --udx-dark-bg: #070716;
+    --udx-dark-surface: rgba(2, 2, 26, .94);
+    --udx-dark-surface-soft: rgba(2, 2, 26, .72);
+    --udx-dark-card: rgba(17, 2, 115, .18);
+    --udx-dark-line: rgba(111, 66, 193, .30);
+    --udx-dark-line-hot: rgba(250, 51, 161, .38);
+    --udx-dark-ink: #f7f3fb;
+    --udx-dark-ink-soft: #d8d0e2;
+    --udx-dark-muted: #9f95ad;
+    --udx-dark-glow: rgba(102, 16, 242, .35);
+}
+
+.udx-theme-control{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 11px;
+    margin:0 0 12px;
+    border:1px solid var(--udx-line);
+    border-radius:8px;
+    background:var(--udx-line-soft);
+}
+.udx-theme-control__eyebrow{
+    display:block;
+    margin-bottom:2px;
+    color:var(--udx-muted);
+    font-size:8px;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+}
+.udx-theme-control strong{ font-size:11px; color:var(--udx-ink); }
+.udx-theme-toggle{
+    appearance:none;
+    border:1px solid var(--udx-line);
+    border-radius:999px;
+    background:#fff;
+    color:var(--udx-ink-soft);
+    min-width:82px;
+    padding:6px 10px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    font:600 10px/1 var(--sans);
+    cursor:pointer;
+    transition:border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.udx-theme-toggle:hover{ border-color:var(--udx-purple); box-shadow:0 0 0 2px rgba(87,8,166,.10); }
+.udx-theme-toggle__icon{ font-size:14px; line-height:1; }
+
+body[data-udx-theme="dark"]{
+    --udx-ink: var(--udx-dark-ink);
+    --udx-ink-soft: var(--udx-dark-ink-soft);
+    --udx-muted: var(--udx-dark-muted);
+    --udx-line: var(--udx-dark-line);
+    --udx-line-soft: rgba(17,2,115,.14);
+    --tint-pink: rgba(191,4,73,.12);
+    --tint-hot: rgba(250,51,161,.10);
+    --tint-lavender: rgba(87,8,166,.17);
+    --tint-indigo: rgba(17,2,115,.26);
+    --tint-cream: rgba(255,255,255,.035);
+    color:var(--udx-dark-ink);
+    background:
+        radial-gradient(circle at 20% 0%, rgba(87,8,166,.16), transparent 34rem),
+        radial-gradient(circle at 90% 10%, rgba(191,4,73,.10), transparent 30rem),
+        var(--udx-dark-bg);
+}
+
+body[data-udx-theme="dark"] .page,
+body[data-udx-theme="dark"] .page1,
+body[data-udx-theme="dark"] .page2,
+body[data-udx-theme="dark"] .page3,
+body[data-udx-theme="dark"] .pagePerf1,
+body[data-udx-theme="dark"] .pagePerf2,
+body[data-udx-theme="dark"] .pagePerf3,
+body[data-udx-theme="dark"] .page-extra{
+    background:linear-gradient(180deg, rgba(8,7,28,.985), rgba(2,2,26,.985));
+    color:var(--udx-dark-ink);
+    border:1px solid rgba(111,66,193,.20);
+    box-shadow:0 12px 34px rgba(0,0,0,.48), 0 0 0 1px rgba(111,66,193,.10);
+}
+body[data-udx-theme="dark"] .page__header,
+body[data-udx-theme="dark"] .page__footer{ border-color:var(--udx-dark-line); color:var(--udx-dark-muted); }
+body[data-udx-theme="dark"] .page__header .chapter-tag,
+body[data-udx-theme="dark"] .page__footer .num,
+body[data-udx-theme="dark"] .prose,
+body[data-udx-theme="dark"] .obs-item p,
+body[data-udx-theme="dark"] .insight-card__text,
+body[data-udx-theme="dark"] .summary-card__caption,
+body[data-udx-theme="dark"] .discipline-note__text,
+body[data-udx-theme="dark"] .tip-card__text{ color:var(--udx-dark-ink-soft); }
+body[data-udx-theme="dark"] .section-title,
+body[data-udx-theme="dark"] .ficha-head__left .name,
+body[data-udx-theme="dark"] .fund-row__name,
+body[data-udx-theme="dark"] .summary-card__value,
+body[data-udx-theme="dark"] .tip-card__title{ color:var(--udx-dark-ink); }
+body[data-udx-theme="dark"] .ficha-head{ border-color:rgba(111,66,193,.18); }
+body[data-udx-theme="dark"] .ficha-head__left .meta span{ background:rgba(87,8,166,.20); color:#d9c7f4; }
+body[data-udx-theme="dark"] .fund-row{ border-color:rgba(111,66,193,.20); }
+body[data-udx-theme="dark"] .tier-legend,
+body[data-udx-theme="dark"] .summary-card,
+body[data-udx-theme="dark"] .tip-card{
+    background:rgba(2,2,26,.55);
+    border-color:var(--udx-dark-line);
+}
+body[data-udx-theme="dark"] .obs-item{ background:rgba(87, 8, 166, .16); }
+body[data-udx-theme="dark"] .insight-card{ background:rgba(87,8,166,.16); }
+body[data-udx-theme="dark"] .discipline-note{ background:linear-gradient(135deg, rgba(17,2,115,.28), rgba(87,8,166,.18)); }
+body[data-udx-theme="dark"] .focus-callout{ box-shadow:0 8px 28px rgba(0,0,0,.30); }
+body[data-udx-theme="dark"] .journey span{ background:rgba(255,255,255,.12); }
+body[data-udx-theme="dark"] .sign-off{ border-color:rgba(111,66,193,.24); }
+
+body[data-udx-theme="dark"] .udx-editor{
+    background:rgba(2,2,26,.97);
+    color:var(--udx-dark-ink);
+    border-left-color:var(--udx-dark-line);
+    box-shadow:-14px 0 44px rgba(0,0,0,.48), -1px 0 0 rgba(111,66,193,.18);
+}
+body[data-udx-theme="dark"] .udx-editor h3{ color:#f6effb; border-color:var(--udx-dark-line); }
+body[data-udx-theme="dark"] .udx-editor label,
+body[data-udx-theme="dark"] .udx-editor__hint,
+body[data-udx-theme="dark"] .udx-editor__item-head{ color:var(--udx-dark-muted); }
+body[data-udx-theme="dark"] .udx-editor input[type=text],
+body[data-udx-theme="dark"] .udx-editor input[type=number],
+body[data-udx-theme="dark"] .udx-editor input[type=file],
+body[data-udx-theme="dark"] .udx-editor textarea,
+body[data-udx-theme="dark"] .udx-editor select{
+    background:rgba(255,255,255,.045);
+    color:var(--udx-dark-ink);
+    border-color:var(--udx-dark-line);
+    color-scheme:dark;
+}
+body[data-udx-theme="dark"] .udx-editor input:focus,
+body[data-udx-theme="dark"] .udx-editor textarea:focus,
+body[data-udx-theme="dark"] .udx-editor select:focus{
+    border-color:#7f4bc6;
+    box-shadow:0 0 0 2px var(--udx-dark-glow);
+}
+body[data-udx-theme="dark"] .udx-editor__item,
+body[data-udx-theme="dark"] .udx-editor__page-item,
+body[data-udx-theme="dark"] .udx-editor__nota-row,
+body[data-udx-theme="dark"] .udx-theme-control{
+    background:rgba(17,2,115,.14);
+    border-color:var(--udx-dark-line);
+}
+body[data-udx-theme="dark"] .udx-theme-control strong{ color:var(--udx-dark-ink); }
+body[data-udx-theme="dark"] .udx-theme-toggle{
+    background-image:var(--grad-clube);
+    border-color:rgba(250,51,161,.25);
+    color:#fff;
+    box-shadow:0 2px 12px rgba(102,16,242,.32);
+}
+body[data-udx-theme="dark"] .udx-editor__btn--ghost{
+    color:var(--udx-dark-ink-soft);
+    border-color:var(--udx-dark-line);
+}
+body[data-udx-theme="dark"] .udx-editor__btn--ghost:hover{ background:rgba(111,66,193,.16); }
+body[data-udx-theme="dark"] .udx-editor__overflow{ background:rgba(17,2,115,.24); border:1px solid var(--udx-dark-line); }
+body[data-udx-theme="dark"] .udx-editor__overflow-row.is-ok{ color:#c3a8ef; }
+body[data-udx-theme="dark"] .udx-editor__toggle{
+    /*background:rgba(2,2,26,.96);*/
+    color:#fff;
+    border:1px solid var(--udx-dark-line);
+    box-shadow:0 6px 22px rgba(0,0,0,.38);
+}
+
+/* Preview de impressão mantém a ficha clara, independentemente do tema da UI. */
+body[data-udx-theme="dark"].udx-print-preview{ background:#cbc8d5; }
+body[data-udx-theme="dark"].udx-print-preview .page,
+body[data-udx-theme="dark"].udx-print-preview .page1,
+body[data-udx-theme="dark"].udx-print-preview .page2,
+body[data-udx-theme="dark"].udx-print-preview .page3,
+body[data-udx-theme="dark"].udx-print-preview .pagePerf1,
+body[data-udx-theme="dark"].udx-print-preview .pagePerf2,
+body[data-udx-theme="dark"].udx-print-preview .pagePerf3,
+body[data-udx-theme="dark"].udx-print-preview .page-extra{
+    --udx-ink:#14102b;
+    --udx-ink-soft:#46425f;
+    --udx-muted:#7a7590;
+    --udx-line:#ece7f3;
+    --udx-line-soft:#f4f0f8;
+    --tint-pink:#fdeef5;
+    --tint-hot:#fee6f2;
+    --tint-lavender:#f4eefc;
+    --tint-indigo:#eeeefc;
+    --tint-cream:#fbf8f3;
+    background:#fff;
+    color:#14102b;
+    border-color:transparent;
+}
+body[data-udx-theme="dark"].udx-print-preview .section-title,
+body[data-udx-theme="dark"].udx-print-preview .ficha-head__left .name,
+body[data-udx-theme="dark"].udx-print-preview .fund-row__name,
+body[data-udx-theme="dark"].udx-print-preview .summary-card__value,
+body[data-udx-theme="dark"].udx-print-preview .tip-card__title{ color:#14102b; }
+body[data-udx-theme="dark"].udx-print-preview .prose,
+body[data-udx-theme="dark"].udx-print-preview .obs-item p,
+body[data-udx-theme="dark"].udx-print-preview .insight-card__text,
+body[data-udx-theme="dark"].udx-print-preview .summary-card__caption,
+body[data-udx-theme="dark"].udx-print-preview .discipline-note__text,
+body[data-udx-theme="dark"].udx-print-preview .tip-card__text{ color:#46425f; }
+body[data-udx-theme="dark"].udx-print-preview .tier-legend{ background:#f4f0f8; }
+body[data-udx-theme="dark"].udx-print-preview .summary-card,
+body[data-udx-theme="dark"].udx-print-preview .tip-card{ background:#fff; border-color:#ece7f3; }
+body[data-udx-theme="dark"].udx-print-preview .insight-card{ background:#f4eefc; }
+body[data-udx-theme="dark"].udx-print-preview .discipline-note{ background:linear-gradient(135deg,#eeeefc 0%,#f4eefc 100%); }
+body[data-udx-theme="dark"].udx-print-preview .ficha-head__left .meta span{ background:#f4eefc; color:#5708A6; }
+
+@media print{
+    body[data-udx-theme="dark"]{
+        background:#fff !important;
+        color:#14102b !important;
+    }
+    body[data-udx-theme="dark"] .page,
+    body[data-udx-theme="dark"] .page1,
+    body[data-udx-theme="dark"] .page2,
+    body[data-udx-theme="dark"] .page3,
+    body[data-udx-theme="dark"] .pagePerf1,
+    body[data-udx-theme="dark"] .pagePerf2,
+    body[data-udx-theme="dark"] .pagePerf3,
+    body[data-udx-theme="dark"] .page-extra{
+        --udx-ink:#14102b;
+        --udx-ink-soft:#46425f;
+        --udx-muted:#7a7590;
+        --udx-line:#ece7f3;
+        --udx-line-soft:#f4f0f8;
+        --tint-pink:#fdeef5;
+        --tint-hot:#fee6f2;
+        --tint-lavender:#f4eefc;
+        --tint-indigo:#eeeefc;
+        --tint-cream:#fbf8f3;
+        background:#fff !important;
+        color:#14102b !important;
+        border:0 !important;
+        box-shadow:none !important;
+    }
+}
+
+/* ============================================================
+   V9 — JOURNEY + PARIDADE ENTRE TEMA ESCURO E PRINT PREVIEW
+   ============================================================ */
+
+/* Tema escuro: pontos inativos ganham contraste sem competir com o ativo. */
+body[data-udx-theme="dark"] .journey span{
+    background: rgba(255,255,255,.16);
+    box-shadow: 0 0 0 1px rgba(111,66,193,.18);
+}
+
+/* Mantém o marcador da página atual com a assinatura cromática da página.
+   Esta regra precisa vir depois de `.journey span` do tema escuro para não
+   perder o gradiente por especificidade/cascata. */
+body[data-udx-theme="dark"] .journey span.is-here{
+    background: var(--accent-grad);
+    box-shadow: 0 0 10px rgba(87, 8, 166, .40);
+}
+
+/* Preview de impressão é sempre uma simulação de papel claro,
+   independentemente do tema selecionado no editor. */
+body.udx-print-preview,
+body[data-udx-theme="dark"].udx-print-preview{
+    --udx-ink: #14102b;
+    --udx-ink-soft: #46425f;
+    --udx-muted: #7a7590;
+    --udx-line: #ece7f3;
+    --udx-line-soft: #f4f0f8;
+    --tint-pink: #fdeef5;
+    --tint-hot: #fee6f2;
+    --tint-lavender: #f4eefc;
+    --tint-indigo: #eeeefc;
+    --tint-cream: #fbf8f3;
+    color: #14102b;
+    background: #cbc8d5;
+}
+
+body.udx-print-preview .page,
+body.udx-print-preview .page1,
+body.udx-print-preview .page2,
+body.udx-print-preview .page3,
+body.udx-print-preview .pagePerf1,
+body.udx-print-preview .pagePerf2,
+body.udx-print-preview .pagePerf3,
+body.udx-print-preview .page-extra,
+body[data-udx-theme="dark"].udx-print-preview .page,
+body[data-udx-theme="dark"].udx-print-preview .page1,
+body[data-udx-theme="dark"].udx-print-preview .page2,
+body[data-udx-theme="dark"].udx-print-preview .page3,
+body[data-udx-theme="dark"].udx-print-preview .pagePerf1,
+body[data-udx-theme="dark"].udx-print-preview .pagePerf2,
+body[data-udx-theme="dark"].udx-print-preview .pagePerf3,
+body[data-udx-theme="dark"].udx-print-preview .page-extra{
+    background: #fff;
+    color: #14102b;
+    border-color: transparent;
+}
+
+/* Journey no preview: volta ao padrão editorial claro. */
+body.udx-print-preview .journey span,
+body[data-udx-theme="dark"].udx-print-preview .journey span{
+    background: #ece7f3;
+    box-shadow: none;
+}
+body.udx-print-preview .journey span.is-here,
+body[data-udx-theme="dark"].udx-print-preview .journey span.is-here{
+    background: var(--accent-grad);
+    box-shadow: none;
+}
+
+/* Restaura também as tintas dos componentes que possuem overrides diretos
+   no tema escuro, evitando que o preview herde superfícies noturnas. */
+body[data-udx-theme="dark"].udx-print-preview .page__header,
+body[data-udx-theme="dark"].udx-print-preview .page__footer{
+    border-color: #ece7f3;
+    color: #7a7590;
+}
+body[data-udx-theme="dark"].udx-print-preview .page__header .chapter-tag,
+body[data-udx-theme="dark"].udx-print-preview .page__footer .num,
+body[data-udx-theme="dark"].udx-print-preview .prose,
+body[data-udx-theme="dark"].udx-print-preview .obs-item p,
+body[data-udx-theme="dark"].udx-print-preview .insight-card__text,
+body[data-udx-theme="dark"].udx-print-preview .summary-card__caption,
+body[data-udx-theme="dark"].udx-print-preview .discipline-note__text,
+body[data-udx-theme="dark"].udx-print-preview .tip-card__text{
+    color: #46425f;
+}
+body[data-udx-theme="dark"].udx-print-preview .section-title,
+body[data-udx-theme="dark"].udx-print-preview .ficha-head__left .name,
+body[data-udx-theme="dark"].udx-print-preview .fund-row__name,
+body[data-udx-theme="dark"].udx-print-preview .summary-card__value,
+body[data-udx-theme="dark"].udx-print-preview .tip-card__title{
+    color: #14102b;
+}
+body[data-udx-theme="dark"].udx-print-preview .ficha-head{
+    border-color: #f4f0f8;
+}
+body[data-udx-theme="dark"].udx-print-preview .ficha-head__left .meta span{
+    background: #f4eefc;
+    color: #5708A6;
+}
+body[data-udx-theme="dark"].udx-print-preview .fund-row{
+    border-color: #ece7f3;
+}
+body[data-udx-theme="dark"].udx-print-preview .tier-legend{
+    background: #f4f0f8;
+    border-color: #ece7f3;
+}
+body[data-udx-theme="dark"].udx-print-preview .summary-card,
+body[data-udx-theme="dark"].udx-print-preview .tip-card{
+    background: #fff;
+    border-color: #ece7f3;
+}
+body[data-udx-theme="dark"].udx-print-preview .obs-item{
+    background: var(--accent-soft);
+}
+body[data-udx-theme="dark"].udx-print-preview .insight-card{
+    background: #f4eefc;
+}
+body[data-udx-theme="dark"].udx-print-preview .discipline-note{
+    background: linear-gradient(135deg, #eeeefc 0%, #f4eefc 100%);
+}
+
+@media print{
+    /* O papel deve ignorar completamente o tema da interface. */
+    body[data-udx-theme="dark"]{
+        --udx-ink: #14102b;
+        --udx-ink-soft: #46425f;
+        --udx-muted: #7a7590;
+        --udx-line: #ece7f3;
+        --udx-line-soft: #f4f0f8;
+        --tint-pink: #fdeef5;
+        --tint-hot: #fee6f2;
+        --tint-lavender: #f4eefc;
+        --tint-indigo: #eeeefc;
+        --tint-cream: #fbf8f3;
+        background: #fff !important;
+        color: #14102b !important;
+    }
+
+    body[data-udx-theme="dark"] .page,
+    body[data-udx-theme="dark"] .page1,
+    body[data-udx-theme="dark"] .page2,
+    body[data-udx-theme="dark"] .page3,
+    body[data-udx-theme="dark"] .pagePerf1,
+    body[data-udx-theme="dark"] .pagePerf2,
+    body[data-udx-theme="dark"] .pagePerf3,
+    body[data-udx-theme="dark"] .page-extra{
+        background: #fff !important;
+        color: #14102b !important;
+        border-color: transparent !important;
+    }
+
+    body[data-udx-theme="dark"] .journey span{
+        background: #ece7f3 !important;
+        box-shadow: none !important;
+    }
+    body[data-udx-theme="dark"] .journey span.is-here{
+        background: var(--accent-grad) !important;
+        box-shadow: none !important;
+    }
+}
+
+/* ============================================================
+   V10 — CONTROLE DE ZOOM DO PREVIEW
+============================================================ */
+.udx-preview-zoom{
+    display:inline-flex;
+    align-items:center;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.24);
+    border-radius:6px;
+    background:rgba(255,255,255,.06);
+}
+.udx-preview-zoom__btn,
+.udx-preview-zoom__value{
+    min-width:32px;
+    height:30px;
+    border:0;
+    background:transparent;
+    color:#fff;
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+}
+.udx-preview-zoom__value{
+    min-width:54px;
+    padding:0 8px;
+    border-left:1px solid rgba(255,255,255,.16);
+    border-right:1px solid rgba(255,255,255,.16);
+    font-size:10px;
+    font-variant-numeric:tabular-nums;
+}
+.udx-preview-zoom__btn:hover,
+.udx-preview-zoom__value:hover{ background:rgba(255,255,255,.10); }
+.udx-preview-zoom__btn:focus-visible,
+.udx-preview-zoom__value:focus-visible{
+    outline:2px solid var(--udx-hot);
+    outline-offset:-2px;
+}
+.udx-preview-zoom__btn:disabled{ opacity:.35; cursor:not-allowed; }
+
+/* `zoom` altera também a caixa de layout no Chromium, evitando os grandes
+   espaços vazios que transform:scale deixaria entre páginas A4. */
+body.udx-print-preview .page,
+body.udx-print-preview .page1,
+body.udx-print-preview .page2,
+body.udx-print-preview .page3,
+body.udx-print-preview .pagePerf1,
+body.udx-print-preview .pagePerf2,
+body.udx-print-preview .pagePerf3,
+body.udx-print-preview .page-extra{
+    zoom:var(--udx-preview-zoom, 1);
+}
+
+@media (max-width:760px){
+    .udx-print-preview-bar__actions{ flex-wrap:wrap; }
+    .udx-preview-zoom{ flex:1 1 140px; justify-content:center; }
+}
+
+@media print{
+    .udx-preview-zoom{ display:none !important; }
+    .page,.page1,.page2,.page3,.pagePerf1,.pagePerf2,.pagePerf3,.page-extra{
+        zoom:1 !important;
+    }
+}
+
+/* ============================================================
+   V11 — CABEÇALHO DO EDITOR + UPLOAD CUSTOMIZADO
+============================================================ */
+.udx-editor__brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:4px 0 14px;
+    margin-bottom:12px;
+    border-bottom:1px solid var(--udx-line);
+}
+.udx-editor__brand-mark{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    flex:0 0 auto;
+    background:linear-gradient(135deg, rgba(250,51,161,.10), rgba(87,8,166,.12));
+    border:1px solid rgba(87,8,166,.16);
+    overflow:hidden;
+}
+.udx-editor__brand-logo{
+    width:38px;
+    height:38px;
+    object-fit:contain;
+}
+.udx-editor__brand-copy{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+.udx-editor__brand-eyebrow{
+    font-size:8px;
+    line-height:1.2;
+    font-weight:700;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--udx-wine);
+}
+.udx-editor__brand-copy strong{
+    font-family:var(--serif);
+    font-size:16px;
+    line-height:1.15;
+    color:var(--udx-ink);
+}
+
+.udx-upload{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    gap:8px;
+    width:100%;
+}
+.udx-upload__input{
+    position:absolute !important;
+    width:1px !important;
+    height:1px !important;
+    padding:0 !important;
+    margin:-1px !important;
+    overflow:hidden !important;
+    clip:rect(0,0,0,0) !important;
+    white-space:nowrap !important;
+    border:0 !important;
+}
+.udx-upload__button{
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    min-height:34px;
+    margin:0 !important;
+    padding:7px 11px;
+    border-radius:7px;
+    border:1px solid rgba(87,8,166,.28);
+    background:linear-gradient(135deg, rgba(87,8,166,.08), rgba(250,51,161,.08));
+    color:var(--udx-purple) !important;
+    font-size:10px !important;
+    font-weight:700 !important;
+    letter-spacing:.05em !important;
+    text-transform:none !important;
+    cursor:pointer;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.udx-upload__button:hover{
+    transform:translateY(-1px);
+    border-color:var(--udx-purple);
+    box-shadow:0 5px 16px rgba(87,8,166,.14);
+}
+.udx-upload__button:focus-within,
+.udx-upload__input:focus + .udx-upload__button{
+    outline:none;
+    box-shadow:0 0 0 3px rgba(87,8,166,.16);
+}
+.udx-upload__icon{
+    width:20px;
+    height:20px;
+    border-radius:6px;
+    display:grid;
+    place-items:center;
+    background:var(--grad-clube);
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    line-height:1;
+}
+.udx-upload__filename{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:10px;
+    color:var(--udx-muted);
+}
+.udx-upload__reset{ margin-top:6px; }
+
+body[data-udx-theme="dark"] .udx-editor__brand{
+    border-color:var(--udx-dark-line);
+}
+body[data-udx-theme="dark"] .udx-editor__brand-mark{
+    background:linear-gradient(135deg, rgba(250,51,161,.13), rgba(87,8,166,.24));
+    border-color:rgba(111,66,193,.28);
+}
+body[data-udx-theme="dark"] .udx-editor__brand-copy strong{ color:var(--udx-dark-ink); }
+body[data-udx-theme="dark"] .udx-editor__brand-eyebrow{ color:#ff75be; }
+body[data-udx-theme="dark"] .udx-upload__button{
+    background:linear-gradient(135deg, rgba(87,8,166,.25), rgba(250,51,161,.12));
+    border-color:rgba(111,66,193,.38);
+    color:#f4eaff !important;
+}
+body[data-udx-theme="dark"] .udx-upload__button:hover{
+    border-color:#9c6ee0;
+    box-shadow:0 7px 20px rgba(0,0,0,.26), 0 0 18px rgba(102,16,242,.14);
+}
+body[data-udx-theme="dark"] .udx-upload__filename{ color:var(--udx-dark-muted); }
+
+@media (max-width: 420px){
+    .udx-upload{ grid-template-columns:1fr; }
+    .udx-upload__button{ width:100%; }
+}
+
+/* ============================================================
+   V12 — RESPONSIVIDADE GERAL
+   Desktop: editor lateral. Tablet: painel sobreposto.
+   Mobile: editor em tela cheia + preview A4 reduzido proporcionalmente.
+============================================================ */
+
+/* V13 — o preview A4 sempre respeita a largura útil da janela.
+   O JS calcula --udx-responsive-zoom considerando o editor aberto/fechado. */
+@media screen {
+    html, body{
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    body:not(.udx-print-preview) .page,
+    body:not(.udx-print-preview) .page1,
+    body:not(.udx-print-preview) .page2,
+    body:not(.udx-print-preview) .page3,
+    body:not(.udx-print-preview) .pagePerf1,
+    body:not(.udx-print-preview) .pagePerf2,
+    body:not(.udx-print-preview) .pagePerf3,
+    body:not(.udx-print-preview) .page-extra{
+        zoom: var(--udx-responsive-zoom, 1);
+        max-width: none;
+    }
+}
+
+/* Tablet / notebooks estreitos: editor deixa de consumir largura do documento. */
+@media screen and (max-width: 1100px){
+    body.udx-editor-open,
+    body.udx-editor-open.udx-editor-collapsed{
+        padding-right: 0;
+    }
+
+    .udx-editor{
+        width: min(360px, calc(100vw - 24px));
+        box-shadow: -12px 0 34px rgba(0,0,0,.20);
+    }
+    .udx-editor.is-collapsed{
+        transform: translateX(100%);
+    }
+    .udx-editor__toggle,
+    .udx-editor__quick-print{
+        right: min(372px, calc(100vw - 12px));
+    }
+    body.udx-editor-collapsed .udx-editor__toggle,
+    body.udx-editor-collapsed .udx-editor__quick-print{
+        right: 12px;
+    }
+}
+
+/* Mobile: editor ocupa a tela e controles passam a priorizar toque. */
+@media screen and (max-width: 640px){
+    body{
+        overflow-x: hidden;
+    }
+
+    .udx-editor{
+        width: 100vw;
+        max-width: none;
+        left: 0;
+        right: 0;
+        padding: 14px 14px 28px;
+        border-left: 0;
+        border-top: 1px solid var(--udx-line);
+        box-shadow: 0 0 36px rgba(0,0,0,.24);
+    }
+    .udx-editor.is-collapsed{
+        transform: translateX(100%);
+    }
+
+    .udx-editor__toggle,
+    body.udx-editor-collapsed .udx-editor__toggle{
+        top: 100px;
+        right: 10px;
+        min-height: 40px;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+    .udx-editor__quick-print,
+    body.udx-editor-collapsed .udx-editor__quick-print{
+        top: 148px;
+        right: 10px;
+        min-height: 40px;
+        max-width: calc(100vw - 20px);
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .udx-editor__brand{
+        padding-right: 76px;
+        gap: 10px;
+    }
+    .udx-editor__brand-mark{
+        flex: 0 0 52px;
+        width: 52px;
+        height: 52px;
+    }
+    .udx-editor__brand-copy{
+        min-width: 0;
+    }
+
+    .udx-theme-control{
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .udx-theme-toggle{
+        min-height: 42px;
+        width: 100%;
+    }
+
+    .udx-editor input[type=text],
+    .udx-editor input[type=number],
+    .udx-editor textarea,
+    .udx-editor select{
+        min-height: 42px;
+        font-size: 16px;
+    }
+    .udx-editor textarea{
+        min-height: 92px;
+    }
+
+    .udx-editor__tag-row{
+        align-items: stretch;
+        gap: 7px;
+    }
+    .udx-editor__tag-row input{
+        min-width: 0;
+    }
+
+    .udx-editor__btn,
+    .udx-editor__btn--sm{
+        min-height: 40px;
+        padding: 8px 11px;
+        font-size: 11px;
+    }
+    .udx-editor__btn + .udx-editor__btn{
+        margin-left: 0;
+    }
+    .udx-editor__actions{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 8px;
+    }
+    .udx-editor__actions .udx-editor__btn{
+        width: 100%;
+    }
+
+    .udx-editor__nota-row{
+        grid-template-columns: minmax(0,1fr) 82px;
+        gap: 8px;
+    }
+    .udx-editor__nota-row input[type=number]{
+        width: 82px;
+        min-width: 0;
+    }
+
+    .udx-upload{
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+    .udx-upload__button{
+        width: 100%;
+        min-height: 42px;
+    }
+    .udx-upload__filename{
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .udx-editor__page-item,
+    .udx-editor__item{
+        padding: 10px;
+    }
+
+    .udx-print-preview-bar{
+        top: 8px;
+        width: calc(100vw - 16px);
+        max-width: none;
+        padding: 9px;
+        border-radius: 9px;
+    }
+    .udx-print-preview-bar__label span{
+        display: none;
+    }
+    .udx-print-preview-bar__actions{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+    }
+    .udx-preview-zoom{
+        grid-column: 1 / -1;
+        width: 100%;
+        min-height: 38px;
+    }
+    .udx-preview-zoom__btn,
+    .udx-preview-zoom__value{
+        min-height: 38px;
+        flex: 1;
+    }
+    .udx-print-preview-bar__btn{
+        min-height: 40px;
+        padding: 8px 9px;
+    }
+
+    body.udx-print-preview .page,
+    body.udx-print-preview .page1,
+    body.udx-print-preview .page2,
+    body.udx-print-preview .page3,
+    body.udx-print-preview .pagePerf1,
+    body.udx-print-preview .pagePerf2,
+    body.udx-print-preview .pagePerf3,
+    body.udx-print-preview .page-extra{
+        margin-top: 41mm;
+    }
+}
+
+@media screen and (max-width: 380px){
+    .udx-editor__actions{
+        grid-template-columns: 1fr;
+    }
+    .udx-editor__brand-copy strong{
+        font-size: 11px;
+    }
+    .udx-editor__nota-row{
+        grid-template-columns: minmax(0,1fr) 74px;
+    }
+    .udx-editor__nota-row input[type=number]{
+        width: 74px;
+    }
+}
+
+@media print{
+    .page,.page1,.page2,.page3,.pagePerf1,.pagePerf2,.pagePerf3,.page-extra{
+        zoom: 1 !important;
+    }
+}
+
+/* ============================================================
+   V14 — INTEGRAÇÃO COM A ESTRUTURA UDX (blog / apps)
+   Carregue esta folha APÓS blog.css, trailsFormat.css,
+   format.css e mediaQuery.css.
+============================================================ */
+
+/* O shell da avaliação herda os tokens globais do projeto, mas mantém
+   as páginas A4 isoladas das regras genéricas de .page / img. */
+.udx-assessment-page{
+    --udx-editor-shell-bg: rgba(2,2,26,.92);
+    min-width: 0;
+    overflow-x: clip;
+    padding-right: 0;
+}
+
+.udx-assessment-topbar{
+    z-index: 1200;
+}
+.udx-assessment-topbar .udx-assessment-topbar__icon{
+    width: 34px;
+    height: 34px;
+    max-width: none;
+    border-radius: 8px;
+}
+.udx-assessment-topbar__badge{
+    display: inline-flex !important;
+}
+
+.udx-assessment-app{
+    width: 100%;
+    min-width: 0;
+    padding: clamp(18px, 3vw, 38px) clamp(10px, 2.2vw, 28px) 48px;
+    overflow-x: clip;
+}
+
+/* Neutraliza regras globais de imagem do projeto dentro das folhas A4. */
+.udx-assessment-app :is(.page,.page1,.page2,.page3,.pagePerf1,.pagePerf2,.pagePerf3,.page-extra) img{
+    border-radius: 0;
+}
+.udx-assessment-app :is(.page,.page1,.page2,.page3,.pagePerf1,.pagePerf2,.pagePerf3,.page-extra) .logo{
+    border-radius: 10px;
+}
+
+/* A plataforma usa Poppins globalmente; Playfair permanece só como serif
+   editorial da ficha. */
+.udx-editor,
+.udx-editor__toggle,
+.udx-editor__quick-print,
+.udx-print-preview-bar{
+    font-family: var(--udx-font, 'Poppins', sans-serif);
+}
+
+/* Integra o editor aos tokens oficiais. */
+.udx-editor{
+    border-left-color: var(--udx-border, rgba(223,224,242,.12));
+}
+.udx-editor__btn{
+    border-radius: var(--udx-radius-sm, 6px);
+}
+.udx-editor__btn:not(.udx-editor__btn--danger):not(.udx-editor__btn--ghost){
+    background-image: var(--udx-grad-apps, linear-gradient(135deg,#BF0449,#6610f2));
+    box-shadow: var(--udx-shadow-btn, 0 4px 18px rgba(191,4,73,.35));
+}
+.udx-editor__toggle{
+    border-radius: var(--udx-radius-sm, 6px) 0 0 var(--udx-radius-sm, 6px);
+    background-image: var(--udx-grad-apps, linear-gradient(135deg,#BF0449,#6610f2));
+    box-shadow: var(--udx-shadow-btn, 0 4px 18px rgba(191,4,73,.35));
+}
+.udx-editor__toggle .mdi{ font-size: 16px; }
+.udx-editor__quick-print{
+    border-radius: var(--udx-radius-sm, 6px) 0 0 var(--udx-radius-sm, 6px);
+    background: rgba(2,2,26,.92);
+    border-color: var(--udx-border, rgba(223,224,242,.18));
+}
+:root[data-bs-theme="light"] .udx-editor__quick-print{
+    color: #270140;
+    background: rgba(255,255,255,.96);
+    border-color: rgba(64,1,36,.18);
+    box-shadow: 0 4px 18px rgba(64,1,36,.12);
+}
+
+/* Tema global do projeto -> compatibilidade com o tema legado da ficha. */
+:root[data-bs-theme="dark"] .udx-editor{
+    background: rgba(2,2,26,.96);
+    border-color: var(--udx-border);
+}
+:root[data-bs-theme="light"] .udx-editor{
+    background: rgba(255,255,255,.98);
+    border-color: rgba(64,1,36,.12);
+}
+
+/* Evita que .container/.page do Bootstrap ou mediaQuery do portal alterem
+   a largura física da ficha; o scale responsivo do editor continua soberano. */
+.udx-assessment-app > :is(.page,.page1,.page2,.page3,.pagePerf1,.pagePerf2,.pagePerf3,.page-extra){
+    max-width: none;
+    flex: 0 0 auto;
+}
+
+/* O editor lateral ocupa espaço apenas em desktop. O preview calcula a
+   largura útil via JS e nunca cria scroll horizontal. */
+@media screen and (min-width: 992px){
+    body.udx-editor-open:not(.udx-editor-collapsed):not(.udx-print-preview) .udx-assessment-app{
+        padding-right: 370px;
+    }
+}
+
+@media screen and (max-width: 991.98px){
+    .udx-assessment-app{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .udx-editor{
+        z-index: 1300;
+		top:80px;
+    }
+    .udx-editor__toggle{
+        z-index: 1301;
+		top:100px;
+    }
+    .udx-editor__quick-print{
+        z-index: 1301;
+        top: 142px;
+    }
+}
+
+@media screen and (max-width: 480px){
+    .udx-assessment-topbar{
+        padding: 10px 12px;
+        gap: 8px;
+    }
+    .udx-assessment-topbar .marca{ font-size: 1rem; }
+    .udx-assessment-topbar__badge{ font-size: 9px !important; padding: 4px 9px !important; }
+    .udx-assessment-topbar .btn-voltar{
+        width: auto;
+        min-height: 40px;
+        padding: 8px 10px;
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+    .udx-assessment-app{ padding-top: 14px; }
+}
+
+/* Preview/print deve ignorar o chrome da plataforma. */
+body.udx-print-preview .udx-assessment-topbar{
+    display: none !important;
+}
+body.udx-print-preview .udx-assessment-app{
+    padding: 0 !important;
+}
+
+@media print{
+    .udx-assessment-topbar{ display:none !important; }
+    .udx-assessment-app{ padding:0 !important; overflow:visible !important; }
+}
+
+/* ================================================================
+   HEADER / TOPBAR — integração completa com a plataforma UDX
+   Derivado da members-topbar usada nas páginas Apps.
+   Escopo local para não afetar headers internos das folhas A4.
+================================================================ */
+.udx-assessment-topbar{
+    position: sticky;
+    top: 0;
+    z-index: 1400;
+    width: 100%;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: 12px 22px;
+    background: rgba(2, 2, 26, 0.96);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--udx-border, rgba(255,255,255,.10));
+    box-shadow: 0 2px 24px rgba(0,0,0,.50);
+    font-family: var(--udx-font, 'Poppins', sans-serif);
+    color: var(--udx-text, #DFE0F2);
+    flex-wrap: wrap;
+}
+
+.udx-assessment-topbar::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background-image: var(--udx-grad-apps, linear-gradient(135deg,#BF0449 0%,#6610f2 100%));
+    opacity: .5;
+    pointer-events: none;
+}
+
+.udx-assessment-topbar .udx-assessment-topbar__icon{
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    object-fit: contain;
+    max-width: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.28);
+}
+
+.udx-assessment-topbar .marca{
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    background: linear-gradient(to top, #fb8460, #f13aa1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #f13aa1;
+}
+
+.udx-assessment-topbar .type-badge,
+.udx-assessment-topbar__badge{
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    max-width: 60vw;
+    padding: 6px 12px !important;
+	font-size: 9px !important;
+    border: 0;
+    border-radius: 50px;
+    background: var(--seg-grad, var(--udx-grad-apps, linear-gradient(135deg,#BF0449 0%,#6610f2 100%)));
+    color: #fff;
+    box-shadow: 0 6px 18px var(--seg-glow, rgba(102,16,242,.32));
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: normal;
+	margin-left:30px;
+}
+
+.udx-assessment-topbar .type-badge .mdi,
+.udx-assessment-topbar__badge .mdi{
+    font-size: 12px;
+    line-height: 1;
+}
+
+.udx-assessment-topbar .spacer{
+    flex: 1 1 auto;
+    min-width: 12px;
+}
+
+.udx-assessment-topbar .btn-voltar,
+.udx-assessment-topbar .btn-sair{
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    margin: 0;
+    padding: 8px 16px;
+    border: 1.5px solid rgba(223,224,242,.40);
+    border-radius: var(--udx-radius-sm, 8px);
+    background: transparent;
+    color: var(--udx-text, #DFE0F2);
+    font-family: var(--udx-font, 'Poppins', sans-serif);
+    font-size: .88rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 280ms ease,
+                border-color 280ms ease,
+                color 280ms ease,
+                box-shadow 280ms ease,
+                transform 180ms ease;
+}
+
+.udx-assessment-topbar .btn-voltar .mdi,
+.udx-assessment-topbar .btn-sair .mdi{
+    font-size: 16px;
+    line-height: 1;
+}
+
+@media (hover:hover) and (pointer:fine){
+    .udx-assessment-topbar .btn-voltar:hover,
+    .udx-assessment-topbar .btn-sair:hover{
+        background-color: rgba(223,224,242,.08);
+        border-color: var(--udx-primary-hot, #FA33A1);
+        color: #fff;
+        box-shadow: 0 5px 18px rgba(102,16,242,.20);
+        transform: translateY(-1px);
+    }
+}
+
+.udx-assessment-topbar .btn-voltar:focus-visible,
+.udx-assessment-topbar .btn-sair:focus-visible{
+    outline: none;
+    border-color: var(--udx-primary-hot, #FA33A1);
+    box-shadow: 0 0 0 .2rem rgba(250,51,161,.25);
+}
+
+/* Modo claro da plataforma */
+:root[data-bs-theme="light"] .udx-assessment-topbar{
+    background: rgba(255,255,255,.94);
+    color: #270140;
+    border-bottom-color: rgba(64,1,36,.12);
+    box-shadow: 0 2px 24px rgba(64,1,36,.12);
+}
+
+:root[data-bs-theme="light"] .udx-assessment-topbar .btn-voltar,
+:root[data-bs-theme="light"] .udx-assessment-topbar .btn-sair{
+    color: #270140;
+    border-color: rgba(64,1,36,.22);
+}
+
+@media (hover:hover) and (pointer:fine){
+    :root[data-bs-theme="light"] .udx-assessment-topbar .btn-voltar:hover,
+    :root[data-bs-theme="light"] .udx-assessment-topbar .btn-sair:hover{
+        color: #270140;
+        background: rgba(87,8,166,.06);
+        border-color: rgba(102,16,242,.42);
+    }
+}
+
+/* Tablet: mantém identidade, reduz ocupação horizontal. */
+@media screen and (max-width: 768px){
+    .udx-assessment-topbar{
+        gap: 35px;
+        padding: 10px 14px;
+    }
+    .udx-assessment-topbar .udx-assessment-topbar__icon{
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+    }
+    .udx-assessment-topbar .marca{
+        font-size: 1.08rem;
+    }
+    .udx-assessment-topbar .btn-voltar,
+    .udx-assessment-topbar .btn-sair{
+        padding-inline: 12px;
+        font-size: .8rem;
+    }
+}
+
+/* Mobile: marca + badge na primeira linha, ação sem provocar overflow. */
+@media screen and (max-width: 480px){
+    .udx-assessment-topbar{
+        min-height: 54px;
+        padding: 9px 10px;
+        gap: 35px;
+        flex-wrap: nowrap;
+    }
+    .udx-assessment-topbar .udx-assessment-topbar__icon{
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+    }
+    .udx-assessment-topbar .marca{
+        font-size: .98rem;
+        max-width: 88px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .udx-assessment-topbar__badge{
+        max-width: 92px;
+        padding: 4px 8px !important;
+        font-size: 8.5px !important;
+        letter-spacing: .045em;
+    }
+    .udx-assessment-topbar .spacer{
+        min-width: 0;
+    }
+    .udx-assessment-topbar .btn-voltar{
+        flex: 0 0 auto;
+        width: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        padding: 0;
+        font-size: 0;
+        border-radius: 10px;
+    }
+    .udx-assessment-topbar .btn-voltar .mdi{
+        margin: 0;
+        font-size: 20px;
+    }
+}
+
+/* A topbar nunca participa do preview/saída impressa. */
+body.udx-print-preview .udx-assessment-topbar{ display:none !important; }
+
+@media print{
+    .udx-assessment-topbar{ display:none !important; }
+}
+
+/* ================================================================
+   V18 — EXPORTAÇÃO DIRETA PARA PDF
+   ================================================================ */
+.udx-editor__btn--pdf{
+    background-image: var(--udx-grad-apps, linear-gradient(135deg,#BF0449,#6610f2));
+    color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+}
+.udx-editor__btn--pdf:hover{ filter:brightness(1.08); }
+.udx-print-preview-bar__btn--pdf{
+    background-image: var(--udx-grad-apps, linear-gradient(135deg,#BF0449,#6610f2));
+    border-color:transparent;
+}
+.udx-pdf-progress{
+    position:fixed;
+    inset:0;
+    z-index:30000;
+    display:grid;
+    place-items:center;
+    padding:20px;
+    background:rgba(2,2,26,.72);
+    -webkit-backdrop-filter:blur(8px);
+    backdrop-filter:blur(8px);
+}
+.udx-pdf-progress__card{
+    width:min(420px, calc(100vw - 32px));
+    padding:20px 22px;
+    border-radius:14px;
+    color:#fff;
+    background:rgba(20,16,43,.98);
+    border:1px solid rgba(111,66,193,.34);
+    box-shadow:0 20px 60px rgba(0,0,0,.42);
+    font-family:var(--udx-font, 'Poppins', sans-serif);
+}
+.udx-pdf-progress__title{ font-size:14px; font-weight:700; margin-bottom:6px; }
+.udx-pdf-progress__text{ font-size:12px; opacity:.78; margin-bottom:12px; }
+.udx-pdf-progress__track{
+    height:6px;
+    overflow:hidden;
+    border-radius:999px;
+    background:rgba(255,255,255,.10);
+}
+.udx-pdf-progress__bar{
+    width:0%; height:100%;
+    border-radius:inherit;
+    background-image:var(--udx-grad-apps, linear-gradient(135deg,#BF0449,#6610f2));
+    transition:width .18s ease;
+}
+body.udx-pdf-exporting .udx-page-remove{ display:none !important; }
+
+@media print{
+    .udx-pdf-progress{ display:none !important; }
+}
+
+
+/* ============================================================
+   V19 — PDF: normalização de captura
+   Evita efeitos de interface não necessários no bitmap final.
+============================================================ */
+body.udx-pdf-exporting .udx-page-remove,
+body.udx-pdf-exporting .udx-editor,
+body.udx-pdf-exporting .udx-editor__toggle,
+body.udx-pdf-exporting .udx-editor__quick-print,
+body.udx-pdf-exporting .udx-assessment-topbar,
+body.udx-pdf-exporting .udx-print-preview-bar{
+    visibility:hidden !important;
+}
+body.udx-pdf-exporting .page,
+body.udx-pdf-exporting .page1,
+body.udx-pdf-exporting .page2,
+body.udx-pdf-exporting .page3,
+body.udx-pdf-exporting .pagePerf1,
+body.udx-pdf-exporting .pagePerf2,
+body.udx-pdf-exporting .pagePerf3,
+body.udx-pdf-exporting .page-extra{
+    zoom:1 !important;
+    transform:none !important;
+    width:210mm !important;
+    min-height:297mm !important;
+    margin:0 auto !important;
+}
