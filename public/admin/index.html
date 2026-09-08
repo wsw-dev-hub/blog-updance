@@ -272,6 +272,50 @@
   .prod-link-pos{ padding:.25rem .4rem !important; font-size:.75rem !important; text-align:center; }
   .prod-link-pos:disabled{ opacity:.4; cursor:not-allowed; }
 
+    /* ── CTA da aba Avaliações (estado sem persistência server-side) ── */
+  .avaliacoes-cta{
+    display:flex; flex-direction:column; align-items:center; gap:1rem;
+    padding:2.6rem 1.4rem;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius-md); box-shadow:var(--shadow-card);
+    text-align:center;
+  }
+  .avaliacoes-cta__icon{
+    width:56px; height:56px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--grad-hot);
+    box-shadow:0 8px 22px rgba(250,51,161,.28);
+  }
+  .avaliacoes-cta__icon .mdi{ font-size:1.7rem; color:#fff; line-height:1; }
+  .avaliacoes-cta h3{
+    margin:0; font-size:1.05rem; font-weight:600; color:#fff;
+    letter-spacing:-.01em;
+  }
+  .avaliacoes-cta p{
+    margin:0; max-width:520px;
+    color:var(--muted); font-size:.86rem; line-height:1.55;
+  }
+  .avaliacoes-cta__link{
+    display:inline-flex; align-items:center; gap:.5rem;
+    margin-top:.4rem; padding:.7rem 1.15rem;
+    border-radius:10px; border:0; cursor:pointer;
+    color:#fff; font-family:'Poppins', sans-serif; font-weight:600; font-size:.9rem;
+    background:var(--grad-hot);
+    box-shadow:0 6px 20px rgba(250,51,161,.32);
+    text-decoration:none;
+    transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .avaliacoes-cta__link:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 26px rgba(250,51,161,.42);
+    color:#fff;
+  }
+  .avaliacoes-cta__link:active{ transform:translateY(0); }
+  .avaliacoes-cta__link .mdi{ font-size:1.05rem; line-height:1; }
+  .avaliacoes-cta__hint{
+    font-size:.72rem; color:var(--faint); letter-spacing:.03em;
+  }
+
   /* ── Breakpoints alinhados com mediaQuery.css ── */
   @media (max-width:480px){
     body{padding:1rem 1rem 2rem}
@@ -286,6 +330,9 @@
     .tab{padding:.55rem .7rem;font-size:.82rem}
     .tab .count{display:none}
     thead th, tbody td{padding:.65rem .75rem}
+    .avaliacoes-cta{padding:2rem 1rem}
+    .avaliacoes-cta h3{font-size:.98rem}
+    .avaliacoes-cta p{font-size:.82rem}
   }
   @media (min-width:481px) and (max-width:575px){
     .stats{grid-template-columns:repeat(2,1fr)}
@@ -318,6 +365,7 @@
         <button class="tab" data-tab="subscribers"><span class="mdi mdi-email-outline"></span>Inscritos<span class="count" id="c-subscribers"></span></button>
         <button class="tab" data-tab="access" title="Pacotes: cards da área de membros e regras de acesso por tipo"><span class="mdi mdi-package-variant-closed"></span>Pacotes<span class="count" id="c-access"></span></button>
         <button class="tab" data-tab="produtos" title="Itens contidos nos pacotes: conteúdos que aparecem dentro dos cards"><span class="mdi mdi-cube-outline"></span>Itens<span class="count" id="c-produtos"></span></button>
+        <button class="tab" data-tab="avaliacoes" title="Fichas de avaliação de alunos (editor)"><span class="mdi mdi-clipboard-text-outline"></span>Avaliações<span class="count" id="c-avaliacoes"></span></button>
         <button class="tab" data-tab="events"><span class="mdi mdi-history"></span>Eventos<span class="count" id="c-events"></span></button>
       </nav>
 
@@ -325,6 +373,7 @@
       <section class="panel" id="panel-subscribers"></section>
       <section class="panel" id="panel-access"></section>
       <section class="panel" id="panel-produtos"></section>
+      <section class="panel" id="panel-avaliacoes"></section>
       <section class="panel" id="panel-events"></section>
 
       <p class="updated" id="updated"></p>
@@ -783,6 +832,9 @@ function setupTabs(){
         el("panel-produtos").innerHTML = '<div class="empty">Clique na aba para carregar.</div>';
         produtosLoaded = false;
 
+        el("c-avaliacoes").textContent = "";
+        el("panel-avaliacoes").innerHTML = avaliacoesPanelHtml();
+
         el("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
         el("loading").hidden=true;
         el("content").hidden=false;
@@ -1055,6 +1107,21 @@ function setupTabs(){
     })
     .catch(function(){ msg.textContent = "Falha de conexão."; });
   }
+
+  /* ── Aba Avaliações (sem persistência server-side) ── */
+  function avaliacoesPanelHtml(){
+    return '<section class="avaliacoes-cta">'+
+      '<div class="avaliacoes-cta__icon"><span class="mdi mdi-clipboard-text-outline" aria-hidden="true"></span></div>'+
+      '<h3>Editor de fichas de avaliação</h3>'+
+      '<p>Gere fichas A4 imprimíveis para cada aluno — fundamentos técnicos, eixo performático, leitura de perfil e direcionamentos de treino.</p>'+
+      '<a class="avaliacoes-cta__link" href="/admin/avaliacoes/">'+
+        '<span class="mdi mdi-pencil-ruler" aria-hidden="true"></span>'+
+        'Abrir editor de avaliações'+
+      '</a>'+
+      '<span class="avaliacoes-cta__hint">A relação de alunos cadastrados será listada aqui em breve.</span>'+
+    '</section>';
+  }
+  
   setupTabs();
   load();
 </script>
