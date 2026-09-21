@@ -28,6 +28,10 @@
 
 import { WorkerMailer } from 'worker-mailer';
 import { produtosList, produtosSave, produtosDelete, produtosVinculosSave } from '../public/js/worker_produtos';
+import {
+  avaliacoesList, avaliacoesGet, avaliacoesSave, avaliacoesPerfSave,
+  avaliacoesDelete, minhasAvaliacoes, minhaAvaliacaoGet
+} from '../public/js/worker_avaliacoes';
 
 const SESSION_TTL  = 60 * 60 * 24 * 7;
 const MAGIC_TTL    = 60 * 15;
@@ -131,7 +135,17 @@ export default {
       if (pathname === '/api/me')                                           return quemSouEu(request, env);
       if (pathname === '/api/me/access')                                    return meusAcessos(request, env);
 	  
-	  if (pathname === '/api/session/bridge')                                return sessionBridge(request, url, env);
+      // ---- MEMBRO: suas próprias avaliações ----
+      if (pathname === '/api/me/avaliacoes') {
+        const m = await getMember(request, env);
+        return m ? minhasAvaliacoes(env, m.email) : json(null, 401);
+      }
+      if (pathname === '/api/me/avaliacoes/get') {
+        const m = await getMember(request, env);
+        return m ? minhaAvaliacaoGet(request, env, m.email) : json(null, 401);
+      }
+      
+	    if (pathname === '/api/session/bridge')                                return sessionBridge(request, url, env);
 
       // ---- ÁRVORE DE TALENTOS (membro) ----
       if (pathname === '/api/talentos/estado')                                return talentosEstado(request, env);
@@ -188,6 +202,33 @@ export default {
       if (pathname === '/api/admin/produtos/vinculos/save' && request.method === 'POST') {
         const a = await getAdmin(request, env);
         return a ? produtosVinculosSave(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+
+            if (pathname === '/api/admin/produtos/vinculos/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? produtosVinculosSave(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+
+      // ---- ADMIN: avaliações ----
+      if (pathname === '/api/admin/avaliacoes/list') {
+        const a = await getAdmin(request, env);
+        return a ? avaliacoesList(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/avaliacoes/get') {
+        const a = await getAdmin(request, env);
+        return a ? avaliacoesGet(request, env) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/avaliacoes/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? avaliacoesSave(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/avaliacoes/perf/save' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? avaliacoesPerfSave(request, env, a) : json({ erro: 'não autorizado' }, 403);
+      }
+      if (pathname === '/api/admin/avaliacoes/delete' && request.method === 'POST') {
+        const a = await getAdmin(request, env);
+        return a ? avaliacoesDelete(request, env, a) : json({ erro: 'não autorizado' }, 403);
       }
 
       /* DEPOIS */

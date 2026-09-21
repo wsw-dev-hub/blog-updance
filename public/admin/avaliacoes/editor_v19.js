@@ -412,6 +412,15 @@
         if (texto) texto.innerHTML   = parseMD(STATE.disciplinaPerfTexto || '');
         if (box)   box.classList.toggle('udx-hidden', !(STATE.disciplinaPerfTexto && STATE.disciplinaPerfTexto.trim()));
     }
+    /* Renderiza o hábito técnico na página 3 e oculta o card se não houver texto.
+       Espelha o comportamento de renderDisciplinaPerf, mas para o eixo técnico. */
+    function renderHabitoTecnico(){
+        const box   = document.querySelector('[data-udx-derived-card="habitoTecnicoNota"]');
+        const texto = document.querySelector('[data-udx-field="habitoTexto"]');
+        if (texto) texto.innerHTML = parseMD(STATE.habitoTexto || '');
+        if (box)   box.classList.toggle('udx-hidden', !(STATE.habitoTexto && STATE.habitoTexto.trim()));
+    }
+
     function renderDerivedPerformatico(){
         const d = derivedPerformatico();
         document.querySelectorAll('[data-udx-derived="mediaGeralPerformatica"]').forEach(el => {
@@ -633,18 +642,9 @@
         renderInsightsPerformaticos();
         renderDicasPerformaticas();
         renderDisciplinaPerf();
+        renderHabitoTecnico();
         renderPaginasExtras();
-        syncPerformaticAxisState();
-		applyPageVisibility();
-		renderDerived();
-		renderDerivedPerformatico();
-		renderMeta();
-        renderFixedPagesEditor();
-		realocarSignOff();
-		renumerarPaginas();
-		updateOverflow();
     }
-
     /* ================================================================
        OVERFLOW MONITOR
     ================================================================ */
@@ -679,6 +679,8 @@
                 STATE[key] = input.value;
                 if (key === 'disciplinaPerfLabel' || key === 'disciplinaPerfTexto'){
                     renderDisciplinaPerf();
+                }else if (key === 'habitoTexto'){
+                    renderHabitoTecnico();
                 }else{
                     renderScalar(key);
                 }
@@ -1027,7 +1029,7 @@
             }catch(e){ alert('Erro de rede ao publicar: ' + e.message); }
         });
 
-        document.getElementById('udxExport')?.addEventListener('click', () => {
+        /*document.getElementById('udxExport')?.addEventListener('click', () => {
             const blob = new Blob([JSON.stringify(STATE, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1035,7 +1037,8 @@
             a.download = 'ficha-' + (STATE.alunoNome || 'aluno').toLowerCase().replace(/\s+/g,'-') + '.json';
             a.click();
             URL.revokeObjectURL(url);
-        });
+        });*/
+
         document.getElementById('udxReset')?.addEventListener('click', () => {
             if (!confirm('Restaurar o conteúdo original da ficha? Perderá as edições atuais.')) return;
             localStorage.removeItem(STORAGE_KEY);
