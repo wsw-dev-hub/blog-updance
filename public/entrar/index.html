@@ -132,47 +132,74 @@
     width:30px;height:30px;
     border-radius:0;
   }
-    /* "Up Dance" — Autography, preto com contorno branco */
+   /* Wrapper: permite "up dance" sobrepor "xperience" como no logo */
+  .auth-brand-text{
+    position:relative;
+    line-height:1;
+    padding-top:6px;
+  }
+
+  /* "up dance" — Autography, preto com contorno branco (minúsculo, cursivo)
+     Posicionado sobre o topo de "xperience" para replicar o layout do logo */
   .auth-brand-text .l1{
+    display:block;
+    position:relative;
+    z-index:2;
     font-family:'Autography', 'Playfair Display', cursive;
     font-style:normal;
     font-weight:400;
-    font-size:38px;
+    font-size:22px;
     line-height:1;
+    letter-spacing:.5px;
+    text-transform:lowercase;
     color:#000;
-    /* Contorno branco em 4 direções (fallback universal) + text-stroke nativo */
+    /* Contorno branco fino e uniforme — replica o traço do logo */
     text-shadow:
-      -1.2px -1.2px 0 #fff,
-       1.2px -1.2px 0 #fff,
-      -1.2px  1.2px 0 #fff,
-       1.2px  1.2px 0 #fff,
-        0    -1.2px 0 #fff,
-        0     1.2px 0 #fff,
-      -1.2px  0    0 #fff,
-       1.2px  0    0 #fff;
-    -webkit-text-stroke:1px #fff;
+      -1px -1px 0 #fff,
+       1px -1px 0 #fff,
+      -1px  1px 0 #fff,
+       1px  1px 0 #fff,
+        0   -1px 0 #fff,
+        0    1px 0 #fff,
+      -1px  0   0 #fff,
+       1px  0   0 #fff;
+    -webkit-text-stroke:.6px #fff;
     paint-order:stroke fill;
-    letter-spacing:1px;
+    /* Empurra o texto para dentro do "xperience", como no logo */
+    margin-bottom:-14px;
+    margin-left:14px;
+    transform:rotate(-2deg);
+    transform-origin:left center;
   }
 
-  /* "Xperience" — Geakosa, prata com sombras escuras */
+  /* "xperience" — Ethnocentric itálica, prata com gradiente e sombra 3D
+     Minúsculo, escala maior que "up dance", inclinação natural da fonte */
   .auth-brand-text .l2{
-    font-family:'Geakosa', 'Bebas Neue', serif;
-    font-size:14px;
+    display:block;
+    position:relative;
+    z-index:1;
+    font-family:'Ethnocentric', 'Bebas Neue', 'Impact', sans-serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:34px;
     line-height:1;
-    letter-spacing:3px;
-    text-transform:uppercase;
-    margin-top:6px;
-    color:#c0c0c0;
-    background:linear-gradient(180deg,#f2f2f2 0%,#c0c0c0 55%,#8a8a8a 100%);
-    -webkit-background-clip:text;background-clip:text;
+    letter-spacing:1px;
+    text-transform:lowercase;
+    /* Fallback sólido caso background-clip:text falhe */
+    color:#c8c8c8;
+    /* Gradiente prata vertical — highlight no topo, base escurecida */
+    background:linear-gradient(180deg,
+      #f5f5f5 0%,
+      #dcdcdc 30%,
+      #b8b8b8 60%,
+      #8a8a8a 100%);
+    -webkit-background-clip:text;
+            background-clip:text;
     -webkit-text-fill-color:transparent;
-    /* Sombras escuras para dar profundidade à prata */
-    text-shadow:
-      0 1px 0   rgba(0,0,0,0.55),
-      0 2px 3px rgba(0,0,0,0.55),
-      0 3px 6px rgba(0,0,0,0.45);
-    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.55));
+    /* Sombra escura projetada para baixo-direita — efeito 3D do logo */
+    filter:
+      drop-shadow(2px 3px 0 rgba(0,0,0,0.55))
+      drop-shadow(3px 5px 6px rgba(0,0,0,0.45));
   }
 
   /* Hero conteúdo */
