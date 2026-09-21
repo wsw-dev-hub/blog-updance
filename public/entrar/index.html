@@ -6,9 +6,7 @@
 <title>Entrar — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
-<!-- Fontes da marca — Autography + Geakosa (Opção B: cdnfonts) -->
-<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/autography">
-<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/geakosa">
+
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 <style>
@@ -113,93 +111,72 @@
   }
 
   /* Brand */
+    /* ══ Brand — versão neutra (padrão CipherAcademy) ══ */
   .auth-brand{
     display:flex;
-    align-items:center;
+    align-items:stretch;      /* ícone estica para acompanhar a altura do texto */
     gap:14px;
     position:relative;
     z-index:1;
   }
+
+  /* Wrapper do texto — define a ALTURA de referência que o ícone acompanha */
+  .auth-brand-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    line-height:1;
+    min-width:0;
+  }
+
+  /* "Up Dance" — display neutro (Bebas Neue), sem cursiva/contorno/3D */
+  .auth-brand-text .l1{
+    font-family:'Bebas Neue', 'Impact', sans-serif;
+    font-weight:400;
+    font-size:24px;
+    line-height:1;
+    letter-spacing:3px;
+    text-transform:none;      /* preserva "Up Dance" como escrito no HTML */
+    color:var(--udx-text);
+  }
+  .auth-brand-text .l1 span{
+    color:var(--udx-primary-hot); /* destaque sutil para "Dance", igual ao Cipher */
+  }
+
+  /* "Xperience" — mono (DM Mono), tag institucional discreta */
+  .auth-brand-text .l2{
+    font-family:'DM Mono', 'Courier New', monospace;
+    font-weight:400;
+    font-size:10px;
+    line-height:1;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--udx-text-muted);
+    margin-top:4px;
+  }
+
+  /* ══ Ícone — acompanha automaticamente a altura do bloco de texto ══ */
   .auth-brand-mark{
-    width:48px;height:48px;
+    /* align-items:stretch (no pai) faz o height = altura de .auth-brand-text */
+    aspect-ratio:1 / 1;       /* mantém quadrado independente da altura calculada */
+    height:auto;              /* deixa o flexbox definir via stretch */
+    align-self:stretch;       /* explícito: acompanha o texto verticalmente */
     border-radius:12px;
     background:var(--udx-grad-hot);
-    display:flex;align-items:center;justify-content:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     flex-shrink:0;
     box-shadow:var(--udx-shadow-btn);
+    padding:6px;              /* respiro interno para a imagem */
   }
   .auth-brand-mark img{
-    width:30px;height:30px;
+    width:auto;
+    height:100%;              /* imagem preenche a altura interna do container */
+    max-width:100%;
+    object-fit:contain;
     border-radius:0;
-  }
-   /* Wrapper: permite "up dance" sobrepor "xperience" como no logo */
-  .auth-brand-text{
-    position:relative;
-    line-height:1;
-    padding-top:6px;
-  }
-
-  /* "up dance" — Autography, preto com contorno branco (minúsculo, cursivo)
-     Posicionado sobre o topo de "xperience" para replicar o layout do logo */
-  .auth-brand-text .l1{
     display:block;
-    position:relative;
-    z-index:2;
-    font-family:'Autography', 'Playfair Display', cursive;
-    font-style:normal;
-    font-weight:400;
-    font-size:22px;
-    line-height:1;
-    letter-spacing:.5px;
-    text-transform:lowercase;
-    color:#000;
-    /* Contorno branco fino e uniforme — replica o traço do logo */
-    text-shadow:
-      -1px -1px 0 #fff,
-       1px -1px 0 #fff,
-      -1px  1px 0 #fff,
-       1px  1px 0 #fff,
-        0   -1px 0 #fff,
-        0    1px 0 #fff,
-      -1px  0   0 #fff,
-       1px  0   0 #fff;
-    -webkit-text-stroke:.6px #fff;
-    paint-order:stroke fill;
-    /* Empurra o texto para dentro do "xperience", como no logo */
-    margin-bottom:-14px;
-    margin-left:14px;
-    transform:rotate(-2deg);
-    transform-origin:left center;
-  }
-
-  /* "xperience" — Ethnocentric itálica, prata com gradiente e sombra 3D
-     Minúsculo, escala maior que "up dance", inclinação natural da fonte */
-  .auth-brand-text .l2{
-    display:block;
-    position:relative;
-    z-index:1;
-    font-family:'Ethnocentric', 'Bebas Neue', 'Impact', sans-serif;
-    font-style:italic;
-    font-weight:400;
-    font-size:34px;
-    line-height:1;
-    letter-spacing:1px;
-    text-transform:lowercase;
-    /* Fallback sólido caso background-clip:text falhe */
-    color:#c8c8c8;
-    /* Gradiente prata vertical — highlight no topo, base escurecida */
-    background:linear-gradient(180deg,
-      #f5f5f5 0%,
-      #dcdcdc 30%,
-      #b8b8b8 60%,
-      #8a8a8a 100%);
-    -webkit-background-clip:text;
-            background-clip:text;
-    -webkit-text-fill-color:transparent;
-    /* Sombra escura projetada para baixo-direita — efeito 3D do logo */
-    filter:
-      drop-shadow(2px 3px 0 rgba(0,0,0,0.55))
-      drop-shadow(3px 5px 6px rgba(0,0,0,0.45));
   }
 
   /* Hero conteúdo */
@@ -816,7 +793,7 @@
         <img src="/images/icons/udx-icon.png" alt="">
       </div>
       <div class="auth-brand-text">
-        <div class="l1">Up Dance</div>
+        <div class="l1">Up <span>Dance</span></div>
         <div class="l2">Xperience</div>
       </div>
     </div>
