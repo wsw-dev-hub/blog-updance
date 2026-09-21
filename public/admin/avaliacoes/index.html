@@ -555,6 +555,8 @@
     <input type="text" data-udx-input="alunoNome">
     <label>Nome do professor</label>
     <input type="text" data-udx-input="professorNome" placeholder="—">
+    <label>E-mail do aluno <span style="font-weight:400;color:#7a7590">(chave para persistir na base)</span></label>
+    <input type="email" data-udx-input="alunoEmail" placeholder="aluno@exemplo.com" autocomplete="off">
     <label>Semestre</label>
     <input type="text" data-udx-input="semestre">
     <label>Turma organizacional</label>
@@ -610,6 +612,10 @@
     <div data-udx-input-list="insightsPerformaticos"></div>
     <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="insightsPerformaticos">+ adicionar insight (perf.)</button>
 
+    <h3>Hábito a cuidar (técnico)</h3>
+    <p class="udx-editor__hint">Aparece na página 3, acima das dicas. Use <code>**negrito**</code>.</p>
+    <textarea data-udx-input="habitoTexto" placeholder="Ex.: dançar com a boca aberta reduz a energia do movimento…"></textarea>
+
     <h3>Hábito performático a cuidar</h3>
     <p class="udx-editor__hint">Deixe o texto em branco para ocultar a nota.</p>
     <label>Rótulo</label>
@@ -636,9 +642,10 @@
 
     <div class="udx-editor__actions">
         <button type="button" class="udx-editor__btn" id="udxSave">Salvar</button>
+        <button type="button" class="udx-editor__btn udx-editor__btn--pdf" id="udxPublish" title="Publica a ficha; aluno passa a vê-la">Publicar</button>
         <button type="button" class="udx-editor__btn udx-editor__btn--print" id="udxPrintPreview">Visualizar impressão</button>
         <button type="button" class="udx-editor__btn udx-editor__btn--pdf" id="udxExportPdf">Gerar PDF</button>
-        <button type="button" class="udx-editor__btn udx-editor__btn--ghost" id="udxExport">Exportar JSON</button>
+        <!--<button type="button" class="udx-editor__btn udx-editor__btn--ghost" id="udxExport">Exportar JSON</button>-->
         <button type="button" class="udx-editor__btn udx-editor__btn--danger" id="udxReset">Restaurar seed</button>
     </div>
 </aside>

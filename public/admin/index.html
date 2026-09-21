@@ -779,6 +779,13 @@ function setupTabs(){
         produtosLoaded = true;
         loadProdutos();
       }
+
+      // lazy-load da aba de avaliações
+      if (t.dataset.tab === "avaliacoes" && !avaliacoesLoaded) {
+        avaliacoesLoaded = true;
+        loadAvaliacoes();
+      }
+
       // lazy-load da aba de eventos
       if (t.dataset.tab === "events" && !eventsLoaded) {
         eventsLoaded = true;
@@ -834,6 +841,7 @@ function setupTabs(){
 
         el("c-avaliacoes").textContent = "";
         el("panel-avaliacoes").innerHTML = avaliacoesPanelHtml();
+        avaliacoesLoaded = false;
 
         el("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
         el("loading").hidden=true;
@@ -1108,18 +1116,98 @@ function setupTabs(){
     .catch(function(){ msg.textContent = "Falha de conexão."; });
   }
 
-  /* ── Aba Avaliações (sem persistência server-side) ── */
-  function avaliacoesPanelHtml(){
-    return '<section class="avaliacoes-cta">'+
-      '<div class="avaliacoes-cta__icon"><span class="mdi mdi-clipboard-text-outline" aria-hidden="true"></span></div>'+
-      '<h3>Editor de fichas de avaliação</h3>'+
-      '<p>Gere fichas A4 imprimíveis para cada aluno — fundamentos técnicos, eixo performático, leitura de perfil e direcionamentos de treino.</p>'+
-      '<a class="avaliacoes-cta__link" href="/admin/avaliacoes/">'+
-        '<span class="mdi mdi-pencil-ruler" aria-hidden="true"></span>'+
-        'Abrir editor de avaliações'+
-      '</a>'+
-      '<span class="avaliacoes-cta__hint">A relação de alunos cadastrados será listada aqui em breve.</span>'+
-    '</section>';
+    function avaliacoesPanelHtml(){
+    return '<div class="empty">Clique na aba para carregar.</div>';
+  }
+
+  var avaliacoesLoaded = false;
+
+  function loadAvaliacoes(){
+    el("panel-avaliacoes").innerHTML = '<div class="empty">Carregando…</div>';
+    fetch("/api/admin/avaliacoes/list", { credentials:"same-origin" })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok){ el("panel-avaliacoes").innerHTML = '<div class="empty">Falha ao carregar.</div>'; return; }
+        var total = (d.tecnicas || []).length + (d.performaticas || []).length;
+        el("c-avaliacoes").textContent = "(" + total + ")";
+        el("panel-avaliacoes").innerHTML = avaliacoesPanelRealHtml(d);
+        bindAvaliacoesActions();
+      })
+      .catch(function(){ avaliacoesLoaded = false; el("panel-avaliacoes").innerHTML = '<div class="empty">Falha de conexão.</div>'; });
+  }
+
+  function avaliacoesPanelRealHtml(d){
+    var linhas = (d.tecnicas || []).map(function(t){
+      var badge = t.status === 'published'
+        ? '<span class="badge ok">publicada</span>'
+        : (t.status === 'archived' ? '<span class="badge neutral">arquivada</span>' : '<span class="badge pending">rascunho</span>');
+      return '<tr>' +
+        '<td class="email">' + esc(t.aluno_nome) + '<div class="dim" style="font-size:.72rem">' + esc(t.aluno_email) + '</div></td>' +
+        '<td class="dim">' + (esc(t.semestre) || '—') + '</td>' +
+        '<td class="dim">' + (esc(t.modalidade_turma) || '—') + '</td>' +
+        '<td class="mono">v.' + esc(String(t.versao)) + '</td>' +
+        '<td>' + badge + '</td>' +
+        '<td class="mono">' + fmtDate(t.updated_at) + '</td>' +
+        '<td style="text-align:center;white-space:nowrap">' +
+          '<a class="ghost-btn" href="/admin/avaliacoes/?id=' + t.id + '" title="Abrir no editor"><span class="mdi mdi-pencil"></span></a> ' +
+          '<button class="ghost-btn aval-del" data-id="' + t.id + '" data-tipo="tecnica" data-label="' + esc(t.aluno_nome) + '" title="Excluir"><span class="mdi mdi-trash-can-outline"></span></button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var linhasPerf = (d.performaticas || []).map(function(p){
+      var badge = p.status === 'published'
+        ? '<span class="badge ok">publicada</span>'
+        : (p.status === 'archived' ? '<span class="badge neutral">arquivada</span>' : '<span class="badge pending">rascunho</span>');
+      return '<tr>' +
+        '<td class="email">' + esc(p.aluno_nome) + '<div class="dim" style="font-size:.72rem">' + esc(p.aluno_email) + '</div></td>' +
+        '<td class="dim">' + (esc(p.semestre) || '—') + '</td>' +
+        '<td class="dim">' + (esc(p.modalidade_turma) || '—') + '</td>' +
+        '<td class="mono">v.' + esc(String(p.versao)) + (p.tecnica_id ? ' <span class="dim" style="font-size:.7rem">↳ tec #' + esc(String(p.tecnica_id)) + '</span>' : '') + '</td>' +
+        '<td>' + badge + '</td>' +
+        '<td class="mono">' + fmtDate(p.updated_at) + '</td>' +
+        '<td style="text-align:center;white-space:nowrap">' +
+          '<a class="ghost-btn" href="/admin/avaliacoes/?perf_id=' + p.id + '" title="Abrir no editor"><span class="mdi mdi-pencil"></span></a> ' +
+          '<button class="ghost-btn aval-del" data-id="' + p.id + '" data-tipo="performatica" data-label="' + esc(p.aluno_nome) + '" title="Excluir"><span class="mdi mdi-trash-can-outline"></span></button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var tabelaTec = linhas ? '<div class="table-wrap"><table>' +
+      '<thead><tr><th>Aluno(a)</th><th>Semestre</th><th>Modalidade</th><th>Versão</th><th>Status</th><th>Atualizado em</th><th style="text-align:center">Ações</th></tr></thead>' +
+      '<tbody>' + linhas + '</tbody></table></div>' : '<div class="empty">Nenhuma ficha técnica cadastrada.</div>';
+    var tabelaPerf = linhasPerf ? '<div class="table-wrap" style="margin-top:1rem"><table>' +
+      '<thead><tr><th>Aluno(a)</th><th>Semestre</th><th>Modalidade</th><th>Versão</th><th>Status</th><th>Atualizado em</th><th style="text-align:center">Ações</th></tr></thead>' +
+      '<tbody>' + linhasPerf + '</tbody></table></div>' : '';
+
+    return '<section class="avaliacoes-cta" style="margin-bottom:1rem">' +
+      '<div class="avaliacoes-cta__icon"><span class="mdi mdi-clipboard-text-outline" aria-hidden="true"></span></div>' +
+      '<h3>Fichas de avaliação</h3>' +
+      '<p>Gerencie fichas técnicas e performáticas. Clique em "Nova ficha" para abrir o editor em branco.</p>' +
+      '<a class="avaliacoes-cta__link" href="/admin/avaliacoes/">' +
+        '<span class="mdi mdi-plus" aria-hidden="true"></span>Nova ficha</a>' +
+    '</section>' +
+    '<h4 style="margin:1rem 0 .5rem;color:#fff;font-size:.9rem">Fichas técnicas</h4>' + tabelaTec +
+    (tabelaPerf ? '<h4 style="margin:1.4rem 0 .5rem;color:#fff;font-size:.9rem">Fichas performáticas</h4>' + tabelaPerf : '');
+  }
+
+  function bindAvaliacoesActions(){
+    document.querySelectorAll('.aval-del').forEach(function(b){
+      b.addEventListener('click', function(){
+        if (!confirm('Excluir a ficha de "' + b.dataset.label + '"? Esta ação não pode ser desfeita.')) return;
+        fetch('/api/admin/avaliacoes/delete', {
+          method:'POST', credentials:'same-origin',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ id: Number(b.dataset.id), tipo: b.dataset.tipo })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d && d.ok){ avaliacoesLoaded = false; loadAvaliacoes(); }
+          else alert((d && d.erro) || 'Falha ao excluir.');
+        })
+        .catch(function(){ alert('Falha de conexão.'); });
+      });
+    });
   }
   
   setupTabs();

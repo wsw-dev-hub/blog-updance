@@ -7,6 +7,14 @@
     const A4_WIDTH_PX  = 210 * (96 / 25.4);
     const DEFAULT_LOGO_SRC = './logos/Norte Danse.png';
 
+    /* Integração com a base D1. Se URLSearchParams tiver ?id=N, o editor
+       carrega essa ficha ao inicializar e opera em modo persistente. */
+    const API_BASE       = '';
+    const URL_PARAMS     = new URLSearchParams(location.search);
+    const REMOTE_ID      = URL_PARAMS.get('id') ? Number(URL_PARAMS.get('id')) : null;
+    const REMOTE_PERF_ID = URL_PARAMS.get('perf_id') ? Number(URL_PARAMS.get('perf_id')) : null;
+    let REMOTE_STATE = { techId: REMOTE_ID, perfId: REMOTE_PERF_ID, saving: false, lastPushAt: 0 };
+
     /* ================================================================
        SEED DO EIXO PERFORMÁTICO (inativo por padrão)
     ================================================================ */
@@ -117,7 +125,9 @@
             dicasPerformaticas:          [],
             disciplinaPerfLabel:         'Hábito performático a cuidar',
             disciplinaPerfTexto:         '',
-            paginasFixas
+            paginasFixas,
+            alunoEmail:                  '',
+            habitoTexto:                 ''
         };
     }
 
@@ -974,12 +984,46 @@
     /* ================================================================
        AÇÕES
     ================================================================ */
-    function bindActions(){
-        document.getElementById('udxSave')?.addEventListener('click', () => {
+        function bindActions(){
+        document.getElementById('udxSave')?.addEventListener('click', async () => {
             clearTimeout(saveTimer);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
-            alert('Salvo em localStorage.');
+            // Persiste também no servidor se houver aluno_email definido no STATE
+            // (usa o campo `professorNome` como texto livre e assume `alunoNome` como âncora).
+            const alunoEmail = (STATE.alunoEmail || '').trim().toLowerCase();
+            if (!alunoEmail){
+                alert('Salvo em localStorage. Para publicar na base, informe o e-mail do aluno.');
+                return;
+            }
+            try{
+                const r = await pushFichaTecnica('draft');
+                if (r && r.ok){
+                    REMOTE_STATE.techId = r.id;
+                    alert('Rascunho salvo na base (id=' + r.id + ').');
+                }else{
+                    alert('Falha ao salvar na base: ' + (r && r.erro || 'erro desconhecido'));
+                }
+            }catch(e){ alert('Erro de rede ao salvar na base: ' + e.message); }
         });
+
+        document.getElementById('udxPublish')?.addEventListener('click', async () => {
+            const alunoEmail = (STATE.alunoEmail || '').trim().toLowerCase();
+            if (!alunoEmail){
+                alert('Informe o e-mail do aluno antes de publicar.');
+                return;
+            }
+            if (!confirm('Publicar a ficha? O aluno passará a vê-la em sua área.')) return;
+            try{
+                const r = await pushFichaTecnica('published');
+                if (r && r.ok){
+                    REMOTE_STATE.techId = r.id;
+                    alert('Ficha publicada (id=' + r.id + ').');
+                }else{
+                    alert('Falha ao publicar: ' + (r && r.erro || 'erro desconhecido'));
+                }
+            }catch(e){ alert('Erro de rede ao publicar: ' + e.message); }
+        });
+
         document.getElementById('udxExport')?.addEventListener('click', () => {
             const blob = new Blob([JSON.stringify(STATE, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1544,5 +1588,104 @@
         updateResponsivePreview();
         updateOverflow();
     });
+        /* Serializa o STATE no shape esperado pela API. */
+    function serializarFichaTecnica(status){
+        return {
+            id:                    REMOTE_STATE.techId || null,
+            aluno_email:           STATE.alunoEmail || '',
+            aluno_nome:            STATE.alunoNome || '',
+            professor_nome:        STATE.professorNome || null,
+            semestre:              STATE.semestre || null,
+            turma_organizacional:  STATE.turmaOrganizacional || null,
+            modalidade_turma:      STATE.modalidadeTurma || null,
+            logo_src:              STATE.logoSrc || null,
+            disciplina_perf_label: STATE.disciplinaPerfLabel || null,
+            disciplina_perf_texto: STATE.disciplinaPerfTexto || null,
+            paginas_fixas:         STATE.paginasFixas || {},
+            ordem_paginas:         STATE.ordemPaginas || [],
+            status:                status || 'draft',
+            fundamentos: STATE.fundamentos.map(f => ({
+                fund_id: f.id, nome: f.nome, tipo: f.tipo || 'fundamento', nota: f.nota
+            })),
+            observacoes:    STATE.observacoes,
+            dicas:          STATE.dicas,
+            tags:           STATE.tagsModalidades,
+            insights:       [],  // Página 2 hoje é literal no HTML; ajustar quando insights técnicos virem editáveis.
+            habitos: [{
+                label:      'Hábito a cuidar',
+                texto:      STATE.habitoTexto || '',
+                recorrente: 0
+            }].filter(h => h.texto && h.texto.trim()),
+            paginas_extras: STATE.paginasExtras.map(p => ({
+                slug: p.id, titulo: p.titulo, conteudo: p.conteudo
+            })),
+        };
+    }
+
+    async function pushFichaTecnica(status){
+        if (REMOTE_STATE.saving) return { ok:false, erro:'Save em andamento.' };
+        REMOTE_STATE.saving = true;
+        try{
+            const r = await fetch(API_BASE + '/api/admin/avaliacoes/save', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type':'application/json' },
+                body: JSON.stringify(serializarFichaTecnica(status)),
+            });
+            const data = await r.json();
+            REMOTE_STATE.lastPushAt = Date.now();
+            return data;
+        }finally{
+            REMOTE_STATE.saving = false;
+        }
+    }
+
+    /* Se a URL trouxe ?id=N, carrega essa ficha ao boot e substitui o STATE. */
+    async function bootRemote(){
+        if (!REMOTE_ID) return;
+        try{
+            const r = await fetch(API_BASE + '/api/admin/avaliacoes/get?id=' + REMOTE_ID + '&tipo=tecnica',
+                                  { credentials:'same-origin' });
+            const d = await r.json();
+            if (d && d.ok && d.ficha){
+                hidratarDoRemoto(d.ficha);
+                render();
+                [
+                    'tagsModalidades','observacoes','dicas','fundamentos','paginasExtras',
+                    'performaticos','observacoesPerformaticas','insightsPerformaticos','dicasPerformaticas'
+                ].forEach(rebuildEditorList);
+                saveState();
+            }
+        }catch(e){ console.warn('[UDX] falha ao carregar ficha remota:', e); }
+    }
+
+    function hidratarDoRemoto(f){
+        STATE.alunoEmail           = f.aluno_email;
+        STATE.alunoNome            = f.aluno_nome;
+        STATE.professorNome        = f.professor_nome || '';
+        STATE.semestre             = f.semestre || '';
+        STATE.turmaOrganizacional  = f.turma_organizacional || '';
+        STATE.modalidadeTurma      = f.modalidade_turma || '';
+        STATE.logoSrc              = f.logo_src || DEFAULT_LOGO_SRC;
+        STATE.disciplinaPerfLabel  = f.disciplina_perf_label || 'Hábito performático a cuidar';
+        STATE.disciplinaPerfTexto  = f.disciplina_perf_texto || '';
+        STATE.paginasFixas         = f.paginas_fixas || STATE.paginasFixas;
+        STATE.ordemPaginas         = Array.isArray(f.ordem_paginas) && f.ordem_paginas.length
+                                       ? f.ordem_paginas : STATE.ordemPaginas;
+        STATE.tagsModalidades      = (f.tags || []).map(t => t.tag);
+        STATE.observacoes          = (f.observacoes || []).map(o => ({ lead:o.lead, texto:o.texto }));
+        STATE.dicas                = (f.dicas || []).map(d => ({ titulo:d.titulo, texto:d.texto }));
+        STATE.fundamentos          = (f.fundamentos || []).map(n => ({
+            id:n.fund_id, nome:n.nome, nota:n.nota, tipo:n.tipo
+        }));
+        STATE.paginasExtras        = (f.paginas_extras || []).map(p => ({
+            id:p.slug, titulo:p.titulo, conteudo:p.conteudo
+        }));
+        STATE.habitoTexto          = (f.habitos && f.habitos[0] && f.habitos[0].texto) || '';
+        REMOTE_STATE.techId = f.id;
+    }
+
+    bootRemote();
+
     console.log('[UDX] Editor v19 · exportação PDF fiel das páginas visíveis carregada · persistência: '+STORAGE_KEY);
 })();
