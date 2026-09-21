@@ -354,30 +354,76 @@
   }
 
   /* Card cabeçalho (marca compacta no topo do formulário) */
+    /* Card cabeçalho (marca compacta no topo do formulário) */
   .card{
     background:transparent;
     border:0;
     border-radius:0;
     overflow:visible;
   }
+
+  /* ══ Head — mesma mecânica de .auth-brand (ícone acompanha altura do texto) ══ */
   .head{
     display:flex;
-    align-items:center;
+    align-items:stretch;      /* ícone estica para acompanhar a altura do texto */
     gap:.7rem;
     padding:0 0 1.2rem;
     border-bottom:1px solid var(--udx-border);
     margin-bottom:1.4rem;
   }
-  .head img{width:36px;height:36px;border-radius:8px;}
+
+  /* Wrapper do texto — define a ALTURA de referência que o ícone acompanha */
+  .head-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    line-height:1;
+    min-width:0;
+  }
+
+  /* "Up Dance" — display neutro (Bebas Neue), espelha .auth-brand-text .l1 */
   .head h1{
     margin:0;
-    font-size:1.3rem;
+    font-family:'Bebas Neue', sans-serif;
     font-weight:400;
-    font-style:italic;
-    font-family:var(--udx-display);
-    background:linear-gradient(to top,#fb8460,#f13aa1);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
+    font-size:24px;
+    line-height:1;
+    letter-spacing:1.6px;
+    color:var(--udx-text);
+    /* Reset das propriedades herdadas do Playfair italic anterior */
+    font-style:normal;
+    background:none;
+    -webkit-background-clip:border-box;
+            background-clip:border-box;
+    -webkit-text-fill-color:currentColor;
+  }
+  .head h1 span{
+    color:var(--udx-primary-hot); /* destaque para "Dance", igual ao .auth-brand */
+  }
+
+  /* Subtítulo — mono (DM Mono), espelha .auth-brand-text .l2 */
+  .head-sub{
+    font-family:'DM Mono', monospace;
+    font-weight:400;
+    font-size:10px;
+    line-height:1;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--udx-text-muted);
+    margin-top:4px;
+  }
+
+  /* Ícone — acompanha automaticamente a altura do bloco de texto */
+  .head img{
+    aspect-ratio:1 / 1;       /* mantém quadrado independente da altura calculada */
+    width:auto;               /* deixa aspect-ratio + height decidir */
+    height:auto;              /* deixa o flexbox definir via stretch */
+    align-self:stretch;       /* explícito: acompanha o texto verticalmente */
+    max-height:100%;
+    object-fit:contain;
+    border-radius:0;          /* zera o border-radius:8px antigo (ícone livre) */
+    display:block;
+    flex-shrink:0;
   }
 
   /* Tabs */
@@ -897,7 +943,7 @@
       <div class="card">
         <div class="head">
           <img src="/images/icons/udx-icon.png" alt="">
-          <h1>Up Dance</h1>
+          <h1>Up <span>Dance</span> Xperience</h1>
         </div>
 
         <div class="tabs">
