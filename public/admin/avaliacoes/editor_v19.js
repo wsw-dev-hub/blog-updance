@@ -879,8 +879,12 @@
                 rebuildEditorList('performaticos');
                 renderPerfActivate();
                 render();
+                applyPageVisibility();   // ← remove `.udx-hidden` das <section class="pagePerfN">
                 renderPerfHiddenFlags();
+                realocarSignOff();       // ← reposiciona o sign-off para a nova última página
+                renumerarPaginas();      // ← recalcula "página N / M" nos footers
                 saveState();
+                updateOverflow();        // ← recalcula overflow após inserir páginas
             });
             host.appendChild(btn);
             return;
