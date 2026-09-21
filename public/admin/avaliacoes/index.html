@@ -422,11 +422,11 @@
     </header>
 	
 	<!-- NOTA DE HÁBITO — índigo (foco/postura em aula) -->
-    <aside class="discipline-note">
+    <aside class="discipline-note" data-udx-derived-card="habitoTecnicoNota">
         <div class="discipline-note__mark">!</div>
         <div class="discipline-note__body">
             <span class="discipline-note__label">Hábito a cuidar</span>
-            <p class="discipline-note__text">Um hábito a ser cuidado é <strong>dançar com a boca aberta</strong>. Além de contribuir para reduzir bastante a energia dos movimentos, pode trazer riscos caso ocorra algum contato inesperado durante aulas, ensaios ou apresentações.</p>
+            <p class="discipline-note__text" data-udx-field="habitoTexto">Um hábito a ser cuidado é <strong>dançar com a boca aberta</strong>. Além de contribuir para reduzir bastante a energia dos movimentos, pode trazer riscos caso ocorra algum contato inesperado durante aulas, ensaios ou apresentações.</p>
         </div>
     </aside>
 
@@ -589,6 +589,10 @@
     <div data-udx-input-list="dicas"></div>
     <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="dicas">+ adicionar dica</button>
 
+    <h3>Hábito a cuidar (técnico)</h3>
+    <p class="udx-editor__hint">Aparece na página 3, acima das dicas. Use <code>**negrito**</code>.</p>
+    <textarea data-udx-input="habitoTexto" placeholder="Ex.: dançar com a boca aberta reduz a energia do movimento…"></textarea>
+
     <h3>Notas dos fundamentos</h3>
     <p class="udx-editor__hint">Deixe em branco para excluir da contagem. Escala 0–10.</p>
     <div data-udx-input-list="fundamentos"></div>
@@ -611,10 +615,6 @@
     <p class="udx-editor__hint">Cartões pareados de leitura de perfil performático.</p>
     <div data-udx-input-list="insightsPerformaticos"></div>
     <button type="button" class="udx-editor__btn udx-editor__btn--sm" data-udx-add="insightsPerformaticos">+ adicionar insight (perf.)</button>
-
-    <h3>Hábito a cuidar (técnico)</h3>
-    <p class="udx-editor__hint">Aparece na página 3, acima das dicas. Use <code>**negrito**</code>.</p>
-    <textarea data-udx-input="habitoTexto" placeholder="Ex.: dançar com a boca aberta reduz a energia do movimento…"></textarea>
 
     <h3>Hábito performático a cuidar</h3>
     <p class="udx-editor__hint">Deixe o texto em branco para ocultar a nota.</p>
