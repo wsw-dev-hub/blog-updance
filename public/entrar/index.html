@@ -9,153 +9,726 @@
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 <style>
-  :root{--bg:#020118;--card:#0c0b22;--line:#221f3e;--txt:#DFE0F2;--muted:#8a86b0;
-    --accent:#BF0449;--accent2:#eb2f5b;--grad:linear-gradient(to right,#F434A1,#ff8442)}
-  *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Poppins',sans-serif;
-    display:flex;align-items:center;justify-content:center;padding:1.5rem}
-  .card{width:min(94vw,420px);background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-  .head{display:flex;align-items:center;gap:.7rem;padding:1.2rem 1.3rem;border-bottom:1px solid var(--line)}
-  .head img{width:36px;height:36px}
-  .head h1{margin:0;font-size:1.3rem;font-weight:400;font-style:italic;font-family:'Playfair Display',serif;
-    background:linear-gradient(to top,#fb8460,#f13aa1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .tabs{display:flex;border-bottom:1px solid var(--line)}
-  .tab{flex:1;background:none;border:0;color:var(--muted);padding:.9rem;font-size:.85rem;font-weight:600;
-    font-family:'Poppins',sans-serif;cursor:pointer;border-bottom:2px solid transparent}
-  .tab.on{color:#fff;border-bottom-color:var(--accent2)}
-  .panel{display:none;padding:1.5rem 1.3rem 1.7rem}.panel.on{display:block}
-  .panel p{margin:0 0 1rem;color:var(--muted);font-size:.88rem;line-height:1.5}
-  label{display:block;font-size:.78rem;color:var(--muted);margin:.2rem 0 .35rem}
+  /* ══════════════════════════════════════════════════════════════
+     UDX · Página de acesso — layout duas colunas (ref. Cipher)
+     Tokens preservam identidade visual UpDance (--udx-*)
+  ══════════════════════════════════════════════════════════════ */
+  :root{
+    --udx-bg:            #02021a;
+    --udx-bg-mid:        #110273;
+    --udx-deep:          #110273;
+    --udx-primary:       #BF0449;
+    --udx-primary-hot:   #FA33A1;
+    --udx-primary-orange:#F27405;
+    --udx-accent:        #5708A6;
+    --udx-accent-blue:   #430ABF;
+    --udx-text:          #DFE0F2;
+    --udx-text-muted:    #b0b3cc;
+    --udx-muted:         #8a86b0;
+    --udx-border:        rgba(223,224,242,0.12);
+    --udx-line:          #221f3e;
+    --udx-card:          #0c0b22;
 
-/* wrapper para campos com ícone e/ou botão de olho */
-.campo{position:relative;margin:0 0 .7rem;transition:margin .2s}
-.campo > .mdi{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);
-  color:var(--muted);font-size:1.05rem;transition:color .2s;pointer-events:none}
-.campo .olho{position:absolute;right:.55rem;top:50%;transform:translateY(-50%);
-  background:none;border:0;color:var(--muted);cursor:pointer;padding:.3rem;
-  border-radius:6px;font-size:1.05rem;transition:color .15s,background .15s}
-.campo .olho:hover{color:#fff;background:var(--line)}
-.campo .olho[aria-pressed="true"]{color:#fff}
-.campo .olho[aria-pressed="true"] .mdi{background:var(--grad);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    --udx-grad-hot:      linear-gradient(135deg,#FA33A1 0%,#F27405 100%);
+    --udx-grad-cool:     linear-gradient(135deg,#5708A6 0%,#110273 100%);
+    --udx-grad-brand:    linear-gradient(to right,#F434A1,#ff8442);
 
-.inp{width:100%;padding:.78rem .9rem;border-radius:9px;border:1px solid #2f2c52;background:var(--bg);
-  color:#fff;font-size:.95rem;font-family:'Poppins',sans-serif;transition:border-color .2s}
-.inp:focus{outline:none;border-color:var(--accent)}
-.inp::placeholder{color:#6f6c94}
-/* padding extra quando há ícone à esquerda / olho à direita */
-.campo.tem-icone .inp{padding-left:2.4rem}
-.campo.tem-olho  .inp{padding-right:2.3rem}
+    --udx-shadow-btn:    0 4px 16px rgba(191,4,73,0.38);
+    --udx-shadow-card:   0 4px 28px rgba(0,0,0,0.42);
 
-/* estados de validação */
-.campo.is-ok  .inp{border-color:#5fe0a4}
-.campo.is-ok  > .mdi{color:#5fe0a4}
-.campo.is-err .inp{border-color:#ff7591}
-.campo.is-err > .mdi{color:#ff7591}
+    --udx-radius-sm:     6px;
+    --udx-radius-md:     10px;
+    --udx-radius-lg:     16px;
 
-/* medidor de força */
-.forca{display:flex;gap:4px;margin:-.2rem 0 .7rem}
-.forca span{flex:1;height:4px;border-radius:2px;background:#2f2c52;transition:background .2s}
-.forca.n1 span:nth-child(-n+1){background:#ff7591}
-.forca.n2 span:nth-child(-n+2){background:#f0b64a}
-.forca.n3 span:nth-child(-n+3){background:#5fe0a4}
-.forca.n4 span{background:#5fe0a4}
+    --udx-font:          'Poppins', sans-serif;
+    --udx-display:       'Playfair Display', serif;
+  }
 
-/* dica em tempo real */
-.dica{display:flex;align-items:center;gap:.4rem;margin:-.3rem 0 .7rem;
-  font-size:.78rem;color:var(--muted);min-height:1.05em;transition:color .2s}
-.dica .mdi{font-size:.95rem}
-.dica.is-ok{color:#5fe0a4}
-.dica.is-err{color:#ff7591}
+  /* ── RESET ── */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--udx-bg);
+    background-image:
+      radial-gradient(1200px 700px at 88% -10%, rgba(87,8,166,0.55) 0%, rgba(87,8,166,0) 62%),
+      radial-gradient(950px 580px at -8% 8%, rgba(191,4,73,0.42) 0%, rgba(191,4,73,0) 60%),
+      linear-gradient(180deg,#02021a 0%,#050329 50%,#02021a 100%);
+    background-attachment:fixed;
+    color:var(--udx-text);
+    font-family:var(--udx-font);
+    font-size:15px;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  :focus-visible{outline:2px solid var(--udx-primary-hot);outline-offset:3px;}
 
-.opc{font-size:.7rem;color:#6f6c94;font-weight:400;text-transform:none}
-.btn{width:100%;padding:.85rem;border-radius:9px;border:0;cursor:pointer;background:var(--accent);
-  color:#fff;font-weight:600;font-size:.95rem;font-family:'Poppins',sans-serif;
-  transition:background-image .25s,opacity .2s}
-.btn:hover:not(:disabled){background-image:var(--grad)}
-.btn:disabled{opacity:.5;cursor:not-allowed;background-image:none}
-  .alt{margin-top:1.1rem;text-align:center;font-size:.82rem}
-  .alt a{color:var(--accent2);cursor:pointer;text-decoration:none}.alt a:hover{text-decoration:underline}
-  .msg{margin-top:.9rem;font-size:.85rem;min-height:1.1em;line-height:1.4}
-  .msg.ok{color:#5fe0a4}.msg.err{color:#ff7591}
-  .voltar{display:block;text-align:center;margin-top:1.2rem;color:var(--muted);font-size:.82rem;text-decoration:none}
-  @media(max-width:420px){.card{border-radius:12px}.panel{padding:1.2rem 1rem 1.4rem}.head h1{font-size:1.15rem}}
+  /* ══ CONTAINER PRINCIPAL — duas colunas ══ */
+  #auth-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:stretch;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ══ PAINEL ESQUERDO — decorativo/institucional ══ */
+  .auth-left{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:40px;
+    padding:48px;
+    background:
+      radial-gradient(120% 90% at 30% 20%, rgba(250,51,161,0.20), transparent 55%),
+      radial-gradient(110% 100% at 85% 90%, rgba(67,10,191,0.35), transparent 60%),
+      linear-gradient(160deg,#1a0033 0%,#02021a 50%,#0a0140 100%);
+    border-right:1px solid var(--udx-border);
+    position:relative;
+    overflow:hidden;
+  }
+  .auth-left::before{
+    content:'';
+    position:absolute;
+    top:-120px;right:-120px;
+    width:500px;height:500px;
+    background:radial-gradient(circle,rgba(250,51,161,0.10) 0%,transparent 65%);
+    pointer-events:none;
+  }
+  .auth-left::after{
+    content:'UPDANCE';
+    position:absolute;
+    bottom:-30px;left:-10px;
+    font-family:var(--udx-display);
+    font-style:italic;
+    font-size:160px;
+    letter-spacing:6px;
+    color:rgba(250,51,161,0.04);
+    pointer-events:none;
+    white-space:nowrap;
+  }
+
+  /* Brand */
+  .auth-brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    position:relative;
+    z-index:1;
+  }
+  .auth-brand-mark{
+    width:48px;height:48px;
+    border-radius:12px;
+    background:var(--udx-grad-hot);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    box-shadow:var(--udx-shadow-btn);
+  }
+  .auth-brand-mark img{
+    width:30px;height:30px;
+    border-radius:0;
+  }
+  .auth-brand-text .l1{
+    font-family:var(--udx-display);
+    font-style:italic;
+    font-size:26px;
+    line-height:1;
+    background:linear-gradient(to top,#fb8460,#f13aa1);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+  .auth-brand-text .l2{
+    font-family:var(--udx-font);
+    font-size:10px;
+    letter-spacing:2px;
+    color:var(--udx-text-muted);
+    text-transform:uppercase;
+    margin-top:2px;
+  }
+
+  /* Hero conteúdo */
+  .auth-hero-content{position:relative;z-index:1;}
+  .auth-hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--udx-primary-hot);
+    margin-bottom:14px;
+  }
+  .auth-hero-tag::before{
+    content:'';
+    width:28px;height:2px;
+    background:linear-gradient(to right,var(--udx-primary),var(--udx-primary-hot));
+  }
+  .auth-hero-title{
+    font-family:var(--udx-font);
+    font-weight:700;
+    font-size:clamp(2rem,3.5vw,3rem);
+    line-height:1.12;
+    letter-spacing:-0.01em;
+    margin-bottom:16px;
+    color:var(--udx-text);
+  }
+  .auth-hero-title em{
+    font-family:var(--udx-display);
+    font-style:italic;
+    font-weight:600;
+    background:linear-gradient(to top,#fb8460,#f13aa1);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+  .auth-hero-sub{
+    font-size:14px;
+    color:var(--udx-text-muted);
+    max-width:420px;
+    line-height:1.7;
+    margin-bottom:28px;
+  }
+  .auth-feature-list{
+    display:flex;flex-direction:column;
+    gap:10px;
+  }
+  .auth-feature{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--udx-border);
+    border-radius:var(--udx-radius-md);
+    padding:12px 14px;
+    font-size:13px;
+    color:var(--udx-text);
+    transition:border-color 260ms ease, background-color 260ms ease;
+  }
+  .auth-feature:hover{
+    border-color:rgba(250,51,161,0.30);
+    background:rgba(250,51,161,0.04);
+  }
+  .auth-feature-ico{
+    width:32px;height:32px;
+    flex-shrink:0;
+    border-radius:8px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:rgba(250,51,161,0.12);
+    border:1px solid rgba(250,51,161,0.24);
+    color:var(--udx-primary-hot);
+    font-size:18px;
+  }
+
+  /* ══ PAINEL DIREITO — formulário ══ */
+  .auth-right{
+    width:480px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    padding:56px 40px 48px;
+    background:var(--udx-card);
+    border-left:1px solid var(--udx-border);
+    position:relative;
+    overflow-y:auto;
+    min-height:100vh;
+  }
+  .auth-form-wrap{
+    width:100%;
+    max-width:380px;
+  }
+
+  /* Card cabeçalho (marca compacta no topo do formulário) */
+  .card{
+    background:transparent;
+    border:0;
+    border-radius:0;
+    overflow:visible;
+  }
+  .head{
+    display:flex;
+    align-items:center;
+    gap:.7rem;
+    padding:0 0 1.2rem;
+    border-bottom:1px solid var(--udx-border);
+    margin-bottom:1.4rem;
+  }
+  .head img{width:36px;height:36px;border-radius:8px;}
+  .head h1{
+    margin:0;
+    font-size:1.3rem;
+    font-weight:400;
+    font-style:italic;
+    font-family:var(--udx-display);
+    background:linear-gradient(to top,#fb8460,#f13aa1);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+
+  /* Tabs */
+  .tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--udx-border);
+    border-radius:10px;
+    padding:4px;
+    margin-bottom:22px;
+  }
+  .tab{
+    padding:10px;
+    border-radius:7px;
+    text-align:center;
+    background:none;
+    border:1px solid transparent;
+    color:var(--udx-text-muted);
+    font-family:var(--udx-font);
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background-color .2s, color .2s, border-color .2s;
+    user-select:none;
+  }
+  .tab:hover:not(.on){color:var(--udx-text);}
+  .tab.on{
+    background:rgba(250,51,161,0.12);
+    color:var(--udx-primary-hot);
+    border-color:rgba(250,51,161,0.28);
+  }
+
+  /* Painéis */
+  .panel{display:none;padding:0;}
+  .panel.on{display:block;animation:udxFadeIn .28s ease;}
+  .panel p{
+    margin:0 0 1rem;
+    color:var(--udx-text-muted);
+    font-size:.88rem;
+    line-height:1.5;
+  }
+
+  @keyframes udxFadeIn{
+    from{opacity:0;transform:translateY(6px);}
+    to  {opacity:1;transform:translateY(0);}
+  }
+
+  /* Labels */
+  label{
+    display:block;
+    font-size:.78rem;
+    color:var(--udx-text-muted);
+    margin:.2rem 0 .35rem;
+    font-weight:500;
+  }
+
+  /* Campos */
+  .campo{
+    position:relative;
+    margin:0 0 .7rem;
+    transition:margin .2s;
+  }
+  .campo > .mdi{
+    position:absolute;
+    left:.85rem;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--udx-text-muted);
+    font-size:1.05rem;
+    transition:color .2s;
+    pointer-events:none;
+    z-index:2;
+  }
+  .campo .olho{
+    position:absolute;
+    right:.55rem;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:0;
+    color:var(--udx-text-muted);
+    cursor:pointer;
+    padding:.3rem;
+    border-radius:6px;
+    font-size:1.05rem;
+    transition:color .15s, background .15s;
+    z-index:2;
+  }
+  .campo .olho:hover{color:#fff;background:rgba(255,255,255,0.06);}
+  .campo .olho[aria-pressed="true"]{color:#fff;}
+  .campo .olho[aria-pressed="true"] .mdi{
+    background:var(--udx-grad-brand);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+
+  .inp{
+    width:100%;
+    padding:.78rem .9rem;
+    border-radius:9px;
+    border:1px solid rgba(223,224,242,0.18);
+    background:rgba(255,255,255,0.04);
+    color:#fff;
+    font-size:.95rem;
+    font-family:var(--udx-font);
+    transition:border-color .2s, background-color .2s;
+  }
+  .inp:focus{
+    outline:none;
+    border-color:var(--udx-primary);
+    background:rgba(255,255,255,0.06);
+    box-shadow:0 0 0 3px rgba(191,4,73,0.14);
+  }
+  .inp::placeholder{color:rgba(223,224,242,0.35);}
+
+  .campo.tem-icone .inp{padding-left:2.4rem;}
+  .campo.tem-olho  .inp{padding-right:2.3rem;}
+
+  /* Estados de validação */
+  .campo.is-ok  .inp{border-color:#5fe0a4;}
+  .campo.is-ok  > .mdi{color:#5fe0a4;}
+  .campo.is-err .inp{border-color:#ff7591;}
+  .campo.is-err > .mdi{color:#ff7591;}
+
+  /* Medidor de força */
+  .forca{display:flex;gap:4px;margin:-.2rem 0 .7rem;}
+  .forca span{
+    flex:1;height:4px;
+    border-radius:2px;
+    background:rgba(255,255,255,0.08);
+    transition:background .2s;
+  }
+  .forca.n1 span:nth-child(-n+1){background:#ff7591;}
+  .forca.n2 span:nth-child(-n+2){background:#f0b64a;}
+  .forca.n3 span:nth-child(-n+3){background:#5fe0a4;}
+  .forca.n4 span{background:#5fe0a4;}
+
+  /* Dica em tempo real */
+  .dica{
+    display:flex;align-items:center;gap:.4rem;
+    margin:-.3rem 0 .7rem;
+    font-size:.78rem;
+    color:var(--udx-text-muted);
+    min-height:1.05em;
+    transition:color .2s;
+  }
+  .dica .mdi{font-size:.95rem;}
+  .dica.is-ok{color:#5fe0a4;}
+  .dica.is-err{color:#ff7591;}
+
+  .opc{
+    font-size:.7rem;
+    color:rgba(223,224,242,0.45);
+    font-weight:400;
+    text-transform:none;
+  }
+
+  /* Botão principal */
+  .btn{
+    width:100%;
+    padding:.9rem;
+    border-radius:9px;
+    border:0;
+    cursor:pointer;
+    background:var(--udx-primary);
+    color:#fff;
+    font-weight:600;
+    font-size:.95rem;
+    font-family:var(--udx-font);
+    letter-spacing:0.02em;
+    box-shadow:var(--udx-shadow-btn);
+    transition:background-color .25s, background-image .25s, box-shadow .25s, opacity .2s, transform .15s;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .btn:hover:not(:disabled){
+    background-image:var(--udx-grad-brand);
+    box-shadow:0 6px 20px rgba(250,51,161,0.42);
+    transform:translateY(-1px);
+  }
+  .btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+    background-image:none;
+    box-shadow:none;
+    transform:none;
+  }
+
+  /* Mensagem de status */
+  .msg{
+    margin-top:.9rem;
+    font-size:.85rem;
+    min-height:1.1em;
+    line-height:1.4;
+  }
+  .msg.ok{color:#5fe0a4;}
+  .msg.err{color:#ff7591;}
+
+  /* Alt / footer do formulário */
+  .alt{
+    margin-top:1.1rem;
+    text-align:center;
+    font-size:.82rem;
+    color:var(--udx-text-muted);
+  }
+  .alt a{
+    color:var(--udx-primary-hot);
+    cursor:pointer;
+    text-decoration:none;
+    font-weight:600;
+    transition:color .2s;
+  }
+  .alt a:hover{color:#fff;text-decoration:underline;}
+
+  .voltar{
+    display:block;
+    text-align:center;
+    margin-top:1.4rem;
+    padding-top:1.2rem;
+    border-top:1px solid var(--udx-border);
+    color:var(--udx-text-muted);
+    font-size:.82rem;
+    text-decoration:none;
+    transition:color .2s;
+  }
+  .voltar:hover{color:var(--udx-primary-hot);}
+
+  /* ══════════════════════════════════════════════════════════════
+     RESPONSIVIDADE
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ≥ 1440px — widescreen */
+  @media (min-width:1440px){
+    .auth-left{padding:56px;gap:48px;}
+    .auth-right{width:520px;padding:64px 48px 56px;}
+    .auth-form-wrap{max-width:400px;}
+  }
+
+  /* ≤ 1200px */
+  @media (max-width:1200px){
+    .auth-left{padding:40px;gap:36px;}
+    .auth-right{width:440px;padding:48px 32px 40px;}
+  }
+
+  /* ≤ 1024px */
+  @media (max-width:1024px){
+    .auth-left{padding:36px;gap:32px;}
+    .auth-hero-sub{font-size:13px;}
+    .auth-right{width:400px;padding:44px 28px 36px;}
+  }
+
+  /* ≤ 992px */
+  @media (max-width:992px){
+    .auth-left{padding:32px;gap:28px;}
+    .auth-right{width:380px;padding:40px 24px 32px;}
+    .auth-form-wrap{max-width:340px;}
+  }
+
+  /* ≤ 900px — oculta painel esquerdo */
+  @media (max-width:900px){
+    .auth-left{display:none;}
+    .auth-right{
+      width:100%;
+      border-left:0;
+      padding:48px 32px 40px;
+    }
+    .auth-form-wrap{max-width:420px;margin:0 auto;}
+  }
+
+  /* ≤ 768px */
+  @media (max-width:768px){
+    .auth-right{padding:44px 24px 36px;}
+    .auth-form-wrap{max-width:100%;}
+    .head h1{font-size:1.2rem;}
+    .tabs{margin-bottom:20px;}
+  }
+
+  /* ≤ 640px */
+  @media (max-width:640px){
+    .auth-right{padding:36px 18px 28px;}
+    .tab{font-size:11px;padding:9px 6px;}
+    .inp{font-size:.9rem;padding:.72rem .85rem;}
+    label{font-size:.75rem;}
+  }
+
+  /* ≤ 480px */
+  @media (max-width:480px){
+    .auth-right{padding:28px 16px 22px;}
+    .head{padding-bottom:1rem;margin-bottom:1.1rem;}
+    .head h1{font-size:1.1rem;}
+    .btn{padding:.85rem;font-size:.9rem;}
+    .tabs{padding:3px;gap:3px;}
+    .tab{font-size:10px;padding:8px 4px;letter-spacing:0.05em;}
+  }
+
+  /* ≤ 400px */
+  @media (max-width:400px){
+    .auth-right{padding:22px 14px 18px;}
+    .inp{font-size:.88rem;padding:.68rem .78rem;}
+    .campo.tem-icone .inp{padding-left:2.2rem;}
+    .campo.tem-olho  .inp{padding-right:2.1rem;}
+    .btn{padding:.8rem;border-radius:8px;}
+  }
+
+  /* ≤ 360px */
+  @media (max-width:360px){
+    .auth-right{padding:20px 12px 16px;}
+    .head h1{font-size:1rem;}
+    .head img{width:32px;height:32px;}
+    .btn{font-size:.85rem;}
+    .voltar{margin-top:1.1rem;padding-top:1rem;}
+  }
+
+  /* ≤ 320px — mínimo */
+  @media (max-width:320px){
+    .auth-right{padding:18px 10px 14px;}
+    .inp{font-size:.85rem;padding:.62rem .72rem;}
+    .tab{font-size:9px;padding:7px 3px;}
+    .campo{margin-bottom:.6rem;}
+  }
 </style>
 </head>
 <body>
     <script src="/js/loader.js"></script>
-  <div class="card">
-    <div class="head"><img src="/images/icons/udx-icon.png" alt=""><h1>Up Dance</h1></div>
-    <div class="tabs">
-      <button class="tab on" data-t="login">Entrar</button>
-      <button class="tab" data-t="criar">Criar conta</button>
+  <div id="auth-screen">
+
+  <!-- ══ PAINEL ESQUERDO — decorativo/institucional ══ -->
+  <aside class="auth-left" aria-hidden="true">
+    <div class="auth-brand">
+      <div class="auth-brand-mark">
+        <img src="/images/icons/udx-icon.png" alt="">
+      </div>
+      <div class="auth-brand-text">
+        <div class="l1">Up Dance</div>
+        <div class="l2">Xperience</div>
+      </div>
     </div>
 
-    <div class="panel on" data-p="login">
-      <p>Acesse sua área de membros.</p>
+    <div class="auth-hero-content">
+      <div class="auth-hero-tag">Sua área de membros</div>
+      <h2 class="auth-hero-title">
+        Dance.<br>
+        Aprenda.<br>
+        <em>Evolua.</em>
+      </h2>
+      <p class="auth-hero-sub">
+        Acesse trilhas guiadas, aulas do Clube do Groove e o acervo de conteúdos exclusivos que só quem faz parte da comunidade Up Dance tem.
+      </p>
 
-      <label for="lemail">E-mail</label>
-      <div class="campo tem-icone" id="lcampoEmail">
-        <span class="mdi mdi-email-outline" aria-hidden="true"></span>
-        <input class="inp" type="email" id="lemail" placeholder="seu@email.com" autocomplete="email">
+      <div class="auth-feature-list">
+        <div class="auth-feature">
+          <div class="auth-feature-ico"><span class="mdi mdi-compass-outline"></span></div>
+          <div>Trilhas por objetivo — técnica, coreografia, bem-estar e mentalidade</div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-ico"><span class="mdi mdi-play-circle-outline"></span></div>
+          <div>Aulas do Clube do Groove com playback passo a passo</div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-ico"><span class="mdi mdi-bookmark-multiple-outline"></span></div>
+          <div>Artigos, bastidores e conteúdos editoriais da comunidade</div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-ico"><span class="mdi mdi-account-heart-outline"></span></div>
+          <div>Seu perfil de membro com progresso salvo entre dispositivos</div>
+        </div>
       </div>
-
-      <label for="lpass">Senha</label>
-      <div class="campo tem-icone tem-olho" id="lcampoPass">
-        <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
-        <input class="inp" type="password" id="lpass" placeholder="Sua senha" autocomplete="current-password">
-        <button class="olho" type="button" data-alvo="lpass" aria-label="Mostrar senha" aria-pressed="false">
-          <span class="mdi mdi-eye-outline"></span>
-        </button>
-      </div>
-
-      <button class="btn" id="lbtn" disabled>Entrar</button>
-      <div class="msg" id="lmsg" role="status" aria-live="polite"></div>
-
-      <div class="alt" style="margin-top:.9rem">
-        <a id="esqueci">Esqueci minha senha</a>
-      </div>
-      <!-- <div class="alt">Prefere sem senha? <a id="magic">Receber link por e-mail</a></div> -->
     </div>
 
-    <div class="panel" data-p="criar">
-      <p>Crie sua conta de membro.</p>
+    <!-- Bloco reservado para stats reais (Opção B).
+         Preencher com números oficiais quando disponíveis.
+         Enquanto vazio, permanece oculto pelo :empty. -->
+    <div class="auth-stats-slot"></div>
+  </aside>
 
-      <label for="cnome">Nome <span class="opc">(opcional)</span></label>
-      <div class="campo tem-icone">
-        <span class="mdi mdi-account-outline" aria-hidden="true"></span>
-        <input class="inp" type="text" id="cnome" placeholder="Seu nome" autocomplete="name">
+  <!-- ══ PAINEL DIREITO — formulário (estrutura original preservada) ══ -->
+  <section class="auth-right">
+    <div class="auth-form-wrap">
+      <div class="card">
+        <div class="head">
+          <img src="/images/icons/udx-icon.png" alt="">
+          <h1>Up Dance</h1>
+        </div>
+
+        <div class="tabs">
+          <button class="tab on" data-t="login">Entrar</button>
+          <button class="tab" data-t="criar">Criar conta</button>
+        </div>
+
+        <div class="panel on" data-p="login">
+          <p>Acesse sua área de membros.</p>
+
+          <label for="lemail">E-mail</label>
+          <div class="campo tem-icone" id="lcampoEmail">
+            <span class="mdi mdi-email-outline" aria-hidden="true"></span>
+            <input class="inp" type="email" id="lemail" placeholder="seu@email.com" autocomplete="email">
+          </div>
+
+          <label for="lpass">Senha</label>
+          <div class="campo tem-icone tem-olho" id="lcampoPass">
+            <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+            <input class="inp" type="password" id="lpass" placeholder="Sua senha" autocomplete="current-password">
+            <button class="olho" type="button" data-alvo="lpass" aria-label="Mostrar senha" aria-pressed="false">
+              <span class="mdi mdi-eye-outline"></span>
+            </button>
+          </div>
+
+          <button class="btn" id="lbtn" disabled>Entrar</button>
+          <div class="msg" id="lmsg" role="status" aria-live="polite"></div>
+
+          <div class="alt" style="margin-top:.9rem">
+            <a id="esqueci">Esqueci minha senha</a>
+          </div>
+          <!-- <div class="alt">Prefere sem senha? <a id="magic">Receber link por e-mail</a></div> -->
+        </div>
+
+        <div class="panel" data-p="criar">
+          <p>Crie sua conta de membro.</p>
+
+          <label for="cnome">Nome <span class="opc">(opcional)</span></label>
+          <div class="campo tem-icone">
+            <span class="mdi mdi-account-outline" aria-hidden="true"></span>
+            <input class="inp" type="text" id="cnome" placeholder="Seu nome" autocomplete="name">
+          </div>
+
+          <label for="cemail">E-mail</label>
+          <div class="campo tem-icone" id="ccampoEmail">
+            <span class="mdi mdi-email-outline" aria-hidden="true"></span>
+            <input class="inp" type="email" id="cemail" placeholder="seu@email.com" autocomplete="email">
+          </div>
+
+          <label for="cfone">Telefone <span class="opc">(opcional)</span></label>
+          <div class="campo tem-icone">
+            <span class="mdi mdi-phone-outline" aria-hidden="true"></span>
+            <input class="inp" type="tel" id="cfone" placeholder="(00) 00000-0000" autocomplete="tel">
+          </div>
+
+          <label for="cpass">Senha <span class="opc">(mín. 8 caracteres)</span></label>
+          <div class="campo tem-icone tem-olho" id="ccampoPass">
+            <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+            <input class="inp" type="password" id="cpass" placeholder="Crie uma senha" autocomplete="new-password" aria-describedby="cforca">
+            <button class="olho" type="button" data-alvo="cpass" aria-label="Mostrar senha" aria-pressed="false">
+              <span class="mdi mdi-eye-outline"></span>
+            </button>
+          </div>
+          <div class="forca" id="cforca" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          <p class="dica" id="cdica" role="status" aria-live="polite"></p>
+
+          <button class="btn" id="cbtn" disabled>Criar conta</button>
+          <div class="msg" id="cmsg" role="status" aria-live="polite"></div>
+        </div>
+
+        <a class="voltar" href="/">← Voltar ao blog</a>
       </div>
-
-      <label for="cemail">E-mail</label>
-      <div class="campo tem-icone" id="ccampoEmail">
-        <span class="mdi mdi-email-outline" aria-hidden="true"></span>
-        <input class="inp" type="email" id="cemail" placeholder="seu@email.com" autocomplete="email">
-      </div>
-
-      <label for="cfone">Telefone <span class="opc">(opcional)</span></label>
-      <div class="campo tem-icone">
-        <span class="mdi mdi-phone-outline" aria-hidden="true"></span>
-        <input class="inp" type="tel" id="cfone" placeholder="(00) 00000-0000" autocomplete="tel">
-      </div>
-
-      <label for="cpass">Senha <span class="opc">(mín. 8 caracteres)</span></label>
-      <div class="campo tem-icone tem-olho" id="ccampoPass">
-        <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
-        <input class="inp" type="password" id="cpass" placeholder="Crie uma senha" autocomplete="new-password" aria-describedby="cforca">
-        <button class="olho" type="button" data-alvo="cpass" aria-label="Mostrar senha" aria-pressed="false">
-          <span class="mdi mdi-eye-outline"></span>
-        </button>
-      </div>
-      <div class="forca" id="cforca" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-      <p class="dica" id="cdica" role="status" aria-live="polite"></p>
-
-      <button class="btn" id="cbtn" disabled>Criar conta</button>
-      <div class="msg" id="cmsg" role="status" aria-live="polite"></div>
     </div>
+  </section>
 
-    <a class="voltar" href="/">← Voltar ao blog</a>
-  </div>
+</div>
 
 <script>
   /* ---------- utilidades ---------- */
