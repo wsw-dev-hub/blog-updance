@@ -6,6 +6,9 @@
 <title>Entrar — Up Dance</title>
 <link rel="icon" type="image/x-icon" href="/images/icons/udx-icon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap">
+<!-- Fontes da marca — Autography + Geakosa (Opção B: cdnfonts) -->
+<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/autography">
+<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/geakosa">
 <!-- Material Design Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 <style>
@@ -129,22 +132,47 @@
     width:30px;height:30px;
     border-radius:0;
   }
+    /* "Up Dance" — Autography, preto com contorno branco */
   .auth-brand-text .l1{
-    font-family:var(--udx-display);
-    font-style:italic;
-    font-size:26px;
+    font-family:'Autography', 'Playfair Display', cursive;
+    font-style:normal;
+    font-weight:400;
+    font-size:38px;
     line-height:1;
-    background:linear-gradient(to top,#fb8460,#f13aa1);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
+    color:#000;
+    /* Contorno branco em 4 direções (fallback universal) + text-stroke nativo */
+    text-shadow:
+      -1.2px -1.2px 0 #fff,
+       1.2px -1.2px 0 #fff,
+      -1.2px  1.2px 0 #fff,
+       1.2px  1.2px 0 #fff,
+        0    -1.2px 0 #fff,
+        0     1.2px 0 #fff,
+      -1.2px  0    0 #fff,
+       1.2px  0    0 #fff;
+    -webkit-text-stroke:1px #fff;
+    paint-order:stroke fill;
+    letter-spacing:1px;
   }
+
+  /* "Xperience" — Geakosa, prata com sombras escuras */
   .auth-brand-text .l2{
-    font-family:var(--udx-font);
-    font-size:10px;
-    letter-spacing:2px;
-    color:var(--udx-text-muted);
+    font-family:'Geakosa', 'Bebas Neue', serif;
+    font-size:14px;
+    line-height:1;
+    letter-spacing:3px;
     text-transform:uppercase;
-    margin-top:2px;
+    margin-top:6px;
+    color:#c0c0c0;
+    background:linear-gradient(180deg,#f2f2f2 0%,#c0c0c0 55%,#8a8a8a 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    /* Sombras escuras para dar profundidade à prata */
+    text-shadow:
+      0 1px 0   rgba(0,0,0,0.55),
+      0 2px 3px rgba(0,0,0,0.55),
+      0 3px 6px rgba(0,0,0,0.45);
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.55));
   }
 
   /* Hero conteúdo */
@@ -193,21 +221,39 @@
     display:flex;flex-direction:column;
     gap:10px;
   }
+    /* ══ Features expansíveis (Trilhas / Aulas / Artigos / Perfil) ══ */
   .auth-feature{
-    display:flex;
-    align-items:center;
-    gap:12px;
     background:rgba(255,255,255,0.03);
     border:1px solid var(--udx-border);
     border-radius:var(--udx-radius-md);
-    padding:12px 14px;
-    font-size:13px;
-    color:var(--udx-text);
+    overflow:hidden;
     transition:border-color 260ms ease, background-color 260ms ease;
   }
   .auth-feature:hover{
     border-color:rgba(250,51,161,0.30);
     background:rgba(250,51,161,0.04);
+  }
+  .auth-feature.is-open{
+    border-color:rgba(250,51,161,0.45);
+    background:rgba(250,51,161,0.06);
+  }
+
+  .auth-feature-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    background:none;
+    border:0;
+    color:var(--udx-text);
+    font-family:var(--udx-font);
+    font-size:13px;
+    font-weight:500;
+    text-align:left;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
   }
   .auth-feature-ico{
     width:32px;height:32px;
@@ -218,6 +264,66 @@
     border:1px solid rgba(250,51,161,0.24);
     color:var(--udx-primary-hot);
     font-size:18px;
+  }
+  .auth-feature-label{
+    flex:1;
+    min-width:0;
+    line-height:1.4;
+  }
+  .auth-feature-chev{
+    flex-shrink:0;
+    font-size:20px;
+    color:var(--udx-text-muted);
+    transition:transform .28s ease, color .2s ease;
+  }
+  .auth-feature.is-open .auth-feature-chev{
+    transform:rotate(180deg);
+    color:var(--udx-primary-hot);
+  }
+
+  /* Sublista com transição de altura via grid-template-rows */
+  .auth-feature-sub{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .32s ease;
+  }
+  .auth-feature.is-open .auth-feature-sub{
+    grid-template-rows:1fr;
+  }
+  .auth-feature-sub-inner{
+    overflow:hidden;
+    min-height:0;
+  }
+  .auth-feature-sub ul{
+    list-style:none;
+    padding:0 14px 12px 58px;
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .auth-feature-sub li{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    color:var(--udx-text-muted);
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px solid transparent;
+    transition:color .2s, background-color .2s, border-color .2s;
+  }
+  .auth-feature-sub li::before{
+    content:'';
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--udx-primary-hot);
+    flex-shrink:0;
+  }
+  .auth-feature-sub li:hover{
+    color:var(--udx-text);
+    background:rgba(255,255,255,0.03);
+    border-color:var(--udx-border);
   }
 
   /* ══ PAINEL DIREITO — formulário ══ */
@@ -459,6 +565,85 @@
     transform:none;
   }
 
+    /* ══ Botões de autenticação social (visual apenas, sem handlers) ══ */
+  .social-auth{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:0 0 1.1rem;
+  }
+  .btn-social{
+    width:100%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:.72rem .9rem;
+    border-radius:9px;
+    border:1px solid rgba(223,224,242,0.18);
+    background:rgba(255,255,255,0.04);
+    color:var(--udx-text);
+    font-family:var(--udx-font);
+    font-size:.9rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:border-color .2s, background-color .2s, transform .15s;
+  }
+  .btn-social:hover{
+    border-color:rgba(223,224,242,0.35);
+    background:rgba(255,255,255,0.07);
+    transform:translateY(-1px);
+  }
+  .btn-social:active{transform:translateY(0);}
+  .btn-social .social-ico{
+    width:20px;height:20px;
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .btn-social .social-ico svg{width:100%;height:100%;display:block;}
+  .btn-social--google{
+    background:#fff;
+    color:#1f1f1f;
+    border-color:#fff;
+  }
+  .btn-social--google:hover{
+    background:#f4f4f4;
+    border-color:#f4f4f4;
+  }
+  .btn-social--gram{
+    background:rgba(0,152,234,0.10);
+    border-color:rgba(0,152,234,0.28);
+    color:#dff0ff;
+  }
+  .btn-social--gram:hover{
+    background:rgba(0,152,234,0.18);
+    border-color:rgba(0,152,234,0.45);
+  }
+
+  /* Divisor "ou com e-mail" */
+  .auth-divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:0 0 1rem;
+  }
+  .auth-divider::before,
+  .auth-divider::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--udx-border);
+  }
+  .auth-divider span{
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--udx-text-muted);
+    font-weight:500;
+  }
+
   /* Mensagem de status */
   .msg{
     margin-top:.9rem;
@@ -620,23 +805,76 @@
         Acesse trilhas guiadas, aulas do Clube do Groove e o acervo de conteúdos exclusivos que só quem faz parte da comunidade Up Dance tem.
       </p>
 
-      <div class="auth-feature-list">
-        <div class="auth-feature">
-          <div class="auth-feature-ico"><span class="mdi mdi-compass-outline"></span></div>
-          <div>Trilhas por objetivo — técnica, coreografia, bem-estar e mentalidade</div>
+            <div class="auth-feature-list" role="list">
+
+        <div class="auth-feature" role="listitem" data-topic="trilhas">
+          <button type="button" class="auth-feature-head" aria-expanded="false" aria-controls="sub-trilhas">
+            <span class="auth-feature-ico"><span class="mdi mdi-compass-outline"></span></span>
+            <span class="auth-feature-label">Trilhas por objetivo</span>
+            <span class="auth-feature-chev mdi mdi-chevron-down" aria-hidden="true"></span>
+          </button>
+          <div class="auth-feature-sub" id="sub-trilhas">
+            <div class="auth-feature-sub-inner">
+              <ul>
+                <li>Técnica</li>
+                <li>Coreografia</li>
+                <li>Bem-estar &amp; Mentalidade</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="auth-feature">
-          <div class="auth-feature-ico"><span class="mdi mdi-play-circle-outline"></span></div>
-          <div>Aulas do Clube do Groove com playback passo a passo</div>
+
+        <div class="auth-feature" role="listitem" data-topic="aulas">
+          <button type="button" class="auth-feature-head" aria-expanded="false" aria-controls="sub-aulas">
+            <span class="auth-feature-ico"><span class="mdi mdi-play-circle-outline"></span></span>
+            <span class="auth-feature-label">Aulas do Clube do Groove</span>
+            <span class="auth-feature-chev mdi mdi-chevron-down" aria-hidden="true"></span>
+          </button>
+          <div class="auth-feature-sub" id="sub-aulas">
+            <div class="auth-feature-sub-inner">
+              <ul>
+                <li>Aquecimento</li>
+                <li>Expressão</li>
+                <li>Neurodança</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="auth-feature">
-          <div class="auth-feature-ico"><span class="mdi mdi-bookmark-multiple-outline"></span></div>
-          <div>Artigos, bastidores e conteúdos editoriais da comunidade</div>
+
+        <div class="auth-feature" role="listitem" data-topic="artigos">
+          <button type="button" class="auth-feature-head" aria-expanded="false" aria-controls="sub-artigos">
+            <span class="auth-feature-ico"><span class="mdi mdi-bookmark-multiple-outline"></span></span>
+            <span class="auth-feature-label">Artigos e bastidores</span>
+            <span class="auth-feature-chev mdi mdi-chevron-down" aria-hidden="true"></span>
+          </button>
+          <div class="auth-feature-sub" id="sub-artigos">
+            <div class="auth-feature-sub-inner">
+              <ul>
+                <li>Música &amp; Coreografia</li>
+                <li>Nutrição &amp; Bem-estar</li>
+                <li>Técnica &amp; Mentalidade</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="auth-feature">
-          <div class="auth-feature-ico"><span class="mdi mdi-account-heart-outline"></span></div>
-          <div>Seu perfil de membro com progresso salvo entre dispositivos</div>
+
+        <div class="auth-feature" role="listitem" data-topic="perfil">
+          <button type="button" class="auth-feature-head" aria-expanded="false" aria-controls="sub-perfil">
+            <span class="auth-feature-ico"><span class="mdi mdi-account-heart-outline"></span></span>
+            <span class="auth-feature-label">Perfil de membro</span>
+            <span class="auth-feature-chev mdi mdi-chevron-down" aria-hidden="true"></span>
+          </button>
+          <div class="auth-feature-sub" id="sub-perfil">
+            <div class="auth-feature-sub-inner">
+              <ul>
+                <li>Meu progresso</li>
+                <li>Aulas salvas</li>
+                <li>Preferências</li>
+              </ul>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -662,6 +900,32 @@
 
         <div class="panel on" data-p="login">
           <p>Acesse sua área de membros.</p>
+
+                    <div class="social-auth">
+            <button type="button" class="btn-social btn-social--google" aria-label="Entrar com Google" disabled>
+              <span class="social-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+              </span>
+              Continuar com Google
+            </button>
+
+            <button type="button" class="btn-social btn-social--gram" aria-label="Entrar com Gram (Toncoin)" disabled>
+              <span class="social-ico" aria-hidden="true">
+                <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#0098EA" d="M28,56c15.5,0,28-12.5,28-28S43.5,0,28,0S0,12.5,0,28S12.5,56,28,56z"/>
+                  <path fill="#FFFFFF" d="M37.6,15.6H18.4c-3.5,0-5.7,3.8-4,6.9l11.8,20.5c0.8,1.3,2.7,1.3,3.5,0l11.8-20.5C43.3,19.4,41.1,15.6,37.6,15.6L37.6,15.6z M26.3,36.8l-2.6-5l-6.2-11.1c-0.4-0.7,0.1-1.6,1-1.6h7.8L26.3,36.8L26.3,36.8z M38.5,20.7l-6.2,11.1l-2.6,5V19.1h7.8C38.4,19.1,38.9,20,38.5,20.7z"/>
+                </svg>
+              </span>
+              Continuar com Gram
+            </button>
+          </div>
+
+          <div class="auth-divider"><span>ou com e-mail</span></div>
 
           <label for="lemail">E-mail</label>
           <div class="campo tem-icone" id="lcampoEmail">
@@ -689,6 +953,32 @@
 
         <div class="panel" data-p="criar">
           <p>Crie sua conta de membro.</p>
+
+                    <div class="social-auth">
+            <button type="button" class="btn-social btn-social--google" aria-label="Cadastrar com Google" disabled>
+              <span class="social-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+              </span>
+              Cadastrar com Google
+            </button>
+
+            <button type="button" class="btn-social btn-social--gram" aria-label="Cadastrar com Gram (Toncoin)" disabled>
+              <span class="social-ico" aria-hidden="true">
+                <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#0098EA" d="M28,56c15.5,0,28-12.5,28-28S43.5,0,28,0S0,12.5,0,28S12.5,56,28,56z"/>
+                  <path fill="#FFFFFF" d="M37.6,15.6H18.4c-3.5,0-5.7,3.8-4,6.9l11.8,20.5c0.8,1.3,2.7,1.3,3.5,0l11.8-20.5C43.3,19.4,41.1,15.6,37.6,15.6L37.6,15.6z M26.3,36.8l-2.6-5l-6.2-11.1c-0.4-0.7,0.1-1.6,1-1.6h7.8L26.3,36.8L26.3,36.8z M38.5,20.7l-6.2,11.1l-2.6,5V19.1h7.8C38.4,19.1,38.9,20,38.5,20.7z"/>
+                </svg>
+              </span>
+              Cadastrar com Gram
+            </button>
+          </div>
+
+          <div class="auth-divider"><span>ou com e-mail</span></div>
 
           <label for="cnome">Nome <span class="opc">(opcional)</span></label>
           <div class="campo tem-icone">
@@ -899,6 +1189,33 @@ if (avisos[st]) setMsg(lmsg, avisos[st][0], avisos[st][1]);
 /* estado inicial dos botões */
 verificarLogin();
 verificarCriar();
+</script>
+<script>
+  /* ══ Acordeão das features do painel esquerdo — click/touch ══ */
+  (function(){
+    var heads = document.querySelectorAll('.auth-feature .auth-feature-head');
+    if (!heads.length) return;
+
+    heads.forEach(function(head){
+      head.addEventListener('click', function(){
+        var item = head.closest('.auth-feature');
+        if (!item) return;
+        var willOpen = !item.classList.contains('is-open');
+
+        /* Fecha os demais para comportamento acordeão (um por vez) */
+        document.querySelectorAll('.auth-feature.is-open').forEach(function(other){
+          if (other !== item){
+            other.classList.remove('is-open');
+            var otherHead = other.querySelector('.auth-feature-head');
+            if (otherHead) otherHead.setAttribute('aria-expanded','false');
+          }
+        });
+
+        item.classList.toggle('is-open', willOpen);
+        head.setAttribute('aria-expanded', String(willOpen));
+      });
+    });
+  })();
 </script>
 </body>
 </html>
