@@ -178,7 +178,10 @@
                 if (!Array.isArray(s.insightsPerformaticos))    s.insightsPerformaticos    = [];
                 if (!Array.isArray(s.dicasPerformaticas))       s.dicasPerformaticas       = [];
                 if (typeof s.disciplinaPerfLabel !== 'string')  s.disciplinaPerfLabel      = seed.disciplinaPerfLabel;
+                if (typeof s.disciplinaPerfTexto !== 'string')  s.disciplinaPerfTexto      = '';if (typeof s.disciplinaPerfLabel !== 'string')  s.disciplinaPerfLabel      = seed.disciplinaPerfLabel;
                 if (typeof s.disciplinaPerfTexto !== 'string')  s.disciplinaPerfTexto      = '';
+                if (typeof s.alunoEmail          !== 'string')  s.alunoEmail               = '';
+                if (typeof s.habitoTexto         !== 'string')  s.habitoTexto
                 if (!s.paginasFixas || typeof s.paginasFixas !== 'object'){
                     s.paginasFixas = seed.paginasFixas;
                 }else{
