@@ -301,21 +301,21 @@
     overflow:hidden;
     min-height:0;
   }
-  .auth-feature-sub ul{
+    .auth-feature-sub ul{
     list-style:none;
-    padding:0 14px 12px 58px;
+    padding:4px 14px 12px 58px;
     margin:0;
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:8px;
   }
   .auth-feature-sub li{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:12px;
-    color:var(--udx-text-muted);
-    padding:6px 8px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    column-gap:10px;
+    row-gap:2px;
+    align-items:start;
+    padding:8px 10px;
     border-radius:6px;
     border:1px solid transparent;
     transition:color .2s, background-color .2s, border-color .2s;
@@ -326,11 +326,37 @@
     border-radius:50%;
     background:var(--udx-primary-hot);
     flex-shrink:0;
+    margin-top:6px;           /* alinha o bullet à linha do título */
+    grid-row:1 / span 2;      /* bullet ocupa as duas linhas */
+    align-self:start;
+  }
+  .auth-feature-sub li strong{
+    grid-column:2;
+    grid-row:1;
+    font-family:var(--udx-font);
+    font-size:12px;
+    font-weight:600;
+    color:var(--udx-text);
+    line-height:1.35;
+    letter-spacing:0.02em;
+  }
+  .auth-feature-sub li em{
+    grid-column:2;
+    grid-row:2;
+    font-style:normal;
+    font-size:11px;
+    line-height:1.5;
+    color:var(--udx-text-muted);
   }
   .auth-feature-sub li:hover{
-    color:var(--udx-text);
     background:rgba(255,255,255,0.03);
     border-color:var(--udx-border);
+  }
+  .auth-feature-sub li:hover strong{
+    color:#fff;
+  }
+  .auth-feature-sub li:hover em{
+    color:var(--udx-text);
   }
 
   /* ══ PAINEL DIREITO — formulário ══ */
@@ -892,7 +918,7 @@
 
             <div class="auth-feature-list" role="list">
 
-        <div class="auth-feature" role="listitem" data-topic="trilhas">
+                <div class="auth-feature" role="listitem" data-topic="trilhas">
           <button type="button" class="auth-feature-head" aria-expanded="false" aria-controls="sub-trilhas">
             <span class="auth-feature-ico"><span class="mdi mdi-compass-outline"></span></span>
             <span class="auth-feature-label">Trilhas por objetivo</span>
@@ -901,9 +927,18 @@
           <div class="auth-feature-sub" id="sub-trilhas">
             <div class="auth-feature-sub-inner">
               <ul>
-                <li>Técnica</li>
-                <li>Coreografia</li>
-                <li>Bem-estar &amp; Mentalidade</li>
+                <li>
+                  <strong>Técnica</strong>
+                  <em>Fundamentos, postura e vocabulário de movimento organizados do passo básico ao avançado.</em>
+                </li>
+                <li>
+                  <strong>Coreografia</strong>
+                  <em>Da montagem de sequências curtas à construção de peças completas, com foco em musicalidade e presença.</em>
+                </li>
+                <li>
+                  <strong>Bem-estar &amp; Mentalidade</strong>
+                  <em>Preparação corporal, prevenção de lesões e gestão emocional para quem dança com constância.</em>
+                </li>
               </ul>
             </div>
           </div>
@@ -918,9 +953,18 @@
           <div class="auth-feature-sub" id="sub-aulas">
             <div class="auth-feature-sub-inner">
               <ul>
-                <li>Aquecimento</li>
-                <li>Expressão</li>
-                <li>Neurodança</li>
+                <li>
+                  <strong>Aquecimento</strong>
+                  <em>Rotinas guiadas de mobilidade e ativação para preparar o corpo antes de cada prática.</em>
+                </li>
+                <li>
+                  <strong>Expressão</strong>
+                  <em>Aulas focadas em interpretação, dinâmica e transferência de peso — a dança como linguagem.</em>
+                </li>
+                <li>
+                  <strong>Neurodança</strong>
+                  <em>Exercícios que integram atenção, memória motora e coordenação em sequências progressivas.</em>
+                </li>
               </ul>
             </div>
           </div>
@@ -935,9 +979,18 @@
           <div class="auth-feature-sub" id="sub-artigos">
             <div class="auth-feature-sub-inner">
               <ul>
-                <li>Música &amp; Coreografia</li>
-                <li>Nutrição &amp; Bem-estar</li>
-                <li>Técnica &amp; Mentalidade</li>
+                <li>
+                  <strong>Música &amp; Coreografia</strong>
+                  <em>Leituras sobre repertório, contagem musical e processos criativos por trás das montagens.</em>
+                </li>
+                <li>
+                  <strong>Nutrição &amp; Bem-estar</strong>
+                  <em>Textos práticos sobre alimentação, recuperação e sono para sustentar a rotina de quem dança.</em>
+                </li>
+                <li>
+                  <strong>Técnica &amp; Mentalidade</strong>
+                  <em>Aprofundamentos técnicos e reflexões sobre foco, disciplina e permanência na dança.</em>
+                </li>
               </ul>
             </div>
           </div>
@@ -952,9 +1005,18 @@
           <div class="auth-feature-sub" id="sub-perfil">
             <div class="auth-feature-sub-inner">
               <ul>
-                <li>Meu progresso</li>
-                <li>Aulas salvas</li>
-                <li>Preferências</li>
+                <li>
+                  <strong>Meu progresso</strong>
+                  <em>Histórico de aulas concluídas, trilhas em andamento e marcos de evolução ao longo do tempo.</em>
+                </li>
+                <li>
+                  <strong>Aulas salvas</strong>
+                  <em>Sua biblioteca pessoal de aulas favoritas e artigos marcados para revisitar quando quiser.</em>
+                </li>
+                <li>
+                  <strong>Preferências</strong>
+                  <em>Ajustes de notificação, idioma e privacidade — sua área de membros do seu jeito.</em>
+                </li>
               </ul>
             </div>
           </div>
